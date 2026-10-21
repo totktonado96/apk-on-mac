@@ -4655,6 +4655,8 @@ public final class ViewCanvasDriver implements MetalSurfaceCallbacks {
                 sb.append(" clk=").append(v.isClickable())
                   .append(" oc=").append(v.hasOnClickListeners());
             }
+            // A disabled view ignores taps too, so a dead button shows why.
+            if (!v.isEnabled()) sb.append(" en=false");
         } catch (Throwable ignored) {}
         if (v instanceof android.widget.TextView tv) {
             CharSequence t = tv.getText();
