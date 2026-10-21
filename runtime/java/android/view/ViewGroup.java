@@ -3076,8 +3076,28 @@ public class ViewGroup extends View implements ViewParent, ViewManager {
                 if (found != null) return found;
             }
         }
+        // Views this group owns but has not attached (ListView's headers and
+        // footers before the first layout), searched after the children as
+        // AOSP ListView.findViewTraversal does.
+        java.util.List<View> owned = macapkUnattachedFindRoots();
+        if (owned != null) {
+            for (View c : owned) {
+                if (c == null) continue;
+                if (c instanceof ViewGroup cvg) {
+                    T found = cvg.findViewByIdRec(searchId, visited);
+                    if (found != null) return found;
+                } else if (visited.put(c, Boolean.TRUE) == null) {
+                    T found = c.findViewById(searchId);
+                    if (found != null) return found;
+                }
+            }
+        }
         return null;
     }
+
+    /** Views a findViewById of this group must also search although they are
+     *  not (yet) its children. None for a plain ViewGroup. */
+    protected java.util.List<View> macapkUnattachedFindRoots() { return null; }
 
     // -------- AOSP-audit batch (v1.0.116) — missing ViewGroup public API --------
 
