@@ -39,6 +39,13 @@ jobs:
           path: thirdparty/framework-res
           key: framework-res-${{ hashFiles('scripts/build_framework_res.sh') }}
 
+      - name: Build framework-res (API 36)
+        run: |
+          if [ ! -s thirdparty/framework-res/framework-res-api36.apk ]; then
+            scripts/build_framework_res.sh --api 36 --tag android-16.0.0_r2 --version-name 16
+          fi
+          ls -l thirdparty/framework-res
+
       - name: Build runtime
         run: runtime/scripts/build.sh
 
