@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <!-- EMBEDDED into macapk-runtime's __TEXT,__info_plist at link time.
+       See runtime/CMakeLists.txt for why this cannot live in a bundle plist. -->
+  <key>CFBundleIdentifier</key><string>org.macapk.runtime</string>
+  <key>CFBundleName</key><string>Mac.apk</string>
+  <key>CFBundleShortVersionString</key><string>1.0</string>
+  <key>NSCameraUsageDescription</key><string>An Android app running in Mac.apk is requesting camera access.</string>
+  <key>NSMicrophoneUsageDescription</key><string>An Android app running in Mac.apk is requesting microphone access.</string>
+  <key>NSLocationWhenInUseUsageDescription</key><string>An Android app running in Mac.apk is requesting your location.</string>
+  <key>NSBluetoothAlwaysUsageDescription</key><string>An Android app running in Mac.apk is requesting Bluetooth access.</string>
+  <key>NSLocalNetworkUsageDescription</key><string>An Android app running in Mac.apk is requesting local network access.</string>
+  <key>NSPhotoLibraryUsageDescription</key><string>An Android app running in Mac.apk is requesting photo library access.</string>
+  <key>NSSpeechRecognitionUsageDescription</key><string>An Android app running in Mac.apk is requesting speech recognition.</string>
+</dict>
+</plist>

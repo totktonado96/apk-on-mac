@@ -1,0 +1,394 @@
+diff --git a/src/libANGLE/renderer/metal/ContextMtl.h b/src/libANGLE/renderer/metal/ContextMtl.h
+index 35be49424b..042e1308f8 100644
+--- a/src/libANGLE/renderer/metal/ContextMtl.h
++++ b/src/libANGLE/renderer/metal/ContextMtl.h
+@@ -552,6 +552,8 @@ class ContextMtl : public ContextImpl, public mtl::Context
+         DIRTY_BIT_RENDER_PIPELINE,
+         DIRTY_BIT_UNIFORM_BUFFERS_BINDING,
+         DIRTY_BIT_RASTERIZER_DISCARD,
++        // Mac.apk (patch 0004): GL line width -> RenderCommandEncoder::setLineWidth.
++        DIRTY_BIT_LINE_WIDTH,
+ 
+         DIRTY_BIT_INVALID,
+         DIRTY_BIT_MAX = DIRTY_BIT_INVALID,
+diff --git a/src/libANGLE/renderer/metal/ContextMtl.mm b/src/libANGLE/renderer/metal/ContextMtl.mm
+index 88efc23749..dbdd9c2120 100644
+--- a/src/libANGLE/renderer/metal/ContextMtl.mm
++++ b/src/libANGLE/renderer/metal/ContextMtl.mm
+@@ -1248,7 +1248,16 @@ GLint GetOwnershipIdentity(const egl::AttributeMap &attribs)
+                 mDirtyBits.set(DIRTY_BIT_RASTERIZER_DISCARD);
+                 break;
+             case gl::state::DIRTY_BIT_LINE_WIDTH:
+-                // Do nothing
++                // Mac.apk (patch 0004): upstream did nothing here, because
++                // DisplayMtl advertised [1,1]. When the display found the
++                // encoder's setLineWidth: it advertises a wider range, and the
++                // width travels to the encoder on the next draw. A [1,1] display
++                // (MACAPK_ANGLE_WIDE_LINES=0, or no setLineWidth:) keeps the
++                // upstream no-op.
++                if (glState.getCaps().maxAliasedLineWidth > 1.0f)
++                {
++                    mDirtyBits.set(DIRTY_BIT_LINE_WIDTH);
++                }
+                 break;
+             case gl::state::DIRTY_BIT_PRIMITIVE_RESTART_ENABLED:
+                 // NOTE(hqle): ES 3.0 feature.
+@@ -2617,6 +2626,29 @@ static bool isDrawNoOp(const mtl::RenderPipelineDesc &descriptor,
+             case DIRTY_BIT_RASTERIZER_DISCARD:
+                 // Already handled.
+                 break;
++            case DIRTY_BIT_LINE_WIDTH:
++                // Mac.apk (patch 0004). A new render pass sets every dirty bit,
++                // so this also re-arms the width for each new encoder. GLES
++                // keeps the requested width as state (glGetFloatv(GL_LINE_WIDTH)
++                // returns it unchanged) and only the RASTERIZED width is derived:
++                // the ES 2.0 and 3.0 glLineWidth pages say "The actual width is
++                // determined by rounding the supplied width to the nearest
++                // integer", then "clamped to an implementation-dependent maximum"
++                // (ContextVk::handleDirtyGraphicsDynamicLineWidth clamps the same
++                // way). The rounding matters here: Metal covers the pixel centres
++                // within width/2 of the line, so a raw 2.4 draws 3 rows on a
++                // pixel centre and 2 on a pixel edge (measured, Apple M2), where
++                // the spec says 2 everywhere.
++                // The caps are whole numbers, so rounding after the clamp equals
++                // the spec's round-then-clamp and never yields 0.
++                if (mState.getCaps().maxAliasedLineWidth > 1.0f)
++                {
++                    const float clamped =
++                        gl::clamp(mState.getLineWidth(), mState.getCaps().minAliasedLineWidth,
++                                  mState.getCaps().maxAliasedLineWidth);
++                    mRenderEncoder.setLineWidth(std::floor(clamped + 0.5f));
++                }
++                break;
+             default:
+                 UNREACHABLE();
+                 break;
+diff --git a/src/libANGLE/renderer/metal/DisplayMtl.mm b/src/libANGLE/renderer/metal/DisplayMtl.mm
+index cdfd06b3f7..4c3c6c7b81 100644
+--- a/src/libANGLE/renderer/metal/DisplayMtl.mm
++++ b/src/libANGLE/renderer/metal/DisplayMtl.mm
+@@ -12,6 +12,7 @@
+ 
+ #include "libANGLE/renderer/metal/DisplayMtl.h"
+ #include <sys/param.h>
++#include <cstdio>
+ 
+ #include "common/apple_platform_utils.h"
+ #include "common/system_utils.h"
+@@ -93,6 +94,113 @@ static EGLint GetStencilSize(GLint internalformat)
+     }
+ }
+ 
++// Mac.apk (patch 0004): the aliased line width range we advertise when the GPU's
++// render encoder can rasterize wide lines. 8 is MoltenVK's lineWidthRange[1] for
++// the same private Metal call (MVKDevice.mm: "lineWidthRange[1] = wideLines ? 8
++// : 1"), which ANGLE-Vulkan passes straight through as maxAliasedLineWidth
++// (vk_caps_utils.cpp), so an app gets the same GL answer from both of the
++// backends Mac.apk ships. Measured on Apple M2 (AGXG14GFamilyRenderContext):
++// setLineWidth: w draws exactly w rows for every w up to 16, the driver's own
++// clamp, so 8 is inside what the hardware really does.
++constexpr float kMacapkMaxAliasedLineWidth = 8.0f;
++
++// Mac.apk (patch 0004): why a wide-line probe came back negative. Only the
++// kill switch is silent; every other outcome is named in the runtime log.
++enum class MacapkLineWidthProbe
++{
++    Supported,
++    NoDevice,
++    NoQueueOrTarget,
++    NoEncoder,
++    EncoderLacksSetLineWidth,
++};
++
++// Mac.apk (patch 0004): does this device's render encoder implement the private
++// -setLineWidth:? There is no device or feature-set query for it, so ask a real
++// encoder: a 1x1 render pass on a throwaway queue that is never committed.
++static MacapkLineWidthProbe MacapkProbeEncoderSetLineWidth(id<MTLDevice> device)
++{
++    if (device == nil)
++    {
++        return MacapkLineWidthProbe::NoDevice;
++    }
++    ANGLE_MTL_OBJC_SCOPE
++    {
++        auto queue = angle::adoptObjCPtr([device newCommandQueue]);
++        MTLTextureDescriptor *texDesc =
++            [MTLTextureDescriptor texture2DDescriptorWithPixelFormat:MTLPixelFormatRGBA8Unorm
++                                                               width:1
++                                                              height:1
++                                                           mipmapped:NO];
++        texDesc.usage       = MTLTextureUsageRenderTarget;
++        texDesc.storageMode = MTLStorageModePrivate;
++        auto texture        = angle::adoptObjCPtr([device newTextureWithDescriptor:texDesc]);
++        if (!queue || !texture)
++        {
++            return MacapkLineWidthProbe::NoQueueOrTarget;
++        }
++        MTLRenderPassDescriptor *passDesc = [MTLRenderPassDescriptor renderPassDescriptor];
++        passDesc.colorAttachments[0].texture     = texture.get();
++        passDesc.colorAttachments[0].loadAction  = MTLLoadActionDontCare;
++        passDesc.colorAttachments[0].storeAction = MTLStoreActionDontCare;
++        id<MTLCommandBuffer> cmdBuffer           = [queue.get() commandBuffer];
++        id<MTLRenderCommandEncoder> encoder =
++            [cmdBuffer renderCommandEncoderWithDescriptor:passDesc];
++        if (encoder == nil)
++        {
++            return MacapkLineWidthProbe::NoEncoder;
++        }
++        const bool responds = [encoder respondsToSelector:@selector(setLineWidth:)];
++        [encoder endEncoding];
++        // cmdBuffer is autoreleased and never committed, so no GPU work is queued.
++        return responds ? MacapkLineWidthProbe::Supported
++                        : MacapkLineWidthProbe::EncoderLacksSetLineWidth;
++    }
++}
++
++// Mac.apk (patch 0004): advertise wide lines only when the encoder has
++// setLineWidth:. MACAPK_ANGLE_WIDE_LINES=0 (read once per process) skips the
++// probe entirely and logs nothing, which restores upstream's [1,1] exactly and
++// means no private-API call is ever made. Any OTHER negative result is logged
++// with its reason, once per display initialization (caps are computed once).
++// All of them fall back to the same [1,1] and 1 px lines, so without the log
++// line a host that lost the capability, a probe that failed and the kill switch
++// would be indistinguishable short of running debug/gl_linewidth_probe.sh on
++// that machine. Literal-only fprintf calls keep the libc unsafe-buffers check
++// quiet.
++static bool MacapkEncoderHasSetLineWidth(id<MTLDevice> device)
++{
++    static const bool sDisabled = angle::GetEnvironmentVar("MACAPK_ANGLE_WIDE_LINES") == "0";
++    if (sDisabled)
++    {
++        return false;
++    }
++    switch (MacapkProbeEncoderSetLineWidth(device))
++    {
++        case MacapkLineWidthProbe::Supported:
++            return true;
++        case MacapkLineWidthProbe::NoDevice:
++            fprintf(stderr, "[macapk-angle] wide GL lines off (1 px): no Metal device\n");
++            break;
++        case MacapkLineWidthProbe::NoQueueOrTarget:
++            fprintf(stderr,
++                    "[macapk-angle] wide GL lines off (1 px): could not create the "
++                    "probe's command queue or 1x1 render target\n");
++            break;
++        case MacapkLineWidthProbe::NoEncoder:
++            fprintf(stderr,
++                    "[macapk-angle] wide GL lines off (1 px): could not create the "
++                    "probe's render command encoder\n");
++            break;
++        case MacapkLineWidthProbe::EncoderLacksSetLineWidth:
++            fprintf(stderr,
++                    "[macapk-angle] wide GL lines off (1 px): this GPU's render "
++                    "command encoder does not implement setLineWidth:\n");
++            break;
++    }
++    return false;
++}
++
+ bool IsMetalDisplayAvailable()
+ {
+     return angle::IsMetalRendererAvailable();
+@@ -759,7 +867,13 @@ bool IsMetalDisplayAvailable()
+ 
+     mNativeCaps.maxAliasedPointSize = 511;
+     mNativeCaps.minAliasedLineWidth = 1.0f;
+-    mNativeCaps.maxAliasedLineWidth = 1.0f;
++    // Mac.apk (patch 0004): upstream hardcodes 1.0 because Metal's public API has
++    // no line width. Real Android GPUs rasterize wide aliased lines, and so does
++    // this Metal driver through the encoder's private setLineWidth: (the call
++    // MoltenVK already makes for vkCmdSetLineWidth). ContextMtl forwards the
++    // clamped GL width only when this is above 1.
++    mNativeCaps.maxAliasedLineWidth =
++        MacapkEncoderHasSetLineWidth(mMetalDevice) ? kMacapkMaxAliasedLineWidth : 1.0f;
+ 
+     if (supportsEitherGPUFamily(2, 1) && !mFeatures.limitMaxDrawBuffersForTesting.enabled)
+     {
+diff --git a/src/libANGLE/renderer/metal/mtl_command_buffer.h b/src/libANGLE/renderer/metal/mtl_command_buffer.h
+index 285645ada9..7e733c5b57 100644
+--- a/src/libANGLE/renderer/metal/mtl_command_buffer.h
++++ b/src/libANGLE/renderer/metal/mtl_command_buffer.h
+@@ -31,6 +31,20 @@
+ #include "libANGLE/renderer/metal/mtl_resources.h"
+ #include "libANGLE/renderer/metal/mtl_state_cache.h"
+ 
++// Mac.apk (patch 0004): wide GL lines on the Metal backend. Apple's GPU render
++// encoders implement -[MTLRenderCommandEncoder setLineWidth:] but the public
++// protocol does not declare it. MoltenVK declares the same private method the
++// same way (MVKCommandEncoderState.mm, protocol MVKMTLRenderCommandEncoder) and
++// calls it for vkCmdSetLineWidth. Declaring it here gives DisplayMtl.mm (the
++// capability probe) and mtl_command_buffer.mm (the replay) one shared selector.
++// Every call site is guarded by respondsToSelector:, so an encoder that lacks it
++// (another GPU driver, a wrapper that does not forward it) keeps the upstream
++// 1 px behaviour. Measured on Apple M2: the driver's AGXG14GFamilyRenderContext
++// responds, and so does the MTL_DEBUG_LAYER=1 wrapper, which forwards it.
++@protocol MacapkMTLRenderCommandEncoderLineWidth <MTLRenderCommandEncoder>
++- (void)setLineWidth:(float)width;
++@end
++
+ namespace rx
+ {
+ namespace mtl
+@@ -414,6 +428,11 @@ struct RenderCommandEncoderStates
+ 
+     std::array<float, 4> blendColor;
+ 
++    // Mac.apk (patch 0004): the line width the NATIVE encoder of this render pass
++    // currently has. A fresh MTLRenderCommandEncoder rasterizes lines 1 px wide,
++    // so reset() puts 1.0 here and a width-1 draw never emits a call.
++    float lineWidth;
++
+     gl::ShaderMap<RenderCommandEncoderShaderStates> perShaderStates;
+ 
+     MTLVisibilityResultMode visibilityResultMode;
+@@ -454,6 +473,13 @@ class RenderCommandEncoder final : public CommandEncoder
+ 
+     RenderCommandEncoder &setBlendColor(float r, float g, float b, float a);
+ 
++    // Mac.apk (patch 0004): record the (already clamped) GL line width. Nothing
++    // is encoded here: the width reaches the native encoder only when a draw
++    // that rasterizes LINES is recorded and the width differs from what this
++    // render pass's encoder already has (see applyLineWidth). The value persists
++    // across render passes, like the GL state it mirrors.
++    RenderCommandEncoder &setLineWidth(float width);
++
+     RenderCommandEncoder &setVertexBuffer(const BufferRef &buffer, size_t offset, uint32_t index)
+     {
+         return setBuffer(gl::ShaderType::Vertex, buffer, offset, index);
+@@ -631,6 +657,13 @@ class RenderCommandEncoder final : public CommandEncoder
+                                           size_t offset,
+                                           uint32_t index);
+ 
++    // Mac.apk (patch 0004): called by every draw* before it records the draw.
++    void applyLineWidth(MTLPrimitiveType primitiveType);
++
++    // Mac.apk (patch 0004): the width ContextMtl asked for. 1.0 until a GL
++    // context with a wide-line-capable display sets something else.
++    float mRequestedLineWidth = 1.0f;
++
+     RenderPassDesc mRenderPassDesc;
+     // Cached Objective-C render pass desc to avoid re-allocate every frame.
+     angle::ObjCPtr<MTLRenderPassDescriptor> mCachedRenderPassDescObjC;
+diff --git a/src/libANGLE/renderer/metal/mtl_command_buffer.mm b/src/libANGLE/renderer/metal/mtl_command_buffer.mm
+index a84b094ff3..db33fc31ff 100644
+--- a/src/libANGLE/renderer/metal/mtl_command_buffer.mm
++++ b/src/libANGLE/renderer/metal/mtl_command_buffer.mm
+@@ -60,6 +60,7 @@
+     PROC(SetViewport)                                \
+     PROC(SetScissorRect)                             \
+     PROC(SetBlendColor)                              \
++    PROC(SetLineWidth)                               \
+     PROC(SetVertexBuffer)                            \
+     PROC(SetVertexBufferOffset)                      \
+     PROC(SetVertexBytes)                             \
+@@ -180,6 +181,19 @@ inline void SetBlendColorCmd(id<MTLRenderCommandEncoder> encoder, IntermediateCo
+     [encoder setBlendColorRed:r green:g blue:b alpha:a];
+ }
+ 
++// Mac.apk (patch 0004): replay of RenderCommandEncoder::setLineWidth. The
++// respondsToSelector: guard is the same one MoltenVK puts around its identical
++// call (MVKCommandEncoderState.mm), so a native encoder without the private
++// method simply keeps drawing 1 px lines.
++inline void SetLineWidthCmd(id<MTLRenderCommandEncoder> encoder, IntermediateCommandStream *stream)
++{
++    float width = stream->fetch<float>();
++    if ([encoder respondsToSelector:@selector(setLineWidth:)])
++    {
++        [static_cast<id<MacapkMTLRenderCommandEncoderLineWidth>>(encoder) setLineWidth:width];
++    }
++}
++
+ inline void SetVertexBufferCmd(id<MTLRenderCommandEncoder> encoder,
+                                IntermediateCommandStream *stream)
+ {
+@@ -1349,6 +1363,8 @@ void RandomizeClearValue(ObjCAttachmentDescriptor *objCRenderPassAttachment)
+ 
+     blendColor = {0, 0, 0, 0};
+ 
++    lineWidth = 1.0f;
++
+     for (RenderCommandEncoderShaderStates &shaderStates : perShaderStates)
+     {
+         shaderStates.reset();
+@@ -1920,6 +1936,33 @@ void RandomizeClearValue(ObjCAttachmentDescriptor *objCRenderPassAttachment)
+     return *this;
+ }
+ 
++RenderCommandEncoder &RenderCommandEncoder::setLineWidth(float width)
++{
++    mRequestedLineWidth = width;
++    return *this;
++}
++
++// Mac.apk (patch 0004). GLES line width applies only to primitives rasterized
++// as lines: GL_LINES / GL_LINE_STRIP (and GL_LINE_LOOP, which this backend draws
++// as a line strip plus a closing MTLPrimitiveTypeLine), and triangles drawn with
++// polygon mode LINE, whose edges are line segments. Encoding the width only for
++// those draws means an app that never draws a line never reaches the private
++// method, and a width that never leaves 1.0 never emits anything at all.
++void RenderCommandEncoder::applyLineWidth(MTLPrimitiveType primitiveType)
++{
++    const bool rasterizesLines =
++        primitiveType == MTLPrimitiveTypeLine || primitiveType == MTLPrimitiveTypeLineStrip ||
++        ((primitiveType == MTLPrimitiveTypeTriangle ||
++          primitiveType == MTLPrimitiveTypeTriangleStrip) &&
++         mStateCache.triangleFillMode == MTLTriangleFillModeLines);
++    if (!rasterizesLines || mStateCache.lineWidth == mRequestedLineWidth)
++    {
++        return;
++    }
++    mStateCache.lineWidth = mRequestedLineWidth;
++    mCommands.push(CmdType::SetLineWidth).push(mRequestedLineWidth);
++}
++
+ RenderCommandEncoder &RenderCommandEncoder::setBuffer(gl::ShaderType shaderType,
+                                                       const BufferRef &buffer,
+                                                       size_t offset,
+@@ -2091,6 +2134,7 @@ void RandomizeClearValue(ObjCAttachmentDescriptor *objCRenderPassAttachment)
+     ASSERT(mPipelineStateSet &&
+            "Render Pipeline State was never set and we've issued a draw command.");
+     CheckPrimitiveType(primitiveType);
++    applyLineWidth(primitiveType);
+     mHasDrawCalls = true;
+     mCommands.push(CmdType::Draw).push(primitiveType).push(vertexStart).push(vertexCount);
+ 
+@@ -2105,6 +2149,7 @@ void RandomizeClearValue(ObjCAttachmentDescriptor *objCRenderPassAttachment)
+     ASSERT(mPipelineStateSet &&
+            "Render Pipeline State was never set and we've issued a draw command.");
+     CheckPrimitiveType(primitiveType);
++    applyLineWidth(primitiveType);
+     mHasDrawCalls = true;
+     mCommands.push(CmdType::DrawInstanced)
+         .push(primitiveType)
+@@ -2125,6 +2170,7 @@ void RandomizeClearValue(ObjCAttachmentDescriptor *objCRenderPassAttachment)
+     ASSERT(mPipelineStateSet &&
+            "Render Pipeline State was never set and we've issued a draw command.");
+     CheckPrimitiveType(primitiveType);
++    applyLineWidth(primitiveType);
+     mHasDrawCalls = true;
+     mCommands.push(CmdType::DrawInstancedBaseInstance)
+         .push(primitiveType)
+@@ -2150,6 +2196,7 @@ void RandomizeClearValue(ObjCAttachmentDescriptor *objCRenderPassAttachment)
+         return *this;
+     }
+ 
++    applyLineWidth(primitiveType);
+     mHasDrawCalls = true;
+     cmdBuffer().setReadDependency(indexBuffer, /*isRenderCommand=*/true);
+ 
+@@ -2178,6 +2225,7 @@ void RandomizeClearValue(ObjCAttachmentDescriptor *objCRenderPassAttachment)
+         return *this;
+     }
+ 
++    applyLineWidth(primitiveType);
+     mHasDrawCalls = true;
+     cmdBuffer().setReadDependency(indexBuffer, /*isRenderCommand=*/true);
+ 
+@@ -2210,6 +2258,7 @@ void RandomizeClearValue(ObjCAttachmentDescriptor *objCRenderPassAttachment)
+         return *this;
+     }
+ 
++    applyLineWidth(primitiveType);
+     mHasDrawCalls = true;
+     cmdBuffer().setReadDependency(indexBuffer, /*isRenderCommand=*/true);
+ 

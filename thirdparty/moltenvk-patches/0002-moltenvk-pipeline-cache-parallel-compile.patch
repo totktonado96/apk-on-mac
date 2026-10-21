@@ -1,0 +1,120 @@
+diff --git a/MoltenVK/MoltenVK/GPUObjects/MVKPipeline.mm b/MoltenVK/MoltenVK/GPUObjects/MVKPipeline.mm
+index 7eae64c..d3d151d 100644
+--- a/MoltenVK/MoltenVK/GPUObjects/MVKPipeline.mm
++++ b/MoltenVK/MoltenVK/GPUObjects/MVKPipeline.mm
+@@ -27,6 +27,8 @@
+ #include "mvk_datatypes.hpp"
+ #include <sys/stat.h>
+ #include <sstream>
++#include <atomic>
++#include <thread>
+ 
+ #ifndef MVK_USE_CEREAL
+ #define MVK_USE_CEREAL (1)
+@@ -2733,8 +2735,61 @@ static void setEmulatedReversedDepthViewportConfig(SPIRVToMSLConversionConfigura
+ 
+ // Loads any data indicated by the creation info.
+ // This is the compliment of the writeData() function. The two must be kept aligned.
++// Mac.apk: one shader library read from the pipeline cache, held until it is compiled.
++struct MVKPipelineCacheReadEntry {
++	MVKShaderModuleKey smKey;
++	SPIRVToMSLConversionConfiguration shaderConversionConfig;
++	SPIRVToMSLConversionResultInfo resultInfo;
++	MVKCompressor<std::string> compressedMSL;
++	MVKShaderLibrary* shLib = nullptr;
++};
++
++// Mac.apk: compile the libraries read from a pipeline cache on several threads.
++// Each MVKShaderLibrary compiles its MSL synchronously, so reading a large cache
++// one entry at a time kept a single MTLCompilerService busy while the rest idled:
++// a game that hands back a big cache (Asphalt Legends' is ~35 MB) sat on its logo
++// for minutes whenever the macOS Metal shader cache was cold. Entries are still
++// added to the caches in their stored order. MACAPK_MVK_PLC_THREADS=1 restores the
++// one-at-a-time compile; any other number sets the thread count.
++static void mvkCompilePipelineCacheEntries(MVKPipelineCache* plc, id<MTLDevice> mtlDev,
++										   std::vector<MVKPipelineCacheReadEntry>& entries) {
++	size_t threadCnt = std::max<NSUInteger>(1, NSProcessInfo.processInfo.activeProcessorCount);
++	if (const char* ev = getenv("MACAPK_MVK_PLC_THREADS")) {
++		long n = strtol(ev, nullptr, 10);
++		if (n > 0) { threadCnt = (size_t)n; }
++	}
++	threadCnt = std::min(threadCnt, entries.size());
++
++	std::atomic<size_t> next(0);
++	auto worker = [&]() {
++		for (size_t i = next++; i < entries.size(); i = next++) {
++			@autoreleasepool {
++				auto& e = entries[i];
++				e.shLib = new MVKShaderLibrary(plc, e.resultInfo, e.compressedMSL);
++			}
++		}
++	};
++
++	if (threadCnt <= 1) { worker(); return; }
++
++	bool hadMaxConcurrent = false;
++	if (@available(macOS 13.3, iOS 16.4, tvOS 16.4, *)) {
++		hadMaxConcurrent = mtlDev.shouldMaximizeConcurrentCompilation;
++		mtlDev.shouldMaximizeConcurrentCompilation = YES;
++	}
++	std::vector<std::thread> threads;
++	threads.reserve(threadCnt - 1);
++	for (size_t t = 1; t < threadCnt; t++) { threads.emplace_back(worker); }
++	worker();
++	for (auto& th : threads) { th.join(); }
++	if (@available(macOS 13.3, iOS 16.4, tvOS 16.4, *)) {
++		mtlDev.shouldMaximizeConcurrentCompilation = hadMaxConcurrent;
++	}
++}
++
+ void MVKPipelineCache::readData(const VkPipelineCacheCreateInfo* pCreateInfo) {
+ #if MVK_USE_CEREAL
++	std::vector<MVKPipelineCacheReadEntry> entries;
+ 	try {
+ 
+ 		size_t byteCount = pCreateInfo->initialDataSize;
+@@ -2774,22 +2829,15 @@ static void setEmulatedReversedDepthViewportConfig(SPIRVToMSLConversionConfigura
+ 				case MVKPipelineCacheEntryTypeShaderLibrary: {
+ 					uint64_t startTime = getPerformanceTimestamp();
+ 
+-					MVKShaderModuleKey smKey;
+-					reader(smKey);
+-
+-					SPIRVToMSLConversionConfiguration shaderConversionConfig;
+-					reader(shaderConversionConfig);
+-
+-					SPIRVToMSLConversionResultInfo resultInfo;
+-					reader(resultInfo);
++					// Mac.apk: read only; the libraries are compiled together below.
++					MVKPipelineCacheReadEntry e;
++					reader(e.smKey);
++					reader(e.shaderConversionConfig);
++					reader(e.resultInfo);
++					reader(e.compressedMSL);
++					entries.push_back(std::move(e));
+ 
+-					MVKCompressor<std::string> compressedMSL;
+-					reader(compressedMSL);
+-
+-					// Add the shader library to the staging cache.
+-					MVKShaderLibraryCache* slCache = getShaderLibraryCache(smKey);
+ 					addPerformanceInterval(getPerformanceStats().pipelineCache.readPipelineCache, startTime);
+-					slCache->addShaderLibrary(&shaderConversionConfig, resultInfo, compressedMSL);
+ 
+ 					break;
+ 				}
+@@ -2804,6 +2852,14 @@ static void setEmulatedReversedDepthViewportConfig(SPIRVToMSLConversionConfigura
+ 	} catch (cereal::Exception& ex) {
+ 		setConfigurationResult(reportError(VK_ERROR_INITIALIZATION_FAILED, "Error reading pipeline cache data: %s", ex.what()));
+ 	}
++
++	// Mac.apk: compile every library read above, then add them to the staging caches in order.
++	if ( !entries.empty() ) {
++		mvkCompilePipelineCacheEntries(this, getMTLDevice(), entries);
++		for (auto& e : entries) {
++			getShaderLibraryCache(e.smKey)->_shaderLibraries.emplace_back(e.shaderConversionConfig, e.shLib);
++		}
++	}
+ #else
+ 	setConfigurationResult(reportError(VK_ERROR_INITIALIZATION_FAILED, "Pipeline cache serialization is unavailable. To enable pipeline cache serialization, build MoltenVK with MVK_USE_CEREAL=1 build setting."));
+ #endif

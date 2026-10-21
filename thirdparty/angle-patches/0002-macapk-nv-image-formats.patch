@@ -1,0 +1,47 @@
+diff --git a/src/libANGLE/validationES31.cpp b/src/libANGLE/validationES31.cpp
+index 2ce8222454..67315965b4 100644
+--- a/src/libANGLE/validationES31.cpp
++++ b/src/libANGLE/validationES31.cpp
+@@ -1421,6 +1421,42 @@ bool ValidateBindImageTexture(const Context *context,
+         case GL_RGBA8:
+         case GL_RGBA8_SNORM:
+             break;
++        // Mac.apk (v1.0.604): GL_NV_image_formats. Real Android GPUs (Adreno /
++        // Mali) expose GL_NV_image_formats, which extends image load/store to the
++        // single/dual-channel + 16-bit + packed formats below. Minecraft
++        // Bedrock's RenderDragon binds exactly these (R8/R16/RG8/R8I/R16UI/... via
++        // glBindImageTexture, access=GL_READ_WRITE) for its deferred renderer;
++        // upstream ANGLE never implemented the extension so it rejected them with
++        // GL_INVALID_VALUE, leaving RenderDragon's offscreen passes empty -> a
++        // BLACK menu. Our ANGLE-Vulkan-on-MoltenVK backend DOES support these as
++        // Vulkan storage images (VK_FORMAT_FEATURE_STORAGE_IMAGE_BIT verified for
++        // every one on Apple M2, debug/vkfmt.c), so accepting them here matches
++        // real-Android behavior. Only GLES-3.1 engines on the Vulkan backend hit
++        // this path (GLES 2.0/3.0 engines never call glBindImageTexture).
++        case GL_R8:
++        case GL_R8_SNORM:
++        case GL_R8UI:
++        case GL_R8I:
++        case GL_R16_EXT:        // GL_R16 (EXT_texture_norm16)
++        case GL_R16_SNORM_EXT:  // GL_R16_SNORM
++        case GL_R16F:
++        case GL_R16UI:
++        case GL_R16I:
++        case GL_RG8:
++        case GL_RG8_SNORM:
++        case GL_RG8UI:
++        case GL_RG8I:
++        case GL_RG16_EXT:       // GL_RG16
++        case GL_RG16_SNORM_EXT: // GL_RG16_SNORM
++        case GL_RG16F:
++        case GL_RG16UI:
++        case GL_RG16I:
++        case GL_R11F_G11F_B10F:
++        case GL_RGB10_A2:
++        case GL_RGB10_A2UI:
++        case GL_RGBA16_EXT:        // GL_RGBA16
++        case GL_RGBA16_SNORM_EXT:  // GL_RGBA16_SNORM
++            break;
+         default:
+             ANGLE_VALIDATION_ERROR(GL_INVALID_VALUE, kInvalidImageFormat);
+             return false;

@@ -1,0 +1,314 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Info.plist for the Mac.apk launcher.
+
+  Document type association: registers .apk and the four bundle formats so
+  double-clicking one in Finder opens Mac.apk, which then INSTALLS it (see
+  MacApkLauncherApp.swift's onOpenURL -> confirmAndInstall). Finder is the
+  intended front door, not a fallback, which is why LSHandlerRank is Default
+  rather than Alternate.
+-->
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>CFBundleName</key>
+    <string>Mac.apk</string>
+    <key>CFBundleDisplayName</key>
+    <string>Mac.apk</string>
+    <!--
+      The bundle is named Mac.apk.app so Finder/Dock show "Mac.apk" (macOS
+      ignores CFBundleDisplayName when it does not match the on-disk bundle
+      name). The executable inside stays "MacApk" (dot-free, so `pkill -x
+      MacApk` still works), so CFBundleExecutable MUST be set explicitly  -
+      otherwise macOS derives the executable name from the bundle name
+      ("Mac.apk") and fails to launch.
+    -->
+    <key>CFBundleExecutable</key>
+    <string>MacApk</string>
+    <key>CFBundleIdentifier</key>
+    <string>org.macapk.launcher</string>
+    <!--
+      LaunchServices caches a bundle's type registrations keyed by
+      CFBundleVersion, so a plist that gains document types without a
+      version bump can be ignored until the LS database is rebuilt by
+      hand. Bump this whenever CFBundleDocumentTypes / UTExported /
+      UTImported below change. (0.2.0 = the Finder-front-door change:
+      rank Default + the four bundle formats. 0.3.0 = CFBundleTypeExtensions
+      added, after a measured machine where another app owned the .apk UTI
+      and our UTI-only binding was never consulted. 0.4.0 = the extension
+      claims moved into their OWN document types, because 0.3.0 put them in
+      the same dicts as LSItemContentTypes, where LaunchServices ignores
+      them; see the CFBundleDocumentTypes comment below.)
+    -->
+    <key>CFBundleVersion</key>
+    <string>0.4.0</string>
+    <key>CFBundleShortVersionString</key>
+    <string>0.2.0</string>
+    <key>CFBundlePackageType</key>
+    <string>APPL</string>
+    <!--
+      App icon. build_launcher.sh generates AppIcon.icns from the 512px
+      master (images/mac_apk_icon_512.png) into Contents/Resources/ at build
+      time, so the launcher shows the Mac.apk icon in the Dock/Finder.
+      The same art is also bundled (as macapk_default_icon.png) next to
+      the runtime so a launched app with no icon of its own gets it too.
+    -->
+    <key>CFBundleIconFile</key>
+    <string>AppIcon</string>
+    <!--
+      macOS 26 (Tahoe) on Apple Silicon is the only host configuration the
+      project verifies against (CLAUDE.md "Build"), and the runtime this
+      launcher spawns leans on macOS-26 libSystem / JDK 21 specifics. A
+      lower floor here advertises support we do not test and lets the app
+      launch on a host where the runtime cannot work, which surfaces as an
+      unexplained child-process failure instead of an honest refusal.
+    -->
+    <!-- 26.4, not 26.0. The x18 preservation the arm64 guest path depends on
+         comes from com.apple.security.custom-x18-abi-toggle, and Apple's own SDK
+         marks its API os_set_custom_x18_abi_enabled() API_AVAILABLE(macos(26.4)).
+         Below 26.4 XNU does not read TPIDR_EL0 bit 48 at all. It checks a
+         different per-thread flag, so the entitlement is inert and guest x18 is
+         zeroed on EVERY return to userspace, silently corrupting Unity and
+         cocos2d-x code. 36 of 51 APKs in the test corpus ship arm64-v8a, so that
+         is the majority path, not an edge case. Owner set the floor 2026-08-21.
+         NOTE: no double hyphen may appear in this comment. It terminates the XML
+         comment early; plutil accepts it anyway but strict parsers do not. -->
+    <key>LSMinimumSystemVersion</key>
+    <string>26.4</string>
+    <key>NSPrincipalClass</key>
+    <string>NSApplication</string>
+    <key>NSHighResolutionCapable</key>
+    <true/>
+
+    <!--
+      Document types. These must cover every extension the runtime can
+      install, which is kSupportedApkExtensions in MacApkLauncherApp.swift:
+      apk, apkm, xapk, apks, apkx. A format missing here cannot be
+      double-clicked, so the two lists have to be changed together.
+
+      LSHandlerRank Default (was Alternate): Finder double-click is the
+      intended way to install an app, so we claim the types outright.
+      Rank alone does not evict a handler the USER previously chose  -
+      the Settings sheet's "Make Default" row calls
+      NSWorkspace.setDefaultApplication(at:toOpen:) for that.
+    -->
+    <key>CFBundleDocumentTypes</key>
+    <array>
+        <dict>
+            <key>CFBundleTypeName</key>
+            <string>Android Application Package</string>
+            <key>CFBundleTypeRole</key>
+            <string>Viewer</string>
+            <key>LSItemContentTypes</key>
+            <array>
+                <string>org.macapk.apk</string>
+            </array>
+            <key>LSHandlerRank</key>
+            <string>Default</string>
+        </dict>
+        <dict>
+            <key>CFBundleTypeName</key>
+            <string>Android App Bundle</string>
+            <key>CFBundleTypeRole</key>
+            <string>Viewer</string>
+            <key>LSItemContentTypes</key>
+            <array>
+                <string>org.macapk.apkm</string>
+                <string>org.macapk.xapk</string>
+                <string>org.macapk.apks</string>
+                <string>org.macapk.apkx</string>
+            </array>
+            <key>LSHandlerRank</key>
+            <string>Default</string>
+        </dict>
+        <!-- Claim by EXTENSION, in a document type of its own.
+
+             Why: on a Mac where another app declares a type for the .apk
+             extension, LaunchServices can pick THAT type as the canonical one
+             for the extension (measured 2026-08-10: org.polyrun.apk; reported
+             2026-10-03 on macOS 27 with Keka installed, Mac.apk-Releases
+             issue 1). A double-clicked .apk then carries the foreign UTI, and
+             a document type bound only through LSItemContentTypes is never a
+             candidate: Mac.apk was missing from Open With entirely.
+
+             Why a SEPARATE dict: 0.3.0 put CFBundleTypeExtensions inside the
+             two dicts above, next to LSItemContentTypes. Apple's Information
+             Property List Key Reference (CoreFoundationKeys, Table 2) says
+             LSItemContentTypes "when present takes precedence over these
+             type-identifier keys: CFBundleTypeExtensions, CFBundleTypeMIMETypes,
+             CFBundleTypeOSTypes", so those extension claims were inert. An
+             extension claim only binds in a dict WITHOUT LSItemContentTypes.
+             LaunchServices matches it against whatever UTI the extension
+             resolves to on this Mac, so it survives another app owning the type.
+
+             The list must match kSupportedApkExtensions in
+             MacApkLauncherApp.swift, like the two dicts above. -->
+        <dict>
+            <key>CFBundleTypeName</key>
+            <string>Android Application Package (by extension)</string>
+            <key>CFBundleTypeRole</key>
+            <string>Viewer</string>
+            <key>CFBundleTypeExtensions</key>
+            <array>
+                <string>apk</string>
+                <string>apkm</string>
+                <string>xapk</string>
+                <string>apks</string>
+                <string>apkx</string>
+            </array>
+            <key>LSHandlerRank</key>
+            <string>Default</string>
+        </dict>
+    </array>
+
+    <!--
+      Exported UTI for .apk so macOS knows what type APKs are. Android does
+      not register an official UTI for APKs so we declare our own. Exported
+      (not imported) because no other vendor defines this type, so we are
+      the authority for it.
+
+      Do NOT change the identifier "org.macapk.apk": LaunchServices keys a
+      user's chosen default handler off the type identifier, so renaming it
+      orphans every existing registration.
+    -->
+    <key>UTExportedTypeDeclarations</key>
+    <array>
+        <dict>
+            <key>UTTypeIdentifier</key>
+            <string>org.macapk.apk</string>
+            <key>UTTypeDescription</key>
+            <string>Android Application Package</string>
+            <key>UTTypeConformsTo</key>
+            <array>
+                <string>public.zip-archive</string>
+            </array>
+            <key>UTTypeTagSpecification</key>
+            <dict>
+                <key>public.filename-extension</key>
+                <array>
+                    <string>apk</string>
+                </array>
+                <key>public.mime-type</key>
+                <array>
+                    <string>application/vnd.android.package-archive</string>
+                </array>
+            </dict>
+        </dict>
+    </array>
+
+    <!--
+      The four bundle formats belong to OTHER ecosystems (.apkm is
+      APKMirror's, .xapk is APKPure's, .apks is bundletool's, .apkx is
+      APKPure's older single-apk variant), so they are IMPORTED, not
+      exported: we declare what we know about a type someone else owns,
+      and defer to that owner's declaration if one ever appears on the
+      system. Each is a zip, hence the public.zip-archive conformance  -
+      the same conformance the .apk type uses, which is why a zip utility
+      can also claim these files and why the "Make Default" row exists.
+    -->
+    <key>UTImportedTypeDeclarations</key>
+    <array>
+        <dict>
+            <key>UTTypeIdentifier</key>
+            <string>org.macapk.apkm</string>
+            <key>UTTypeDescription</key>
+            <string>Android App Bundle (APKMirror)</string>
+            <key>UTTypeConformsTo</key>
+            <array>
+                <string>public.zip-archive</string>
+            </array>
+            <key>UTTypeTagSpecification</key>
+            <dict>
+                <key>public.filename-extension</key>
+                <array>
+                    <string>apkm</string>
+                </array>
+            </dict>
+        </dict>
+        <dict>
+            <key>UTTypeIdentifier</key>
+            <string>org.macapk.xapk</string>
+            <key>UTTypeDescription</key>
+            <string>Android App Bundle (APKPure)</string>
+            <key>UTTypeConformsTo</key>
+            <array>
+                <string>public.zip-archive</string>
+            </array>
+            <key>UTTypeTagSpecification</key>
+            <dict>
+                <key>public.filename-extension</key>
+                <array>
+                    <string>xapk</string>
+                </array>
+            </dict>
+        </dict>
+        <dict>
+            <key>UTTypeIdentifier</key>
+            <string>org.macapk.apks</string>
+            <key>UTTypeDescription</key>
+            <string>Android App Bundle (bundletool)</string>
+            <key>UTTypeConformsTo</key>
+            <array>
+                <string>public.zip-archive</string>
+            </array>
+            <key>UTTypeTagSpecification</key>
+            <dict>
+                <key>public.filename-extension</key>
+                <array>
+                    <string>apks</string>
+                </array>
+            </dict>
+        </dict>
+        <dict>
+            <key>UTTypeIdentifier</key>
+            <string>org.macapk.apkx</string>
+            <key>UTTypeDescription</key>
+            <string>Android Application Package (APKPure)</string>
+            <key>UTTypeConformsTo</key>
+            <array>
+                <string>public.zip-archive</string>
+            </array>
+            <key>UTTypeTagSpecification</key>
+            <dict>
+                <key>public.filename-extension</key>
+                <array>
+                    <string>apkx</string>
+                </array>
+            </dict>
+        </dict>
+    </array>
+
+    <!--
+      TCC usage descriptions. Android apps request CAMERA / RECORD_AUDIO /
+      ACCESS_FINE_LOCATION / BLUETOOTH_* / READ_MEDIA_IMAGES at runtime; the
+      macOS equivalent is a TCC prompt, and TCC's contract is that a process
+      touching a protected resource with NO matching usage-description key in
+      its bundle Info.plist is killed outright (SIGKILL, not a denial the app
+      can handle). The runtime runs as a child of this bundle, so this is the
+      Info.plist TCC reads. These strings are declared ahead of the native
+      AVFoundation / CoreLocation / CoreBluetooth bridge so that wiring the
+      bridge cannot instant-kill the process, and so the prompt the user sees
+      names the Android app rather than being blank. Adding a key does not
+      itself trigger a prompt  - the prompt happens on first access.
+    -->
+    <key>NSCameraUsageDescription</key>
+    <string>An Android app running in Mac.apk is requesting camera access.</string>
+    <key>NSMicrophoneUsageDescription</key>
+    <string>An Android app running in Mac.apk is requesting microphone access.</string>
+    <key>NSLocationWhenInUseUsageDescription</key>
+    <string>An Android app running in Mac.apk is requesting your location.</string>
+    <key>NSBluetoothAlwaysUsageDescription</key>
+    <string>An Android app running in Mac.apk is requesting Bluetooth access.</string>
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>An Android app running in Mac.apk is requesting access to your photo library.</string>
+
+    <!--
+      We need permission to spawn child processes (the runtime) and to open
+      URLs via NSWorkspace. Both are default abilities, but if we later add
+      App Sandbox we will need to declare entitlements:
+        com.apple.security.app-sandbox
+        com.apple.security.files.user-selected.read-only
+        com.apple.security.temporary-exception.process-spawn (or NSXPC route)
+    -->
+</dict>
+</plist>

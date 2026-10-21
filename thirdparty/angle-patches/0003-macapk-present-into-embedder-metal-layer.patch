@@ -1,0 +1,54 @@
+diff --git a/src/libANGLE/renderer/vulkan/mac/WindowSurfaceVkMac.mm b/src/libANGLE/renderer/vulkan/mac/WindowSurfaceVkMac.mm
+index 1f99df2776..1415c385ee 100644
+--- a/src/libANGLE/renderer/vulkan/mac/WindowSurfaceVkMac.mm
++++ b/src/libANGLE/renderer/vulkan/mac/WindowSurfaceVkMac.mm
+@@ -35,17 +35,38 @@
+ 
+     CALayer *layer = reinterpret_cast<CALayer *>(mNativeWindowType);
+ 
+-    mMetalLayer        = [[CAMetalLayer alloc] init];
+-    mMetalLayer.frame  = CGRectMake(0, 0, layer.frame.size.width, layer.frame.size.height);
+-    mMetalLayer.device = mMetalDevice;
+-    mMetalLayer.drawableSize =
+-        CGSizeMake(mMetalLayer.bounds.size.width * mMetalLayer.contentsScale,
+-                   mMetalLayer.bounds.size.height * mMetalLayer.contentsScale);
+-    mMetalLayer.framebufferOnly  = NO;
+-    mMetalLayer.autoresizingMask = kCALayerWidthSizable | kCALayerHeightSizable;
+-    mMetalLayer.contentsScale    = layer.contentsScale;
+-
+-    [layer addSublayer:mMetalLayer];
++    // MACAPK: when the embedder already hands us a CAMetalLayer, present into it
++    // DIRECTLY rather than creating + addSublayer:ing a private child layer. The
++    // child-sublayer path below runs on the CALLER's thread, which for a native-EGL
++    // engine (Minecraft's RenderDragon) is the guest RENDER thread, not the main
++    // thread. Core Animation layer-tree mutations off the main thread are not
++    // reliably committed to the render server, so MoltenVK ends up presenting into a
++    // child layer that never robustly reaches the screen: the Vulkan swapchain image
++    // renders correctly (glReadPixels confirms the full frame) yet the window stays
++    // black. The host owns this CAMetalLayer's geometry / visibility / parent and
++    // re-asserts them on the main thread, so reusing it directly makes the present
++    // visible. Only the passed-CAMetalLayer case changes; NSView / plain-CALayer
++    // embedders still take the original child-layer path unchanged.
++    if ([layer isKindOfClass:[CAMetalLayer class]])
++    {
++        mMetalLayer                 = (CAMetalLayer *)[layer retain];
++        mMetalLayer.device          = mMetalDevice;
++        mMetalLayer.framebufferOnly = NO;
++    }
++    else
++    {
++        mMetalLayer        = [[CAMetalLayer alloc] init];
++        mMetalLayer.frame  = CGRectMake(0, 0, layer.frame.size.width, layer.frame.size.height);
++        mMetalLayer.device = mMetalDevice;
++        mMetalLayer.drawableSize =
++            CGSizeMake(mMetalLayer.bounds.size.width * mMetalLayer.contentsScale,
++                       mMetalLayer.bounds.size.height * mMetalLayer.contentsScale);
++        mMetalLayer.framebufferOnly  = NO;
++        mMetalLayer.autoresizingMask = kCALayerWidthSizable | kCALayerHeightSizable;
++        mMetalLayer.contentsScale    = layer.contentsScale;
++
++        [layer addSublayer:mMetalLayer];
++    }
+ 
+     VkMetalSurfaceCreateInfoEXT createInfo = {};
+     createInfo.sType                       = VK_STRUCTURE_TYPE_METAL_SURFACE_CREATE_INFO_EXT;

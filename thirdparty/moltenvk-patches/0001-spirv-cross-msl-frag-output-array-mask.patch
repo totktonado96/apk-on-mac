@@ -1,0 +1,26 @@
+--- a/spirv_msl.cpp
++++ b/spirv_msl.cpp
+@@ -3080,6 +3080,23 @@
+ 
+ 	for (uint32_t i = 0; i < elem_cnt; i++)
+ 	{
++		// Mac.apk: a flattened fragment-output ARRAY can straddle enable_frag_output_mask.
++		// add_interface_block() keeps the whole variable when its BASE location is enabled,
++		// but member_attribute_qualifier() then strips [[color(n)]] from every element whose
++		// own location is disabled, and Metal rejects an unattributed member of a fragment
++		// return struct ("'color' attribute must be made explicit"). Skip those elements
++		// here instead. The variable is already a function-local array (add_local_variable
++		// above), so writes to the skipped elements still compile and are discarded, which
++		// is what Vulkan specifies for an output location with no color attachment.
++		// Only shaders that fail to compile today change behaviour.
++		if (storage == StorageClassOutput && get_execution_model() == ExecutionModelFragment && !is_builtin &&
++		    !meta.strip_array && has_decoration(var.self, DecorationLocation))
++		{
++			uint32_t elem_locn = get_decoration(var.self, DecorationLocation) + i;
++			if (elem_locn < 32 && !(msl_options.enable_frag_output_mask & (1u << elem_locn)))
++				continue;
++		}
++
+ 		// Add a reference to the variable type to the interface struct.
+ 		uint32_t ib_mbr_idx = uint32_t(ib_type.member_types.size());
+ 

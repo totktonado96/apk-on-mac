@@ -1,0 +1,23 @@
+diff --git a/src/libANGLE/renderer/vulkan/vk_renderer.cpp b/src/libANGLE/renderer/vulkan/vk_renderer.cpp
+index f96feb213e..1a8fb125e5 100644
+--- a/src/libANGLE/renderer/vulkan/vk_renderer.cpp
++++ b/src/libANGLE/renderer/vulkan/vk_renderer.cpp
+@@ -5104,7 +5104,17 @@ gl::Version Renderer::getMaxSupportedESVersion() const
+     // Limit to ES2.0 if there are any blockers for 3.0.
+ 
+     // VK_EXT_provoking_vertex is required for flat shading.
+-    if (!mFeatures.provokingVertex.enabled)
++    // Mac.apk (v1.0.603) DIAGNOSTIC GATE: MoltenVK on Apple Silicon does NOT
++    // advertise VK_EXT_provoking_vertex unless it was built with
++    // MVK_USE_METAL_PRIVATE_API=1 (Homebrew/most prebuilts omit it), so this
++    // check caps ANGLE to ES2 -- which is fatal for GLES-3.1 engines (Minecraft
++    // Bedrock / RenderDragon). Setting MACAPK_ANGLE_ALLOW_ES3_NO_PROVOKING=1
++    // skips the cap so ES3.x is exposed; the only correctness cost is that
++    // flat-qualified (flat) varyings take the FIRST vertex instead of the LAST.
++    // Off by default -> byte-identical to upstream ANGLE. The proper fix is a
++    // MoltenVK build WITH provoking-vertex (then this gate is unnecessary).
++    if (!mFeatures.provokingVertex.enabled &&
++        getenv("MACAPK_ANGLE_ALLOW_ES3_NO_PROVOKING") == nullptr)
+     {
+         maxVersion = LimitVersionTo(maxVersion, {2, 0});
+     }

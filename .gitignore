@@ -1,0 +1,43 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon?
+._*
+
+# Editors
+.idea/
+.vscode/
+*.iml
+*.swp
+*.swo
+*.xcuserstate
+xcuserdata/
+
+# Build output
+build/
+dist/
+out/
+runtime/build/
+cache/
+logs/
+*.log
+*.tmp
+launcher/BuildInfo.generated.swift
+__pycache__/
+*.py[cod]
+
+# Large or machine-local dependencies, fetched or built by the scripts
+thirdparty/angle/
+thirdparty/depot_tools/
+thirdparty/MoltenVK-build/
+thirdparty/framework-res/
+
+# Signing and notarization settings. Never commit these.
+scripts/.release.env
+.env
+.env.*
+*.p8
+*.p12
+*.keystore
+*.jks

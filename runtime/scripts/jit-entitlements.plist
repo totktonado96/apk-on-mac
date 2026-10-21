@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <!-- W^X JIT for Android JS engines run natively (cohtml's V8 renders MCPE's
+         Ore-UI menu). allow-jit permits MAP_JIT + pthread_jit_write_protect;
+         allow-unsigned-executable-memory permits mprotect(RX) on freshly-written
+         RW pages (the W^X code-modification path). Persistent RWX is still blocked
+         under ad-hoc signing; the mprotect shim translates a guest RWX request to
+         a transient RW write phase (see __macapk_arm64_mprotect). -->
+    <key>com.apple.security.cs.allow-jit</key>
+    <true/>
+    <key>com.apple.security.cs.allow-unsigned-executable-memory</key>
+    <true/>
+    <!-- v1.0.1017: needed once the bundle is signed with a Developer ID rather
+         than ad-hoc. Library validation would otherwise refuse the runtime's
+         dlopen of ANGLE / MoltenVK / libjvm, which are signed by other teams or
+         not at all. Ad hoc signing does not enforce it, which is why the dev
+         path never needed this key and why its absence here stayed invisible
+         until a release build was contemplated.
+         It arrived here because launcher/MacApk.entitlements (the file
+         scripts/build_dist.sh used to sign with) carried THIS key but not
+         custom-x18-abi-toggle, device.camera or device.audio-input, while this
+         file carried those three but not this one. Two files, drifted in BOTH
+         directions, and a forced codesign with an entitlements argument
+         REPLACES the whole blob rather than merging it. There is now ONE file;
+         do not reintroduce a second.
+         NOTE: no double hyphen may appear anywhere in this comment. It closes
+         the XML comment early, plutil accepts it anyway, and AMFI then rejects
+         the plist at codesign time with a syntax error that names neither the
+         file nor the cause. That is exactly how this edit failed once. -->
+    <key>com.apple.security.cs.disable-library-validation</key>
+    <true/>
+    <!-- Durable x18 preservation (macOS 26.4+). This entitlement makes XNU
+         honor a SELF-set TPIDR_EL0 bit 48 (MACHDEP_TPIDR_FLAG_PRESERVE_X18)
+         across context switches, so x18 survives EL0 exception returns for
+         each thread that OR-s the bit in. Guest Android arm64 code (Unity,
+         cocos2d-x, hand-asm FMOD) uses x18 as a general-purpose register,
+         which macOS otherwise clobbers. Note: .security. (NOT .private.) so
+         it is honored for ad-hoc third-party binaries under SIP; same
+         com.apple.security.* family as allow-jit above. As of v1.0.1018 this
+         is the ONLY x18 mechanism: the deprecated sdk-below-13
+         LC_BUILD_VERSION gate and its MACAPK_X18_SDK_GATE option were
+         deleted, so there is no fallback below macOS 26.4. See
+         docs/x18-custom-abi-toggle-entitlement_2026-07-14.md. -->
+    <key>com.apple.security.custom-x18-abi-toggle</key>
+    <true/>
+    <!-- v1.0.940: real microphone and camera capture (audio_input.mm /
+         camera_capture.mm). These are HARDENED RUNTIME "Resource Access" keys,
+         NOT App Sandbox keys: the sandbox spellings are the different
+         com.apple.security.device.microphone / .camera, and we are not
+         sandboxed. This binary is signed by build.sh with codesign's
+         hardened-runtime option, so these are the ones TCC consults.
+         The bundle's Info.plist usage strings (launcher/Info.plist:113) are the
+         other half and were already present. One half without the other can
+         yield a SILENT denial rather than a prompt, which is the failure mode
+         hardest to diagnose from the app side. If capture ever fails with no
+         prompt, dump the signed entitlements with codesign and check both keys
+         are present.
+
+         WARNING TO THE NEXT EDITOR: do NOT write a double hyphen anywhere in
+         this comment. XML forbids it inside a comment, and AMFI's parser
+         enforces that where `plutil -lint` does not: it accepts the file, then
+         codesign fails with "AMFIUnserializeXML: syntax error", make DELETES
+         the linked binary, and the build stops. That is exactly how v1.0.940
+         first broke, by spelling out a codesign flag here. The project's
+         house style of writing a double hyphen in place of an em dash does not
+         apply to XML. -->
+    <key>com.apple.security.device.audio-input</key>
+    <true/>
+    <key>com.apple.security.device.camera</key>
+    <true/>
+    <!-- Mac Location Services for android.location (location_bridge.mm).
+         The hardened runtime Resource Access key for CoreLocation; without it
+         TCC refuses this binary location without ever showing the prompt,
+         however complete the bundle usage string is. Same rule as the two
+         keys above: one half without the other is a SILENT denial. -->
+    <key>com.apple.security.personal-information.location</key>
+    <true/>
+</dict>
+</plist>

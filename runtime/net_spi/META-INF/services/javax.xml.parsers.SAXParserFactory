@@ -1,0 +1,8 @@
+# Android's default SAXParserFactory (namespace-processing Expat semantics, no
+# external DTD fetch). JDK FactoryFinder reads this ServiceLoader entry before
+# falling back to its own Xerces factory, so SAXParserFactory.newInstance()
+# answers like libcore's does. Lives here because runtime/net_spi/META-INF/services
+# is the one resource directory both build.sh and build_java_only.sh package
+# (into macapk-loader.jar). See runtime/java/org/apache/harmony/xml/parsers/
+# SAXParserFactoryImpl.java; bisect with MACAPK_SAX_ANDROID_DEFAULTS=0.
+org.apache.harmony.xml.parsers.SAXParserFactoryImpl
