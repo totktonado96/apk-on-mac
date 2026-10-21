@@ -716,6 +716,7 @@ public class TextView extends View
             mTextSizeUnit = attributes.textSizeUnit;
             if (textSizePx != attributes.textSize) {
                 textSizePx = attributes.textSize;
+                macapkSyncPaintTextSize();
                 requestLayout();
                 invalidate();
             }
@@ -870,6 +871,7 @@ public class TextView extends View
                 ? dm.scaledDensity
                 : (dm != null && dm.density > 0f ? dm.density : 1f);
             this.textSizePx = 14f * density;
+            macapkSyncPaintTextSize();
         } catch (Throwable t) {
             // Leave the static 14f default if the context isn't usable
             // yet (some test paths construct TextView before Resources
@@ -1559,6 +1561,7 @@ public class TextView extends View
         mTextSizeUnit = unit;
         if (textSizePx != px) {
             textSizePx = px;
+            macapkSyncPaintTextSize();
             requestLayout();
             invalidate();
         }
@@ -1580,6 +1583,7 @@ public class TextView extends View
         this.textSizePx = (dm != null)
             ? android.util.TypedValue.applyDimension(unit, size, dm)
             : size;
+        macapkSyncPaintTextSize();
         if (TW_TRACE) {
             String cn = getClass().getSimpleName();
             if (cn.contains("CalculatorFormula") || cn.contains("CalculatorResult")) {
@@ -1702,9 +1706,19 @@ public class TextView extends View
     // version (gated Calculator's onStart). TextPaint extends Paint,
     // so internal Paint-typed callers are unaffected.
     private android.text.TextPaint paint;
+    /** AOSP setTextSize writes the size into mTextPaint at once (setRawTextSize),
+     *  so getPaint().getTextSize() always answers the view's size. Ours kept the
+     *  size in textSizePx and copied it into the paint only when measuring or
+     *  drawing, so code that reads the paint in between got the Paint default
+     *  (12px): WhatsApp sizes its emoji images from getPaint().getTextSize() when
+     *  the text is set, and a reaction's heart came out 13px instead of 32px. */
+    private void macapkSyncPaintTextSize() {
+        if (paint != null) paint.setTextSize(textSizePx);
+    }
     public android.text.TextPaint getPaint() {
         if (paint == null) {
             paint = new android.text.TextPaint();
+            paint.setTextSize(textSizePx);
             // A link colour set before the paint existed (ctor theme default,
             // an early setLinkTextColor) has to land on it too.
             if (mLinkTextColor != null) {
