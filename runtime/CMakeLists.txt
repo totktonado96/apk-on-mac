@@ -149,6 +149,7 @@ set(MACAPK_RUNTIME_SOURCES
     # media keys; gate MACAPK_NOW_PLAYING).
     src/nowplaying_bridge.mm
     src/notification_bridge.mm
+    src/power_assertion_bridge.mm
     src/webview_bridge.mm
     # Android App Links: the sign-in window that hands a verified link back (AppLinks.java).
     src/applink_window.mm
