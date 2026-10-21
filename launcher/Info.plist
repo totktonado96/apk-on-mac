@@ -12,9 +12,9 @@
 <plist version="1.0">
 <dict>
     <key>CFBundleName</key>
-    <string>Mac.apk</string>
+    <string>Apk on Mac</string>
     <key>CFBundleDisplayName</key>
-    <string>Mac.apk</string>
+    <string>Apk on Mac</string>
     <!--
       The bundle is named Mac.apk.app so Finder/Dock show "Mac.apk" (macOS
       ignores CFBundleDisplayName when it does not match the on-disk bundle
@@ -292,15 +292,15 @@
       itself trigger a prompt  - the prompt happens on first access.
     -->
     <key>NSCameraUsageDescription</key>
-    <string>An Android app running in Mac.apk is requesting camera access.</string>
+    <string>An Android app running in Apk on Mac is requesting camera access.</string>
     <key>NSMicrophoneUsageDescription</key>
-    <string>An Android app running in Mac.apk is requesting microphone access.</string>
+    <string>An Android app running in Apk on Mac is requesting microphone access.</string>
     <key>NSLocationWhenInUseUsageDescription</key>
-    <string>An Android app running in Mac.apk is requesting your location.</string>
+    <string>An Android app running in Apk on Mac is requesting your location.</string>
     <key>NSBluetoothAlwaysUsageDescription</key>
-    <string>An Android app running in Mac.apk is requesting Bluetooth access.</string>
+    <string>An Android app running in Apk on Mac is requesting Bluetooth access.</string>
     <key>NSPhotoLibraryUsageDescription</key>
-    <string>An Android app running in Mac.apk is requesting access to your photo library.</string>
+    <string>An Android app running in Apk on Mac is requesting access to your photo library.</string>
 
     <!--
       We need permission to spawn child processes (the runtime) and to open

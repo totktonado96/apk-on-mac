@@ -97,7 +97,7 @@ struct MacApkLauncherApp: App {
     }
 
     var body: some Scene {
-        WindowGroup("Mac.apk") {
+        WindowGroup("Apk on Mac") {
             LauncherView()
                 .environmentObject(model)
                 // Owner, 2026-10-13: about 10% larger than the old 600 x 480.
@@ -2098,7 +2098,7 @@ struct LauncherView: View {
                 // Word only, no icon (owner, 2026-10-13). The icon+word group
                 // used to be what was centred, which put "Mac.apk" half an
                 // icon right of the tagline and of a centred sheet.
-                Text("Mac.apk")
+                Text("Apk on Mac")
                     .font(.system(size: 24, weight: .semibold, design: .rounded))
                     .contentShape(Rectangle())
                     .onTapGesture {

@@ -4798,7 +4798,8 @@ public final class InstallPipeline {
                 // Owner, explicitly: "the uninstall runtime button will not
                 // remove the control panel."
                 guard id != "org.macapk.launcher",
-                      b.lastPathComponent != "Mac.apk.app" else {
+                      b.lastPathComponent != "Mac.apk.app",
+                      b.lastPathComponent != "Apk on Mac.app" else {
                     plan.refusedBundles.append(b.path); continue
                 }
                 plan.bundles.append(b.path)
@@ -5580,6 +5581,11 @@ public enum RuntimeInstall {
         candidates.append(contentsOf: extra)
         candidates.append(URL(fileURLWithPath: "/Applications/Mac.apk.app/Contents",
                               isDirectory: true))
+        // Apk on Mac distribution name (the DMG ships the bundle renamed).
+        candidates.append(URL(fileURLWithPath: "/Applications/Apk on Mac.app/Contents",
+                              isDirectory: true))
+        candidates.append(FileManager.default.homeDirectoryForCurrentUser
+            .appendingPathComponent("Applications/Apk on Mac.app/Contents", isDirectory: true))
         // A per-user install (~/Applications/Mac.apk.app) is a normal place to
         // put an app, and a user who cannot write /Applications has no other.
         // Before this the control panel running from there found no payload of

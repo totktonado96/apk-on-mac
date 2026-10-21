@@ -1,0 +1,95 @@
+name: Build DMG
+
+on:
+  push:
+    branches: [main]
+    tags: ['v*']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: macos-26
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Select newest Xcode
+        run: |
+          latest=$(ls -d /Applications/Xcode_26*.app | sort -V | tail -1)
+          echo "Using $latest"
+          sudo xcode-select -s "$latest"
+          xcodebuild -version
+          sdk=$(xcrun --show-sdk-version)
+          echo "SDK version: $sdk"
+          if [ "$(printf '26.4\n%s\n' "$sdk" | sort -V | head -1)" != "26.4" ]; then
+            echo "::error::macOS SDK $sdk < 26.4 on this runner"; exit 1
+          fi
+
+      - name: Install Homebrew dependencies
+        run: |
+          brew update >/dev/null || true
+          brew install cmake openjdk@21 capstone apktool libpng libvpx librsvg glib gettext
+
+      - name: Cache framework-res
+        uses: actions/cache@v4
+        with:
+          path: thirdparty/framework-res
+          key: framework-res-${{ hashFiles('scripts/build_framework_res.sh') }}
+
+      - name: Build runtime
+        run: runtime/scripts/build.sh
+
+      - name: Brand (icon)
+        run: scripts/brand_apk_on_mac.sh
+
+      - name: Build launcher
+        run: scripts/build_launcher.sh
+
+      - name: Build ad-hoc signed DMG
+        env:
+          MACAPK_DMG_NAME: Apk-on-Mac
+          MACAPK_DMG_VOLNAME: Apk on Mac
+          MACAPK_DMG_APP_NAME: Apk on Mac
+        run: scripts/build_dist.sh --dmg
+
+      - name: Collect LGPL source (GLib, libintl)
+        run: scripts/collect_lgpl_sources.sh build/lgpl_src
+
+      - name: Name DMG
+        run: |
+          ref="${GITHUB_REF_NAME//\//-}"
+          mv build/dist/Apk-on-Mac.dmg "build/dist/Apk-on-Mac-${ref}.dmg"
+          ls -lh build/dist/*.dmg build/lgpl_src
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Apk-on-Mac-dmg
+          path: |
+            build/dist/Apk-on-Mac-*.dmg
+            build/lgpl_src/*
+          if-no-files-found: error
+
+      - name: Publish pre-release
+        if: startsWith(github.ref, 'refs/tags/v')
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          tag="$GITHUB_REF_NAME"
+          sha=$(git rev-parse HEAD)
+          cat > notes.md <<EOF
+          **Alpha release of Apk on Mac** - runs Android APKs natively on Apple Silicon macOS.
+
+          - Source: https://github.com/${GITHUB_REPOSITORY}/tree/${tag} (commit ${sha}). License: AGPL-3.0 (see LICENSE).
+          - **Requirements:** macOS 26.4 or newer, Apple Silicon.
+          - **Ad-hoc signed, not notarized.** First open: right-click the app, choose Open, or run
+            \`xattr -dr com.apple.quarantine "/Applications/Apk on Mac.app"\`.
+          - **Only install APKs you trust.** Apps run with your user permissions, unsandboxed.
+          - Based on [Mac.apk](https://github.com/kksimp/Mac.apk) by Kaleb Simpson; not affiliated with or endorsed by it.
+          - Third-party licenses: THIRD_PARTY_NOTICES.txt in the DMG. Corresponding LGPL-2.1 source for the bundled GLib and libintl (exact versions, checksums, build recipes) is attached to this release (see LGPL-SOURCE-README.txt).
+          EOF
+          sed -i '' 's/^          //' notes.md
+          gh release create "$tag" --prerelease --title "Apk on Mac $tag" --notes-file notes.md \
+            build/dist/Apk-on-Mac-*.dmg build/lgpl_src/*

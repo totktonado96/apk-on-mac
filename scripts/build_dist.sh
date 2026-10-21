@@ -423,16 +423,17 @@ fi
 
 if [ "$DO_DMG" -eq 1 ]; then
     echo "Building .dmg..."
-    DMG="$DIST_DIR/macapk.dmg"
+    DMG="$DIST_DIR/${MACAPK_DMG_NAME:-macapk}.dmg"
+    STAGE_APP="${MACAPK_DMG_APP_NAME:-Mac.apk}.app"
     STAGE="$DIST_DIR/.dmg_stage"
     rm -f "$DMG"; rm -rf "$STAGE"; mkdir -p "$STAGE"
     # ditto, not cp -R: this app is SIGNED and (usually) STAPLED by now, and
     # ditto is the tool documented to preserve the extended attributes and
     # metadata a signature depends on. The same rule the step-0 copy already
     # follows; this site was the one place still using cp -R.
-    ditto "$APP" "$STAGE/Mac.apk.app"
+    ditto "$APP" "$STAGE/$STAGE_APP"
     # Cheap insurance that the copy the user actually receives is intact.
-    if ! codesign --verify --deep --strict "$STAGE/Mac.apk.app" 2>/dev/null; then
+    if ! codesign --verify --deep --strict "$STAGE/$STAGE_APP" 2>/dev/null; then
         echo "ERROR: the app copied into the DMG does not verify -- refusing to" >&2
         echo "       ship an image whose payload is broken." >&2
         exit 1
@@ -444,7 +445,7 @@ if [ "$DO_DMG" -eq 1 ]; then
     if [ -f "$APP/Contents/Resources/THIRD_PARTY_NOTICES.txt" ]; then
         cp -f "$APP/Contents/Resources/THIRD_PARTY_NOTICES.txt" "$STAGE/THIRD_PARTY_NOTICES.txt"
     fi
-    hdiutil create -volname "Mac.apk" -srcfolder "$STAGE" -ov -format UDZO "$DMG" >/dev/null
+    hdiutil create -volname "${MACAPK_DMG_VOLNAME:-Mac.apk}" -srcfolder "$STAGE" -ov -format UDZO "$DMG" >/dev/null
     if [ -n "$SIGN_IDENTITY" ]; then
         codesign --force --sign "$SIGN_IDENTITY" "$DMG"
         # Only notarize/staple the DMG when we were asked to notarize at all.
