@@ -18,10 +18,9 @@
 
 ---
 
-> **Apk on Mac is a community fork of [Mac.apk](https://github.com/kksimp/Mac.apk)
-> by Kaleb Simpson (Voltare).** It is not affiliated with, endorsed by, or an
-> official release of the Mac.apk project. "Mac.apk" and its logo belong to their
-> owner; see [TRADEMARKS.md](TRADEMARKS.md).
+<p align="center">
+  💬 Contact & support: <a href="https://t.me/baha_kabulov"><b>Telegram @baha_kabulov</b></a>
+</p>
 
 ## What it is
 
@@ -41,60 +40,27 @@ implemented directly on macOS:
 | 32-bit ARM native code | recompiled to arm64 ahead of time |
 | OpenGL ES / Vulkan | ANGLE and MoltenVK, both on Metal |
 
-The upstream wiki explains the design in depth:
-[How Mac.apk works](https://github.com/kksimp/Mac.apk/wiki/How-Mac.apk-Works).
 
-## Why a fork
+## What's new in Apk on Mac
 
-This fork tracks upstream and adds fixes and features that are still under review
-upstream, or that go in a different direction:
-
-- **Keyboard:**
-  - Russian and other non-Latin layouts work: WASD and Cmd+C/V use the physical
-    key position.
-  - Keys no longer stick after Cmd+Tab.
-  - Home, End, Page Up/Down and F1–F12 work.
-- **Notifications:** Android notifications appear in macOS Notification Center,
-  and clicking one opens the app.
-- **Text-to-speech:** apps speak with macOS voices, and utterance callbacks
-  actually fire.
-- **Keep awake:** video apps keep the display awake through
-  `FLAG_KEEP_SCREEN_ON` and wake locks.
-- **Audio:** sound survives switching output devices, such as connecting AirPods.
-- **Window:** a Window menu (⌘M, Zoom), and the window position is remembered
-  per app.
-- **Reliability:**
-  - Alarms and reminders keep working (PendingIntent identity).
-  - AsyncTask cancellation behaves like Android.
-  - The per-app language persists across restarts.
-  - 2FA apps get the HMAC-SHA1 keys they need.
-  - The macOS system proxy is honoured.
-- **Native layer:**
-  - Correct arm64 `open()` flags.
-  - Linux errno numbers in file calls.
-  - TCP keepalive options are mapped to their macOS equivalents.
-  - Static recursive mutexes are accepted.
-  - Missing Bionic symbols were added.
-- **Installer:**
-  - The update dialog no longer promises to keep your data when it won't.
-  - An app can't be uninstalled while it is running.
-  - Free disk space is checked before installing.
-  - App names that clash with built-in macOS apps are detected.
-
-Upstream pull requests for these:
-[#58](https://github.com/kksimp/Mac.apk/pull/58),
-[#59](https://github.com/kksimp/Mac.apk/pull/59),
-[#73](https://github.com/kksimp/Mac.apk/pull/73)–[#79](https://github.com/kksimp/Mac.apk/pull/79).
-They are merged into this fork as they land.
+- **Keyboard:** Russian and other non-Latin layouts work (WASD, Cmd+C/V by physical
+  key), no stuck keys after Cmd+Tab, Home/End/Page Up/Down and F1–F12.
+- **Notifications** in macOS Notification Center; clicking one opens the app.
+- **Text-to-speech** with macOS voices.
+- **Keep awake:** video apps keep the display on.
+- **Audio** survives switching output devices (AirPods, headphones).
+- **Window menu** (⌘M, Zoom) and per-app window position memory.
+- **Reliability:** alarms and reminders, AsyncTask cancellation, per-app language,
+  HMAC keys for 2FA apps, macOS system proxy, and many native-layer fixes.
+- **Installer:** honest update dialog, no uninstall of a running app, a free-space
+  check, and protection against name clashes with built-in macOS apps.
 
 ## Status
 
 **Alpha. No builds are published yet.**
 
-- The codebase still uses the upstream product name internally (bundle IDs,
-  paths, menu titles). Until those are renamed, binaries built from this repo
-  must not be distributed under the Mac.apk name.
-- [COMPATIBILITY.md](COMPATIBILITY.md) is upstream's list of apps tested by hand.
+- [COMPATIBILITY.md](COMPATIBILITY.md) lists apps tested by hand.
+- Found a bug or need help? Write in Telegram: [@baha_kabulov](https://t.me/baha_kabulov).
 
 ## Requirements
 
@@ -116,21 +82,17 @@ APKs you trust, from sources you trust.
 
 ## License
 
-[GNU AGPL v3.0](LICENSE), the same license as upstream.
+[GNU AGPL v3.0](LICENSE).
 
-- Copyright in the upstream code belongs to Kaleb Simpson / Voltare and the
-  Mac.apk contributors.
-- Changes in this fork are © their authors and are released under the same
+- Based on [Mac.apk](https://github.com/kksimp/Mac.apk), © Kaleb Simpson / Voltare
+  and contributors. Not affiliated with or endorsed by that project.
+- Changes in Apk on Mac are © their authors and are released under the same
   license.
-- If you distribute a build or offer it over a network, you must make the
-  complete corresponding source available under the AGPL.
 
 Bundled third-party components (ANGLE, MoltenVK, Capstone, OpenJDK, Bouncy
 Castle, AOSP resources, GLib/libintl under the LGPL, and others) keep their own
 licenses. See [THIRD_PARTY_NOTICES.txt](THIRD_PARTY_NOTICES.txt).
 
-## Credits
+## Contact
 
-All the hard work is upstream's: [Mac.apk](https://github.com/kksimp/Mac.apk) by
-[@kksimp](https://github.com/kksimp). If you find this useful, consider
-[sponsoring the original author](https://github.com/sponsors/kksimp).
+Questions, bug reports, partnerships: Telegram [@baha_kabulov](https://t.me/baha_kabulov).
