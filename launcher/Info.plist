@@ -44,6 +44,16 @@
     <string>0.4.0</string>
     <key>CFBundleShortVersionString</key>
     <string>0.2.0</string>
+    <!-- Sparkle 2 auto-update (see launcher/SparkleUpdater.swift). Releases are
+         published as non-prerelease so releases/latest resolves to them. -->
+    <key>SUFeedURL</key>
+    <string>https://github.com/totktonado96/apk-on-mac/releases/latest/download/appcast.xml</string>
+    <key>SUPublicEDKey</key>
+    <string>5pRvEPVSaqROL63J0qLrE0rXOCvxOe5cBgNQQC0PAMs=</string>
+    <key>SUEnableAutomaticChecks</key>
+    <true/>
+    <key>SUScheduledCheckInterval</key>
+    <integer>86400</integer>
     <key>CFBundleDevelopmentRegion</key>
     <string>en</string>
     <key>CFBundleLocalizations</key>

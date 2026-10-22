@@ -111,10 +111,21 @@ echo "[1/5] Compiling launcher Swift sources..."
 # is API_DEPRECATED and banned here.
 SWIFT_TARGET="arm64-apple-macos26.0"
 
+# Sparkle 2 (auto-update): linked and embedded only when SPARKLE_DIR points at a
+# directory holding Sparkle.framework (CI downloads the release tarball).
+# Without it the build works as before and UpdateCheck.swift is the fallback.
+SPARKLE_FLAGS=()
+if [ -n "${SPARKLE_DIR:-}" ] && [ -d "$SPARKLE_DIR/Sparkle.framework" ]; then
+    echo "  Sparkle: linking $SPARKLE_DIR/Sparkle.framework"
+    SPARKLE_FLAGS=(-F "$SPARKLE_DIR" -framework Sparkle
+                   -Xlinker -rpath -Xlinker @executable_path/../Frameworks)
+fi
+
 swiftc \
     -O \
     -parse-as-library \
     -target "$SWIFT_TARGET" \
+    ${SPARKLE_FLAGS[@]+"${SPARKLE_FLAGS[@]}"} \
     -framework AppKit \
     -framework SwiftUI \
     -framework UniformTypeIdentifiers \
@@ -124,9 +135,16 @@ swiftc \
     "$LAUNCHER_DIR/InstallCore.swift" \
     "$LAUNCHER_DIR/BundleGenerator.swift" \
     "$LAUNCHER_DIR/UpdateCheck.swift" \
+    "$LAUNCHER_DIR/SparkleUpdater.swift" \
     "$LAUNCHER_DIR/CompatCheck.swift" \
     "$LAUNCHER_DIR/QuickLook/ApkInfo.swift" \
     "$BUILD_INFO_SWIFT"
+
+if [ ${#SPARKLE_FLAGS[@]} -gt 0 ]; then
+    mkdir -p "$CONTENTS/Frameworks"
+    rm -rf "$CONTENTS/Frameworks/Sparkle.framework"
+    ditto "$SPARKLE_DIR/Sparkle.framework" "$CONTENTS/Frameworks/Sparkle.framework"
+fi
 
 # The per-app stub template. Each installed APK gets a generated .app whose
 # executable is a COPY of this binary; the stub resolves the one shared

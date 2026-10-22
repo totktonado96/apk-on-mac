@@ -73,6 +73,7 @@ struct MacApkLauncherApp: App {
     @StateObject private var updates = UpdateChecker.shared
 
     init() {
+        AppUpdater.start()
         // Harness-only settings never belong in the owner's control panel
         // (owner, 2026-10-19: "the mac.apk app still launches apps in the
         // background"). scripts/rebuild_and_run.sh ends with `open` on this
@@ -164,10 +165,14 @@ struct MacApkLauncherApp: App {
             // Apk on Mac > Check for Updates..., the standard macOS spot (right
             // under About). Same checker as the glowing button in the panel.
             CommandGroup(after: .appInfo) {
-                Button(updates.menuTitle) {
-                    updates.check { updates.presentResult($0) }
+                if AppUpdater.available {
+                    Button("Check for Updates…") { AppUpdater.checkNow() }
+                } else {
+                    Button(updates.menuTitle) {
+                        updates.check { updates.presentResult($0) }
+                    }
+                    .disabled(updates.isChecking)
                 }
-                .disabled(updates.isChecking)
             }
             // Owner, 2026-10-13: no Help menu. Apk on Mac ships no help book, so
             // its only item opened a "Help isn't available" dialog. This empties
@@ -2299,7 +2304,7 @@ struct LauncherView: View {
         }
         .onAppear {
             refreshRuntimeState()
-            updates.checkOnLaunch()
+            if !AppUpdater.available { updates.checkOnLaunch() }
         }
         .onReceive(NotificationCenter.default.publisher(
             for: NSApplication.didBecomeActiveNotification)) { _ in
@@ -2317,14 +2322,14 @@ struct LauncherView: View {
     /// failure. The same check lives in the menu bar (Apk on Mac > Check for
     /// Updates...).
     private var updateButton: some View {
-        let glowing = updates.updateAvailable
+        let glowing = !AppUpdater.available && updates.updateAvailable
         return Button {
-            updates.check { updates.presentResult($0) }
+            if AppUpdater.available { AppUpdater.checkNow() } else { updates.check { updates.presentResult($0) } }
         } label: {
             Image(systemName: glowing ? "arrow.down.circle.fill" : "arrow.triangle.2.circlepath")
                 .accessibilityLabel(glowing ? "Update Available" : "Check for Updates")
         }
-        .disabled(updates.isChecking)
+        .disabled(!AppUpdater.available && updates.isChecking)
         .tint(glowing ? .orange : nil)
         .buttonStyle(.bordered)
         .overlay(

@@ -49,6 +49,31 @@ jobs:
       - name: Build runtime
         run: runtime/scripts/build.sh
 
+      - name: Version from tag
+        if: startsWith(github.ref, 'refs/tags/v')
+        run: |
+          ver="${GITHUB_REF_NAME#v}"
+          if ! printf '%s' "$ver" | grep -Eq '^[0-9]+(\.[0-9]+)*$'; then
+            echo "::error::tag $GITHUB_REF_NAME is not vX.Y.Z"; exit 1
+          fi
+          # build_launcher.sh stamps VERSION into CFBundleShortVersionString and CFBundleVersion.
+          echo "$ver" > VERSION
+          echo "MACAPK_RELEASE_VERSION=$ver" >> "$GITHUB_ENV"
+
+      - name: Download Sparkle
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          SPARKLE_VERSION=2.10.0
+          mkdir -p "$RUNNER_TEMP/sparkle"
+          gh release download "$SPARKLE_VERSION" -R sparkle-project/Sparkle \
+            -p "Sparkle-$SPARKLE_VERSION.tar.xz" -D "$RUNNER_TEMP/sparkle"
+          tar -xf "$RUNNER_TEMP/sparkle/Sparkle-$SPARKLE_VERSION.tar.xz" -C "$RUNNER_TEMP/sparkle"
+          ls "$RUNNER_TEMP/sparkle"
+          test -d "$RUNNER_TEMP/sparkle/Sparkle.framework"
+          test -x "$RUNNER_TEMP/sparkle/bin/sign_update"
+          echo "SPARKLE_DIR=$RUNNER_TEMP/sparkle" >> "$GITHUB_ENV"
+
       - name: Brand (icon)
         run: scripts/brand_apk_on_mac.sh
 
@@ -73,6 +98,47 @@ jobs:
           mv build/dist/Apk-on-Mac.dmg "build/dist/Apk-on-Mac-${ref}.dmg"
           ls -lh build/dist/*.dmg build/lgpl_src
 
+      - name: Generate Sparkle appcast
+        if: startsWith(github.ref, 'refs/tags/v')
+        env:
+          SPARKLE_PRIVATE_KEY: ${{ secrets.SPARKLE_PRIVATE_KEY }}
+        run: |
+          if [ -z "$SPARKLE_PRIVATE_KEY" ]; then
+            echo "::error::SPARKLE_PRIVATE_KEY secret is not set"; exit 1
+          fi
+          tag="$GITHUB_REF_NAME"
+          ver="${tag#v}"
+          dmg=$(ls build/dist/Apk-on-Mac-*.dmg | head -1)
+          name=$(basename "$dmg")
+          # Key via stdin only; sign_update prints: sparkle:edSignature="..." length="..."
+          out=$(printf '%s' "$SPARKLE_PRIVATE_KEY" | "$SPARKLE_DIR/bin/sign_update" --ed-key-file - "$dmg")
+          sig=$(printf '%s' "$out" | sed -n 's/.*sparkle:edSignature="\([^"]*\)".*/\1/p')
+          len=$(printf '%s' "$out" | sed -n 's/.*length="\([^"]*\)".*/\1/p')
+          if [ -z "$sig" ] || [ -z "$len" ]; then
+            echo "::error::sign_update produced no signature/length"; exit 1
+          fi
+          url="https://github.com/${GITHUB_REPOSITORY}/releases/download/${tag}/${name}"
+          cat > build/dist/appcast.xml <<EOF
+          <?xml version="1.0" encoding="utf-8"?>
+          <rss version="2.0" xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle">
+            <channel>
+              <title>Apk on Mac</title>
+              <item>
+                <title>Version ${ver}</title>
+                <pubDate>$(date -u '+%a, %d %b %Y %H:%M:%S +0000')</pubDate>
+                <sparkle:version>${ver}</sparkle:version>
+                <sparkle:shortVersionString>${ver}</sparkle:shortVersionString>
+                <sparkle:minimumSystemVersion>26.4</sparkle:minimumSystemVersion>
+                <sparkle:releaseNotesLink>https://github.com/${GITHUB_REPOSITORY}/releases/tag/${tag}</sparkle:releaseNotesLink>
+                <enclosure url="${url}" length="${len}" type="application/octet-stream" sparkle:edSignature="${sig}"/>
+              </item>
+            </channel>
+          </rss>
+          EOF
+          sed -i '' 's/^          //' build/dist/appcast.xml
+          plutil -lint build/dist/appcast.xml
+          cat build/dist/appcast.xml
+
       - uses: actions/upload-artifact@v4
         with:
           name: Apk-on-Mac-dmg
@@ -81,7 +147,7 @@ jobs:
             build/lgpl_src/*
           if-no-files-found: error
 
-      - name: Publish pre-release
+      - name: Publish release
         if: startsWith(github.ref, 'refs/tags/v')
         env:
           GH_TOKEN: ${{ github.token }}
@@ -100,8 +166,8 @@ jobs:
           - Third-party licenses: THIRD_PARTY_NOTICES.txt in the DMG. Corresponding LGPL-2.1 source for the bundled GLib and libintl (exact versions, checksums, build recipes) is attached to this release (see LGPL-SOURCE-README.txt).
           EOF
           sed -i '' 's/^          //' notes.md
-          gh release create "$tag" --prerelease --title "Apk on Mac $tag" --notes-file notes.md \
-            build/dist/Apk-on-Mac-*.dmg build/lgpl_src/*
+          gh release create "$tag" --latest --title "Apk on Mac $tag" --notes-file notes.md \
+            build/dist/Apk-on-Mac-*.dmg build/dist/appcast.xml build/lgpl_src/*
 
       - name: Update Homebrew cask (only if TAP_GITHUB_TOKEN is set)
         if: startsWith(github.ref, 'refs/tags/v')

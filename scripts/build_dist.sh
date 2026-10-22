@@ -347,6 +347,16 @@ sign() {  # $1 file ; remaining args passed to codesign (e.g. --entitlements)
 }
 # 5a. every nested dylib (Frameworks, JRE, Resources, bin, lib)
 while IFS= read -r -d '' f; do sign "$f"; done < <(find "$APP" -name '*.dylib' -type f -print0)
+# 5a'. Sparkle.framework (if embedded): nested code first (XPC services,
+# Autoupdate, Updater.app), then the framework itself.
+SPK="$FW/Sparkle.framework"
+if [ -d "$SPK" ]; then
+    SPKB="$SPK/Versions/B"
+    for x in "$SPKB"/XPCServices/*.xpc; do [ -d "$x" ] && sign "$x"; done
+    [ -f "$SPKB/Autoupdate" ] && sign "$SPKB/Autoupdate"
+    [ -d "$SPKB/Updater.app" ] && sign "$SPKB/Updater.app"
+    sign "$SPK"
+fi
 # 5b. JRE executables (java launcher etc.) -- WITH $ENT.
 # v1.0.1029: these used to be signed `--options runtime` with NO entitlements
 # at all, which is a JVM under hardened runtime with no allow-jit, no
