@@ -136,7 +136,7 @@ jobs:
           </rss>
           EOF
           sed -i '' 's/^          //' build/dist/appcast.xml
-          plutil -lint build/dist/appcast.xml
+          xmllint --noout build/dist/appcast.xml
           cat build/dist/appcast.xml
 
       - uses: actions/upload-artifact@v4
