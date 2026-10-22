@@ -157,7 +157,10 @@ struct MacApkLauncherApp: App {
         // Kill the standard New / Open menu items because they make no sense
         // for a launcher and just confuse users when they trigger nothing.
         .commands {
-            CommandGroup(replacing: .newItem) { }
+            CommandGroup(replacing: .newItem) {
+                Button("Install from URL…") { model.urlInstallTrigger &+= 1 }
+                    .keyboardShortcut("u", modifiers: .command)
+            }
             // Apk on Mac > Check for Updates..., the standard macOS spot (right
             // under About). Same checker as the glowing button in the panel.
             CommandGroup(after: .appInfo) {
@@ -277,6 +280,13 @@ enum LauncherOrientation: String, CaseIterable, Identifiable {
 /// For bundles we extract the inner base apk to a sibling temp dir at
 /// launch time and pass the extracted .apk path on to the runtime,
 /// which only knows how to handle plain .apk files.
+/// Localized string lookup (Resources/<lang>.lproj/Localizable.strings), with
+/// optional printf-style arguments. The English text is the key.
+func L(_ key: String, _ args: CVarArg...) -> String {
+    let f = NSLocalizedString(key, comment: "")
+    return args.isEmpty ? f : String(format: f, arguments: args)
+}
+
 let kSupportedApkExtensions: Set<String> = ["apk", "apkm", "xapk", "apks", "apkx"]
 
 /// Substring the runtime prints (bare `fprintf`, runtime/src/main.cpp)
@@ -467,6 +477,9 @@ final class LaunchModel: ObservableObject {
     /// the last of them. The observer coalesces a burst into one request
     /// so N selected APKs produce ONE confirmation, not N.
     @Published var pendingInstallPaths: [String] = []
+    /// Bumped by File > Install from URL... (and the header button); LauncherView
+    /// observes it and opens the URL prompt.
+    @Published var urlInstallTrigger = 0
     @Published var selectedPreset: PhonePreset = kPhonePresets[0]
     /// Orientation the runtime should boot the window in. Defaults to
     /// .auto so the runtime reads the APK manifest and picks. Override
@@ -2049,6 +2062,9 @@ struct LauncherView: View {
         .onChange(of: model.pendingInstallPaths) { _, _ in
             drainPendingInstalls()
         }
+        .onChange(of: model.urlInstallTrigger) { _, _ in
+            installFromURL(initial: nil, autoStart: false)
+        }
         // A window SwiftUI creates to deliver an open event (Apk on Mac running
         // with its window closed) gets the URL appended before this view's
         // onChange is watching, so that first value is never a "change".
@@ -2198,6 +2214,12 @@ struct LauncherView: View {
                 // jump: the glyph beside it stays put, so only the pill animates.
                 .transition(.opacity.combined(with: .move(edge: .trailing)))
             }
+            Button { model.urlInstallTrigger &+= 1 } label: {
+                Image(systemName: "link.badge.plus")
+                    .font(.system(size: 16, weight: .regular))
+            }
+            .buttonStyle(.borderless)
+            .help("Install from URL…")
             Button { showAccounts = true } label: {
                 Image(systemName: accountStore.hasKnownAccount
                       ? "person.crop.circle.badge.checkmark"
@@ -2633,19 +2655,23 @@ struct LauncherView: View {
         // drops give a useful error rather than silently accepting.
         // v1.0.464: a valid drop INSTALLS the APK (extract-only) into the
         // library rather than loading it for a direct run.
-        .onDrop(of: [UTType.fileURL], isTargeted: $isTargeted) { providers in
+        .onDrop(of: [UTType.fileURL, UTType.url], isTargeted: $isTargeted) { providers in
             guard let provider = providers.first else { return false }
             _ = provider.loadObject(ofClass: URL.self) { url, _ in
                 guard let u = url else { return }
                 let ext = u.pathExtension.lowercased()
                 DispatchQueue.main.async {
-                    if kSupportedApkExtensions.contains(ext) {
+                    if !u.isFileURL, ["http", "https"].contains(u.scheme?.lowercased() ?? "") {
+                        // A web link dropped on the window: download it, then
+                        // run the normal install flow.
+                        installFromURL(initial: u.absoluteString, autoStart: true)
+                    } else if kSupportedApkExtensions.contains(ext) {
                         // Not interactive: the drop itself was the gesture.
                         runInstall(LauncherInstallRequest(sourceFiles: [u],
                                                           source: .gui,
                                                           interactive: false))
                     } else {
-                        model.status = "Unsupported file type: .\(ext). Drop a .apk, .apkm, .xapk, .apks, or .apkx."
+                        model.status = L("Unsupported file type: .%@. Drop a .apk, .apkm, .xapk, .apks, or .apkx.", ext)
                         model.statusKind = .error
                     }
                 }
@@ -3276,6 +3302,34 @@ struct LauncherView: View {
     // and the confirm + report halves move behind it. The call SITES do not
     // change, which is the entire point of funnelling them first.
 
+    /// Install from URL: download, validate, then the same funnel as a dropped
+    /// file. Interactive, so the usual confirm dialog (and the compatibility
+    /// check) still run: the user chose a link, not yet an app.
+    private func installFromURL(initial: String?, autoStart: Bool) {
+        UrlInstall.start(initial: initial, autoStart: autoStart) { result in
+            switch result {
+            case .success(let file):
+                runInstall(LauncherInstallRequest(sourceFiles: [file],
+                                                  source: .gui,
+                                                  interactive: true))
+            case .failure(let err):
+                guard !err.message.isEmpty else {   // empty = user cancelled
+                    model.status = L("Download cancelled.")
+                    model.statusKind = .info
+                    return
+                }
+                let alert = NSAlert()
+                alert.alertStyle = .warning
+                alert.messageText = L("Couldn't install from URL")
+                alert.informativeText = err.message
+                alert.addButton(withTitle: L("OK"))
+                alert.runModal()
+                model.status = err.message
+                model.statusKind = .error
+            }
+        }
+    }
+
     /// Validate, optionally confirm, then extract-and-register.
     private func runInstall(_ request: LauncherInstallRequest) {
         guard let runtime = model.runtimePath() else {
@@ -3324,7 +3378,20 @@ struct LauncherView: View {
         }
 
         guard request.interactive else {
-            startInstall(files, source: request.source, runtime: runtime)
+            // Not interactive: no confirm dialog, but an x86-only app still
+            // gets a warning, because installing one can never work.
+            DispatchQueue.global(qos: .userInitiated).async {
+                let compat = CompatCheck.run(files)
+                DispatchQueue.main.async {
+                    if !compat.x86Only.isEmpty
+                        && !CompatCheck.confirmX86Only(compat.x86Only) {
+                        model.status = L("Install cancelled.")
+                        model.statusKind = .info
+                        return
+                    }
+                    startInstall(files, source: request.source, runtime: runtime)
+                }
+            }
             return
         }
 
@@ -3332,15 +3399,25 @@ struct LauncherView: View {
         // it. Doing the peek inline would freeze the window for as long as
         // the runtime takes to answer, which is exactly the moment the user
         // is waiting to see what they double-clicked.
-        model.status = "Reading \(files.count == 1 ? files[0].lastPathComponent : "\(files.count) packages")…"
+        model.status = files.count == 1
+            ? L("Reading %@…", files[0].lastPathComponent)
+            : L("Reading %d packages…", files.count)
         model.statusKind = .info
         DispatchQueue.global(qos: .userInitiated).async {
             let peeks = files.map { ApkPeek.detailed($0, runtimePath: runtime) }
+            let compat = CompatCheck.run(files)
             DispatchQueue.main.async {
-                guard confirmInstall(peeks: peeks, source: request.source) else {
+                if !compat.x86Only.isEmpty
+                    && !CompatCheck.confirmX86Only(compat.x86Only) {
+                    model.status = L("Install cancelled.")
+                    model.statusKind = .info
+                    return
+                }
+                guard confirmInstall(peeks: peeks, source: request.source,
+                                     compatNotes: compat.notes) else {
                     model.status = files.count == 1
-                        ? "Install cancelled."
-                        : "Install of \(files.count) apps cancelled."
+                        ? L("Install cancelled.")
+                        : L("Install of %d apps cancelled.", files.count)
                     model.statusKind = .info
                     return
                 }
@@ -3355,7 +3432,8 @@ struct LauncherView: View {
     /// arrive while the window is not key (or not yet on screen at all, on a
     /// cold launch), where a sheet has nothing to attach to.
     private func confirmInstall(peeks: [ApkPeek],
-                                source: LauncherInstallSource) -> Bool {
+                                source: LauncherInstallSource,
+                                compatNotes: [String] = []) -> Bool {
         // TEST-ONLY unattended mode, for debug/installtest. A modal alert in a
         // harness that no human is watching is not a safe default -- it just
         // hangs until the harness times out and reports a failure that is
@@ -3392,63 +3470,50 @@ struct LauncherView: View {
                 // so anything else would be a guess presented as a fact.
                 switch (existing.versionCode, peek.versionCode) {
                 case let (old?, new?) where new > old:
-                    alert.messageText = "Update \"\(existing.label)\"?"
-                    alert.informativeText = """
-                    \(peek.detailLine)
-
-                    This is newer than the installed version (\(old) -> \(new)). \
-                    \(BundleGenerator.identityMode() == .package
+                    alert.messageText = L("Update \"%@\"?", existing.label)
+                    let carry = BundleGenerator.identityMode() == .package
                         && RegistryStore.shared.setting(InstallPipeline.storeUpdatesInPlaceSettingKey) != "0"
-                        ? "Your saved data is carried forward."
-                        : "It installs alongside the current version as a separate app. The current version and its data stay untouched.")
-                    """
+                        ? L("Your saved data is carried forward.")
+                        : L("It installs alongside the current version as a separate app. The current version and its data stay untouched.")
+                    alert.informativeText = peek.detailLine + "\n\n"
+                        + L("This is newer than the installed version (%@ -> %@).", "\(old)", "\(new)")
+                        + " " + carry
                 case let (old?, new?) where new < old:
                     alert.alertStyle = .warning
-                    alert.messageText = "Install an OLDER version of \"\(existing.label)\"?"
-                    alert.informativeText = """
-                    \(peek.detailLine)
-
-                    This is older than what you have installed (\(old) -> \(new)). \
-                    Older versions keep their own separate data, so this app's \
-                    current saves will not be visible to it.
-                    """
+                    alert.messageText = L("Install an OLDER version of \"%@\"?", existing.label)
+                    alert.informativeText = peek.detailLine + "\n\n"
+                        + L("This is older than what you have installed (%@ -> %@). Older versions keep their own separate data, so this app's current saves will not be visible to it.", "\(old)", "\(new)")
                 default:
-                    alert.messageText = "Reinstall \"\(existing.label)\"?"
-                    alert.informativeText = """
-                    \(peek.detailLine)
-
-                    \(existing.label) is already installed\
-                    \(existing.version.isEmpty ? "" : " (version \(existing.version))"). \
-                    Installing again re-unpacks it from this file. Its saved data is kept.
-                    """
+                    alert.messageText = L("Reinstall \"%@\"?", existing.label)
+                    alert.informativeText = peek.detailLine + "\n\n"
+                        + (existing.version.isEmpty
+                            ? L("%@ is already installed. Installing again re-unpacks it from this file. Its saved data is kept.", existing.label)
+                            : L("%@ is already installed (version %@). Installing again re-unpacks it from this file. Its saved data is kept.", existing.label, existing.version))
                 }
             } else {
-                alert.messageText = "Install \"\(peek.displayName)\"?"
-                alert.informativeText = """
-                \(peek.detailLine)
-
-                Apk on Mac will unpack this app into your app library so you can \
-                launch it from here. It runs inside the Apk on Mac Android runtime \
-                and does not modify system files.
-                """
+                alert.messageText = L("Install \"%@\"?", peek.displayName)
+                alert.informativeText = peek.detailLine + "\n\n"
+                    + L("Apk on Mac will unpack this app into your app library so you can launch it from here. It runs inside the Apk on Mac Android runtime and does not modify system files.")
             }
         } else {
-            alert.messageText = "Install \(peeks.count) apps?"
+            alert.messageText = L("Install %d apps?", peeks.count)
             // Cap the list: an "Open With" on a whole folder can be dozens
             // of files, and an alert that tall is unusable.
             let shown = peeks.prefix(8).map { "  • \($0.displayName)" }
             let rest = peeks.count - shown.count
             alert.informativeText = shown.joined(separator: "\n")
-                + (rest > 0 ? "\n  … and \(rest) more" : "")
-                + "\n\nEach is unpacked into your app library. Apps already "
-                + "installed are re-unpacked and keep their saved data."
+                + (rest > 0 ? "\n  " + L("… and %d more", rest) : "")
+                + "\n\n" + L("Each is unpacked into your app library. Apps already installed are re-unpacked and keep their saved data.")
         }
 
         if case .android(let requestor) = source {
-            alert.informativeText += "\n\nRequested by \(requestor)."
+            alert.informativeText += "\n\n" + L("Requested by %@.", requestor)
         }
-        alert.addButton(withTitle: peeks.count == 1 ? "Install" : "Install All")
-        alert.addButton(withTitle: "Cancel")
+        if !compatNotes.isEmpty {
+            alert.informativeText += "\n\n" + compatNotes.joined(separator: "\n")
+        }
+        alert.addButton(withTitle: peeks.count == 1 ? L("Install") : L("Install All"))
+        alert.addButton(withTitle: L("Cancel"))
         return alert.runModal() == .alertFirstButtonReturn
     }
 

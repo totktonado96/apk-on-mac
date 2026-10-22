@@ -124,6 +124,8 @@ swiftc \
     "$LAUNCHER_DIR/InstallCore.swift" \
     "$LAUNCHER_DIR/BundleGenerator.swift" \
     "$LAUNCHER_DIR/UpdateCheck.swift" \
+    "$LAUNCHER_DIR/CompatCheck.swift" \
+    "$LAUNCHER_DIR/QuickLook/ApkInfo.swift" \
     "$BUILD_INFO_SWIFT"
 
 # The per-app stub template. Each installed APK gets a generated .app whose
