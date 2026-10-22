@@ -551,6 +551,109 @@ static void tap_dispatch(AVAudioPCMBuffer* buf) {
 // two-lock note above). Returns true only when a tap is genuinely installed on
 // a real device and the engine is running.
 // ---------------------------------------------------------------------------
+// ---------------------------------------------------------------------------
+// Input-device change (MACAPK_MIC_RESTART, default on; =0 keeps the old behaviour
+// of a dead mic until the app is restarted).
+//
+// AVAudioEngine posts AVAudioEngineConfigurationChangeNotification when the
+// hardware behind the node changes (headset plugged in, default input switched,
+// device sample rate changed). Apple's contract: the engine is STOPPED, taps stay
+// installed but the node's format may differ, and the app must re-read the format
+// and restart (AVAudioEngine.h). Everything cached from the old format -- g_hw_fmt
+// and each Cap's converter -- is stale after that. audio_backend.mm restarts the
+// OUTPUT engine the same way; like it, the work is dispatched to a queue rather
+// than done inside the notification (the engine's own thread posts it, and
+// stop/start from there can deadlock against the engine).
+// ---------------------------------------------------------------------------
+static bool mic_restart_enabled() {
+    const char* e = std::getenv("MACAPK_MIC_RESTART");
+    return !(e && std::strcmp(e, "0") == 0);
+}
+static bool cap_build_converter(Cap* c);
+static dispatch_queue_t g_restart_q = nullptr;
+static std::atomic<bool> g_restart_pending{false};
+
+static void restart_input_engine() {
+    g_restart_pending.store(false);   // a change during the restart queues another
+    std::lock_guard<std::mutex> elk(g_engine_mtx);   // order: g_engine_mtx -> g_mtx
+    if (!g_in_engine) return;
+    @autoreleasepool {
+        [g_in_engine stop];
+        AVAudioInputNode* input = nil;
+        @try {
+            input = g_in_engine.inputNode;
+            [input removeTapOnBus:0];
+        } @catch (NSException* ex) {
+            std::fprintf(stderr, "[audio-in] restart: inputNode unavailable: %s\n",
+                         ex.reason ? ex.reason.UTF8String : "(no reason)");
+            g_in_ok = false;
+            return;
+        }
+        AVAudioFormat* hw = input ? [input outputFormatForBus:0] : nil;
+        if (!hw || hw.channelCount == 0 || hw.sampleRate <= 0.0) {
+            // No input device right now (unplugged). The engine stays stopped; the
+            // next configuration change (device returns) tries again.
+            std::fprintf(stderr, "[audio-in] restart: no usable input device\n");
+            g_in_ok = false;
+            return;
+        }
+        {
+            // The tap is removed and the engine stopped, so only a straggling
+            // callback can be inside cap_consume; g_mtx excludes it while the
+            // formats and converters are swapped.
+            std::lock_guard<std::mutex> lk(g_mtx);
+            [g_hw_fmt release];
+            g_hw_fmt = [hw retain];
+            for (Cap* c : g_caps) {
+                [c->conv release];    c->conv = nil;
+                [c->dst_fmt release]; c->dst_fmt = nil;
+                [c->out_buf release]; c->out_buf = nil;
+                c->conv_error_logged = false;
+                if (!cap_build_converter(c))
+                    std::fprintf(stderr, "[audio-in] restart: converter rebuild failed; "
+                                 "stream is silent until reopened\n");
+            }
+        }
+        @try {
+            [input installTapOnBus:0 bufferSize:1024 format:nil
+                             block:^(AVAudioPCMBuffer* buf, AVAudioTime* when) {
+                (void)when;
+                @autoreleasepool { tap_dispatch(buf); }
+            }];
+        } @catch (NSException* ex) {
+            std::fprintf(stderr, "[audio-in] restart: installTap failed: %s\n",
+                         ex.reason ? ex.reason.UTF8String : "(no reason)");
+            g_in_ok = false;
+            return;
+        }
+        [g_in_engine prepare];
+        NSError* err = nil;
+        if (![g_in_engine startAndReturnError:&err]) {
+            std::fprintf(stderr, "[audio-in] restart: engine start FAILED: %s\n",
+                         err ? err.localizedDescription.UTF8String : "(unknown)");
+            g_in_ok = false;
+            return;
+        }
+        g_in_ok = true;
+        std::fprintf(stderr, "[audio-in] input device changed; microphone live: input %.0f Hz %u ch\n",
+                     hw.sampleRate, (unsigned)hw.channelCount);
+    }
+}
+
+static void observe_input_config_change(AVAudioEngine* eng) {
+    if (!mic_restart_enabled()) return;
+    if (!g_restart_q) g_restart_q = dispatch_queue_create("macapk.audio-in.restart", DISPATCH_QUEUE_SERIAL);
+    [[NSNotificationCenter defaultCenter]
+        addObserverForName:AVAudioEngineConfigurationChangeNotification
+                    object:eng queue:nil
+                usingBlock:^(NSNotification* n) {
+        (void)n;
+        // Plugging in a headset posts several in a row; one restart covers them.
+        if (g_restart_pending.exchange(true)) return;
+        dispatch_async(g_restart_q, ^{ restart_input_engine(); });
+    }];
+}
+
 static bool ensure_input_engine_locked() {
     if (g_in_tried) return g_in_ok;
     g_in_tried = true;
@@ -622,6 +725,7 @@ static bool ensure_input_engine_locked() {
             return false;
         }
         g_in_ok = true;
+        observe_input_config_change(g_in_engine);
         std::fprintf(stderr,
             "[audio-in] microphone live: input %.0f Hz %u ch\n",
             hw.sampleRate, (unsigned)hw.channelCount);
