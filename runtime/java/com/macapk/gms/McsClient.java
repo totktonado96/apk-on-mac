@@ -73,6 +73,8 @@ public final class McsClient {
     private static volatile Dispatcher sDispatcher = (pkg, extras) ->
         log("push for " + pkg + " (" + extras.size() + " keys) -- no dispatcher set, dropped");
 
+    /** Hand a (replayed) message to the dispatcher armed by Boot. */
+    static void dispatchLocal(String pkg, Map<String, String> extras) { sDispatcher.deliver(pkg, extras); }
     public static void setDispatcher(Dispatcher d) { if (d != null) sDispatcher = d; }
 
     // ===================================================================
@@ -439,6 +441,13 @@ public final class McsClient {
                 if (app != null) self = app.getPackageName();
             } catch (Throwable ignored) {}
             if (self != null && !self.equals(category)) {
+                // Spool for a package that registered through this installation
+                // instead of losing it; it replays the message at its next boot.
+                if (McsSpool.enabled() && GmsStore.hasEverRegistered(category)
+                        && McsSpool.spool(category, extras)) {
+                    if (persistentId != null) queueAck(persistentId);
+                    return;
+                }
                 log("push for " + category + " is not ours (" + self
                     + "), not dispatching -- NOTE the cumulative stream ack still"
                     + " consumes it, see the comment above");

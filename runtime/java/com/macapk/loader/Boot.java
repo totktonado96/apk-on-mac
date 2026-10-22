@@ -2520,6 +2520,17 @@ public final class Boot {
                         "Application.onCreate threw " + t + " -- continuing");
                     t.printStackTrace();
                 }
+                // Push that Google routed down ANOTHER app's MCS socket while this
+                // one was not running (McsSpool): replay it now, through the same
+                // RECEIVE broadcast a live message uses, after Application.onCreate
+                // so the app's receiver/service finds its Application ready.
+                try {
+                    if (com.macapk.loader.PlayServices.pushBackendEnabled()) {
+                        com.macapk.gms.McsSpool.replay(application.getPackageName());
+                    }
+                } catch (Throwable t) {
+                    NativeLog.w(TAG, "FCM spool replay skipped: " + t);
+                }
                 applicationHolder[0] = application;
             } catch (Throwable t) {
                 // Boot-level setup failure (provider chain, etc.). Still
