@@ -58,6 +58,12 @@ jobs:
       - name: Build ad-hoc signed DMG
         run: scripts/build_dist.sh --dmg
 
+      - name: List Quick Look extensions
+        run: |
+          find build -name '*.appex' -maxdepth 6 -print
+          for x in $(find build/dist -name '*.appex' -maxdepth 6 | tr ' ' '?'); do :; done
+          find build -path '*PlugIns/*.appex' -maxdepth 6 | grep -q . 
+
       - name: Collect LGPL source (GLib, libintl)
         run: scripts/collect_lgpl_sources.sh build/lgpl_src
 

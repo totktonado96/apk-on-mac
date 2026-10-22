@@ -226,6 +226,29 @@ codesign --force --sign - --options runtime \
     --entitlements "$PROJECT_DIR/runtime/scripts/jit-entitlements.plist" \
     --identifier io.github.totktonado96.apkonmac.location "$LOC_APP"
 
+# Quick Look extensions: APK icon thumbnails + Space-bar preview card. Pure
+# Swift (launcher/QuickLook/ApkInfo.swift parses the zip, AXML and arsc itself),
+# sandboxed, embedded in Contents/PlugIns. build_dist.sh re-signs them.
+echo "[3c/5] Building Quick Look extensions..."
+QL_DIR="$LAUNCHER_DIR/QuickLook"
+rm -rf "$CONTENTS/PlugIns"
+for spec in "Thumbnail:ApkThumbnailProvider:QuickLookThumbnailing" "Preview:ApkPreviewProvider:Quartz"; do
+    IFS=: read -r QK QCLS QFW <<<"$spec"
+    QAPPEX="$CONTENTS/PlugIns/Apk on Mac $QK.appex"
+    mkdir -p "$QAPPEX/Contents/MacOS"
+    swiftc \
+        -O \
+        -parse-as-library \
+        -application-extension \
+        -target "$SWIFT_TARGET" \
+        -framework "$QFW" \
+        -Xlinker -e -Xlinker _NSExtensionMain \
+        -o "$QAPPEX/Contents/MacOS/ApkQL$QK" \
+        "$QL_DIR/ApkInfo.swift" "$QL_DIR/${QK}Provider.swift"
+    cp "$QL_DIR/${QK}Info.plist" "$QAPPEX/Contents/Info.plist"
+    codesign --force --sign - --entitlements "$QL_DIR/QuickLook.entitlements" "$QAPPEX"
+done
+
 echo "[4/5] Copying Info.plist and bundling runtime binary..."
 cp "$LAUNCHER_DIR/Info.plist" "$CONTENTS/Info.plist"
 

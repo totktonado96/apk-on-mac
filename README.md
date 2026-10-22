@@ -43,6 +43,8 @@ implemented directly on macOS:
 
 ## What's new in Apk on Mac
 
+- **Finder previews (Quick Look):** APK files show the app's own icon, and Space shows a
+  card with name, version, SDK, ABIs, permissions and whether it runs on Apple Silicon.
 - **Keyboard:** Russian and other non-Latin layouts work (WASD, Cmd+C/V by physical
   key), no stuck keys after Cmd+Tab, Home/End/Page Up/Down and F1–F12.
 - **Notifications** in macOS Notification Center; clicking one opens the app.

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>CFBundleIdentifier</key><string>io.github.totktonado96.apkonmac.quicklook.thumbnail</string>
+    <key>CFBundleName</key><string>Apk on Mac Thumbnail</string>
+    <key>CFBundleDisplayName</key><string>Apk on Mac Thumbnail</string>
+    <key>CFBundleExecutable</key><string>ApkQLThumbnail</string>
+    <key>CFBundlePackageType</key><string>XPC!</string>
+    <key>CFBundleInfoDictionaryVersion</key><string>6.0</string>
+    <key>CFBundleShortVersionString</key><string>1.0</string>
+    <key>CFBundleVersion</key><string>1</string>
+    <key>LSMinimumSystemVersion</key><string>26.4</string>
+    <key>NSExtension</key>
+    <dict>
+        <key>NSExtensionPointIdentifier</key><string>com.apple.quicklook.thumbnail</string>
+        <key>NSExtensionPrincipalClass</key><string>ApkThumbnailProvider</string>
+        <key>NSExtensionAttributes</key>
+        <dict>
+            <key>QLSupportedContentTypes</key>
+            <array>
+                <string>io.github.totktonado96.apkonmac.apk</string>
+                <string>io.github.totktonado96.apkonmac.apkm</string>
+                <string>io.github.totktonado96.apkonmac.xapk</string>
+                <string>io.github.totktonado96.apkonmac.apks</string>
+                <string>io.github.totktonado96.apkonmac.apkx</string>
+            </array>
+            <key>QLThumbnailMinimumDimension</key><integer>16</integer>
+        </dict>
+    </dict>
+</dict>
+</plist>

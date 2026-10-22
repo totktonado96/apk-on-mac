@@ -384,6 +384,10 @@ fi
 [ -d "$APP/Contents/Helpers/Apk on Mac Location.app" ] && \
     sign "$APP/Contents/Helpers/Apk on Mac Location.app" --entitlements "$ENT" --identifier io.github.totktonado96.apkonmac.location
 sign "$RES/macapk-runtime" --entitlements "$ENT"
+# Quick Look extensions: sandbox-only entitlements (NOT $ENT), signed before the seal.
+for x in "$APP"/Contents/PlugIns/*.appex; do
+    [ -d "$x" ] && sign "$x" --entitlements "$PROJECT_DIR/launcher/QuickLook/QuickLook.entitlements"
+done
 [ -f "$BIN/macapk-translator" ] && sign "$BIN/macapk-translator" --entitlements "$ENT"
 # 5d. seal the whole bundle last (entitlements on the launcher executable too)
 sign "$APP" --entitlements "$ENT"
