@@ -34,7 +34,7 @@ public class KeyguardManager {
     // AOSP KeyguardManager.createConfirmDeviceCredentialIntent(CharSequence,
     // CharSequence) (same file/branch as the constants above):
     //
-    //     private static final boolean CONFIRM_ACTIVITY_PRESENT = false;
+    private static final boolean CONFIRM_ACTIVITY_PRESENT = false;
     public Intent createConfirmDeviceCredentialIntent(CharSequence title,
     //             CharSequence description) {
     //         if (!isDeviceSecure()) return null;
@@ -62,6 +62,7 @@ public class KeyguardManager {
     // always come back empty -- using the guaranteed fallback value
     // directly is behaviorally identical and skips a PackageManager
     // round-trip for a branch that cannot execute today.
+    private static final boolean CONFIRM_ACTIVITY_PRESENT = false;
     public Intent createConfirmDeviceCredentialIntent(CharSequence title,
             CharSequence description) {
         // isDeviceSecure() is now real, but nothing here handles
