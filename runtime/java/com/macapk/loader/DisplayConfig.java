@@ -60,8 +60,15 @@ public final class DisplayConfig {
      *  never been run. With it off, such an activity keeps its instance, gets
      *  no onConfigurationChanged (which AOSP would not send it either), and
      *  its view tree still learns the new configuration. */
+    // v1.0.x DEFAULT ON now that a relaunch carries Bundle state and the
+    // non-configuration instance (ViewModels). Rollback: MACAPK_CONFIG_RELAUNCH=0
+    // (or the older MACAPK_RESIZE_RELAUNCH=0). Resizes reach here once per
+    // committed window size -- apply_user_resize_main on windowDidEndLiveResize
+    // -- and only bucket-crossing bits (filterDiff) can relaunch, so a drag does
+    // not recreate per pixel.
     static final boolean RELAUNCH_ON =
-        "1".equals(System.getenv("MACAPK_RESIZE_RELAUNCH"));
+        !"0".equals(System.getenv("MACAPK_CONFIG_RELAUNCH"))
+        && !"0".equals(System.getenv("MACAPK_RESIZE_RELAUNCH"));
 
     // ---- the committed display ------------------------------------------------
 

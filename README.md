@@ -43,6 +43,7 @@ implemented directly on macOS:
 
 ## What's new in Apk on Mac
 
+- **Theme and language toggles keep your place:** recreating an activity now keeps its ViewModels (`getLastNonConfigurationInstance`), and a dark/light flip, locale change or window resize across a size bucket relaunches an activity that does not declare it in `configChanges`, as Android does. Off with `MACAPK_RETAIN_NCI=0` / `MACAPK_CONFIG_RELAUNCH=0`.
 - **Notification clicks after quit:** clicking a delivered notification relaunches the app and opens its target.
 - **Notification buttons:** action buttons and inline reply from an app's notifications work from the banner.
 - **Push for closed apps:** FCM messages that reach another app's connection are saved and delivered when the app next starts.

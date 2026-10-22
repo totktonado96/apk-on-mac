@@ -512,6 +512,14 @@ public final class ActivityHost {
                     a.macapkDispatchFragmentState(android.app.FragmentManagerImpl.ACTIVITY_CREATED);
                 }
             }
+            // performDestroyActivity: retain AFTER onStop, BEFORE onDestroy.
+            if (sRecreating && RETAIN_NCI && a == sRelaunchRecord) {
+                try { sRelaunchNci = a.macapkRetainNonConfigurationInstance(); }
+                catch (Throwable t) {
+                    NativeLog.w(TAG, "onRetainNonConfigurationInstance threw for "
+                        + a.getClass().getName() + ": " + t);
+                }
+            }
             runTolerant(a, "onDestroy", new Class<?>[0], new Object[0]);
             if (app != null) app.dispatchActivityDestroyed(a);
             // ON_DESTROY walks the registry down (ON_PAUSE/ON_STOP/ON_DESTROY in
@@ -1228,6 +1236,14 @@ public final class ActivityHost {
                     runTolerant(a, "onSaveInstanceState",
                             new Class<?>[]{Bundle.class}, new Object[]{state});
                     sRelaunchState = state;
+                    // AOSP handleRelaunchActivity -> handleRelaunchActivityInner
+                    // -> handleDestroyActivity(finishing=false, getNonConfigInstance
+                    // =true): the destroyed instance reports isChangingConfigurations()
+                    // so androidx ComponentActivity (ON_DESTROY: `if
+                    // (!isChangingConfigurations()) viewModelStore.clear()`) keeps its
+                    // ViewModels. onActivityFinished retains the NCI between onStop and
+                    // onDestroy, as performDestroyActivity does.
+                    if (RETAIN_NCI) a.macapkSetChangingConfigurations(true);
                     // Window policy phase 3: a relaunch keeps the SAME
                     // ActivityRecord, so its orientation (a request included)
                     // and its window box go to the new instance unchanged.
@@ -1243,7 +1259,9 @@ public final class ActivityHost {
                     // not leave a stale Bundle to be handed to an unrelated
                     // cold launch later.
                     sRelaunchState = null;
+                    sRelaunchNci = null;
                     sRelaunchRecord = null;
+                    a.macapkSetChangingConfigurations(false);
                 }
             }
         });
@@ -3405,6 +3423,16 @@ public final class ActivityHost {
      *  threading a parameter through every call site is not worth the churn. */
     private static Bundle sRelaunchState = null;
 
+    /** The old instance's onRetainNonConfigurationInstance() result, carried to
+     *  the new instance across a relaunch. AOSP keeps it on the ActivityClientRecord
+     *  (ActivityThread.performDestroyActivity: `r.lastNonConfigurationInstances =
+     *  r.activity.retainNonConfigurationInstances()`, handed back in
+     *  performLaunchActivity via activity.attach(..., r.lastNonConfigurationInstances)).
+     *  MACAPK_RETAIN_NCI=0 restores the old drop-everything relaunch (and
+     *  isChangingConfigurations() == false, so ViewModels are cleared). */
+    private static final boolean RETAIN_NCI = !"0".equals(System.getenv("MACAPK_RETAIN_NCI"));
+    private static Object sRelaunchNci = null;
+
     private static void performLaunch(Intent intent) {
         // "cleared BEFORE the activity is started" -- so before stack.peek() is
         // read below, because after this the task is empty and there is nothing
@@ -3611,6 +3639,9 @@ public final class ActivityHost {
         // cold launch and non-null for a relaunch, and an app distinguishes
         // "first run" from "recreated" purely by this argument.
         Bundle launchState = sRelaunchState;
+        // Activity.attach(lastNonConfigurationInstances): visible to
+        // getLastNonConfigurationInstance() from onCreate until onResume.
+        if (sRecreating) activity.macapkSetLastNonConfigurationInstance(sRelaunchNci);
         runTolerant(activity, "onCreate", new Class<?>[]{Bundle.class},
                 new Object[]{launchState});
         // AOSP: AN ACTIVITY THAT CALLED finish() DURING onCreate IS NEVER STARTED
@@ -3784,6 +3815,7 @@ public final class ActivityHost {
                 new Object[]{launchState});
         // One launch, one consumption: a later cold launch must see null.
         sRelaunchState = null;
+        sRelaunchNci = null;
         driveLifecycleTo(activity, "STARTED");
         if (app != null) app.dispatchActivityStarted(activity);
         activity.macapkDispatchFragmentState(
@@ -3820,6 +3852,8 @@ public final class ActivityHost {
         }
         resumeFinalState(activity);
         runTolerant(activity, "onResume", new Class<?>[0], new Object[0]);
+        // Activity.performResume: `mLastNonConfigurationInstances = null;`
+        activity.macapkSetLastNonConfigurationInstance(null);
         driveLifecycleTo(activity, "RESUMED");
         // AOSP ActivityThread.handleResumeActivity calls onPostResume after
         // performResume (onResume) once the activity is resumed. AppCompat

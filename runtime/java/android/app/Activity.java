@@ -3622,13 +3622,25 @@ public class Activity extends ContextThemeWrapper
      *  recreates activities (single fixed configuration); always
      *  returns null. androidx.activity.ComponentActivity reads this
      *  during onCreate to decide whether to re-bind ViewModels. */
-    public Object getLastNonConfigurationInstance() { return null; }
+    // v1.0.x: a recreate now relaunches, so this is real (MACAPK_RETAIN_NCI=0
+    // keeps the field null). AOSP Activity.getLastNonConfigurationInstance:
+    // `mLastNonConfigurationInstances != null ? ...activity : null`; cleared in
+    // performResume. Platform-fragment / child retention is not modelled.
+    private Object mLastNonConfigurationInstance;
+    private volatile boolean mChangingConfigurations;
+    /** @hide ActivityHost only. */
+    public void macapkSetLastNonConfigurationInstance(Object o) { mLastNonConfigurationInstance = o; }
+    /** @hide ActivityHost only: Activity.retainNonConfigurationInstances. */
+    public Object macapkRetainNonConfigurationInstance() { return onRetainNonConfigurationInstance(); }
+    /** @hide ActivityHost only: ActivityClientRecord's relaunch flag. */
+    public void macapkSetChangingConfigurations(boolean b) { mChangingConfigurations = b; }
+    public Object getLastNonConfigurationInstance() { return mLastNonConfigurationInstance; }
     public Object onRetainNonConfigurationInstance() { return null; }
     public Object getLastCustomNonConfigurationInstance() { return null; }
     public Object onRetainCustomNonConfigurationInstance() { return null; }
 
     /** AOSP API-3+ — back button handling. */
-    public boolean isChangingConfigurations() { return false; }
+    public boolean isChangingConfigurations() { return mChangingConfigurations; }
 
     /** AOSP API-1+ — task-management. We have one activity stack. */
     public int getTaskId() { return 1; }
@@ -3960,7 +3972,19 @@ public class Activity extends ContextThemeWrapper
                 // only surfaces re-inflated after this point pick the new
                 // configuration up. Say so rather than papering over it by
                 // calling a callback the app never asked for.
-                try {
+                // v1.0.x: relaunch like AOSP (ActivityThread.handleRelaunchActivity)
+                // now that recreate() carries instance state and the NCI, unless
+                // MACAPK_CONFIG_RELAUNCH=0. Not from recreate()'s own legacy
+                // fallback (that would loop). Window resizes never come here:
+                // DisplayConfig filters them through the size buckets and runs
+                // once per committed window size (end of a live drag).
+                boolean relaunching = false;
+                if (MACAPK_CONFIG_RELAUNCH && !mInLegacyRecreate && !isFinishing()) {
+                    try {
+                        relaunching = com.macapk.loader.ActivityHost.macapkRecreate(this);
+                    } catch (Throwable ignored) {}
+                }
+                if (!relaunching) try {
                     com.macapk.loader.NativeLog.i("Apk on Mac.Activity",
                         "config change 0x" + Integer.toHexString(diff)
                         + " not declared in android:configChanges (declared 0x"
@@ -4118,6 +4142,9 @@ public class Activity extends ContextThemeWrapper
     // Bundle is identity pass-through in-process and that is AOSP-equivalent
     // same-process. None of the 140-class Parcelable gap blocks it. Full
     // analysis, census method and falsifier: docs/saved-instance-state-correctly-absent_2026-08-13.md
+    private boolean mInLegacyRecreate;
+    static final boolean MACAPK_CONFIG_RELAUNCH =
+        !"0".equals(System.getenv("MACAPK_CONFIG_RELAUNCH"));
     public void recreate() {
         // AOSP destroys this instance and builds a new one from the same
         // Intent, which is the ONLY thing that re-inflates a layout against
@@ -4134,7 +4161,11 @@ public class Activity extends ContextThemeWrapper
         try {
             Resources r = getResources();
             Configuration c = (r != null) ? r.getConfiguration() : null;
-            if (c != null) dispatchConfigurationChanged(c);
+            if (c != null) {
+                mInLegacyRecreate = true;
+                try { dispatchConfigurationChanged(c); }
+                finally { mInLegacyRecreate = false; }
+            }
         } catch (Throwable ignored) {}
     }
     /** AOSP getChangingConfigurations(): "If this activity is being
