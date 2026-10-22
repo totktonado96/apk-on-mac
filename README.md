@@ -43,6 +43,10 @@ implemented directly on macOS:
 
 ## What's new in Apk on Mac
 
+- **Notification clicks after quit:** clicking a delivered notification relaunches the app and opens its target.
+- **Notification buttons:** action buttons and inline reply from an app's notifications work from the banner.
+- **Push for closed apps:** FCM messages that reach another app's connection are saved and delivered when the app next starts.
+- **Microphone follows the device:** switching the input device (headset, USB mic) no longer leaves the mic dead.
 - **Share via macOS:** an app's Share button opens the system share sheet (Mail, Messages, AirDrop, ...) for text, images and files.
 - **Drag and drop files:** drop files from Finder on an app window and the app receives them as a share (or open-with) when it handles one.
 - **Lone modifier keys:** Shift, Ctrl, Option, Cmd and Caps Lock pressed alone reach games as Android key events (not in text fields).
