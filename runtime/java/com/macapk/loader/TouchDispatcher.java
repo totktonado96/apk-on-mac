@@ -3012,6 +3012,12 @@ public final class TouchDispatcher {
         }
         deliverText(s);
     }
+    /** JNI door for Finder file drops on the window (cocoa_bridge.mm
+     *  performDragOperation:): see HostDropHandler. */
+    public void dispatchHostFiles(String[] paths) {
+        noteRealInput();
+        HostDropHandler.onDropped(paths);
+    }
     private static final boolean HOST_TEXT = !"0".equals(System.getenv("MACAPK_HOST_TEXT"));
     private void deliverText(String s) {
         if (InputRecorder.ON) {

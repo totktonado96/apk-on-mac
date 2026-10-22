@@ -10801,13 +10801,22 @@ static void install_window_delegate(NSWindow* w) {
 }
 }  // namespace macapk
 
+// MACAPK_DRAG_DROP=0 (default on): do not accept file drops on the window.
+static bool MacApkDragDropOn() {
+    static const bool on = [] {
+        const char* e = getenv("MACAPK_DRAG_DROP");
+        return !e || e[0] != '0';
+    }();
+    return on;
+}
+
 // Conforms to NSTextInputClient so host text composition works (see keyDown:
 // and the NSTextInputClient section below). The conformance is what makes
 // NSView.inputContext non-nil at all -- AppKit documents it as "Returns nil if
 // the receiver doesn't conform to NSTextInputClient protocol"
 // (MacOSX.sdk/.../AppKit.framework/Headers/NSView.h:342-344), so without it
 // there is no way to reach the macOS input method from this view.
-@interface MacApkMetalView : MTKView <NSTextInputClient>
+@interface MacApkMetalView : MTKView <NSTextInputClient, NSDraggingDestination>
 - (void)debugSyntheticTapAtViewX:(CGFloat)vx Y:(CGFloat)vy;
 - (void)debugSyntheticTouchAction:(int)action atViewX:(CGFloat)vx Y:(CGFloat)vy;
 - (void)debugSyntheticKey:(int)keycode unicode:(int)uni;
@@ -11422,7 +11431,54 @@ static int g_tpNextId = 0;
         // 10_12" -- the Touch Bar only, so a trackpad finger never reached us. ADD indirect.
         self.allowedTouchTypes |= NSTouchTypeMaskIndirect;
     }
+    if (self && MacApkDragDropOn()) {
+        // Files from Finder dropped on the window reach the app as a share/open
+        // (HostDropHandler). MACAPK_DRAG_DROP=0 leaves the view unregistered.
+        [self registerForDraggedTypes:@[NSPasteboardTypeFileURL]];
+    }
     return self;
+}
+
+- (NSDragOperation)draggingEntered:(id<NSDraggingInfo>)sender {
+    return [self macapkDropURLs:sender].count ? NSDragOperationCopy : NSDragOperationNone;
+}
+- (NSDragOperation)draggingUpdated:(id<NSDraggingInfo>)sender {
+    return [self macapkDropURLs:sender].count ? NSDragOperationCopy : NSDragOperationNone;
+}
+- (NSArray<NSURL*>*)macapkDropURLs:(id<NSDraggingInfo>)sender {
+    return [[sender draggingPasteboard]
+        readObjectsForClasses:@[[NSURL class]]
+                      options:@{NSPasteboardURLReadingFileURLsOnlyKey: @YES}] ?: @[];
+}
+- (BOOL)performDragOperation:(id<NSDraggingInfo>)sender {
+    NSArray<NSURL*>* urls = [self macapkDropURLs:sender];
+    if (urls.count == 0 || !macapk::g_touch_vm || !macapk::g_touch_dispatcher) return NO;
+    JNIEnv* env = nullptr;
+    JavaVM* vm = macapk::g_touch_vm;
+    jint r = vm->GetEnv(reinterpret_cast<void**>(&env), JNI_VERSION_21);
+    if (r == JNI_EDETACHED) {
+        if (vm->AttachCurrentThread(reinterpret_cast<void**>(&env), nullptr) != JNI_OK) return NO;
+    } else if (r != JNI_OK || !env) return NO;
+    static jmethodID mid = nullptr;
+    if (!mid) {
+        jclass cls = env->GetObjectClass(macapk::g_touch_dispatcher);
+        mid = env->GetMethodID(cls, "dispatchHostFiles", "([Ljava/lang/String;)V");
+        env->DeleteLocalRef(cls);
+    }
+    if (!mid) { if (env->ExceptionCheck()) env->ExceptionClear(); return NO; }
+    jclass strCls = env->FindClass("java/lang/String");
+    jobjectArray arr = env->NewObjectArray((jsize)urls.count, strCls, nullptr);
+    env->DeleteLocalRef(strCls);
+    if (!arr) { if (env->ExceptionCheck()) env->ExceptionClear(); return NO; }
+    for (NSUInteger i = 0; i < urls.count; i++) {
+        jstring js = env->NewStringUTF(urls[i].path.fileSystemRepresentation);
+        env->SetObjectArrayElement(arr, (jsize)i, js);
+        if (js) env->DeleteLocalRef(js);
+    }
+    env->CallVoidMethod(macapk::g_touch_dispatcher, mid, arr);
+    env->DeleteLocalRef(arr);
+    if (env->ExceptionCheck()) { env->ExceptionDescribe(); env->ExceptionClear(); }
+    return YES;
 }
 
 // A replaced / removed view, or a window that loses key, can end a contact without
