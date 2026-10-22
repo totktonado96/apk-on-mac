@@ -3834,6 +3834,8 @@ public final class ActivityHost {
         // AOSP-ordered (everything onCreate registered is in place).
         currentActivityResumed = true;
         latchWindowAdded(activity, false);
+        // First Activity is up: release any notification click that launched us.
+        try { android.app.NotificationManager.macapkActivityUp(); } catch (Throwable ignored) {}
         pushTopWindowTraits(activity);
         // v1.0.575: blocking handshakes done; macapk-activity returns to its own
         // Looper.loop, so stop the OS-main pump from also draining the main queue.

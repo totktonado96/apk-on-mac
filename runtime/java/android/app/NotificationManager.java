@@ -44,7 +44,8 @@ public class NotificationManager {
     private static final long THROTTLE_MS = 2000;
 
     private static native void nativePost(String key, String title, String text, String subtitle,
-                                          byte[] iconPng, boolean silent);
+                                          byte[] iconPng, boolean silent, String coldPayload);
+    private static native void nativeBootReady();
     private static native void nativeCancel(String key);
     private static native void nativeCancelAll();
     private static native boolean nativeIsDenied();
@@ -101,7 +102,8 @@ public class NotificationManager {
         try {
             nativePost(key, title, body, sub, iconPng(n),
                        importance == IMPORTANCE_LOW || importance == IMPORTANCE_MIN
-                       || (reposted && (n.flags & Notification.FLAG_ONLY_ALERT_ONCE) != 0));
+                       || (reposted && (n.flags & Notification.FLAG_ONLY_ALERT_ONCE) != 0),
+                       coldPayload(n));
         } catch (UnsatisfiedLinkError e) {
             sLinked = false;
         }
@@ -138,6 +140,64 @@ public class NotificationManager {
         synchronized (sActive) { sActive.remove(key); sLastPost.remove(key); }
         if (!ENABLED || !sLinked) return;
         try { nativeCancel(key); } catch (UnsatisfiedLinkError e) { sLinked = false; }
+    }
+
+    // ---- Click after the process exited (MACAPK_NOTIF_COLD_CLICK, default on) ----
+    // AOSP keeps the PendingIntent in system_server (PendingIntentRecord), so a tap
+    // works whether or not the posting app is running. Here the token lives in this
+    // process, so the banner carries it: contentIntent marshalled through Parcel
+    // (real marshalling, android.os.Parcel.marshall) and base64'd into the
+    // notification's userInfo. macOS relaunches the app on click; the native
+    // delegate stashes the payload until the first Activity is resumed
+    // (macapkActivityUp -> nativeBootReady) and calls macapkOnColdNotificationClicked.
+    private static final boolean COLD_CLICK = !"0".equals(System.getenv("MACAPK_NOTIF_COLD_CLICK"));
+    private static final int COLD_MAX_BYTES = 48 * 1024;
+
+    private static String coldPayload(Notification n) {
+        if (!COLD_CLICK || n.contentIntent == null) return null;
+        android.os.Parcel p = android.os.Parcel.obtain();
+        try {
+            p.writeTypedObject(n.contentIntent, 0);
+            byte[] b = p.marshall();
+            if (b == null || b.length == 0 || b.length > COLD_MAX_BYTES) return null;
+            return java.util.Base64.getEncoder().encodeToString(b);
+        } catch (Throwable t) {
+            return null;   // an extra the Parcel cannot flatten: live click still works
+        } finally {
+            p.recycle();
+        }
+    }
+
+    /** Called by ActivityHost once the first Activity has resumed. */
+    public static void macapkActivityUp() {
+        if (!COLD_CLICK || !ENABLED || !sLinked) return;
+        try { nativeBootReady(); } catch (UnsatisfiedLinkError e) { sLinked = false; }
+    }
+
+    static void macapkOnColdNotificationClicked(String key, String payload) {
+        final PendingIntent pi;
+        synchronized (sActive) {
+            android.service.notification.StatusBarNotification live = sActive.get(key);
+            if (live != null) { macapkOnNotificationClicked(key); return; }
+        }
+        android.os.Parcel p = android.os.Parcel.obtain();
+        try {
+            byte[] b = java.util.Base64.getDecoder().decode(payload);
+            p.unmarshall(b, 0, b.length);
+            p.setDataPosition(0);
+            pi = p.readTypedObject(PendingIntent.CREATOR);
+        } catch (Throwable t) {
+            System.err.println("[W] notification: cold contentIntent undecodable: " + t);
+            return;
+        } finally {
+            p.recycle();
+        }
+        if (pi == null) return;
+        new android.os.Handler(android.os.Looper.getMainLooper()).post(() -> {
+            try { pi.send(); }
+            catch (PendingIntent.CanceledException ignored) {}
+            catch (Throwable t) { System.err.println("[W] notification: cold contentIntent failed: " + t); }
+        });
     }
 
     /** Called from notification_bridge.mm on the main queue when the user clicks

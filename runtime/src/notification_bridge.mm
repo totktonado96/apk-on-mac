@@ -31,6 +31,13 @@ namespace {
 JavaVM*   g_vm = nullptr;
 jclass    g_cls = nullptr;          // global ref to android.app.NotificationManager
 jmethodID g_on_click = nullptr;
+jmethodID g_on_cold_click = nullptr;
+// Cold-click stash (main queue only). A click that LAUNCHED the app arrives from
+// the UN delegate long before Java has an Activity; firing the PendingIntent
+// then would start an Activity under a half-booted app. Hold it until Java
+// reports the first Activity resumed (nativeBootReady).
+bool      g_boot_ready = false;
+NSMutableArray* g_cold_stash = nil;  // of @[key, payload]
 std::atomic<int> g_auth{0};         // 0 unknown / not asked, 1 granted, 2 denied
 bool      g_asked = false;          // main queue only
 
@@ -69,6 +76,42 @@ void SendClick(NSString* key) {
     }
 }
 
+// MACAPK_NOTIF_COLD_CLICK=0 restores the old behaviour (a click with no live
+// Notification in the Java map is dropped).
+bool ColdEnabled() {
+    const char* e = std::getenv("MACAPK_NOTIF_COLD_CLICK");
+    return !(e && std::strcmp(e, "0") == 0);
+}
+
+void SendColdClick(NSString* key, NSString* payload) {
+    JNIEnv* env = Env();
+    if (!env || !g_cls || !g_on_cold_click || !key || !payload) return;
+    jstring jk = env->NewStringUTF(key.UTF8String);
+    jstring jp = env->NewStringUTF(payload.UTF8String);
+    env->CallStaticVoidMethod(g_cls, g_on_cold_click, jk, jp);
+    env->DeleteLocalRef(jk);
+    env->DeleteLocalRef(jp);
+    if (env->ExceptionCheck()) {
+        std::fprintf(stderr, "[W] notification: Java threw in macapkOnColdNotificationClicked\n");
+        env->ExceptionDescribe();
+        env->ExceptionClear();
+    }
+}
+
+// Main queue only.
+void HandleClick(NSString* key, NSString* payload) {
+    if (payload && ColdEnabled() && g_on_cold_click) {
+        if (!g_boot_ready) {
+            if (!g_cold_stash) g_cold_stash = [[NSMutableArray alloc] init];
+            [g_cold_stash addObject:@[key, payload]];
+        } else {
+            SendColdClick(key, payload);
+        }
+        return;
+    }
+    SendClick(key);
+}
+
 NSString* Str(JNIEnv* env, jstring s) {
     if (!s) return nil;
     const char* c = env->GetStringUTFChars(s, nullptr);
@@ -99,16 +142,20 @@ NSString* Str(JNIEnv* env, jstring s) {
 didReceiveNotificationResponse:(UNNotificationResponse*)response
          withCompletionHandler:(void (^)(void))done {
     NSString* key = [response.notification.request.identifier copy];
+    id pl = response.notification.request.content.userInfo[@"macapk.pi"];
+    NSString* payload = [pl isKindOfClass:[NSString class]] ? [pl copy] : nil;
     if ([response.actionIdentifier isEqualToString:UNNotificationDefaultActionIdentifier]) {
         dispatch_async(dispatch_get_main_queue(), ^{
             @autoreleasepool {
                 [NSApp activateIgnoringOtherApps:YES];
-                macapk::notification::SendClick(key);
+                macapk::notification::HandleClick(key, payload);
             }
             [key release];
+            [payload release];
         });
     } else {
         [key release];
+        [payload release];
     }
     done();
 }
@@ -141,11 +188,12 @@ void EnsureAuthOnMain() {
 }
 
 void JNICALL Notif_nativePost(JNIEnv* env, jclass, jstring key, jstring title, jstring text,
-                              jstring subtitle, jbyteArray png, jboolean silent) {
+                              jstring subtitle, jbyteArray png, jboolean silent, jstring cold) {
     NSString* k = [Str(env, key) retain];
     NSString* t = [Str(env, title) retain];
     NSString* x = [Str(env, text) retain];
     NSString* s = [Str(env, subtitle) retain];
+    NSString* cp = [Str(env, cold) retain];
     NSData* icon = nil;
     if (png) {
         jsize n = env->GetArrayLength(png);
@@ -167,6 +215,9 @@ void JNICALL Notif_nativePost(JNIEnv* env, jclass, jstring key, jstring title, j
                 if (t) c.title = t;
                 if (s) c.subtitle = s;
                 if (x) c.body = x;
+                // Serialized contentIntent, so a click after the process exited
+                // (macOS relaunches the app) can still be fired; see HandleClick.
+                if (cp) c.userInfo = @{@"macapk.pi": cp};
                 if (!quiet) c.sound = [UNNotificationSound defaultSound];
                 if (icon) {
                     // The attachment's file is moved into the data store by the
@@ -191,7 +242,7 @@ void JNICALL Notif_nativePost(JNIEnv* env, jclass, jstring key, jstring title, j
                 }];
             }
         }
-        [k release]; [t release]; [x release]; [s release]; [icon release];
+        [k release]; [t release]; [x release]; [s release]; [cp release]; [icon release];
     });
 }
 
@@ -216,18 +267,32 @@ void JNICALL Notif_nativeCancelAll(JNIEnv*, jclass) {
     });
 }
 
+void JNICALL Notif_nativeBootReady(JNIEnv*, jclass) {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        @autoreleasepool {
+            g_boot_ready = true;
+            NSArray* items = g_cold_stash;
+            g_cold_stash = nil;
+            for (NSArray* it in items) SendColdClick(it[0], it[1]);
+            [items release];
+        }
+    });
+}
+
 jboolean JNICALL Notif_nativeIsDenied(JNIEnv*, jclass) {
     return g_auth.load() == 2 ? JNI_TRUE : JNI_FALSE;
 }
 
 const JNINativeMethod kMethods[] = {
     {const_cast<char*>("nativePost"),
-     const_cast<char*>("(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;[BZ)V"),
+     const_cast<char*>("(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;[BZLjava/lang/String;)V"),
      reinterpret_cast<void*>(Notif_nativePost)},
     {const_cast<char*>("nativeCancel"), const_cast<char*>("(Ljava/lang/String;)V"),
      reinterpret_cast<void*>(Notif_nativeCancel)},
     {const_cast<char*>("nativeCancelAll"), const_cast<char*>("()V"),
      reinterpret_cast<void*>(Notif_nativeCancelAll)},
+    {const_cast<char*>("nativeBootReady"), const_cast<char*>("()V"),
+     reinterpret_cast<void*>(Notif_nativeBootReady)},
     {const_cast<char*>("nativeIsDenied"), const_cast<char*>("()Z"),
      reinterpret_cast<void*>(Notif_nativeIsDenied)},
 };
@@ -256,6 +321,9 @@ void RegisterNotificationBridgeMethods(JNIEnv* env) {
         env->ExceptionClear();
         std::fprintf(stderr, "[I] notification: macapkOnNotificationClicked missing; clicks only focus the app\n");
     }
+    g_on_cold_click = env->GetStaticMethodID(cls, "macapkOnColdNotificationClicked",
+                                             "(Ljava/lang/String;Ljava/lang/String;)V");
+    if (!g_on_cold_click) env->ExceptionClear();
     env->GetJavaVM(&g_vm);
     g_cls = (jclass)env->NewGlobalRef(cls);
     env->DeleteLocalRef(cls);
