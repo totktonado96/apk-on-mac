@@ -101,6 +101,11 @@ public final class Manifest {
      *  -> 0 (DEFAULT_TARGET_SDK_VERSION), which AOSP treats as older than every
      *  level, not as "unknown" (MACAPK_TARGETSDK_ZERO; =0 synthesises 1). */
     public final int    targetSdk;
+
+    /** Raw <application android:networkSecurityConfig> / usesCleartextTraffic of the
+     *  (single) manifest parsed in this process; null when absent. */
+    public static volatile String networkSecurityConfigRaw;
+    public static volatile Boolean usesCleartextTraffic;
     /** android:minSdkVersion from <uses-sdk>. 0 when the manifest
      *  doesn't declare one. Plumbed into ApplicationInfo.minSdkVersion
      *  so engines (Unity reads it via JNI at native init and logs
@@ -1062,6 +1067,15 @@ public final class Manifest {
             if (appComponentFactory != null && appComponentFactory.isEmpty()) {
                 appComponentFactory = null;
             }
+            // Network Security Config: the raw reference (installed by Boot via
+            // MacApkNetworkSecurity) and android:usesCleartextTraffic, which AOSP
+            // only consults when there is no config.
+            String rawNsc = app.getAttributeNS(ANDROID_NS, "networkSecurityConfig");
+            networkSecurityConfigRaw = (rawNsc != null && !rawNsc.isEmpty()) ? rawNsc : null;
+            String rawCt = app.getAttributeNS(ANDROID_NS, "usesCleartextTraffic");
+            usesCleartextTraffic = (rawCt != null && !rawCt.isEmpty())
+                ? Boolean.valueOf("true".equalsIgnoreCase(rawCt) || "-1".equals(rawCt) || "1".equals(rawCt))
+                : null;
             // v1.0.128: pull `<application android:theme="@style/X">`.
             // Drives ResourceIndex's application-theme cascade so chrome
             // painters resolve `?attr/colorSurfaceContainerHigh` against

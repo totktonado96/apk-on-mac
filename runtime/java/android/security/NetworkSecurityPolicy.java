@@ -4,11 +4,12 @@
 // isCleartextTrafficPermitted before an HTTP request) threw
 // NoSuchMethodError.
 //
-// Apk on Mac does not enforce a Network Security Config, and the games /
-// apps we host predate the API-28 cleartext-by-default-off change or
-// declare cleartext explicitly. Mirroring the pre-Android-9 platform
-// default (and the permissive behavior our HTTP path already has), we
-// report cleartext as permitted. AOSP API surface mirrored exactly.
+// Answers come from MacApkNetworkSecurity, which parses the app's
+// res/xml/network_security_config (cleartextTrafficPermitted per base-config /
+// domain-config). With no config, or MACAPK_NSC=0, cleartext is permitted -- the
+// behaviour this class always had; AOSP's implicit "false for targetSdk >= 28" is
+// opt-in via MACAPK_NSC_CLEARTEXT=1 (rationale in MacApkNetworkSecurity). OkHttp
+// and friends reach these two methods reflectively.
 package android.security;
 
 public class NetworkSecurityPolicy {
@@ -19,10 +20,10 @@ public class NetworkSecurityPolicy {
     public NetworkSecurityPolicy() {}
 
     /** Whether cleartext (HTTP) traffic is permitted application-wide. */
-    public boolean isCleartextTrafficPermitted() { return true; }
+    public boolean isCleartextTrafficPermitted() { return MacApkNetworkSecurity.cleartextPermittedEverywhere(); }
 
     /** Whether cleartext traffic is permitted for the given host. */
-    public boolean isCleartextTrafficPermitted(String hostname) { return true; }
+    public boolean isCleartextTrafficPermitted(String hostname) { return MacApkNetworkSecurity.cleartextPermitted(hostname); }
 
     /** Whether Certificate Transparency verification is required for the given
      *  hostname (API 36, android.security.certificate_transparency_configuration).

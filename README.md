@@ -48,6 +48,9 @@ implemented directly on macOS:
 - **Push for closed apps:** FCM messages that reach another app's connection are saved and delivered when the app next starts.
 - **Microphone follows the device:** switching the input device (headset, USB mic) no longer leaves the mic dead.
 - **Share via macOS:** an app's Share button opens the system share sheet (Mail, Messages, AirDrop, ...) for text, images and files.
+- **Touch ID:** an app's biometric prompt uses Touch ID (or your login password), and `BiometricManager` / `KeyguardManager` report what the Mac really has. Off with `MACAPK_BIOMETRIC=0`.
+- **Enterprise CAs:** certificates your admin or you trusted in Keychain Access are now trusted by apps, not just Apple's built-in roots. Off with `MACAPK_SYSTEM_TRUST=0`.
+- **Network Security Config:** an app's `network_security_config` (custom trust anchors, certificate pins, per-domain cleartext rules) is now honoured. Off with `MACAPK_NSC=0`.
 - **Drag and drop files:** drop files from Finder on an app window and the app receives them as a share (or open-with) when it handles one.
 - **Lone modifier keys:** Shift, Ctrl, Option, Cmd and Caps Lock pressed alone reach games as Android key events (not in text fields).
 - **Emoji and CJK text:** converted or composed text (emoji, IME candidates) is committed to the app as one string instead of per UTF-16 unit.

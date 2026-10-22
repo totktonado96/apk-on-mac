@@ -1633,6 +1633,12 @@ public final class Boot {
         // AOSP's starting window, at the point AOSP shows it: before any of the
         // app's code runs. See paintStartingWindowFromManifest.
         paintStartingWindowFromManifest(resources, manifest);
+        // Network Security Config (cleartext policy, per-domain anchors, pins).
+        // Only an app that declares one gets a different trust manager.
+        try {
+            android.security.MacApkNetworkSecurity.install(resources, manifest.packageName,
+                Manifest.networkSecurityConfigRaw, Manifest.usesCleartextTraffic, manifest.targetSdk);
+        } catch (Throwable t) { NativeLog.w(TAG, "network security config install failed: " + t); }
         bootClock("starting window painted (T1 marker)");
         // Keyboard bindings (the Controls menu): seed the built-in profiles on
         // first run, then pick one for this package. MACAPK_KEYBIND_PROFILE
