@@ -12121,6 +12121,61 @@ static JNIEnv* MacapkTouchJniEnv() {
     if (!_imeKeyConsumed && !wasComposing && !_imeMarked)
         [self dispatchKeyAction:0 atEvent:event];
 }
+// A modifier pressed or released ALONE. AppKit reports these only as
+// flagsChanged: (no keyDown/keyUp), so Shift/Ctrl/Option/Cmd/CapsLock never
+// reached a game (sprint, crouch, a held Ctrl) before. Android delivers them as
+// ordinary KeyEvents with their own key codes (KEYCODE_SHIFT_LEFT .. META_RIGHT,
+// KEYCODE_CAPS_LOCK; the Generic.kl scan codes), meta state included.
+// Only with NO text target (the same gate keyDown uses): a text field keeps
+// today's behaviour, where a lone modifier is not a key the editor sees.
+// MACAPK_MODIFIER_KEYS=0 restores "modifiers alone are never delivered".
+// Held-key tracking (g_held_keys) lets macapkReleaseHeldKeys UP them on focus loss.
+- (void)flagsChanged:(NSEvent*)event {
+    static const bool kModKeys = [] {
+        const char* e = getenv("MACAPK_MODIFIER_KEYS");
+        return !e || e[0] != '0';
+    }();
+    if (!kModKeys) { [super flagsChanged:event]; return; }
+    const unsigned short vk = [event keyCode];
+    int keycode = 0;
+    NSEventModifierFlags bit = 0;
+    switch (vk) {
+        case 56: keycode = 59;  bit = NSEventModifierFlagShift;    break;  // Shift L
+        case 60: keycode = 60;  bit = NSEventModifierFlagShift;    break;  // Shift R
+        case 59: keycode = 113; bit = NSEventModifierFlagControl;  break;  // Ctrl L
+        case 62: keycode = 114; bit = NSEventModifierFlagControl;  break;  // Ctrl R
+        case 58: keycode = 57;  bit = NSEventModifierFlagOption;   break;  // Alt L
+        case 61: keycode = 58;  bit = NSEventModifierFlagOption;   break;  // Alt R
+        case 55: keycode = 117; bit = NSEventModifierFlagCommand;  break;  // Meta L
+        case 54: keycode = 118; bit = NSEventModifierFlagCommand;  break;  // Meta R
+        case 57: keycode = 115; bit = NSEventModifierFlagCapsLock; break;  // Caps Lock
+        default: [super flagsChanged:event]; return;
+    }
+    const NSEventModifierFlags flags = [event modifierFlags];
+    const bool down = (flags & bit) != 0;
+    // A release must always get through (it only fires for a DOWN we sent, or
+    // is harmless otherwise); a press needs the no-text-target gate.
+    if (down && (_imeMarked || MacApkGuestTextTargetActive())) return;
+    if (vk >= 128) return;
+    // Caps Lock is a toggle: AppKit reports one flagsChanged per press with the
+    // flag reflecting the LOCK state, so send DOWN+UP for each change (Android's
+    // own caps key also produces a DOWN/UP pair per physical press).
+    const int meta = macapk::hostkey::PointerMetaState(flags);
+    if (vk == 57) {
+        [self dispatchKeyRawAction:0 keyCode:keycode unicode:0 meta:meta repeat:NO];
+        [self dispatchKeyRawAction:1 keyCode:keycode unicode:0 meta:meta repeat:NO];
+        return;
+    }
+    if (down) {
+        if (g_held_keys[vk].down) return;   // already down (the other side's flag)
+        g_held_keys[vk] = {true, keycode, 0};
+        [self dispatchKeyRawAction:0 keyCode:keycode unicode:0 meta:meta repeat:NO];
+    } else {
+        if (!g_held_keys[vk].down) return;  // its DOWN never reached the guest
+        g_held_keys[vk].down = false;
+        [self dispatchKeyRawAction:1 keyCode:keycode unicode:0 meta:meta repeat:NO];
+    }
+}
 - (void)keyUp:(NSEvent*)event {
     unsigned short vk = [event keyCode];
     if (vk < 128 && g_cmd_chord_down[vk]) {   // its UP went with the DOWN
