@@ -12,7 +12,7 @@ import android.view.inputmethod.InputMethodSession;
  *  Android the InputMethodManagerService binds to this over IPC and drives the
  *  IME through the IInputMethod transport that onBind() hands back.
  *
- *  Mac.apk is a SINGLE-APP host: there is no system process, so nothing ever
+ *  Apk on Mac is a SINGLE-APP host: there is no system process, so nothing ever
  *  binds an IME that an APK declares, and host keyboard input is routed to the
  *  focused view directly rather than through the IME pipeline. That is a
  *  structural absence, not a stub -- we do not fabricate a system that binds
@@ -143,7 +143,7 @@ public abstract class AbstractInputMethodService extends Service
     public abstract AbstractInputMethodSessionImpl onCreateInputMethodSessionInterface();
 
     /** AOSP's onBind() memoizes onCreateInputMethodInterface() and wraps it in
-     *  an IInputMethodWrapper Binder. Mac.apk has no Binder transport and no
+     *  an IInputMethodWrapper Binder. Apk on Mac has no Binder transport and no
      *  system service to hand one to, so there is nothing to return -- but we
      *  keep the memoized construction so the IME's own interface object exists
      *  and is reachable through getInputMethodInternal()-style access from a

@@ -8,7 +8,7 @@ import android.os.OutcomeReceiver;
 /** The SPI an app implements to be a system credential provider. API 34.
  *  Source: frameworks/base/core/java/android/service/credentials/CredentialProviderService.java
  *
- *  Mac.apk is not the system credential manager, so nothing ever binds this
+ *  Apk on Mac is not the system credential manager, so nothing ever binds this
  *  service: onBind returns null, which is the documented outcome for a service
  *  the system declines to bind. That is honest absence -- we do NOT synthesize
  *  a picker, and we never invoke a provider's callbacks with a fabricated

@@ -19,7 +19,7 @@
 // form AOSP's (hidden) SparseRectFArray uses, implemented here as a private
 // helper so no new framework type is required.
 //
-// EditorBoundsInfo / TextAppearanceInfo are not modeled in Mac.apk yet, so
+// EditorBoundsInfo / TextAppearanceInfo are not modeled in Apk on Mac yet, so
 // those two setters keep their Object parameter (as they were) and their
 // getters are omitted rather than fabricating a type; see the note in
 // setEditorBoundsInfo.
@@ -91,7 +91,7 @@ public final class CursorAnchorInfo implements Parcelable {
     }
 
     /**
-     * AOSP declares a public Parcel constructor. Mac.apk runs the editor and the
+     * AOSP declares a public Parcel constructor. Apk on Mac runs the editor and the
      * IME surface in one process, so a CursorAnchorInfo is never marshalled and
      * there is nothing to read back; the object is constructed in the same state
      * a Builder with nothing set would produce.
@@ -270,7 +270,7 @@ public final class CursorAnchorInfo implements Parcelable {
     @Override public int describeContents() { return 0; }
 
     @Override public void writeToParcel(Parcel dest, int flags) {
-        // No IME IPC in Mac.apk; the InputConnection and the IME surface live in
+        // No IME IPC in Apk on Mac; the InputConnection and the IME surface live in
         // the same process, so a CursorAnchorInfo is never marshalled. No-op.
     }
 

@@ -9,7 +9,7 @@ import java.util.concurrent.Executor;
 // android.credentials.CredentialManager -- the Credential Manager entry point
 // (API 34: passkeys / password / federated sign-in aggregation).
 //
-// Mac.apk has ONE credential provider: Google sign-in (GetGoogleIdOption /
+// Apk on Mac has ONE credential provider: Google sign-in (GetGoogleIdOption /
 // GetSignInWithGoogleOption), answered from the central Google account by
 // com.macapk.gms.GoogleSignInBroker, as GMS's provider answers on a phone
 // (MACAPK_GMS_SIGNIN=0 removes it). For everything else -- passwords,
@@ -37,7 +37,7 @@ public final class CredentialManager {
             Log.w(TAG, "getCredential already canceled");
             return;
         }
-        // The one provider Mac.apk has: Google sign-in for a GetGoogleIdOption /
+        // The one provider Apk on Mac has: Google sign-in for a GetGoogleIdOption /
         // GetSignInWithGoogleOption, answered from the central Google account the
         // way GMS's provider answers on a phone (com.macapk.gms.GoogleSignInBroker).
         // Every other option (passwords, passkeys) still has no provider.
@@ -104,7 +104,7 @@ public final class CredentialManager {
 
     // --- provider registry ------------------------------------------------
     // AOSP forwards these three to the credential manager system service.
-    // Mac.apk has no such service and no credential provider is ever enabled,
+    // Apk on Mac has no such service and no credential provider is ever enabled,
     // so:
     //   isEnabledCredentialProviderService  -> false. This is the honest
     //     answer, not a stub: the set of enabled providers is genuinely

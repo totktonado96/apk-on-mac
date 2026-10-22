@@ -1,5 +1,5 @@
 // android.media.SyncParams -- A/V sync tuning passed to MediaPlayer.setSyncParams.
-// AOSP frameworks/base media/java/android/media/SyncParams.java. Mac.apk has no
+// AOSP frameworks/base media/java/android/media/SyncParams.java. Apk on Mac has no
 // A/V sync controller, so this is a typed holder of the values apps set.
 package android.media;
 

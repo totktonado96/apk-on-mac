@@ -28,7 +28,7 @@ public class EGLExt {
      * AOSP EGLExt.eglDupNativeFenceFDANDROID(EGLDisplay, EGLSync) (API 33):
      * duplicate an EGLSync's underlying Linux sync_file fd as a SyncFence.
      *
-     * Deliberately NOT a native bridge. Mac.apk has no sync_file: host GPU
+     * Deliberately NOT a native bridge. Apk on Mac has no sync_file: host GPU
      * synchronisation is a Metal shared event behind ANGLE, and no fd ever
      * reaches guest Java. AOSP's documented answer when the fence cannot be
      * duplicated is an INVALID SyncFence, and that is exactly what we can

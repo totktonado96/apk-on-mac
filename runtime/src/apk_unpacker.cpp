@@ -806,7 +806,7 @@ static bool ArscVisitEntry(const uint8_t* b, size_t n, uint32_t resid, F&& visit
 // shows. The raster is still returned, for the caller to keep as a fallback.
 // Measured on Rhythm 5.5.499 (issue #11): its mipmap-anydpi ic_launcher is the
 // real headphones icon while every mipmap-*dpi webp is Android Studio's default
-// robot, and the robot is what every Mac.apk install of it showed.
+// robot, and the robot is what every Apk on Mac install of it showed.
 std::string ArscBestRasterEntry(const std::string& arsc, uint32_t resid,
                                 uint32_t* rank_out, bool* xml_wins_out) {
     const uint8_t* b = reinterpret_cast<const uint8_t*>(arsc.data());
@@ -2122,16 +2122,16 @@ const BuildIdentity& GetBuildIdentity(const std::string& binary_dir) {
 // ---- ".apk" MUST NOT APPEAR IN AN ANDROID ROOT (2026-09-22, v1.0.1634) ----
 //
 // Owner report: Among Us "errors and says not enough storage space". ROOT CAUSE,
-// one sentence: the default android root was $HOME/Library/Caches/Mac.apk/scratch
-// -- a directory literally named "Mac.apk" -- and guest code that finds the APK
+// one sentence: the default android root was $HOME/Library/Caches/Apk on Mac/scratch
+// -- a directory literally named "Apk on Mac" -- and guest code that finds the APK
 // inside a path by splitting at the first ".apk" split OUR path instead of the
 // app's. Every guest-visible path (sourceDir, splitSourceDirs, getFilesDir,
 // getExternalFilesDir, nativeLibraryDir) is rooted here, so the corruption
 // reaches all of them.
 //
 // Measured on Among Us (Unity 2022.3 il2cpp). libunity builds
-// ".../Caches/Mac.apk/scratch/android/data/app/.../base.apk/assets/bin/Data/Managed"
-// and opened "/Users/<u>/Library/Caches/Mac.apk" as the archive; its il2cpp
+// ".../Caches/Apk on Mac/scratch/android/data/app/.../base.apk/assets/bin/Data/Managed"
+// and opened "/Users/<u>/Library/Caches/Apk on Mac" as the archive; its il2cpp
 // resource copy (libunity 0x60b128) then failed, and Unity reports ANY failure of
 // that copy as "Not enough storage space to install required resources."
 // (libunity 0x6e1774, title "Error"). The same launch with a root containing no
@@ -2147,8 +2147,8 @@ const BuildIdentity& GetBuildIdentity(const std::string& binary_dir) {
 // far away, as a misleading error inside the app.
 // The test is a plain SUBSTRING match, not "a component ending in .apk": the
 // guest splits at the first ".apk" wherever it falls, so a bundle named
-// "Mac.apk capture test.app" breaks it exactly as "Mac.apk/" did (the prefix
-// "/Applications/Mac.apk" would be taken as the archive). BundleGenerator's
+// "Apk on Mac capture test.app" breaks it exactly as "Apk on Mac/" did (the prefix
+// "/Applications/Apk on Mac" would be taken as the archive). BundleGenerator's
 // apkSafeDirName applies the same rule when it names a new bundle.
 static bool MacapkPathContainsApk(const std::string& s) {
     return s.find(".apk") != std::string::npos;
@@ -2165,7 +2165,7 @@ static void MacapkMigrateLegacyScratchRoot() {
     done = true;
     const char* home = std::getenv("HOME");
     if (!home || !*home) return;
-    const fs::path oldp = std::string(home) + "/Library/Caches/Mac.apk/scratch";
+    const fs::path oldp = std::string(home) + "/Library/Caches/Apk on Mac/scratch";
     const fs::path newp = std::string(home) + "/Library/Caches/MacApk/scratch";
     std::error_code ec;
     if (!fs::is_directory(fs::symlink_status(oldp, ec)) || fs::exists(newp, ec)) return;

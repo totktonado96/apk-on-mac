@@ -1,6 +1,6 @@
 // android.net.wifi.ScanResult
 //
-// One Wi-Fi access point seen in a scan. Mac.apk never scans (WifiManager
+// One Wi-Fi access point seen in a scan. Apk on Mac never scans (WifiManager
 // .getScanResults is empty), so instances are not produced from a radio, but
 // apps reference ScanResult fields/constants when iterating the (empty) result
 // list, so the public fields + channel-width constants must resolve. Mirrors

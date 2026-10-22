@@ -115,7 +115,7 @@ public class NetworkCapabilities {
     }
     public int[] getTransportTypes() { return new int[] { macapkTransport() }; }
 
-    /** Mac.apk-internal: the transport carrying the host's default route. */
+    /** Apk on Mac-internal: the transport carrying the host's default route. */
     static int macapkTransport() {
         return MacApkHostNetwork.get().transport;
     }

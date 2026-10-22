@@ -1,16 +1,16 @@
 #!/usr/bin/env bash
 # scripts/promote_app.sh <src-app> [canonical-app]
 #
-# Atomically install a freshly built Mac.apk.app over the ONE canonical copy,
+# Atomically install a freshly built Apk on Mac.app over the ONE canonical copy,
 # then make it the only one the machine can resolve.
 #
 # WHY THIS IS ITS OWN FILE (2026-08-19). This block used to live inline in
 # scripts/rebuild_and_run.sh and had exactly ONE caller, so scripts/build_launcher.sh
 # -- which builds the three Swift execution surfaces and nothing else -- had no
-# way to promote at all. Its last two lines said "Built: build/Mac.apk.app" and
-# "Run with: open build/Mac.apk.app", and CLAUDE.md's own step-by-step recipe
+# way to promote at all. Its last two lines said "Built: build/Apk on Mac.app" and
+# "Run with: open build/Apk on Mac.app", and CLAUDE.md's own step-by-step recipe
 # tells the reader to run exactly that sequence. The result is that
-# /Applications/Mac.apk.app keeps serving the PREVIOUSLY promoted Swift binaries
+# /Applications/Apk on Mac.app keeps serving the PREVIOUSLY promoted Swift binaries
 # while the developer looks at a different bundle, with no signal anywhere.
 # Measured on this machine 2026-08-19: the canonical app's MacApk and
 # macapk-installhelper both carried build 260819.0937 while the repo's last
@@ -27,10 +27,10 @@
 #   2. ditto a full copy to a staging dir NEXT TO the target (same volume, so
 #      the swap is a rename, not a copy)
 #   3. move the old bundle aside, move the new one in, restore on failure
-#   4. delete the source copy so exactly one Mac.apk is resolvable
+#   4. delete the source copy so exactly one Apk on Mac is resolvable
 #      (--keep-source opts out)
 #   5. lsregister -f the canonical path and UNREGISTER every other
-#      org.macapk.launcher registration
+#      io.github.totktonado96.apkonmac.launcher registration
 #   6. restage the per-app stub into every installed app bundle
 #
 # It does NOT stage the shared runtime. Both CALLERS do, immediately after
@@ -55,8 +55,8 @@ for a in "$@"; do
     esac
 done
 
-SRC_APP="${ARGS[0]:-$PROJECT_DIR/build/Mac.apk.app}"
-CANONICAL="${ARGS[1]:-${MACAPK_CANONICAL_APP:-/Applications/Mac.apk.app}}"
+SRC_APP="${ARGS[0]:-$PROJECT_DIR/build/Apk on Mac.app}"
+CANONICAL="${ARGS[1]:-${MACAPK_CANONICAL_APP:-/Applications/Apk on Mac.app}}"
 CANON_PARENT="$(dirname "$CANONICAL")"
 
 if [ ! -d "$SRC_APP" ]; then
@@ -93,8 +93,8 @@ echo "==> Promoting ${BUILD_ID:-unknown build} to $CANONICAL ..."
 # the swap fails the old bundle is restored and we exit nonzero: the
 # previous good runtime staying in place is correct, a half-copied
 # bundle is not.
-STAGING="$CANON_PARENT/.Mac.apk.app.staging.$$"
-ASIDE="$CANON_PARENT/.Mac.apk.app.previous.$$"
+STAGING="$CANON_PARENT/.Apk on Mac.app.staging.$$"
+ASIDE="$CANON_PARENT/.Apk on Mac.app.previous.$$"
 rm -rf "$STAGING" "$ASIDE"
 # ⚠ The trap must NEVER be able to delete $ASIDE while $ASIDE is the only
 # surviving copy of the previous good runtime. Between the mv at "park the
@@ -111,7 +111,7 @@ if ! mv "$STAGING" "$CANONICAL"; then
     if [ -d "$ASIDE" ] && ! mv "$ASIDE" "$CANONICAL"; then
         # Both moves failed. Do not delete anything: say exactly where the
         # previous runtime is so it can be recovered by hand.
-        echo "ERROR: could not restore either. Your previous Mac.apk is intact at:" >&2
+        echo "ERROR: could not restore either. Your previous Apk on Mac is intact at:" >&2
         echo "         $ASIDE" >&2
         echo "       Move it back to $CANONICAL manually." >&2
     fi
@@ -120,7 +120,7 @@ fi
 rm -rf "$ASIDE"
 ig_record_install "$SRC_TREE" "$CANONICAL" "promote_app.sh${MACAPK_INSTALL_VIA:+ via $MACAPK_INSTALL_VIA}"
 
-# Exactly ONE resolvable Mac.apk: drop the repo copy we just promoted
+# Exactly ONE resolvable Apk on Mac: drop the repo copy we just promoted
 # (build_dist.sh recreates it from source when it needs one), then prune
 # every LaunchServices registration for our bundle id that is not the
 # canonical path. Two of those once pointed at deleted trees (an old
@@ -134,7 +134,7 @@ fi
 if [ -x "$LSREGISTER" ]; then
     echo "==> Refreshing LaunchServices registrations..."
     "$LSREGISTER" -f "$CANONICAL" 2>/dev/null || true
-    # Enumerate registered paths claiming org.macapk.launcher and
+    # Enumerate registered paths claiming io.github.totktonado96.apkonmac.launcher and
     # unregister all but the canonical. The dump costs a few seconds,
     # which is nothing next to the build.
     "$LSREGISTER" -dump 2>/dev/null | awk '
@@ -174,7 +174,7 @@ fi
 # ⚠ MACAPK_CANONICAL_APP is EXPORTED for this call on purpose. restage_app_stubs.sh
 # resolves its template from that variable, and this script takes the canonical
 # path as an ARGUMENT -- so without the export, promoting to a non-default
-# location would push /Applications/Mac.apk.app's stub into every installed
+# location would push /Applications/Apk on Mac.app's stub into every installed
 # bundle, i.e. a template from a bundle we did not just build. Two sources of
 # truth for "which app is canonical" is exactly the divergence this extraction
 # exists to remove.

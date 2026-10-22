@@ -24,7 +24,7 @@ import android.os.SystemClock;
 public final class LocationBridge {
     private LocationBridge() {}
 
-    private static final String TAG = "Mac.apk.Location";
+    private static final String TAG = "Apk on Mac.Location";
 
     public static final boolean ON = !"0".equals(System.getenv("MACAPK_LOCATION_HOST"));
 
@@ -81,8 +81,8 @@ public final class LocationBridge {
                         java.io.File h = locateHelper();
                         nativeSetHelper(h != null ? h.getPath() : null);
                         try {
-                            NativeLog.i(TAG, h != null ? "Mac.apk Location helper: " + h
-                                    : "no Mac.apk Location helper found: macOS cannot show its"
+                            NativeLog.i(TAG, h != null ? "Apk on Mac Location helper: " + h
+                                    : "no Apk on Mac Location helper found: macOS cannot show its"
                                       + " location prompt for this runtime");
                         } catch (Throwable ignored) { }
                     }
@@ -99,15 +99,15 @@ public final class LocationBridge {
         return b == 1;
     }
 
-    /** "Mac.apk Location.app" (launcher/LocationHelperMain.swift), the bundle
+    /** "Apk on Mac Location.app" (launcher/LocationHelperMain.swift), the bundle
      *  CoreLocation runs in so macOS can show its prompt: MACAPK_LOCATION_HELPER,
-     *  else Contents/Helpers next to the running runtime (a dev Mac.apk.app),
-     *  else the canonical installed Mac.apk.app (MACAPK_CANONICAL_APP or
+     *  else Contents/Helpers next to the running runtime (a dev Apk on Mac.app),
+     *  else the canonical installed Apk on Mac.app (MACAPK_CANONICAL_APP or
      *  /Applications). The staged shared runtime has no Helpers of its own,
      *  so an installed app resolves the canonical one, as it does for
      *  macapk-installhelper (PackageInstallerBackend.locateHelper). */
     static java.io.File locateHelper() {
-        final String rel = "Helpers/Mac.apk Location.app/Contents/MacOS/macapk-location";
+        final String rel = "Helpers/Apk on Mac Location.app/Contents/MacOS/macapk-location";
         String env = System.getenv("MACAPK_LOCATION_HELPER");
         if (env != null && !env.isEmpty()) {
             java.io.File f = new java.io.File(env);
@@ -182,7 +182,7 @@ public final class LocationBridge {
         if (authStatus() != AUTH_NOT_DETERMINED) return authStatus();
         if (!canPrompt()) {
             // Waiting would only freeze the caller: no prompt can appear.
-            NativeLog.w(TAG, "macOS cannot show its location prompt (no Mac.apk Location"
+            NativeLog.w(TAG, "macOS cannot show its location prompt (no Apk on Mac Location"
                     + " helper); location stays unauthorized");
             return authStatus();
         }

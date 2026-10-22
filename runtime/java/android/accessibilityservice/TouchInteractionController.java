@@ -10,7 +10,7 @@ import java.util.concurrent.Executor;
  * API 31+ handle that lets an accessibility service take over touch
  * interpretation on one display while touch exploration is enabled.
  *
- * Mac.apk never enables touch exploration (there is no accessibility service
+ * Apk on Mac never enables touch exploration (there is no accessibility service
  * bound to enable it), so the controller is permanently in STATE_CLEAR and the
  * request* / perform* calls have nothing to hand off to. Registration is
  * tracked so register/unregister stays symmetric.
@@ -36,7 +36,7 @@ public final class TouchInteractionController {
 
     public int getDisplayId() { return mDisplayId; }
 
-    /** AOSP reports the display's advertised max pointer count. Mac.apk routes
+    /** AOSP reports the display's advertised max pointer count. Apk on Mac routes
      *  a single mouse cursor through TouchDispatcher, so one pointer is the
      *  honest answer rather than a fabricated multitouch capability. */
     public int getMaxPointerCount() { return 1; }
@@ -65,7 +65,7 @@ public final class TouchInteractionController {
     }
 
     /** AOSP throws IllegalStateException when the controller is not in a state
-     *  that allows the transition. Mac.apk is always STATE_CLEAR and no service
+     *  that allows the transition. Apk on Mac is always STATE_CLEAR and no service
      *  is ever bound, so these are no-ops rather than throws: a service that
      *  calls them is running code that on a device would only run after a state
      *  callback we never deliver. */

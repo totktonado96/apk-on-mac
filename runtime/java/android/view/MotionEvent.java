@@ -248,7 +248,7 @@ public class MotionEvent extends InputEvent implements Parcelable {
      *  values it does NOT take are pressure/size 1.0, x/y precision 1.0,
      *  deviceId 0, edgeFlags 0, buttonState 0, flags 0 -- and, crucially,
      *  source SOURCE_UNKNOWN with pp[0].clear() leaving toolType
-     *  TOOL_TYPE_UNKNOWN. Mac.apk used to default this path to
+     *  TOOL_TYPE_UNKNOWN. Apk on Mac used to default this path to
      *  SOURCE_TOUCHSCREEN/TOOL_TYPE_FINGER; that is not what Android answers,
      *  so a synthesizer that needs a touchscreen source must say so (see
      *  TouchDispatcher.touchEvent, which builds the host-mouse stream through
@@ -272,7 +272,7 @@ public class MotionEvent extends InputEvent implements Parcelable {
     /** AOSP MotionEvent.java:1870 (the @hide form that takes a source). The
      *  single-pointer body: pp[0].clear() then id=0, pc[0].clear() then
      *  x/y/pressure/size, so every other axis is 0. displayId is accepted for
-     *  signature parity and ignored: Mac.apk is single-display. */
+     *  signature parity and ignored: Apk on Mac is single-display. */
     public static MotionEvent obtain(long downTime, long eventTime, int action,
             float x, float y, float pressure, float size, int metaState,
             float xPrecision, float yPrecision, int deviceId, int edgeFlags,
@@ -397,7 +397,7 @@ public class MotionEvent extends InputEvent implements Parcelable {
      *  flags, CLASSIFICATION. AOSP returns null when the underlying initialize()
      *  fails, which is why the return is @Nullable.
      *
-     *  Mac.apk presents ONE display (Display.DEFAULT_DISPLAY) and reports
+     *  Apk on Mac presents ONE display (Display.DEFAULT_DISPLAY) and reports
      *  CLASSIFICATION_NONE for every event (getClassification() above), so both
      *  extra arguments are validated and then have no further effect -- the same
      *  as passing DEFAULT_DISPLAY and CLASSIFICATION_NONE, which is what every
@@ -958,7 +958,7 @@ public class MotionEvent extends InputEvent implements Parcelable {
     public static final class PointerCoords {
         /** AOSP MotionEvent.PointerCoords.isResampled():4470 (API 34): was this
          *  sample SYNTHESISED by the platform's input resampler rather than
-         *  reported by the digitiser? Mac.apk feeds every sample straight from a
+         *  reported by the digitiser? Apk on Mac feeds every sample straight from a
          *  Cocoa NSEvent (cocoa_bridge.mm) and runs no resampler, so every
          *  sample is real -- the same answer a device gives with resampling
          *  disabled. */
@@ -983,7 +983,7 @@ public class MotionEvent extends InputEvent implements Parcelable {
         public float touchMajor, touchMinor, toolMajor, toolMinor, orientation;
         // AOSP-11 keeps AXIS_RELATIVE_X/Y in the packed store rather than in
         // named fields; these are equivalent through get/setAxisValue and are
-        // kept because existing Mac.apk code reads them by name.
+        // kept because existing Apk on Mac code reads them by name.
         public float relativeX, relativeY;
         public PointerCoords() {}
         public PointerCoords(PointerCoords other) { copyFrom(other); }

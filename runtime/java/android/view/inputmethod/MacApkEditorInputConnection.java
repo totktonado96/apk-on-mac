@@ -5,7 +5,7 @@ import android.view.View;
 import android.widget.TextView;
 
 /**
- * The InputConnection a Mac.apk {@link TextView}-based editor is bound to when
+ * The InputConnection a Apk on Mac {@link TextView}-based editor is bound to when
  * the view itself does not supply one.
  *
  * <p>WHAT AOSP DOES. {@code TextView.onCreateInputConnection(EditorInfo)}

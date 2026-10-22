@@ -9,7 +9,7 @@ import java.util.List;
  * Lets an accessibility service treat swipes on a fingerprint sensor as a
  * gesture source.
  *
- * There is no fingerprint sensor behind Mac.apk, so detection is unavailable --
+ * There is no fingerprint sensor behind Apk on Mac, so detection is unavailable --
  * the same answer AOSP gives on any device without a sensor, or while another
  * client holds it. Registration is still tracked so unregister is symmetric.
  *
@@ -31,7 +31,7 @@ public final class FingerprintGestureController {
 
     FingerprintGestureController() { }
 
-    /** No sensor is reachable from Mac.apk. AOSP answers false whenever the
+    /** No sensor is reachable from Apk on Mac. AOSP answers false whenever the
      *  hardware is absent or busy, so this is an ordinary device state. */
     public boolean isGestureDetectionAvailable() { return false; }
 

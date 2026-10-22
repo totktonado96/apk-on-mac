@@ -2,7 +2,7 @@
 // Surface (the inverse of ImageReader). AOSP frameworks/base
 // media/java/android/media/ImageWriter.java.
 //
-// Mac.apk has no Surface-backed consumer pipeline, so dequeueInputImage returns
+// Apk on Mac has no Surface-backed consumer pipeline, so dequeueInputImage returns
 // null (no buffer slot) and queueInputImage is a no-op. The class links for
 // CameraX/codec reprocessing setup; it produces no frames.
 package android.media;

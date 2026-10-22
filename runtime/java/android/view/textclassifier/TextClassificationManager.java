@@ -4,7 +4,7 @@
 // core/java/android/view/textclassifier/TextClassificationManager.java
 // (android16-release).
 //
-// Mac.apk has no on-device model, so the DEFAULT classifier is
+// Apk on Mac has no on-device model, so the DEFAULT classifier is
 // TextClassifier.NO_OP -- which is AOSP's own answer when no classifier service
 // is available. An APP can still install its own via setTextClassifier /
 // setTextClassificationSessionFactory, and those really take effect here.
@@ -24,7 +24,7 @@ public class TextClassificationManager {
 
     /** AOSP setTextClassifier(TextClassifier): install the app's own classifier;
      *  null restores the platform default. Honoured for real -- this is the
-     *  supported way an app supplies smart-linkify behaviour Mac.apk cannot. */
+     *  supported way an app supplies smart-linkify behaviour Apk on Mac cannot. */
     public void setTextClassifier(TextClassifier textClassifier) {
         mCustomTextClassifier = textClassifier;
     }

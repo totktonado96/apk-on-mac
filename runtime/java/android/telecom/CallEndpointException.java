@@ -3,7 +3,7 @@
 // CallControl.requestCallEndpointChange().
 //
 // A REAL implementation (plain RuntimeException + Parcelable value), and the
-// value Mac.apk actually USES: with no Telecom service there is no endpoint to
+// value Apk on Mac actually USES: with no Telecom service there is no endpoint to
 // route call audio to, so requestCallEndpointChange reports
 // ERROR_ENDPOINT_DOES_NOT_EXIST rather than silently succeeding and leaving
 // the app waiting for an onCallEndpointChanged that cannot arrive.

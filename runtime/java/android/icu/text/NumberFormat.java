@@ -9,7 +9,7 @@
 // abstract front whose factory methods return a concrete delegate over
 // java.text.NumberFormat -- no ICU4J bundle.
 //
-// UFormat is ICU's abstract base. The note that used to sit here -- "on Mac.apk
+// UFormat is ICU's abstract base. The note that used to sit here -- "on Apk on Mac
 // it does not exist as a separate type" -- was the reason this extended
 // java.text.Format directly, and it was wrong: android.icu.text.UFormat IS a
 // public type in the platform (`public abstract class android.icu.text.UFormat

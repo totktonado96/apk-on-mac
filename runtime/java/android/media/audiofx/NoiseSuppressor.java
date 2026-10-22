@@ -1,6 +1,6 @@
 // android.media.audiofx.NoiseSuppressor -- mic noise suppression preprocessor.
 // AOSP frameworks/base media/java/android/media/audiofx/NoiseSuppressor.java.
-// Mac.apk has no mic source/preprocessor, so isAvailable reports false and
+// Apk on Mac has no mic source/preprocessor, so isAvailable reports false and
 // create returns null (AOSP returns null when the effect cannot be
 // instantiated) -- the caller's "if (NoiseSuppressor.isAvailable())" guard
 // simply skips it.

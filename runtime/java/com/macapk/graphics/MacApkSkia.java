@@ -7,7 +7,7 @@ import java.io.File;
 import java.lang.reflect.Field;
 
 /**
- * Mac.apk Skia execution engine for AGSL RuntimeShader and RenderEffect post-processing.
+ * Apk on Mac Skia execution engine for AGSL RuntimeShader and RenderEffect post-processing.
  */
 public final class MacApkSkia {
     private static volatile boolean sLoaded = false;
@@ -65,7 +65,7 @@ public final class MacApkSkia {
             candidates.add("Contents/Resources/libskiko-macos-arm64.dylib");
             candidates.add("thirdparty/skia-prebuilt/lib/libskiko-macos-arm64.dylib");
             candidates.add("runtime/build/bin/libskiko-macos-arm64.dylib");
-            candidates.add("/Applications/Mac.apk.app/Contents/Resources/libskiko-macos-arm64.dylib");
+            candidates.add("/Applications/Apk on Mac.app/Contents/Resources/libskiko-macos-arm64.dylib");
 
             for (String path : candidates) {
                 if (path == null || path.isEmpty()) continue;
@@ -75,10 +75,10 @@ public final class MacApkSkia {
                         System.load(f.getAbsolutePath());
                         System.load(new File(f.getParentFile(), "libmacapk-skia-metal.dylib").getAbsolutePath());
                         sLoaded = true;
-                        System.err.println("[I] Mac.apk: Skia/Skiko Metal bridge loaded from " + f.getAbsolutePath());
+                        System.err.println("[I] Apk on Mac: Skia/Skiko Metal bridge loaded from " + f.getAbsolutePath());
                         return;
                     } catch (Throwable t) {
-                        System.err.println("[W] Mac.apk: Failed loading Skia from " + f.getAbsolutePath() + ": " + t);
+                        System.err.println("[W] Apk on Mac: Failed loading Skia from " + f.getAbsolutePath() + ": " + t);
                     }
                 }
             }
@@ -87,7 +87,7 @@ public final class MacApkSkia {
                 System.loadLibrary("skiko-macos-arm64");
                 System.loadLibrary("macapk-skia-metal");
                 sLoaded = true;
-                System.err.println("[I] Mac.apk: Skia/Skiko Metal bridge loaded via System.loadLibrary");
+                System.err.println("[I] Apk on Mac: Skia/Skiko Metal bridge loaded via System.loadLibrary");
             } catch (Throwable t) {
                 sLoadFailed = true;
                 throw new IllegalStateException("Skia Metal backend unavailable; no CPU shader fallback", t);
@@ -157,7 +157,7 @@ public final class MacApkSkia {
                 paint = PaintKt.Paint_nMake();
                 if (paint == 0) throw new IllegalStateException("Skia could not create GPU paint");
                 sBackendName = "Metal: " + NativeSkiaMetal.deviceName(device);
-                System.err.println("[I] Mac.apk: Skia backend=" + sBackendName);
+                System.err.println("[I] Apk on Mac: Skia backend=" + sBackendName);
             } catch (Throwable t) {
                 close();
                 throw t;

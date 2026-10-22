@@ -1281,7 +1281,7 @@ public abstract class Layout {
         final int count = getLineCount();
         if (TRACE_COMPOSE) {
             String t = text.toString();
-            com.macapk.loader.NativeLog.i("Mac.apk.LayoutDraw",
+            com.macapk.loader.NativeLog.i("Apk on Mac.LayoutDraw",
                 "draw '" + (t.length() > 40 ? t.substring(0, 40) : t) + "' color=0x"
                 + Integer.toHexString(paint.getColor()) + " size=" + paint.getTextSize()
                 + " width=" + width + " lines=" + count);
@@ -1470,7 +1470,7 @@ public abstract class Layout {
 
     /** AOSP Layout.getRangeForRect (API 34): the text range whose segments (as
      *  found by `segmentFinder`) fall inside `area` per `inclusionStrategy`.
-     *  Used by handwriting / gesture selection. Mac.apk does not compute
+     *  Used by handwriting / gesture selection. Apk on Mac does not compute
      *  per-segment glyph bounds for this path, so it reports "no range found"
      *  (null), the same value AOSP returns when nothing qualifies. */
     public int[] getRangeForRect(android.graphics.RectF area,
@@ -1705,7 +1705,7 @@ public abstract class Layout {
      *  (:3026-3060) are gated on
      *  `TextKeyListener.getMetaState(editingBuffer, META_SHIFT_ON | ...)` being
      *  non-zero, and this tree's MetaKeyKeyListener.getMetaState is a
-     *  documented constant 0 because Mac.apk routes text input through the
+     *  documented constant 0 because Apk on Mac routes text input through the
      *  IME / InputConnection path, not the hardware meta-state machine
      *  (MetaKeyKeyListener.java:9-12). With caps == fn == 0, AOSP draws exactly
      *  the two-point line below.
@@ -2235,7 +2235,7 @@ public abstract class Layout {
      * We always build a StaticLayout. That is not a shortcut: BoringLayout is
      * a FAST PATH, not a different rendering, and this tree's
      * BoringLayout.isBoring() already declines it unconditionally (see that
-     * file), so a device and Mac.apk produce the same geometry either way --
+     * file), so a device and Apk on Mac produce the same geometry either way --
      * the only difference is which concrete class comes back, and AOSP's
      * contract here is a Layout.
      */

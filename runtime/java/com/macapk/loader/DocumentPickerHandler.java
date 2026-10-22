@@ -6,7 +6,7 @@
 // ACTION_OPEN_DOCUMENT_TREE are served by DocumentsUI (a full-screen activity: the
 // caller is paused and stopped while it is up) and answer with RESULT_OK +
 // content:// document (or tree) URIs + URI grants, or RESULT_CANCELED. Before
-// this, Mac.apk had no component for them at all: the import / export buttons of
+// this, Apk on Mac had no component for them at all: the import / export buttons of
 // Aegis, AnkiDroid, OpenSudoku, NewPipe and the like were dead (and since the
 // start-resolution work, honestly "No Activity found").
 //
@@ -52,7 +52,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 
 public final class DocumentPickerHandler {
-    private static final String TAG = "Mac.apk.Documents";
+    private static final String TAG = "Apk on Mac.Documents";
 
     static final boolean DOC_PICKER = !"0".equals(System.getenv("MACAPK_DOC_PICKER"));
     /** MACAPK_DOC_TREE, default ON (v1.0.1654). */

@@ -312,11 +312,11 @@ public class View implements android.graphics.drawable.Drawable.Callback,
                 // this a declared-transparent Toolbar got an opaque colorSurface
                 // slab (F-Droid's own androidx Toolbar, background=@null: 0 ->
                 // 20000 ink offline; Signal's DarkOverflowToolbar in the
-                // corpus). Mac.apk-internal flag, so no AOSP deviation.
+                // corpus). Apk on Mac-internal flag, so no AOSP deviation.
                 if (declaredNullBg) macapkBackgroundExplicitlySet = true;
                 if (ENV_MACAPK_TRACE_DEFSTYLE != null) {
                     try {
-                        com.macapk.loader.NativeLog.i("Mac.apk.View",
+                        com.macapk.loader.NativeLog.i("Apk on Mac.View",
                             "ctor4 " + getClass().getSimpleName()
                             + " dsa=0x" + Integer.toHexString(defStyleAttr)
                             + " dsr=0x" + Integer.toHexString(defStyleRes)
@@ -416,7 +416,7 @@ public class View implements android.graphics.drawable.Drawable.Callback,
 
     /** Which padding attributes THIS view's 4-arg constructor found in the
      *  cascade (bit = MACAPK_CTOR_PAD_*); 0 when it read none (gate off, no
-     *  default style, or no padding in any tier). Mac.apk-internal. */
+     *  default style, or no padding in any tier). Apk on Mac-internal. */
     int macapkCtorPaddingMask;
     /** What the constructor read, for macapkCtorPaddingPx. Null when it read
      *  no padding. */
@@ -427,7 +427,7 @@ public class View implements android.graphics.drawable.Drawable.Callback,
      *  or Integer.MIN_VALUE when the constructor did not read that attribute
      *  (absent in every tier, gate off, or no default style).
      *
-     *  Mac.apk-internal, for LayoutInflater's post-construction tier-1/2
+     *  Apk on Mac-internal, for LayoutInflater's post-construction tier-1/2
      *  padding replay. AOSP applies padding exactly once, in the constructor,
      *  and a subclass constructor may then build on it: MaterialButtonHelper
      *  reads it back and writes padding + insets. A replay of the SAME value
@@ -481,7 +481,7 @@ public class View implements android.graphics.drawable.Drawable.Callback,
      *  defined only when the value is not UNDEFINED_PADDING.
      *
      *  "Present" is AOSP's index list: a value, or an explicit @empty
-     *  (TypedArray.hasValueOrEmpty; @null is not in it). One Mac.apk-only
+     *  (TypedArray.hasValueOrEmpty; @null is not in it). One Apk on Mac-only
      *  guard: a value our TypedArray HAS but cannot parse as a dimension (a
      *  reference form it does not chase yet) is treated as absent rather than
      *  as AOSP's @empty, so that side keeps its pre-B3 value instead of
@@ -726,7 +726,7 @@ public class View implements android.graphics.drawable.Drawable.Callback,
         // composing against a reused/populated composition. Gated off by default.
         if (v != null && com.macapk.loader.ComposeViewFallback.MACAPK_TRACE_COMPOSE_INSERT
                 && "androidx.compose.ui.platform.a0".equals(v.getClass().getName())) {
-            com.macapk.loader.NativeLog.i("Mac.apk.WrapComp",
+            com.macapk.loader.NativeLog.i("Apk on Mac.WrapComp",
                 "getTag(WrappedComposition) -> REUSE on " + getClass().getName()
                 + "@" + Integer.toHexString(System.identityHashCode(this)) + " key=" + key);
         }
@@ -777,7 +777,7 @@ public class View implements android.graphics.drawable.Drawable.Callback,
         // Real Android's ComponentActivity.initializeViewTreeOwners sets the
         // activity ITSELF as the decor's ViewTreeLifecycle/ViewModelStore/
         // SavedStateRegistry owner, so any descendant resolves the activity as the
-        // root owner (until a closer owner overrides it). Mac.apk cannot replicate
+        // root owner (until a closer owner overrides it). Apk on Mac cannot replicate
         // that install reliably for R8-renamed apps (name-based ViewTreeXxxOwner.set
         // is ClassNotFound), and Conductor sets its OwnViewTreeLifecycleAndRegistry
         // on the controller view only AFTER the welcome ComposeView's first
@@ -1029,7 +1029,7 @@ public class View implements android.graphics.drawable.Drawable.Callback,
         // fresh (one setTag, getTag null first) or reused (getTag non-null).
         if (t != null && com.macapk.loader.ComposeViewFallback.MACAPK_TRACE_COMPOSE_INSERT
                 && "androidx.compose.ui.platform.a0".equals(t.getClass().getName())) {
-            com.macapk.loader.NativeLog.i("Mac.apk.WrapComp",
+            com.macapk.loader.NativeLog.i("Apk on Mac.WrapComp",
                 "setTag(WrappedComposition) -> FRESH on " + getClass().getName()
                 + "@" + Integer.toHexString(System.identityHashCode(this)) + " key=" + key);
         }
@@ -1225,7 +1225,7 @@ public class View implements android.graphics.drawable.Drawable.Callback,
     }
 
     // Per AOSP View.setMinimumHeight/Width (int). Stored but not
-    // used in layout because Mac.apk's layout pass is a stub --
+    // used in layout because Apk on Mac's layout pass is a stub --
     // these still need to be callable or apps that programmatically
     // size their UI hit NoSuchMethodError (Frozen Bubble's button
     // setup at boot is an example).
@@ -1376,7 +1376,7 @@ public class View implements android.graphics.drawable.Drawable.Callback,
     public void setDrawingCacheEnabled(boolean enabled) { mDrawingCacheEnabled = enabled; }
     public boolean isDrawingCacheEnabled() { return mDrawingCacheEnabled; }
     /** AOSP: `return mAttachInfo != null && mAttachInfo.mHardwareAccelerated;`
-     *  (frameworks/base View.java:24522). Mac.apk's window IS hardware
+     *  (frameworks/base View.java:24522). Apk on Mac's window IS hardware
      *  accelerated -- every draw lands on a Metal/ANGLE-backed surface and
      *  android.graphics.Canvas.isHardwareAccelerated() already reports true --
      *  so the only honest answer once the view is attached is true.
@@ -1824,7 +1824,7 @@ public class View implements android.graphics.drawable.Drawable.Callback,
      *  was neither; it never got that far.
      *
      *  One token for the whole window, which is what AttachInfo means -- every
-     *  view in a window shares mWindowToken, and Mac.apk presents exactly one
+     *  view in a window shares mWindowToken, and Apk on Mac presents exactly one
      *  window. Gated on macapkAttached (our stand-in for mAttachInfo != null, see
      *  :813) so a detached view still answers null, as AOSP does. */
     private static final android.os.IBinder MACAPK_WINDOW_TOKEN = new android.os.Binder();
@@ -2367,7 +2367,7 @@ public class View implements android.graphics.drawable.Drawable.Callback,
     public void setImportantForContentCapture(int mode) { importantForContentCapture = mode; }
     /** AOSP API-29+ `View.getContentCaptureSession()`. Returns the
      *  ContentCaptureSession this view should report to, or null if
-     *  ContentCapture isn't enabled. Mac.apk has no ContentCapture
+     *  ContentCapture isn't enabled. Apk on Mac has no ContentCapture
      *  pipeline, so always null. F-Droid's RecyclerView+ViewHolder
      *  bind path calls this reflectively and NPEs at class-link time
      *  if the method is missing. */
@@ -2528,7 +2528,7 @@ public class View implements android.graphics.drawable.Drawable.Callback,
     // getter; nothing in the tree ever read it, so an installed delegate was
     // silently inert.
     //
-    // The ...Internal bodies are deliberately minimal: Mac.apk bridges no
+    // The ...Internal bodies are deliberately minimal: Apk on Mac bridges no
     // accessibility service to NSAccessibility, and AccessibilityManager
     // .isEnabled() is false, which is precisely the branch AOSP's
     // sendAccessibilityEventInternal early-returns on when no a11y service is
@@ -2856,7 +2856,7 @@ public class View implements android.graphics.drawable.Drawable.Callback,
      *  which is why a freshly constructed widget's getDrawableState() carries
      *  no state_window_focused on real Android (fwprobe DRAWSTATE golden:
      *  every unattached row lacks it; ours carried it on all 85). Once
-     *  attached, Mac.apk's single main window is frontmost-and-key for the
+     *  attached, Apk on Mac's single main window is frontmost-and-key for the
      *  app's lifetime, so macapkAttached alone stands in for the AOSP
      *  conjunction (same stand-in isHardwareAccelerated already uses for
      *  mAttachInfo != null). If a real NSWindow key-status bridge ever lands,
@@ -3281,7 +3281,7 @@ public class View implements android.graphics.drawable.Drawable.Callback,
             a.initialize(getRight() - getLeft(), getBottom() - getTop(),
                     parent.getWidth(), parent.getHeight());
             if (TRACE_LEGACY_ANIM) {
-                com.macapk.loader.NativeLog.i("Mac.apk.LegacyAnim", "start " + a.getClass().getSimpleName()
+                com.macapk.loader.NativeLog.i("Apk on Mac.LegacyAnim", "start " + a.getClass().getSimpleName()
                     + " dur=" + a.getDuration() + " on " + getClass().getName() + "@"
                     + Integer.toHexString(System.identityHashCode(this)) + " t=" + drawingTime);
             }
@@ -3400,7 +3400,7 @@ public class View implements android.graphics.drawable.Drawable.Callback,
             StringBuilder sb = new StringBuilder();
             StackTraceElement[] st = Thread.currentThread().getStackTrace();
             for (int i = 2; i < Math.min(st.length, 8); i++) sb.append("\n    at ").append(st[i]);
-            android.util.Log.i("Mac.apk.BgTint", "setBackgroundTintList("
+            android.util.Log.i("Apk on Mac.BgTint", "setBackgroundTintList("
                 + (tint == null ? "null" : "0x" + Integer.toHexString(tint.getDefaultColor()))
                 + ") on " + getClass().getName() + sb);
         }
@@ -4665,7 +4665,7 @@ public class View implements android.graphics.drawable.Drawable.Callback,
      *  (AOSP's "not attached to the view root" signal). AOSP can use a null
      *  parent for that because the real DecorView's mParent is always the
      *  ViewRootImpl (a non-View ViewParent) once attached, so a null parent
-     *  only happens on a genuinely detached view. Mac.apk has no such
+     *  only happens on a genuinely detached view. Apk on Mac has no such
      *  ViewParent-implementing window-root object: the main content root
      *  attaches via ViewCanvasDriver.macapkDrawFrame calling
      *  macapkDispatchAttachedToWindow() directly, and EVERY Dialog /
@@ -4973,7 +4973,7 @@ public class View implements android.graphics.drawable.Drawable.Callback,
             try {
                 Class<?> log = Class.forName("com.macapk.loader.NativeLog");
                 log.getMethod("i", String.class, String.class).invoke(null,
-                    "Mac.apk.Measure",
+                    "Apk on Mac.Measure",
                     getClass().getSimpleName() + "@"
                     + Integer.toHexString(System.identityHashCode(this))
                     + " w=" + MeasureSpec.toString(wSpec)
@@ -5147,7 +5147,7 @@ public class View implements android.graphics.drawable.Drawable.Callback,
                 || cn.endsWith("ScreenContainerView")) {
                 try {
                     Class<?> log = Class.forName("com.macapk.loader.NativeLog");
-                    log.getMethod("i", String.class, String.class).invoke(null, "Mac.apk.ComposeMeasure",
+                    log.getMethod("i", String.class, String.class).invoke(null, "Apk on Mac.ComposeMeasure",
                         cn + " measure w=" + MeasureSpec.toString(wSpec) + " h=" + MeasureSpec.toString(hSpec)
                         + " -> " + measuredWidth + "x" + measuredHeight);
                 } catch (Throwable ignored) {}
@@ -5278,7 +5278,7 @@ public class View implements android.graphics.drawable.Drawable.Callback,
      *  invalidateChildInParent are what re-record the GraphicsLayer it draws the
      *  View into (invalidateOrDefer -> layoutNode.invalidateLayer). An
      *  AndroidView { WebView } therefore replayed the recording from its FIRST
-     *  draw forever (mGradani NIAS login white; Mac.apk-Releases issue 2;
+     *  draw forever (mGradani NIAS login white; Apk on Mac-Releases issue 2;
      *  debug/wvtest/compose_shape). Same guards as AOSP: skipInvalidate (not
      *  VISIBLE, no animation), attached, non-empty bounds. Off the UI thread
      *  (our postInvalidate calls invalidate directly) the walk is posted to it,
@@ -5331,7 +5331,7 @@ public class View implements android.graphics.drawable.Drawable.Callback,
                   .append(" layoutReq=").append(av.layoutRequested).append('\n');
                 p2 = av.getParent(); depth++;
             }
-            com.macapk.loader.NativeLog.i("Mac.apk.ComposeInsert", sb.toString());
+            com.macapk.loader.NativeLog.i("Apk on Mac.ComposeInsert", sb.toString());
         } catch (Throwable ignored) {}
     }
     // v1.0.411 DIAGNOSTIC: trace attach/detach transitions on Compose hosts
@@ -5351,7 +5351,7 @@ public class View implements android.graphics.drawable.Drawable.Callback,
             boolean host = cn.endsWith("ComposeView") || cn.equals("androidx.compose.ui.platform.c")
                 || cn.endsWith("AbstractComposeView");
             if (!host) return;
-            com.macapk.loader.NativeLog.i("Mac.apk.ComposeAttach",
+            com.macapk.loader.NativeLog.i("Apk on Mac.ComposeAttach",
                 which + " " + cn + "@" + Integer.toHexString(System.identityHashCode(this))
                 + " wasAttached=" + wasAttached + " vis=" + getVisibility()
                 + " parent=" + (parent == null ? "null" : parent.getClass().getName()));
@@ -5394,7 +5394,7 @@ public class View implements android.graphics.drawable.Drawable.Callback,
                     sWindowRecomposerHookRegistered = true;
                     try {
                         Runtime.getRuntime().addShutdownHook(new Thread(() ->
-                            com.macapk.loader.NativeLog.i("Mac.apk.ComposeAttach",
+                            com.macapk.loader.NativeLog.i("Apk on Mac.ComposeAttach",
                                 "windowRecomposer-fail FINAL total=" + sWindowRecomposerFailCount.get())));
                     } catch (Throwable ignored) {}
                 }
@@ -5430,7 +5430,7 @@ public class View implements android.graphics.drawable.Drawable.Callback,
                 } else {
                     // No concrete class in this tree currently implements ViewParent
                     // without also being a View (see the isShown() comment above,
-                    // "Mac.apk has no such ViewParent-implementing window-root
+                    // "Apk on Mac has no such ViewParent-implementing window-root
                     // object") -- if this branch ever prints, that has changed and
                     // is itself a finding.
                     sb.append("  [").append(depth).append("] NON-VIEW ViewParent: ")
@@ -5441,7 +5441,7 @@ public class View implements android.graphics.drawable.Drawable.Callback,
             }
             if (depth == 0) sb.append("  (getParent() == null -- this view has no parent at all)\n");
             else if (depth >= 16) sb.append("  (chain truncated at 16 -- possible cycle)\n");
-            com.macapk.loader.NativeLog.i("Mac.apk.ComposeAttach", sb.toString());
+            com.macapk.loader.NativeLog.i("Apk on Mac.ComposeAttach", sb.toString());
         }
     }
     public void invalidate(Rect dirty) { invalidate(); }
@@ -5655,7 +5655,7 @@ public class View implements android.graphics.drawable.Drawable.Callback,
         if (TRACE_COMPOSE) {
             String cn = getClass().getName();
             if (cn.endsWith("ComposeView") || cn.endsWith("AndroidComposeView")) {
-                com.macapk.loader.NativeLog.i("Mac.apk.ComposeDraw",
+                com.macapk.loader.NativeLog.i("Apk on Mac.ComposeDraw",
                     cn + " bounds=[" + left + "," + top + "-" + right + "," + bottom
                     + "] size=" + (right-left) + "x" + (bottom-top)
                     + " attached=" + isAttachedToWindow() + " children="
@@ -5709,7 +5709,7 @@ public class View implements android.graphics.drawable.Drawable.Callback,
         try {
             String k = t.getClass().getName() + ":" + String.valueOf(t.getMessage());
             if (!macapkBgDrawFailed.add(k)) return;
-            com.macapk.loader.NativeLog.w("Mac.apk.View",
+            com.macapk.loader.NativeLog.w("Apk on Mac.View",
                 "background drawable draw() failed, using synthetic chrome: " + k);
         } catch (Throwable ignored) {}
     }
@@ -6116,7 +6116,7 @@ public class View implements android.graphics.drawable.Drawable.Callback,
             try {
                 Class<?> log = Class.forName("com.macapk.loader.NativeLog");
                 log.getMethod("i", String.class, String.class).invoke(null,
-                    "Mac.apk.EditMode",
+                    "Apk on Mac.EditMode",
                     getClass().getSimpleName() + "@"
                     + Integer.toHexString(System.identityHashCode(this))
                     + " id=0x" + Integer.toHexString(getId()));
@@ -6187,7 +6187,7 @@ public class View implements android.graphics.drawable.Drawable.Callback,
     boolean requestFocusNoSearch(int direction, android.graphics.Rect previouslyFocusedRect) {
         if (!isFocusableConsideringTouchMode()) {
             if (sTraceIme) {
-                System.err.println("[Mac.apk.IME] requestFocus REFUSED " + getClass().getName()
+                System.err.println("[Apk on Mac.IME] requestFocus REFUSED " + getClass().getName()
                     + " focusable=" + focusable + " vis=" + visibility
                     + " enabled=" + isEnabled() + " touchMode=" + isInTouchMode()
                     + " focusableInTouchMode=" + focusableInTouchMode);
@@ -6202,7 +6202,7 @@ public class View implements android.graphics.drawable.Drawable.Callback,
         if (mIsFocused) return true;
         handleFocusGainInternal(direction, previouslyFocusedRect);
         if (sTraceIme) {
-            System.err.println("[Mac.apk.IME] requestFocus GRANTED " + getClass().getName()
+            System.err.println("[Apk on Mac.IME] requestFocus GRANTED " + getClass().getName()
                 + " parent=" + (getParent() == null ? "null" : getParent().getClass().getName()));
         }
         return true;
@@ -6243,7 +6243,7 @@ public class View implements android.graphics.drawable.Drawable.Callback,
                 .append(" dir=").append(direction);
             StackTraceElement[] st = new Throwable().getStackTrace();
             for (int i = 1; i < Math.min(st.length, 14); i++) sb.append("\n      at ").append(st[i]);
-            com.macapk.loader.NativeLog.i("Mac.apk.Focus", sb.toString());
+            com.macapk.loader.NativeLog.i("Apk on Mac.Focus", sb.toString());
         }
         mIsFocused = true;
         ViewParent p = getParent();
@@ -6477,14 +6477,14 @@ public class View implements android.graphics.drawable.Drawable.Callback,
             StringBuilder sb = new StringBuilder();
             StackTraceElement[] st = Thread.currentThread().getStackTrace();
             for (int i = 2; i < Math.min(st.length, 7); i++) sb.append("\n    at ").append(st[i]);
-            android.util.Log.i("Mac.apk.SetBg", "setBackgroundDrawable("
+            android.util.Log.i("Apk on Mac.SetBg", "setBackgroundDrawable("
                 + (d == null ? "null" : d.getClass().getSimpleName()
                    + (d instanceof android.graphics.drawable.VectorDrawable vd
                       ? " stub=" + vd.macapkUnresolvedStub : ""))
                 + ") on " + getClass().getName() + sb);
         }
         // AOSP's mBackground is ONE slot: installing null means the view has no
-        // background at all. Mac.apk splits that state across two fields (the
+        // background at all. Apk on Mac splits that state across two fields (the
         // flat `backgroundColor` fast path and `backgroundDrawable`), and
         // setBackground(null) used to clear only the second -- so a view whose
         // background had been set as a colour kept painting it after an explicit
@@ -6764,7 +6764,7 @@ public class View implements android.graphics.drawable.Drawable.Callback,
      *  scroll indicators, scroll bars, then the foreground drawable positioned
      *  by its gravity inside the view's (padding-aware) self bounds.
      *
-     *  Mac.apk draws no scroll chrome (setHorizontal/VerticalScrollBarEnabled
+     *  Apk on Mac draws no scroll chrome (setHorizontal/VerticalScrollBarEnabled
      *  and friends are inert by design on a desktop window), so the foreground
      *  pass is the only part with an observable effect here.
      *
@@ -8046,7 +8046,7 @@ public class View implements android.graphics.drawable.Drawable.Callback,
                 String cn = st[i].getClassName();
                 if (cn.equals("android.view.View")) continue;
                 if (sRootInsetCallers.add(cn)) {
-                    com.macapk.loader.NativeLog.i("Mac.apk.View",
+                    com.macapk.loader.NativeLog.i("Apk on Mac.View",
                         "getRootWindowInsets caller: " + cn + "." + st[i].getMethodName());
                 }
                 break;
@@ -8143,7 +8143,7 @@ public class View implements android.graphics.drawable.Drawable.Callback,
     // generic input events (mouse wheel, gamepad axis, joystick).
     // ShatteredPD's input glue references this interface during init;
     // absent, the loader hits NoClassDefFoundError before any input
-    // handler is installed and the engine bails. Mac.apk doesn't
+    // handler is installed and the engine bails. Apk on Mac doesn't
     // currently route gamepad/wheel events here -- callers register
     // listeners that never fire -- but the interface MUST exist or
     // class loading fails. Per AOSP the method signature is
@@ -8299,7 +8299,7 @@ public class View implements android.graphics.drawable.Drawable.Callback,
      *  the RenderEffect descriptor in its invokevirtual and would not resolve
      *  against an (Object)V method.
      *
-     *  Mac.apk's View has no owned RenderNode (transform/elevation are plain
+     *  Apk on Mac's View has no owned RenderNode (transform/elevation are plain
      *  fields), so the effect is stored the same way android.graphics.RenderNode
      *  stores it; the compositing half -- rendering this view's output through
      *  the ConvolveOp blur that Canvas.drawRenderNode already applies to a
@@ -8491,7 +8491,7 @@ public class View implements android.graphics.drawable.Drawable.Callback,
      *  VISIBLE content area of the window this view lives in -- the window
      *  bounds minus the system-bar and display-cutout insets, normalized to
      *  (0,0). Detached, AOSP falls back to the WindowManager's maximum window
-     *  metrics inset the same way; Mac.apk's window IS the display, so the
+     *  metrics inset the same way; Apk on Mac's window IS the display, so the
      *  display metrics are the equivalent bounds.
      *
      *  This is the method behind the classic soft-keyboard probe
@@ -8566,7 +8566,7 @@ public class View implements android.graphics.drawable.Drawable.Callback,
             try {
                 View root = getRootView();
                 int rh = (root != null) ? root.getHeight() : -1;
-                com.macapk.loader.NativeLog.i("Mac.apk.View",
+                com.macapk.loader.NativeLog.i("Apk on Mac.View",
                     "visibleDisplayFrame h=" + outRect.height()
                     + " rootView.h=" + rh
                     + " keyboardProbe=" + (rh - outRect.height())
@@ -8662,7 +8662,7 @@ public class View implements android.graphics.drawable.Drawable.Callback,
         // drag the app asked for a silent false" (the pre-port stub, or the =0 arm) from
         // "the app never asked" (Anuto with 0 credits). Normal launches log nothing.
         if (com.macapk.loader.ViewTextDump.ENABLED) {
-            com.macapk.loader.NativeLog.i("Mac.apk.Drag", "startDragAndDrop -> " + r + " from "
+            com.macapk.loader.NativeLog.i("Apk on Mac.Drag", "startDragAndDrop -> " + r + " from "
                     + getClass().getName());
         }
         return r;
@@ -8774,7 +8774,7 @@ public class View implements android.graphics.drawable.Drawable.Callback,
     // ---- Outline shadow colors (AOSP View.java:20403/20432, API 28+) ----
     // Material You tints the elevation shadow away from black. AOSP delegates
     // to the owned RenderNode's setSpotShadowColor/setAmbientShadowColor;
-    // Mac.apk's View has no RenderNode, so the colors live here for the
+    // Apk on Mac's View has no RenderNode, so the colors live here for the
     // elevation-shadow painter to read. AOSP's default is opaque black.
     private int mSpotShadowColor = 0xFF000000;
     private int mAmbientShadowColor = 0xFF000000;
@@ -8987,7 +8987,7 @@ public class View implements android.graphics.drawable.Drawable.Callback,
     /** AOSP View.dispatchTrackballEvent(MotionEvent) (public in current.txt;
      *  ViewGroup overrides it to route to the focused child).
      *
-     *  Mac.apk has no trackball input path -- there is no macOS equivalent of
+     *  Apk on Mac has no trackball input path -- there is no macOS equivalent of
      *  that D-pad-era hardware -- so nothing ever CALLS this, and AOSP's own
      *  "not consumed" answer is false. But the METHOD has to exist: two corpus
      *  apps reference it, and a missing one is a NoSuchMethodError at their call
@@ -9443,11 +9443,11 @@ public class View implements android.graphics.drawable.Drawable.Callback,
     }
 
     // ======================================================================
-    //  AOSP API-36 surface completion (Mac.apk API-gap lane, android.view).
+    //  AOSP API-36 surface completion (Apk on Mac API-gap lane, android.view).
     //  Every member below is a name AOSP's core/api/current.txt declares on
     //  android.view.View and this file did not have. Bodies mirror
     //  frameworks/base/core/java/android/view/View.java (android16-release);
-    //  where AOSP's body reads state Mac.apk has no analogue for (AttachInfo,
+    //  where AOSP's body reads state Apk on Mac has no analogue for (AttachInfo,
     //  RenderNode, IWindowSession) the comment says which branch of AOSP's own
     //  code we are therefore taking, so the answer is one a real device also
     //  gives -- never an invented one.
@@ -9512,7 +9512,7 @@ public class View implements android.graphics.drawable.Drawable.Callback,
         mOnCapturedPointerListener = l;
     }
     /** AOSP View.hasPointerCapture() asks mAttachInfo.mHasWindowFocus &&
-     *  ViewRootImpl's captured-pointer state. Mac.apk never grants pointer
+     *  ViewRootImpl's captured-pointer state. Apk on Mac never grants pointer
      *  capture (requestPointerCapture() is a no-op here, matching a device that
      *  declines), so the honest answer is false -- the same answer a real device
      *  gives before capture is granted. */
@@ -9554,7 +9554,7 @@ public class View implements android.graphics.drawable.Drawable.Callback,
     /** AOSP View.dispatchUnhandledMove:14910 `return false`. */
     public boolean dispatchUnhandledMove(View focused, int direction) { return false; }
     /** AOSP View.onFilterTouchEventForSecurity:16674. The FILTER_TOUCHES_WHEN_
-     *  OBSCURED branch is the one that matters to an app; Mac.apk never sets
+     *  OBSCURED branch is the one that matters to an app; Apk on Mac never sets
      *  MotionEvent.FLAG_WINDOW_IS_OBSCURED (nothing can overlay our window), so
      *  the guard is evaluated and passes, exactly as on an unobscured device. */
     public boolean onFilterTouchEventForSecurity(MotionEvent event) {
@@ -9587,7 +9587,7 @@ public class View implements android.graphics.drawable.Drawable.Callback,
     }
     /** AOSP View.requestUnbufferedDispatch(MotionEvent):18439. Sets
      *  AttachInfo.mUnbufferedDispatchRequested, which ViewRootImpl reads to stop
-     *  batching input for the rest of the gesture. Mac.apk delivers Cocoa mouse
+     *  batching input for the rest of the gesture. Apk on Mac delivers Cocoa mouse
      *  events one-for-one already (cocoa_bridge.mm posts each NSEvent straight
      *  into TouchDispatcher; there is no batching stage to disable), so the
      *  request is already satisfied and there is nothing to record. */
@@ -9598,7 +9598,7 @@ public class View implements android.graphics.drawable.Drawable.Callback,
     // ---- window-insets animation callback dispatch (API 30) -------------------
     // AOSP View.dispatchWindowInsetsAnimation*: each one hands the event to the
     // view's own WindowInsetsAnimation.Callback if it registered one. These are
-    // driven by InsetsAnimationThreadControlRunner on a device; Mac.apk runs no
+    // driven by InsetsAnimationThreadControlRunner on a device; Apk on Mac runs no
     // insets animation, so nothing in this tree calls them -- they exist so an
     // app (or a library that subclasses View) can override and super-call.
     public void dispatchWindowInsetsAnimationPrepare(WindowInsetsAnimation animation) {
@@ -9640,7 +9640,7 @@ public class View implements android.graphics.drawable.Drawable.Callback,
     // ---- transparent region --------------------------------------------------
     /** AOSP View.gatherTransparentRegion:28827. The region walk exists so
      *  SurfaceView can punch a hole through the window's transparent region;
-     *  Mac.apk composites SurfaceView content through the same ANGLE/Metal layer
+     *  Apk on Mac composites SurfaceView content through the same ANGLE/Metal layer
      *  rather than a separate SurfaceFlinger layer, so there is no window
      *  transparent region for a caller to collect. AOSP's own guard is
      *  `if (region != null && attachInfo != null)` and it returns true either
@@ -9651,7 +9651,7 @@ public class View implements android.graphics.drawable.Drawable.Callback,
     /** AOSP View.generateDisplayHash:34148. Its FIRST guard is
      *  `IWindowSession session = getWindowSession(); if (session == null) {
      *  callback.onDisplayHashError(DISPLAY_HASH_ERROR_MISSING_WINDOW); return; }`.
-     *  Mac.apk has no IWindowSession at all, so that is the branch a device
+     *  Apk on Mac has no IWindowSession at all, so that is the branch a device
      *  without one takes and the branch we take -- reported through the caller's
      *  Executor, as AOSP reports every result. Consistent with
      *  DisplayHashManager.getSupportedHashAlgorithms() returning an empty set:
@@ -9669,7 +9669,7 @@ public class View implements android.graphics.drawable.Drawable.Callback,
     private int mAccessibilityTraversalAfterId = NO_ID;
     /** AOSP View.setAccessibilityTraversalAfter / getAccessibilityTraversalAfter
      *  (and the Before pair immediately above it in AOSP): a plain id round-trip.
-     *  Nothing in Mac.apk consumes the order (we bridge no a11y service), but an
+     *  Nothing in Apk on Mac consumes the order (we bridge no a11y service), but an
      *  app that writes then reads its own traversal order must see it. */
     public void setAccessibilityTraversalAfter(int afterId) {
         mAccessibilityTraversalAfterId = afterId;
@@ -9744,7 +9744,7 @@ public class View implements android.graphics.drawable.Drawable.Callback,
     public boolean isCredential() { return mIsCredential; }
     /** AOSP View.setPendingCredentialRequest / getPendingCredentialRequest /
      *  getPendingCredentialCallback / clearPendingCredentialRequest: a plain
-     *  request+callback round-trip on the view. Mac.apk bridges no credential
+     *  request+callback round-trip on the view. Apk on Mac bridges no credential
      *  provider, so the request is never fulfilled -- which is the same
      *  observable outcome as a device with no credential provider installed. */
     public void setPendingCredentialRequest(android.credentials.GetCredentialRequest request,
@@ -9768,7 +9768,7 @@ public class View implements android.graphics.drawable.Drawable.Callback,
     // ---- stylus handwriting (API 33/35) --------------------------------------
     // AOSP stores the enable bit in PFLAG4_AUTO_HANDWRITING_ENABLED (default ON,
     // set in the View constructor) and the four bounds offsets in plain fields
-    // (View.setHandwritingBoundsOffsets:13208). Mac.apk has no stylus source and
+    // (View.setHandwritingBoundsOffsets:13208). Apk on Mac has no stylus source and
     // no handwriting IME, so the values only round-trip -- the same as on a
     // device with no stylus, where the offsets are honoured by nobody either.
     private boolean mAutoHandwritingEnabled = true;
@@ -9821,7 +9821,7 @@ public class View implements android.graphics.drawable.Drawable.Callback,
     // ---- tint blend modes (API 29) -------------------------------------------
     // AOSP keeps ONE tint mode per drawable slot: setBackgroundTintMode(
     // PorterDuff.Mode) converts to a BlendMode and writes the same
-    // TintInfo.mBlendMode this pair reads. Mac.apk's PorterDuff pair predates
+    // TintInfo.mBlendMode this pair reads. Apk on Mac's PorterDuff pair predates
     // this and is a documented no-op/null (see setBackgroundTintMode above); the
     // two are deliberately NOT wired together here, because making the
     // PorterDuff getter start answering would change behaviour every Canvas-tier
@@ -9993,13 +9993,13 @@ public class View implements android.graphics.drawable.Drawable.Callback,
     /** AOSP View.hasOnLongClickListeners():7905. */
     public boolean hasOnLongClickListeners() { return onLongClickListener != null; }
     private boolean mAllowClickWhenDisabled;
-    /** AOSP View.setAllowClickWhenDisabled:14300 (a PFLAG4 bit). Mac.apk's
+    /** AOSP View.setAllowClickWhenDisabled:14300 (a PFLAG4 bit). Apk on Mac's
      *  onTouchEvent already declines a disabled view, matching the default
      *  (false); the bit is recorded so an app can read its own opt-in back. */
     public void setAllowClickWhenDisabled(boolean clickableWhenDisabled) {
         mAllowClickWhenDisabled = clickableWhenDisabled;
     }
-    /** @hide -- read by Mac.apk's own touch path if it ever honours the opt-in. */
+    /** @hide -- read by Apk on Mac's own touch path if it ever honours the opt-in. */
     public final boolean macapkAllowClickWhenDisabled() { return mAllowClickWhenDisabled; }
     /** Harness only (com.macapk.loader.ViewTextDump `tch=`/`drg=`): AOSP keeps
      *  these in ListenerInfo with no public getter. A touch listener marks a
@@ -10017,19 +10017,19 @@ public class View implements android.graphics.drawable.Drawable.Callback,
      *  view-velocity API is enabled on the AttachInfo. It is not here. */
     public float getFrameContentVelocity() { return 0f; }
     /** AOSP View.getLocationInSurface(int[]) is getLocationInWindow(location)
-     *  plus the ViewRootImpl's surfaceInsets. Mac.apk's window has no surface
+     *  plus the ViewRootImpl's surfaceInsets. Apk on Mac's window has no surface
      *  insets (no drop-shadow surface expansion), so the two coincide -- the same
      *  as on a device whose window has zero surface insets. */
     public void getLocationInSurface(int[] location) { getLocationInWindow(location); }
     /** AOSP View.getRootSurfaceControl() returns mAttachInfo.getRootSurfaceControl(),
-     *  and null for a view that is not attached. Mac.apk composites through
+     *  and null for a view that is not attached. Apk on Mac composites through
      *  ANGLE/Metal rather than SurfaceControl, so there is no root SurfaceControl
      *  to hand out and null -- AOSP's own "no window" answer -- is the honest one.
      *  Deliberately NOT a fabricated AttachedSurfaceControl: a caller that got one
      *  would queue transactions that never apply. */
     public AttachedSurfaceControl getRootSurfaceControl() { return null; }
     /** AOSP View.getWindowAttachCount() returns mWindowAttachCount, which
-     *  ViewRootImpl bumps on each attach. Mac.apk attaches a view to its window
+     *  ViewRootImpl bumps on each attach. Apk on Mac attaches a view to its window
      *  once and never re-attaches it, so the count is 1 once attached and 0
      *  before -- the value a device reports for the same lifecycle. */
     protected int getWindowAttachCount() { return isAttachedToWindow() ? 1 : 0; }

@@ -3,7 +3,7 @@ package android.telephony;
 /**
  * Handle for an in-flight network scan.
  *
- * Mac.apk never starts one (no radio), so TelephonyManager.requestNetworkScan
+ * Apk on Mac never starts one (no radio), so TelephonyManager.requestNetworkScan
  * reports ERROR_UNSUPPORTED to the callback and returns null, which AOSP
  * documents as the failure result. This class exists so a caller that stores
  * the handle and later calls stopScan() links.

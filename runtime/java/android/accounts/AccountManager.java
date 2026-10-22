@@ -1,6 +1,6 @@
 // android.accounts.AccountManager -- the system account registry.
 //
-// Mac.apk runs no AccountManagerService, and there are no accounts. Every query
+// Apk on Mac runs no AccountManagerService, and there are no accounts. Every query
 // therefore reports EMPTY and every mutation reports FAILURE -- which is exactly
 // what a fresh Android device with no accounts added reports, so apps that probe
 // for an account degrade the way they already know how to.
@@ -138,7 +138,7 @@ public class AccountManager {
         return c == null ? Collections.emptyMap() : com.macapk.accounts.AppAuthenticators.of(c);
     }
 
-    /** AOSP keeps the CE accounts database at /data/system_ce/<userId>/; Mac.apk's /data is
+    /** AOSP keeps the CE accounts database at /data/system_ce/<userId>/; Apk on Mac's /data is
      *  the android root's data dir (Environment.getDataDirectory). */
     private static com.macapk.accounts.AccountStore store() {
         return com.macapk.accounts.AccountStore.at(new java.io.File(
@@ -384,8 +384,8 @@ public class AccountManager {
         return NONE;
     }
 
-    /** AOSP applies per-package account VISIBILITY here. Mac.apk hosts exactly
-     *  one app and the user signed in through Mac.apk's own UI on that app's
+    /** AOSP applies per-package account VISIBILITY here. Apk on Mac hosts exactly
+     *  one app and the user signed in through Apk on Mac's own UI on that app's
      *  behalf, so there is no second party to hide the account from -- the
      *  visibility filter would be a no-op on a one-package device. */
     public Account[] getAccountsByTypeForPackage(String type, String packageName) {
@@ -445,7 +445,7 @@ public class AccountManager {
     }
 
     /** The account password is never stored -- sign-in is OAuth through a
-     *  WebView and Mac.apk never sees the user's password. AOSP returns null for
+     *  WebView and Apk on Mac never sees the user's password. AOSP returns null for
      *  an authenticator that stores none, which is exactly our case. */
     public String getPassword(Account account) {
         if (APP_ACCOUNTS) {
@@ -780,7 +780,7 @@ public class AccountManager {
     /** The Activity-taking overload differs from the non-UI one in that AOSP is
      *  allowed to launch the authenticator's sign-in UI instead of failing. When the
      *  pinned account is a com.google account that is not signed in yet and a window
-     *  is available, we drive Mac.apk's own sign-in (the guarded one-shot in
+     *  is available, we drive Apk on Mac's own sign-in (the guarded one-shot in
      *  NativeSignIn) and then fetch the token -- we present the window ourselves
      *  rather than handing back a KEY_INTENT for the guest to start. Otherwise it
      *  behaves as the non-UI overload. */
@@ -857,7 +857,7 @@ public class AccountManager {
 
     /** AOSP's "add an account" flow: the platform (not the app) asks the user to
      *  sign in. For the com.google authenticator, with the layer up and a window
-     *  available, we drive Mac.apk's guarded one-shot sign-in on the worker thread
+     *  available, we drive Apk on Mac's guarded one-shot sign-in on the worker thread
      *  and resolve the future with the account bundle. AOSP resolves this future with
      *  OperationCanceledException when the user backs out of the authenticator UI, so
      *  a cancel surfaces the same way. With no window (headless) or any other account

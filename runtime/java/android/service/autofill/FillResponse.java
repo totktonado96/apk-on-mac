@@ -17,7 +17,7 @@ import java.util.Set;
  * present them, what to save afterwards, and the authentication step (if any)
  * that must run before any of it is revealed.
  *
- * Pure value object with a large builder. Mac.apk consumes no FillResponse --
+ * Pure value object with a large builder. Apk on Mac consumes no FillResponse --
  * nothing binds an autofill service -- but the builder is exactly what a
  * password manager exercises in its own tests, and AOSP's rules (the builder is
  * single-use; disableAutofill() is exclusive with everything else; setting an

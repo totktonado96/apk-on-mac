@@ -4,7 +4,7 @@
 // PrintDocumentInfo plus a readable descriptor for the bytes.
 //
 // getInfo() is fully real. getData() is not, and cannot be: AOSP opens a pipe
-// and asks the SPOOLER to pump the job's data into it, and Mac.apk has no
+// and asks the SPOOLER to pump the job's data into it, and Apk on Mac has no
 // spooler that owns any print-job data (see PrintService). AOSP itself returns
 // null from getData() when that call fails, so null is the faithful "no data"
 // answer here rather than an empty pipe that would read as a zero-byte

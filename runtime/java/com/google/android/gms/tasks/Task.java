@@ -12,7 +12,7 @@ import java.util.concurrent.Executor;
 // Architectural note: this class is intentionally NOT named with a
 // "Stub" suffix. Bundled APK code is compiled against
 // "com.google.android.gms.tasks.Task" and the bytecode resolves that
-// exact name through Mac.apk's parent-first AppClassLoader. Our
+// exact name through Apk on Mac's parent-first AppClassLoader. Our
 // class file IS the Task the APK sees; renaming it would defeat the
 // shadow.
 public abstract class Task<T> {

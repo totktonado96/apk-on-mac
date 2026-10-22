@@ -1,6 +1,6 @@
 package android.app;
 
-/** The handle to an ongoing voice interaction. Mac.apk has no voice-interaction
+/** The handle to an ongoing voice interaction. Apk on Mac has no voice-interaction
  *  service, so an Activity is never launched via one (getVoiceInteractor→null);
  *  the type resolves. Source: frameworks/base/core/java/android/app/VoiceInteractor.java
  *  (android16-release).

@@ -11,7 +11,7 @@
 // What is deliberately NOT reproduced: AOSP's ~2000-line
 // MandatoryStreamCombination.Builder, which DERIVES the mandatory tables from a
 // camera's hardware level and capabilities. Those tables are a statement about
-// what a real camera guarantees. Mac.apk's AVFoundation backend does not claim
+// what a real camera guarantees. Apk on Mac's AVFoundation backend does not claim
 // a CDD hardware level, so the characteristics keys resolve to null and an app
 // takes its "no mandatory combination info" branch -- the same branch a device
 // whose HAL omits the tag gives it. Synthesising a table here would tell an app

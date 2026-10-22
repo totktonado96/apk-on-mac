@@ -43,7 +43,7 @@ public final class NativeMedia {
 
     // ---- Video decoder (backs MediaCodec video mimes): VideoToolbox ----
     //
-    // This is the single source of truth for "what video can Mac.apk decode
+    // This is the single source of truth for "what video can Apk on Mac decode
     // on THIS host, and is it hardware": MediaCodec.java calls these to
     // decide configure()/start() behavior, and MediaCodecList/MediaCodecInfo
     // are expected to answer findDecoderForFormat()/isHardwareAccelerated()

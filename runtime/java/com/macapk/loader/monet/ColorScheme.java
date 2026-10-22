@@ -3,7 +3,7 @@
 //   frameworks/base/packages/SystemUI/monet/src/com/android/systemui/monet/Shades.java
 // Kotlin -> Java, and ONLY Style.TONAL_SPOT: ThemeOverlayController reads the style from
 // Settings.Secure THEME_CUSTOMIZATION_OVERLAY_PACKAGES, whose default is TONAL_SPOT, and
-// Mac.apk has no wallpaper picker that could choose another. The arithmetic, including
+// Apk on Mac has no wallpaper picker that could choose another. The arithmetic, including
 // which values are float and which are double, is kept exactly as the Kotlin spells it,
 // because CTS (tests/tests/graphics/res/xml/valid_themes.xml) demands BYTE-EXACT ramps.
 // See docs/monet-wallpaper-seed_2026-09-26.md.

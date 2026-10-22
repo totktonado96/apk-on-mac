@@ -4,7 +4,7 @@
 // service can deliver a printer's icon asynchronously.
 //
 // AOSP forwards the icon over IPC to the spooler and returns false when that
-// call fails. There is no spooler in Mac.apk, so there is nowhere to deliver
+// call fails. There is no spooler in Apk on Mac, so there is nowhere to deliver
 // to: the callback records the icon (so the service can read it back and so a
 // second call is correctly rejected) and returns FALSE, which is precisely
 // AOSP's "the icon could not be delivered" answer. Returning true would be the

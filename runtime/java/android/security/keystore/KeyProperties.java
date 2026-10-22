@@ -48,7 +48,7 @@ public class KeyProperties {
     public static final String DIGEST_SHA512 = "SHA-512";
 
     // User-authentication types (KeyGenParameterSpec.Builder
-    // .setUserAuthenticationParameters). Mac.apk has no lock-screen auth, but
+    // .setUserAuthenticationParameters). Apk on Mac has no lock-screen auth, but
     // the constants must exist for callers that OR them into the spec.
     public static final int AUTH_BIOMETRIC_STRONG = 2;
     public static final int AUTH_DEVICE_CREDENTIAL = 1;

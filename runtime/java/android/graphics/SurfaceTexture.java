@@ -232,7 +232,7 @@ public class SurfaceTexture {
         mAttached = false;
     }
 
-    /** Mac.apk framework-internal. AOSP has no no-arg constructor; AOSP's own
+    /** Apk on Mac framework-internal. AOSP has no no-arg constructor; AOSP's own
      *  TextureView creates its texture with `new SurfaceTexture(false)` (the
      *  detached form) and attaches it later, and ours currently calls this.
      *  Kept so android.view.TextureView keeps compiling; it is unreachable
@@ -268,7 +268,7 @@ public class SurfaceTexture {
             // thread's looper, else the main looper. Apps written against that
             // ordering call updateTexImage straight from the callback because
             // they know which thread it lands on, so preserve it exactly.
-            // (AOSP builds this Handler with the async flag; Mac.apk's queues
+            // (AOSP builds this Handler with the async flag; Apk on Mac's queues
             // dispatch in posted order regardless, see Handler.createAsync.)
             Looper looper = handler != null ? handler.getLooper() :
                     mCreatorLooper != null ? mCreatorLooper : Looper.getMainLooper();
@@ -755,7 +755,7 @@ public class SurfaceTexture {
     // SurfaceTexture, and this instance owns no native memory.
 
     /** The GL texture name this stream is attached to, or 0 when detached.
-     *  Mac.apk framework-internal, for the producer bridge that will bind the
+     *  Apk on Mac framework-internal, for the producer bridge that will bind the
      *  latched buffer. */
     public int macapkGetTexName() {
         synchronized (mLock) {
@@ -765,7 +765,7 @@ public class SurfaceTexture {
 
     /** Default buffer size a producer should allocate against, or 0 when the
      *  app never called setDefaultBufferSize (producer decides).
-     *  Mac.apk framework-internal. */
+     *  Apk on Mac framework-internal. */
     public int macapkGetDefaultWidth() {
         synchronized (mLock) {
             return mDefaultWidth;
@@ -778,7 +778,7 @@ public class SurfaceTexture {
     }
 
     /**
-     * Mac.apk framework-internal PRODUCER entry point: publish one frame to
+     * Apk on Mac framework-internal PRODUCER entry point: publish one frame to
      * this stream. This is the Java-side stand-in for BufferQueue's
      * queueBuffer, whose consumer-side onFrameAvailable AOSP forwards to the
      * app through postEventFromNative -> mOnFrameAvailableHandler. Callers are
@@ -813,7 +813,7 @@ public class SurfaceTexture {
     }
 
     /**
-     * Mac.apk framework-internal: bind this stream to a native camera capture
+     * Apk on Mac framework-internal: bind this stream to a native camera capture
      * session so latches can pull pixels. Called by CameraCaptureSessionImpl
      * once its session is configured and running -- the same seam shape as
      * ImageReader.macapkAttachCameraSource.
@@ -840,7 +840,7 @@ public class SurfaceTexture {
         }
     }
 
-    /** Whether a camera source is currently attached. Mac.apk framework-internal. */
+    /** Whether a camera source is currently attached. Apk on Mac framework-internal. */
     public boolean macapkHasCameraSource() {
         synchronized (mLock) {
             return mCamSession != 0;
@@ -888,14 +888,14 @@ public class SurfaceTexture {
     // a plain field has no cross-thread visibility guarantee for that.
     private static volatile java.lang.ref.WeakReference<SurfaceTexture> sActiveVideoTarget;
 
-    /** Mac.apk framework-internal: register this instance as the current
+    /** Apk on Mac framework-internal: register this instance as the current
      *  candidate destination for a decoded-video frame. Called by
      *  Surface's SurfaceTexture-arg constructor; see the section doc above. */
     public void macapkRegisterVideoTarget() {
         sActiveVideoTarget = new java.lang.ref.WeakReference<>(this);
     }
 
-    /** Mac.apk framework-internal: undo the registration above, but only if
+    /** Apk on Mac framework-internal: undo the registration above, but only if
      *  it is still THIS instance -- a newer TextureView may have registered
      *  since (most-recent-wins), and an old one detaching must not clobber
      *  a live registration that superseded it. */
@@ -914,7 +914,7 @@ public class SurfaceTexture {
         return t != null && !t.mAbandoned;
     }
 
-    /** Mac.apk framework-internal native entry point (cocoa_bridge.mm's
+    /** Apk on Mac framework-internal native entry point (cocoa_bridge.mm's
      *  CocoaPresentVideoFrame): one decoded video frame is ready. Routes to
      *  the registered target, if any is still alive. Returns true when a
      *  target consumed the frame -- the caller then skips its OWN fullscreen
@@ -934,7 +934,7 @@ public class SurfaceTexture {
         return true;
     }
 
-    /** Mac.apk framework-internal PRODUCER entry point, decoded-video shape
+    /** Apk on Mac framework-internal PRODUCER entry point, decoded-video shape
      *  (the sole caller is macapkOfferDecodedFrame above). Unlike
      *  macapkQueueFrame (the metadata-only, pull-the-pixels-later shape the
      *  camera producer uses), the pixels are already in hand here, so they
@@ -963,7 +963,7 @@ public class SurfaceTexture {
     /** Connect a pixel producer. False when the stream is abandoned, a camera
      *  session feeds it, or another producer is already connected (AOSP's
      *  single-producer BufferQueue; eglCreateWindowSurface then reports
-     *  EGL_BAD_ALLOC). Mac.apk framework-internal. */
+     *  EGL_BAD_ALLOC). Apk on Mac framework-internal. */
     public boolean macapkConnectProducer(Object producer) {
         if (producer == null) return false;
         synchronized (mLock) {
@@ -976,7 +976,7 @@ public class SurfaceTexture {
 
     /** Disconnect {@code producer} if it is the connected one. The last queued
      *  frame survives, as GLConsumer keeps its current image after the
-     *  producer disconnects. Mac.apk framework-internal. */
+     *  producer disconnects. Apk on Mac framework-internal. */
     public void macapkDisconnectProducer(Object producer) {
         synchronized (mLock) {
             if (mProducer == producer) mProducer = null;
@@ -984,7 +984,7 @@ public class SurfaceTexture {
     }
 
     /** Whether a pixel producer (EGL window surface) is connected.
-     *  Mac.apk framework-internal. */
+     *  Apk on Mac framework-internal. */
     public boolean macapkHasProducer() {
         synchronized (mLock) {
             return mProducer != null;
@@ -992,7 +992,7 @@ public class SurfaceTexture {
     }
 
     /**
-     * Mac.apk framework-internal PRODUCER entry point: queue one frame of
+     * Apk on Mac framework-internal PRODUCER entry point: queue one frame of
      * pixels that are already in hand (the BufferQueue queueBuffer analogue).
      *
      * @param argb ARGB_8888, NON-premultiplied int values (0xAARRGGBB) with
@@ -1097,7 +1097,7 @@ public class SurfaceTexture {
     }
 
     /**
-     * Mac.apk framework-internal SOFTWARE consumer latch -- TextureView's draw
+     * Apk on Mac framework-internal SOFTWARE consumer latch -- TextureView's draw
      * path, standing in for the HWUI render thread that consumes a
      * TextureView's SurfaceTexture on real Android. Latches the newest camera
      * frame into a reusable Bitmap and returns it; with no new frame it
@@ -1201,7 +1201,7 @@ public class SurfaceTexture {
 
     /** Bumped once per freshly latched camera frame (either consumer shape).
      *  Lets TextureView tell "new frame latched" from "same frame redrawn"
-     *  without comparing timestamps. Mac.apk framework-internal. */
+     *  without comparing timestamps. Apk on Mac framework-internal. */
     public int macapkLatchGeneration() {
         return mLatchGeneration;
     }

@@ -1,6 +1,6 @@
 // MacApkLauncherApp.swift
 //
-// Mac.apk launcher - a real Mac app you open by double-clicking.
+// Apk on Mac launcher - a real Mac app you open by double-clicking.
 //
 // What the user does:
 //   1. Build it once with scripts/build_launcher.sh (or open
@@ -110,12 +110,12 @@ struct MacApkLauncherApp: App {
                 // to it -- same process, so install.log showed one pid and a
                 // second window. Preferring "*" here routes the event to the
                 // window that already exists. SwiftUI still creates one when
-                // none exists (Mac.apk running with its window closed), and
+                // none exists (Apk on Mac running with its window closed), and
                 // onOpenURL below hides that one.
                 .handlesExternalEvents(preferring: ["*"], allowing: ["*"])
                 .onAppear { model.windowAppearedAt = Date() }
                 // onOpenURL fires when the user opens an .apk via Finder's
-                // "Open With > Mac.apk" or by dropping it on the Dock icon.
+                // "Open With > Apk on Mac" or by dropping it on the Dock icon.
                 // The URL is a file://, so we extract the path and stash it.
                 .onOpenURL { url in
                     if url.isFileURL && kSupportedApkExtensions.contains(
@@ -142,10 +142,10 @@ struct MacApkLauncherApp: App {
                             model.launchedForOpen = true
                             NSApp.hide(nil)
                         } else if Date().timeIntervalSince(model.windowAppearedAt) < 2 {
-                            // Mac.apk was already running with no window, so
+                            // Apk on Mac was already running with no window, so
                             // SwiftUI made one just to receive this event.
                             // Keep the install silent: hide it rather than
-                            // quit, since the user had Mac.apk running.
+                            // quit, since the user had Apk on Mac running.
                             InstallLog.write("[gui] open event created a window; hiding it")
                             NSApp.hide(nil)
                         }
@@ -158,7 +158,7 @@ struct MacApkLauncherApp: App {
         // for a launcher and just confuse users when they trigger nothing.
         .commands {
             CommandGroup(replacing: .newItem) { }
-            // Mac.apk > Check for Updates..., the standard macOS spot (right
+            // Apk on Mac > Check for Updates..., the standard macOS spot (right
             // under About). Same checker as the glowing button in the panel.
             CommandGroup(after: .appInfo) {
                 Button(updates.menuTitle) {
@@ -166,7 +166,7 @@ struct MacApkLauncherApp: App {
                 }
                 .disabled(updates.isChecking)
             }
-            // Owner, 2026-10-13: no Help menu. Mac.apk ships no help book, so
+            // Owner, 2026-10-13: no Help menu. Apk on Mac ships no help book, so
             // its only item opened a "Help isn't available" dialog. This empties
             // the menu; HelpMenuRemover takes the empty menu off the bar.
             CommandGroup(replacing: .help) { }
@@ -311,7 +311,7 @@ enum LauncherSettings {
     /// Keys are namespaced so they cannot collide with any framework
     /// default that happens to share a short name.
     private static func defaultsKey(_ key: String) -> String {
-        "org.macapk.launcher.\(key)"
+        "io.github.totktonado96.apkonmac.launcher.\(key)"
     }
 
     static let kAndroidRoot = "androidRoot"
@@ -399,7 +399,7 @@ final class LaunchModel: ObservableObject {
     /// its display name + icon (from the parsed manifest / extracted
     /// resources). We hand both to the runtime so macOS shows the app's
     /// own icon in the Dock and the app's display name in the window
-    /// title bar, rather than "Mac.apk" / the package name. Empty for
+    /// title bar, rather than "Apk on Mac" / the package name. Empty for
     /// drag-drop first-launches (no InstalledApp record yet) -- the
     /// runtime falls back to its default Dock + package-name title.
     @Published var appLabel: String = ""
@@ -443,8 +443,8 @@ final class LaunchModel: ObservableObject {
     /// app the user has selected in the grid. Drives the tile highlight
     /// and is the app the Launch button runs. Empty = nothing selected.
     @Published var selectedAppId: String = ""
-    /// When this process started. Used to tell "the user launched Mac.apk"
-    /// from "Finder launched Mac.apk in order to hand it an APK": an open
+    /// When this process started. Used to tell "the user launched Apk on Mac"
+    /// from "Finder launched Apk on Mac in order to hand it an APK": an open
     /// event that arrives within seconds of launch is the latter.
     let launchedAt = Date()
     /// When a launcher window last appeared. An open event that lands right
@@ -457,7 +457,7 @@ final class LaunchModel: ObservableObject {
     var launchedForOpen = false
 
     /// v1.0.464: paths stashed by the App-level onOpenURL handler (Finder
-    /// double-click / "Open With > Mac.apk" / Dock drop) for the
+    /// double-click / "Open With > Apk on Mac" / Dock drop) for the
     /// LauncherView to pick up and INSTALL (not run). LauncherView observes
     /// this via .onChange, drains it, and routes it through the install
     /// funnel, which confirms with the user first.
@@ -475,7 +475,7 @@ final class LaunchModel: ObservableObject {
     /// example -- cocos2d-x sets the orientation at runtime, not in
     /// the manifest).
     @Published var selectedOrientation: LauncherOrientation = .auto
-    /// User-visible path where Mac.apk mirrors Android's filesystem
+    /// User-visible path where Apk on Mac mirrors Android's filesystem
     /// for the running app (`<root>/data/data/<pkg>/foo.png` etc.).
     /// We always pin the trailing component to `android` so picking
     /// "~/Documents" lands files at "~/Documents/android/data/..."
@@ -517,7 +517,7 @@ final class LaunchModel: ObservableObject {
     /// and whether the runtime itself emits its chatty `--verbose`
     /// trace events.
     @Published var fileLogEnabled: Bool = true
-    /// Hidden dev menu. Revealed by tapping the "Mac.apk" title in
+    /// Hidden dev menu. Revealed by tapping the "Apk on Mac" title in
     /// the header five times. Stays revealed for the rest of the
     /// session (clears on relaunch). When true, the controls row
     /// shows the Force ARM32 + Disable Ads toggles for testing.
@@ -711,7 +711,7 @@ final class LaunchModel: ObservableObject {
     ///   3. If we couldn't find the runtime at all, return the
     ///      Library/Caches fallback so the env var is still valid.
     /// v1.0.130: returns the user-visible `~/Documents/android/` root
-    /// (or whatever the user set). All Mac.apk caches & per-app data
+    /// (or whatever the user set). All Apk on Mac caches & per-app data
     /// land under this dir so the user can manage / delete everything
     /// from one Finder location. Mirrors SetupAndroidRootEx's contract:
     /// expand `~`, force the trailing `/android` segment if missing,
@@ -984,7 +984,7 @@ final class LaunchModel: ObservableObject {
     }
 
     /// Pull the ABI list out of the runtime's warning line, which reads
-    /// `[macapk] APK ships NO usable ABI (has: x86, x86_64) -- Mac.apk ...`.
+    /// `[macapk] APK ships NO usable ABI (has: x86, x86_64) -- Apk on Mac ...`.
     /// Returns "" if the parenthetical is not where we expect it, in which
     /// case the banner falls back to its generic wording. Shared with the
     /// install path, which scans the extractor's captured output for the
@@ -1466,7 +1466,7 @@ struct EnvEditor: View {
 
 // MARK: - Google account plumbing (v1.0.1171)
 //
-// Mac.apk's Play Services layer (runtime/java/com/macapk/gms/) needs a
+// Apk on Mac's Play Services layer (runtime/java/com/macapk/gms/) needs a
 // signed-in Google account before it can answer a Play licence check the way
 // a real device does. Until now the only way to add one was a shell command,
 // which is not something a user of a Mac app should ever have to run.
@@ -1637,20 +1637,20 @@ enum GmsCLI {
     /// can debug from a screenshot of this panel.
     private static func diagnostic(_ a: Answer, verb: String) -> String {
         let tail = lines(a.text).last { !$0.trimmingCharacters(in: .whitespaces).isEmpty }
-        let base = "The Mac.apk runtime could not \(verb) (exit \(a.status))."
+        let base = "The Apk on Mac runtime could not \(verb) (exit \(a.status))."
         guard let t = tail, !t.isEmpty else { return base }
         return base + " Last output: " + t
     }
 
     private static func timeoutMessage(_ verb: String) -> String {
-        "The Mac.apk runtime did not \(verb) within \(Int(kLocalTimeout)) seconds."
+        "The Apk on Mac runtime did not \(verb) within \(Int(kLocalTimeout)) seconds."
     }
 
     /// The signed-in accounts. Zero of them is a normal, successful answer.
     static func accounts(runtimePath: String) -> Result<[GmsAccount], GmsError> {
         let a = run(runtimePath, ["accounts"], timeout: kLocalTimeout)
         if let e = a.launchError {
-            return .failure(GmsError(message: "Could not start the Mac.apk runtime: \(e)"))
+            return .failure(GmsError(message: "Could not start the Apk on Mac runtime: \(e)"))
         }
         if a.timedOut { return .failure(GmsError(message: timeoutMessage("answer"))) }
         guard a.status == 0 else {
@@ -1674,7 +1674,7 @@ enum GmsCLI {
         // here would close Google's window out from under them.
         let a = run(runtimePath, ["signin-window"], timeout: nil, onStarted: onStarted)
         if let e = a.launchError {
-            return .failed("Could not start the Mac.apk runtime: \(e)")
+            return .failed("Could not start the Apk on Mac runtime: \(e)")
         }
         if a.status == kCancelled { return .cancelled }
         // ERROR is checked before the exit status because it is the only place
@@ -1705,7 +1705,7 @@ enum GmsCLI {
     static func signOut(email: String, runtimePath: String) -> Result<Void, GmsError> {
         let a = run(runtimePath, ["signout", email], timeout: kLocalTimeout)
         if let e = a.launchError {
-            return .failure(GmsError(message: "Could not start the Mac.apk runtime: \(e)"))
+            return .failure(GmsError(message: "Could not start the Apk on Mac runtime: \(e)"))
         }
         if a.timedOut { return .failure(GmsError(message: timeoutMessage("sign out"))) }
         guard a.status == 0 else {
@@ -1717,7 +1717,7 @@ enum GmsCLI {
     /// `--gms status`, verbatim. Diagnostic only; never parsed.
     static func statusDump(runtimePath: String) -> String {
         let a = run(runtimePath, ["status"], timeout: kLocalTimeout)
-        if let e = a.launchError { return "Could not start the Mac.apk runtime: \(e)" }
+        if let e = a.launchError { return "Could not start the Apk on Mac runtime: \(e)" }
         if a.timedOut { return timeoutMessage("answer") }
         let trimmed = a.text.trimmingCharacters(in: .whitespacesAndNewlines)
         if trimmed.isEmpty { return "The runtime printed nothing (exit \(a.status))." }
@@ -1761,7 +1761,7 @@ final class GmsAccountStore: ObservableObject {
     /// then. Either one being positive is proof; both negative is the nudge case.
     var hasKnownAccount: Bool { !accounts.isEmpty || sentinelSignedIn }
 
-    /// ~/Library/Application Support/Mac.apk/gms/accounts.present -- the same
+    /// ~/Library/Application Support/Apk on Mac/gms/accounts.present -- the same
     /// path GmsStore.accountSentinelFile() writes. Resolved once; the directory
     /// does not move under a running launcher.
     private static let sentinelURL: URL = {
@@ -1771,7 +1771,7 @@ final class GmsAccountStore: ObservableObject {
                                 appropriateFor: nil, create: false))
             ?? URL(fileURLWithPath: NSHomeDirectory())
                 .appendingPathComponent("Library/Application Support")
-        return base.appendingPathComponent("Mac.apk/gms/accounts.present")
+        return base.appendingPathComponent("Apk on Mac/gms/accounts.present")
     }()
 
     init() { refreshSentinel() }
@@ -1796,7 +1796,7 @@ final class GmsAccountStore: ObservableObject {
     /// Same failure the header's "runtime not found" badge reports, worded for
     /// someone who came here to add an account rather than to build anything.
     private static let kNoRuntime =
-        "Mac.apk cannot find its runtime, so it cannot manage accounts. "
+        "Apk on Mac cannot find its runtime, so it cannot manage accounts. "
         + "Install the runtime from the control at the top left of the main "
         + "window, or build it with runtime/scripts/build.sh."
 
@@ -1915,7 +1915,7 @@ struct LauncherView: View {
     // uninstall) share one source of truth. Passed into InstalledAppsView.
     @StateObject private var library = InstalledLibrary()
     @State private var isTargeted: Bool = false
-    // Hidden dev-menu reveal: 5 taps on the "Mac.apk" header title
+    // Hidden dev-menu reveal: 5 taps on the "Apk on Mac" header title
     // within a 2-second window flips model.devMenuRevealed. The
     // window resets the count if the gap between taps is too long,
     // so a casual click doesn't accidentally accumulate over hours.
@@ -1940,7 +1940,7 @@ struct LauncherView: View {
     /// Which app currently opens .apk and friends, as a one-line summary.
     @State private var defaultHandlerSummary: String = "Checking…"
     @State private var settingDefaultHandler: Bool = false
-    /// True when Mac.apk opens every supported extension; drives the green
+    /// True when Apk on Mac opens every supported extension; drives the green
     /// "Default" check that replaces the Make Default button.
     @State private var macApkIsDefaultHandler: Bool = false
     /// The visible result of the LAST Make Default click, shown on the row
@@ -2049,7 +2049,7 @@ struct LauncherView: View {
         .onChange(of: model.pendingInstallPaths) { _, _ in
             drainPendingInstalls()
         }
-        // A window SwiftUI creates to deliver an open event (Mac.apk running
+        // A window SwiftUI creates to deliver an open event (Apk on Mac running
         // with its window closed) gets the URL appended before this view's
         // onChange is watching, so that first value is never a "change".
         // Drain on appear too, or that install silently never starts.
@@ -2096,7 +2096,7 @@ struct LauncherView: View {
         ZStack {
             VStack(alignment: .center, spacing: 4) {
                 // Word only, no icon (owner, 2026-10-13). The icon+word group
-                // used to be what was centred, which put "Mac.apk" half an
+                // used to be what was centred, which put "Apk on Mac" half an
                 // icon right of the tagline and of a centred sheet.
                 Text("Apk on Mac")
                     .font(.system(size: 24, weight: .semibold, design: .rounded))
@@ -2267,7 +2267,7 @@ struct LauncherView: View {
                     .disabled(runtimeBusy || !runtimeState.sourceAvailable)
                     .help(runtimeState.sourceAvailable
                           ? "Stage the shared runtime into \(RuntimeInstall.stagedRoot.path). Installed apps are not touched."
-                          : "Mac.apk.app carries no runtime payload to install from. Rebuild with runtime/scripts/build.sh.")
+                          : "Apk on Mac.app carries no runtime payload to install from. Rebuild with runtime/scripts/build.sh.")
                 Button("Uninstall…") { confirmUninstallRuntime() }
                     .disabled(runtimeBusy || !runtimeState.installed)
                     .help("Remove the shared runtime. Your Android apps and their data stay installed, but cannot launch until you reinstall it.")
@@ -2292,7 +2292,7 @@ struct LauncherView: View {
     /// width. Glows amber when the launch check found a newer GitHub release
     /// than the one baked into this build. Amber rather than red: red already
     /// means "runtime missing" in this corner, and a waiting update is not a
-    /// failure. The same check lives in the menu bar (Mac.apk > Check for
+    /// failure. The same check lives in the menu bar (Apk on Mac > Check for
     /// Updates...).
     private var updateButton: some View {
         let glowing = updates.updateAvailable
@@ -2333,13 +2333,13 @@ struct LauncherView: View {
     private var updateHelpText: String {
         switch updates.state {
         case .available(let tag, _):
-            return "Mac.apk \(tag) is available (you have v\(updates.displayVersion)). Click to go to the releases page."
+            return "Apk on Mac \(tag) is available (you have v\(updates.displayVersion)). Click to go to the releases page."
         case .checking:
-            return "Checking GitHub for a newer Mac.apk release…"
+            return "Checking GitHub for a newer Apk on Mac release…"
         default:
             return updates.bakedRelease == nil
                 ? "Development build: update checks only run on published releases."
-                : "Check GitHub for a newer Mac.apk release."
+                : "Check GitHub for a newer Apk on Mac release."
         }
     }
 
@@ -2366,7 +2366,7 @@ struct LauncherView: View {
         s += (runtimeState.stagedBuildId ?? "no build-id.txt") + "\n"
         s += "launcher build \(BuildInfo.id)"
         if runtimeState.isStale {
-            s += "\n\nThis is NOT what Mac.apk.app currently ships"
+            s += "\n\nThis is NOT what Apk on Mac.app currently ships"
             if !runtimeState.missingPayloadDirs.isEmpty {
                 s += " (missing " + runtimeState.missingPayloadDirs.joined(separator: ", ") + ")"
             }
@@ -2394,7 +2394,7 @@ struct LauncherView: View {
     private func refreshRuntimeState() {
         runtimeState = RuntimeInstall.state()
         // Once per control-panel session: bring every installed app's stub
-        // up to this Mac.apk's template (v1.0.1592, StubRefresh). A stub from
+        // up to this Apk on Mac's template (v1.0.1592, StubRefresh). A stub from
         // before v1.0.1592 cannot refresh itself on launch, and an app the
         // user never launches would otherwise keep its old stub forever. Off
         // the main thread: it hashes one ~700 KB file per installed app.
@@ -2407,7 +2407,7 @@ struct LauncherView: View {
 
     private func installRuntime() {
         runtimeBusy = true
-        model.status = "Installing the Mac.apk runtime…"
+        model.status = "Installing the Apk on Mac runtime…"
         model.statusKind = .info
         // Off the main thread: staging is ~15 files and an APFS clone, fast,
         // but it is still file IO and a beachballed control panel during an
@@ -2464,7 +2464,7 @@ struct LauncherView: View {
         let sizeStr = ByteCountFormatter.string(fromByteCount: appBytes, countStyle: .file)
 
         let alert = NSAlert()
-        alert.messageText = "Uninstall the Mac.apk runtime?"
+        alert.messageText = "Uninstall the Apk on Mac runtime?"
         // The reassurance IS the point of separating the two actions. A bare
         // "your apps will be inoperable" reads like they are being broken
         // permanently, which is exactly what this design avoids.
@@ -2673,7 +2673,7 @@ struct LauncherView: View {
             Divider()
             Form {
                 // The Display section (Screen size + Orientation) moved to
-                // Advanced (dev menu) 2026-10-04, Mac.apk-Releases issue 1
+                // Advanced (dev menu) 2026-10-04, Apk on Mac-Releases issue 1
                 // ("the Screen size setting fails to save"). Neither picker
                 // ever reached an INSTALLED app: AppStubMain.swift launches the
                 // runtime with only --apk and --android-root, so both applied
@@ -2686,7 +2686,7 @@ struct LauncherView: View {
                 Section("File types") {
                     HStack(alignment: .firstTextBaseline) {
                         VStack(alignment: .leading, spacing: 3) {
-                            Text("Open Android app files with Mac.apk")
+                            Text("Open Android app files with Apk on Mac")
                             Text(defaultHandlerSummary)
                                 .font(.caption)
                                 .foregroundColor(.secondary)
@@ -2702,7 +2702,7 @@ struct LauncherView: View {
                         } else if macApkIsDefaultHandler {
                             Label("Default", systemImage: "checkmark.circle.fill")
                                 .foregroundColor(.green)
-                                .help("Mac.apk opens .apk, .apkm, .xapk, .apks and .apkx files.")
+                                .help("Apk on Mac opens .apk, .apkm, .xapk, .apks and .apkx files.")
                         } else {
                             Button("Make Default") { makeDefaultHandler() }
                         }
@@ -2862,13 +2862,13 @@ struct LauncherView: View {
     // this is completion-based and why the summary is re-read afterwards
     // rather than assumed.
 
-    // ⚠ WHICH TYPES (fixed 2026-10-04, Mac.apk-Releases issue 1). This used to
+    // ⚠ WHICH TYPES (fixed 2026-10-04, Apk on Mac-Releases issue 1). This used to
     // set the default for our OWN five UTIs only. On a Mac where another app
     // declares a type for the .apk extension, LaunchServices can make THAT
     // type canonical for the extension (measured: org.polyrun.apk on the dev
     // machine), so a double-clicked .apk carries the foreign UTI and our
-    // default for org.macapk.apk is never consulted. Reported on macOS 27: the
-    // files kept opening in Keka and Mac.apk was missing from Open With, which
+    // default for io.github.totktonado96.apkonmac.apk is never consulted. Reported on macOS 27: the
+    // files kept opening in Keka and Apk on Mac was missing from Open With, which
     // is only possible when the file's type is not one we declare. The button reported success and nothing changed, while Get
     // Info > "Change All..." (which sets the default for the file's REAL type)
     // worked. So the list below adds every type each extension resolves to on
@@ -2890,8 +2890,8 @@ struct LauncherView: View {
             seen.insert(t.identifier)
             out.append(t)
         }
-        for id in ["org.macapk.apk", "org.macapk.apkm", "org.macapk.xapk",
-                   "org.macapk.apks", "org.macapk.apkx"] {
+        for id in ["io.github.totktonado96.apkonmac.apk", "io.github.totktonado96.apkonmac.apkm", "io.github.totktonado96.apkonmac.xapk",
+                   "io.github.totktonado96.apkonmac.apks", "io.github.totktonado96.apkonmac.apkx"] {
             add(UTType(id))
         }
         for ext in kSupportedApkExtensions.sorted() {
@@ -2905,13 +2905,13 @@ struct LauncherView: View {
     }
 
     /// Re-reads who opens each extension, updates the summary line and the
-    /// Default check, and returns how many extensions Mac.apk opens.
+    /// Default check, and returns how many extensions Apk on Mac opens.
     @discardableResult
     private func refreshDefaultHandlerSummary() -> (mine: Int, total: Int) {
         // Per extension: the type a file with that extension is given on this
         // Mac (the preferred type for the tag), and who opens it. That is the
-        // question a Finder double-click asks, unlike "who opens org.macapk.apk",
-        // which can be answered "Mac.apk" while every .apk opens in Keka.
+        // question a Finder double-click asks, unlike "who opens io.github.totktonado96.apkonmac.apk",
+        // which can be answered "Apk on Mac" while every .apk opens in Keka.
         let exts = kSupportedApkExtensions.sorted()
         let me = Bundle.main.bundleURL.resolvingSymlinksInPath()
         var mine = 0
@@ -2927,14 +2927,14 @@ struct LauncherView: View {
         }
         macApkIsDefaultHandler = (mine == exts.count)
         if mine == exts.count {
-            defaultHandlerSummary = "Mac.apk opens all \(exts.count) file types."
+            defaultHandlerSummary = "Apk on Mac opens all \(exts.count) file types."
         } else if mine == 0 {
             let who = others.sorted().joined(separator: ", ")
             defaultHandlerSummary = who.isEmpty
                 ? "No app currently opens these files."
                 : "Currently opened by \(who)."
         } else {
-            defaultHandlerSummary = "Mac.apk opens \(mine) of \(exts.count) file types."
+            defaultHandlerSummary = "Apk on Mac opens \(mine) of \(exts.count) file types."
         }
         return (mine, exts.count)
     }
@@ -2953,7 +2953,7 @@ struct LauncherView: View {
         }
         let types = handledContentTypes
         guard !types.isEmpty else {
-            defaultHandlerFeedback = "macOS has not registered Mac.apk's file types yet."
+            defaultHandlerFeedback = "macOS has not registered Apk on Mac's file types yet."
             defaultHandlerFeedbackOK = false
             return
         }
@@ -2975,7 +2975,7 @@ struct LauncherView: View {
         // The verdict is what LaunchServices reports AFTERWARDS, per
         // extension, not whether the calls returned an error. A clean
         // completion is not proof: that is exactly how the v1.0.1702 button
-        // "succeeded" while every .apk kept opening in Keka (Mac.apk-Releases
+        // "succeeded" while every .apk kept opening in Keka (Apk on Mac-Releases
         // issue 1), and a declined consent prompt would read the same way.
         group.notify(queue: .main) {
             settingDefaultHandler = false
@@ -2987,18 +2987,18 @@ struct LauncherView: View {
             }
             if r.mine == r.total {
                 defaultHandlerFeedback = "Done. Double-clicking an Android app file "
-                    + "in Finder now opens Mac.apk."
+                    + "in Finder now opens Apk on Mac."
                 defaultHandlerFeedbackOK = true
-                model.status = "Mac.apk now opens Android app files."
+                model.status = "Apk on Mac now opens Android app files."
                 model.statusKind = .success
             } else {
                 let why = failed.first.map { " (\($0))" } ?? ""
-                defaultHandlerFeedback = "macOS did not apply the change: Mac.apk opens "
+                defaultHandlerFeedback = "macOS did not apply the change: Apk on Mac opens "
                     + "\(r.mine) of \(r.total) file types\(why). If macOS asked, choose "
-                    + "Mac.apk. Otherwise select a .apk in Finder, press Cmd+I and use "
+                    + "Apk on Mac. Otherwise select a .apk in Finder, press Cmd+I and use "
                     + "Open with > Change All."
                 defaultHandlerFeedbackOK = false
-                model.status = "Couldn't make Mac.apk the default for Android app files."
+                model.status = "Couldn't make Apk on Mac the default for Android app files."
                 model.statusKind = .error
             }
         }
@@ -3074,11 +3074,11 @@ struct LauncherView: View {
                     .foregroundColor(.orange)
                     .font(.system(size: 14))
                 VStack(alignment: .leading, spacing: 2) {
-                    Text("This app's native code can't run on Mac.apk")
+                    Text("This app's native code can't run on Apk on Mac")
                         .font(.system(size: 12, weight: .semibold))
                     Text(abis.isEmpty
                          ? "The APK ships no arm64-v8a, armeabi-v7a, or armeabi library. Its native code is replaced by a stub, so the app may start but will misbehave or crash."
-                         : "The APK only ships \(abis). Mac.apk runs arm64-v8a, armeabi-v7a, and armeabi, so this app's native code is replaced by a stub: it may start but will misbehave or crash.")
+                         : "The APK only ships \(abis). Apk on Mac runs arm64-v8a, armeabi-v7a, and armeabi, so this app's native code is replaced by a stub: it may start but will misbehave or crash.")
                         .font(.system(size: 11))
                         .foregroundColor(.secondary)
                         .fixedSize(horizontal: false, vertical: true)
@@ -3296,7 +3296,7 @@ struct LauncherView: View {
             // calls on every launch (AppStubMain.swift), so it is not a new
             // mechanism -- the first-install path was simply the one place that
             // hard-errored instead of using it. Staging is per-user
-            // (~/Library/Application Support/Mac.apk/runtime), needs no root,
+            // (~/Library/Application Support/Apk on Mac/runtime), needs no root,
             // and is an APFS clone of ~15 files, so doing it inline is cheap.
             //
             // It still refuses to undo a DELIBERATE uninstall: ensureStaged
@@ -3304,10 +3304,10 @@ struct LauncherView: View {
             // fall through to the original message in that case. So "I removed
             // it on purpose" and "it was never staged" stay distinguishable,
             // which is the whole reason that marker exists.
-            model.status = "Preparing the Mac.apk runtime..."
+            model.status = "Preparing the Apk on Mac runtime..."
             model.statusKind = .info
             if RuntimeInstall.ensureStaged(log: { model.appendLog($0) }) == nil {
-                model.status = "The Mac.apk runtime is not installed, so apps cannot be "
+                model.status = "The Apk on Mac runtime is not installed, so apps cannot be "
                     + "installed or launched. Choose Runtime: Install (top left) first."
                 model.statusKind = .error
                 return
@@ -3318,7 +3318,7 @@ struct LauncherView: View {
         }
         guard !files.isEmpty else {
             model.status = "Nothing installable in that selection. "
-                + "Mac.apk takes .apk, .apkm, .xapk, .apks, and .apkx."
+                + "Apk on Mac takes .apk, .apkm, .xapk, .apks, and .apkx."
             model.statusKind = .error
             return
         }
@@ -3427,8 +3427,8 @@ struct LauncherView: View {
                 alert.informativeText = """
                 \(peek.detailLine)
 
-                Mac.apk will unpack this app into your app library so you can \
-                launch it from here. It runs inside the Mac.apk Android runtime \
+                Apk on Mac will unpack this app into your app library so you can \
+                launch it from here. It runs inside the Apk on Mac Android runtime \
                 and does not modify system files.
                 """
             }
@@ -3644,7 +3644,7 @@ struct LauncherView: View {
         let alert = NSAlert()
         alert.messageText = "Reset \(app.label)? This deletes its saved data."
         alert.informativeText = """
-        Mac.apk keeps an app's extracted assets, translated code AND its \
+        Apk on Mac keeps an app's extracted assets, translated code AND its \
         save files in one folder, so a reset cannot spare the saves. \
         Everything \(app.label) has stored (\(ByteCountFormatter.string(
             fromByteCount: size, countStyle: .file))) is deleted, then the app \
@@ -3695,8 +3695,8 @@ struct LauncherView: View {
     /// dumps data/data/<pkg>/ into the parent dir directly.
     private func pickAndroidRoot() {
         let panel = NSOpenPanel()
-        panel.title = "Choose where Mac.apk keeps the android filesystem mirror"
-        panel.message = "Pick any folder. Mac.apk will create (or reuse) a subfolder called 'android' inside it."
+        panel.title = "Choose where Apk on Mac keeps the android filesystem mirror"
+        panel.message = "Pick any folder. Apk on Mac will create (or reuse) a subfolder called 'android' inside it."
         panel.prompt = "Choose"
         panel.canChooseDirectories = true
         panel.canChooseFiles = false
@@ -4034,7 +4034,7 @@ struct LauncherView: View {
         // Installed-Apps panel makes concurrent launches easy to trigger.
         // "/" is the only byte illegal in a POSIX filename, so fold it out of
         // both the directory name and the link name.
-        let safeLabel = (label.isEmpty ? "Mac.apk App" : label)
+        let safeLabel = (label.isEmpty ? "Apk on Mac App" : label)
             .replacingOccurrences(of: "/", with: "-")
         let wrapper = Paths.supportDir
             .appendingPathComponent("run-wrapper", isDirectory: true)
@@ -4056,7 +4056,7 @@ struct LauncherView: View {
             "CFBundleName": displayLabel,
             "CFBundleDisplayName": displayLabel,
             "CFBundleExecutable": linkName,
-            "CFBundleIdentifier": "org.macapk.run",
+            "CFBundleIdentifier": "io.github.totktonado96.apkonmac.run",
             "CFBundlePackageType": "APPL",
         ]
         do {
@@ -4177,16 +4177,16 @@ struct LauncherView: View {
         // Dock icon + window title policy.
         //
         // History: v1.0.128 hid the runtime's own Dock icon so the user
-        // saw only ONE entry ("Mac.apk"); v1.0.339/340 flipped that and
+        // saw only ONE entry ("Apk on Mac"); v1.0.339/340 flipped that and
         // had the launcher CEDE its Dock (.accessory) so the running app
         // took over the single slot.
         //
         // v1.0.342: the launcher and the runtime each keep their OWN Dock
         // icon -- they no longer share one slot. The launcher stays
-        // .regular (its AppIcon.icns Mac.apk tile is always in the Dock)
+        // .regular (its AppIcon.icns Apk on Mac tile is always in the Dock)
         // and the runtime shows its own separate entry: the app's own icon
         // (`MACAPK_APP_ICON`) when the drawer record has one, otherwise the
-        // bundled Mac.apk default (`MACAPK_DEFAULT_ICON`), so a launched
+        // bundled Apk on Mac default (`MACAPK_DEFAULT_ICON`), so a launched
         // app is never blank/generic. We do NOT touch the launcher's
         // activation policy here (and the terminationHandler no longer
         // restores it), so there is nothing that swaps the two icons in
@@ -4196,7 +4196,7 @@ struct LauncherView: View {
         if haveAppIcon {
             env["MACAPK_APP_ICON"] = model.appIconPath
         }
-        // The Mac.apk default icon ships in the app bundle next to the
+        // The Apk on Mac default icon ships in the app bundle next to the
         // runtime (Resources/macapk_default_icon.png). Hand its path to the
         // runtime as the fallback for apps with no icon of their own.
         let defaultIconPath = Bundle.main.path(forResource: "macapk_default_icon",
@@ -4251,7 +4251,7 @@ struct LauncherView: View {
         // strictly CHEAPER than what it replaces, on the only lines that
         // mattered for speed.
         //
-        // Level 4 = INFO is AOSP's OWN default floor, not a Mac.apk invention:
+        // Level 4 = INFO is AOSP's OWN default floor, not a Apk on Mac invention:
         // android_util_Log.cpp calls __android_log_is_loggable(level, tag,
         // ANDROID_LOG_INFO), i.e. INFO is the default minimum for every tag
         // unless a developer lowers it with log.tag.<TAG>. runtime/java/android/
@@ -4289,7 +4289,7 @@ struct LauncherView: View {
 
         // Buffer queue serializes access to the partial-line buffers from
         // the readability handler threads.
-        let bufferQueue = DispatchQueue(label: "org.macapk.launcher.log")
+        let bufferQueue = DispatchQueue(label: "io.github.totktonado96.apkonmac.launcher.log")
         var stderrBuffer = Data()
         var stdoutBuffer = Data()
         let drain: (inout Data, Data) -> Void = { buffer, newData in
@@ -4611,7 +4611,7 @@ struct LauncherView: View {
 // MARK: - Installed Apps library (v1.0.464)
 //
 // "Install" = register an APK in a persistent JSON library at
-// ~/Library/Application Support/Mac.apk/installed_apps.json. Dropping,
+// ~/Library/Application Support/Apk on Mac/installed_apps.json. Dropping,
 // picking, Open-With'ing, or "Install from folder"-ing an APK runs the
 // runtime in --extract-only mode (unpack manifest + icon + assets, no
 // JVM, no window) and records {package, label, version, apkPath,
@@ -4647,10 +4647,10 @@ extension InstalledApp {
 
     /// The APK this row should launch, repair and reinstall from: the bundle's
     /// own `Contents/Resources/base.<ext>` first (the stub's contract, and the
-    /// one copy Mac.apk keeps -- there is no retained copy any more), then the
+    /// one copy Apk on Mac keeps -- there is no retained copy any more), then the
     /// recorded path, then the original the user installed from. Rows written
     /// before the retention removal point `apkPath` into the deleted
-    /// Application Support/Mac.apk/apks/, so without this preference every
+    /// Application Support/Apk on Mac/apks/, so without this preference every
     /// such row would badge "APK missing" while its app launches fine.
     var resolvedApkPath: String? {
         ApkRetention.apkCandidates(for: asRecord())
@@ -4970,7 +4970,7 @@ final class InstalledLibrary: ObservableObject {
                                 appropriateFor: nil, create: true))
             ?? URL(fileURLWithPath: NSHomeDirectory())
                 .appendingPathComponent("Library/Application Support")
-        let dir = base.appendingPathComponent("Mac.apk", isDirectory: true)
+        let dir = base.appendingPathComponent("Apk on Mac", isDirectory: true)
         try? fm.createDirectory(at: dir, withIntermediateDirectories: true)
         return dir.appendingPathComponent("installed_apps.json")
     }()
@@ -5105,7 +5105,7 @@ final class InstalledLibrary: ObservableObject {
     /// with its retained APK.
     var removedApps: [InstalledApp] { apps.filter { $0.state == AppState.removed } }
 
-    /// Set once the legacy Application Support/Mac.apk/apks/ purge has run in
+    /// Set once the legacy Application Support/Apk on Mac/apks/ purge has run in
     /// this process; see reconcile().
     private static var purgedLegacyApks = false
     private static var refreshedPurposeStrings = false
@@ -5130,7 +5130,7 @@ final class InstalledLibrary: ObservableObject {
     /// purge at the top.)
     func reconcile() {
         let fm = FileManager.default
-        // One-time per process: empty the legacy Application Support/Mac.apk/
+        // One-time per process: empty the legacy Application Support/Apk on Mac/
         // apks/ directory. Nothing writes it any more (owner: no APK copies,
         // ever) and every row resolves its APK through the bundle first, so
         // the copies there are dead weight -- measured 3.9 GB on this machine
@@ -5551,7 +5551,7 @@ final class InstalledLibrary: ObservableObject {
                     }
                     // THE BUNDLE IS THE APP'S ONLY HOME (owner, 2026-08-11:
                     // "I want all the app data to be contained to the .app
-                    // bundle ... the only thing shared would be the Mac.apk
+                    // bundle ... the only thing shared would be the Apk on Mac
                     // runtime"). So the bundle is created BEFORE extraction
                     // and the extractor is pointed INSIDE it -- rather than
                     // extracting to a shared root and moving afterwards,
@@ -6681,7 +6681,7 @@ struct InstalledAppsView: View {
         let panel = NSOpenPanel()
         panel.title = "Choose APK folder"
         panel.message = "Pick a folder of .apk / .apkm / .xapk / .apks files. " +
-            "Mac.apk installs (extract + register) each one. " +
+            "Apk on Mac installs (extract + register) each one. " +
             "Already-installed apps are refreshed."
         panel.canChooseDirectories = true
         panel.canChooseFiles = false
@@ -6729,7 +6729,7 @@ struct InstalledAppsView: View {
 // this view only reads its published state.
 //
 // The panel is deliberately narrow in scope. It answers three questions and no
-// others: is an account signed in, how do I add one, and what does Mac.apk do
+// others: is an account signed in, how do I add one, and what does Apk on Mac do
 // with it. Account state itself lives in the runtime; the launcher persists
 // nothing about it, so there is no LauncherSettings key here.
 struct AccountsSheet: View {
@@ -6795,7 +6795,7 @@ struct AccountsSheet: View {
             Button("Cancel", role: .cancel) { }
         } message: {
             Text(signOutTarget.map {
-                "Mac.apk deletes \($0.email)'s saved token from this Mac. Apps "
+                "Apk on Mac deletes \($0.email)'s saved token from this Mac. Apps "
                 + "that check a Google Play licence will not find an account "
                 + "until you sign in again."
             } ?? "")
@@ -6809,7 +6809,7 @@ struct AccountsSheet: View {
         if model.runtimePath() == nil {
             // A missing runtime is why the buttons would do nothing, so say so
             // instead of offering a Sign in button that silently fails.
-            Label("Mac.apk cannot find its runtime, so it cannot manage "
+            Label("Apk on Mac cannot find its runtime, so it cannot manage "
                 + "accounts. Install the runtime from the control at the top "
                 + "left of the main window, or build it with "
                 + "runtime/scripts/build.sh.",
@@ -6845,7 +6845,7 @@ struct AccountsSheet: View {
                 // the shape of a thing users are right to refuse.
                 Text("Apps you bought on Google Play verify their licence with "
                    + "Google before they run, exactly as they do on an Android "
-                   + "device. Signing in lets Mac.apk answer that check with "
+                   + "device. Signing in lets Apk on Mac answer that check with "
                    + "your own account. Apps that do not use Play licensing "
                    + "run without one.")
                     .font(.caption)
@@ -6921,7 +6921,7 @@ struct AccountsSheet: View {
                     .font(.callout)
                     .fixedSize(horizontal: false, vertical: true)
             }
-            Text("That window is Google's own sign-in page. Mac.apk does not "
+            Text("That window is Google's own sign-in page. Apk on Mac does not "
                + "read what you type into it.")
                 .font(.caption)
                 .foregroundStyle(.secondary)
@@ -6967,8 +6967,8 @@ struct AccountsSheet: View {
     // it. Nothing here promises anything the runtime does not actually do.
     private var privacySection: some View {
         VStack(alignment: .leading, spacing: 6) {
-            privacyLine("You sign in on Google's own page, in a window Mac.apk "
-                      + "does not read. Mac.apk never sees your password.")
+            privacyLine("You sign in on Google's own page, in a window Apk on Mac "
+                      + "does not read. Apk on Mac never sees your password.")
             privacyLine("The token Google returns is stored on this Mac only, "
                       + "in a file that only your macOS account can read.")
             privacyLine("Signing out deletes that token from this Mac.")

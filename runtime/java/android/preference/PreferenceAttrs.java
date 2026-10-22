@@ -6,9 +6,9 @@
 //
 //   AOSP's Preference constructors read their attributes through
 //   context.obtainStyledAttributes(attrs, com.android.internal.R.styleable.X,
-//   ...), keyed by the FRAMEWORK's compiled attribute ids. Mac.apk has no
+//   ...), keyed by the FRAMEWORK's compiled attribute ids. Apk on Mac has no
 //   com.android.internal.R, so there is no id array to hand that call; and
-//   Mac.apk's TypedArray resolves an attribute by NAME anyway (see
+//   Apk on Mac's TypedArray resolves an attribute by NAME anyway (see
 //   Resources.Theme.obtainStyledAttributes), so the id round-trip buys nothing
 //   here even where it would resolve.
 //

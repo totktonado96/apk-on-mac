@@ -5,13 +5,13 @@ import com.google.android.gms.tasks.Tasks;
 
 // FirebaseCrashlytics no-op shadow. Real Crashlytics intercepts the
 // process's default UncaughtExceptionHandler and uploads crash data
-// to Firebase servers. Both halves are out of bounds for Mac.apk:
+// to Firebase servers. Both halves are out of bounds for Apk on Mac:
 // we don't want to fight HotSpot's exception machinery, and we
 // absolutely don't want to call Google's servers. Every call is a
 // silent drop.
 //
 // For internal debugging we could route .log(...) / .recordException
-// to Mac.apk's NativeLog; left disabled by default to keep boot
+// to Apk on Mac's NativeLog; left disabled by default to keep boot
 // output readable.
 public final class FirebaseCrashlytics {
     private static final FirebaseCrashlytics INSTANCE = new FirebaseCrashlytics();

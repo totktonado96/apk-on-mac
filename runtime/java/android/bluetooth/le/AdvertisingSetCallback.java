@@ -1,7 +1,7 @@
 // android.bluetooth.le.AdvertisingSetCallback -- the result callback for the
 // API-26 "advertising set" API (BluetoothLeAdvertiser.startAdvertisingSet).
 //
-// Mirrored exactly. As with AdvertiseCallback, Mac.apk reports
+// Mirrored exactly. As with AdvertiseCallback, Apk on Mac reports
 // ADVERTISE_FAILED_FEATURE_UNSUPPORTED rather than staying silent -- see
 // BluetoothLeAdvertiser.
 //

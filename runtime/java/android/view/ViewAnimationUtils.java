@@ -5,7 +5,7 @@
 //
 // AOSP returns a RevealAnimator (a ValueAnimator subclass) that animates the
 // reveal radius from startRadius to endRadius and clips the view to that circle
-// each frame via the hardware renderer. Mac.apk's view draw path does not do
+// each frame via the hardware renderer. Apk on Mac's view draw path does not do
 // hardware circular clipping, so we return a real ValueAnimator over the radius
 // range that invalidates the target each frame: the Animator's timing,
 // getAnimatedValue() (the current radius), and start/end lifecycle are all

@@ -3,7 +3,7 @@
 // Source: frameworks/base
 // core/java/android/view/translation/TranslationResponse.java (android16-release).
 //
-// Mac.apk ships no on-device translator, so no response is ever produced by the
+// Apk on Mac ships no on-device translator, so no response is ever produced by the
 // framework -- but an app (or a test) can build one and read it back.
 package android.view.translation;
 

@@ -4,7 +4,7 @@ import android.util.Pair;
 
 /**
  * Low-level container parser (API 30), used by ExoPlayer/Media3 as an optional
- * platform extractor. Mac.apk provides no platform parser, so create() returns
+ * platform extractor. Apk on Mac provides no platform parser, so create() returns
  * an instance whose advance() reports "no more data" (false) -- which is the
  * documented signal for the caller to fall back to its OWN extractors, which
  * ExoPlayer/Media3 always ship. So media playback proceeds on the app's path

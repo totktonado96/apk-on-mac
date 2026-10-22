@@ -2,7 +2,7 @@
 # gen_third_party_notices.sh <out-file>
 #
 # Assemble THIRD_PARTY_NOTICES.txt: the licence and attribution of every
-# third-party component that SHIPS inside Mac.apk.app -- the redistribution
+# third-party component that SHIPS inside Apk on Mac.app -- the redistribution
 # obligation the DMG carries. Each component's text comes from its OWN source
 # tree where that is a plain file (ANGLE, MoltenVK, Vulkan headers, Capstone,
 # libpng and Brotli from the Homebrew kegs), from pinned upstream license/notice
@@ -13,7 +13,7 @@
 #
 # Deterministic and self-contained: `build_launcher.sh` runs it into
 # `Contents/Resources/THIRD_PARTY_NOTICES.txt`, and the same file is published
-# in the Mac.apk-Releases repo. Re-run after adding or dropping a bundled
+# in the apk-on-mac releases repo. Re-run after adding or dropping a bundled
 # component; the component list below is the single place to edit.
 #
 # WHY a script and not a static file: the licence text must be the ACTUAL text
@@ -42,15 +42,15 @@ LIC="$ROOT/thirdparty/licenses"   # canonical texts a keg does not carry
 tmp="$(mktemp)"; trap 'rm -f "$tmp"' EXIT
 {
   cat <<'HDR'
-Mac.apk -- Third-party notices
+Apk on Mac -- Third-party notices
 ==============================
 
-Mac.apk is distributed as a signed application bundle that includes the
+Apk on Mac is distributed as a signed application bundle that includes the
 third-party components listed below. Each is used under the terms of its own
-licence, reproduced (or pointed to) here to satisfy those terms. Mac.apk's own
+licence, reproduced (or pointed to) here to satisfy those terms. Apk on Mac's own
 code is licensed separately; see LICENSE and EULA.md.
 
-The Android application you choose to run through Mac.apk is not part of Mac.apk
+The Android application you choose to run through Apk on Mac is not part of Apk on Mac
 and is not covered by these notices; you are responsible for your rights to it.
 
 HDR
@@ -75,7 +75,7 @@ HDR
 "The complete OpenJDK licence and per-module notices ship inside this bundle at
 Contents/Resources/jre/legal/ (LICENSE and ADDITIONAL_LICENSE_INFO per module).
 OpenJDK is used under GPLv2 with the Classpath Exception, which permits the
-in-process embedding Mac.apk relies on. Source: https://openjdk.org/ ."
+in-process embedding Apk on Mac relies on. Source: https://openjdk.org/ ."
 
   # ANGLE -- GLES -> Metal.
   emit "ANGLE (libEGL.dylib, libGLESv2.dylib) -- OpenGL ES over Metal" \
@@ -139,7 +139,7 @@ https://github.com/KhronosGroup/Vulkan-Headers ."
   emit "stb_vorbis (compiled into macapk-runtime) -- Ogg Vorbis decode" \
        "MIT OR Unlicense" "" \
 "Copyright (c) 2017 Sean Barrett. Available under the MIT licence or as public
-domain (Unlicense), at the user's choice; Mac.apk uses it under the MIT licence:
+domain (Unlicense), at the user's choice; Apk on Mac uses it under the MIT licence:
 
 $(awk '/^ALTERNATIVE A - MIT License/{f=1;next} /^-{20,}/{if(f)exit} f' "$ROOT/runtime/thirdparty/stb_vorbis.c")
 
@@ -152,7 +152,7 @@ Source: https://github.com/nothings/stb ."
        "$(first "$LIC/FreeType-FTL.txt")" \
 "Portions of this software are copyright (c) The FreeType Project
 (www.freetype.org). All rights reserved. FreeType is dual-licensed (FTL or
-GPLv2); Mac.apk uses it under the FreeType License (FTL), reproduced below.
+GPLv2); Apk on Mac uses it under the FreeType License (FTL), reproduced below.
 Source: https://freetype.org/ ."
   emit "Brotli $(kver brotli) (jre/lib/libbrotlidec.1.dylib, libbrotlicommon.1.dylib) -- decoder used by FreeType" \
        "MIT" \
@@ -168,7 +168,7 @@ Source: https://freetype.org/ ."
   emit "Graphite2 $(kver graphite2) (jre/lib/libgraphite2.3.dylib) -- font shaping, used by HarfBuzz" \
        "MIT OR MPL-2.0 OR LGPL-2.1-or-later OR GPL-2.0-or-later" \
        "$(first "$(keg graphite2)/LICENSE" "$(keg graphite2)/COPYING")" \
-"Graphite2 is offered under several licences; Mac.apk uses it under the MIT
+"Graphite2 is offered under several licences; Apk on Mac uses it under the MIT
 licence. Source: https://github.com/silnrsi/graphite ."
 
   emit "GLib $(kver glib) (jre/lib/libglib-2.0.0.dylib) -- utility library, used by HarfBuzz" \
@@ -179,8 +179,8 @@ licence. Source: https://github.com/silnrsi/graphite ."
 linked library (Contents/Resources/jre/lib/libglib-2.0.0.dylib), unmodified
 from the Homebrew build of the version named above apart from Mach-O load-path
 metadata. The complete corresponding source (upstream tarball, Homebrew's patch,
-the build recipe) is attached to the same GitHub release as the Mac.apk download
-(https://github.com/kksimp/Mac.apk-Releases/releases), with
+the build recipe) is attached to the same GitHub release as the Apk on Mac download
+(https://github.com/totktonado96/apk-on-mac/releases), with
 LGPL-SOURCE-README.txt explaining how to use a modified build. Upstream:
 https://download.gnome.org/sources/glib/ . The LGPL-2.1 text follows."
 
@@ -191,8 +191,8 @@ https://download.gnome.org/sources/glib/ . The LGPL-2.1 text follows."
 in the GLib entry above). It ships as a separate, dynamically linked library,
 unmodified from the Homebrew build of the version named above apart from Mach-O
 load-path metadata. The complete corresponding source (upstream tarball and the
-build recipe) is attached to the same GitHub release as the Mac.apk download
-(https://github.com/kksimp/Mac.apk-Releases/releases); see LGPL-SOURCE-README.txt
+build recipe) is attached to the same GitHub release as the Apk on Mac download
+(https://github.com/totktonado96/apk-on-mac/releases); see LGPL-SOURCE-README.txt
 there. Upstream: https://ftp.gnu.org/pub/gnu/gettext/ ."
 
   emit "PCRE2 $(kver pcre2) (jre/lib/libpcre2-8.0.dylib) -- regular expressions, used by GLib" \

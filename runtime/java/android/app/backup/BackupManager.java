@@ -1,6 +1,6 @@
 // android.app.backup.BackupManager -- "tell the system my data
 // changed" service. Cocos2d-x calls dataChanged() after writing user
-// prefs. There's no backup transport in Mac.apk; calls are no-ops.
+// prefs. There's no backup transport in Apk on Mac; calls are no-ops.
 package android.app.backup;
 
 import android.content.Context;
@@ -15,7 +15,7 @@ public class BackupManager {
      *  "Returns a UserHandle for the user that has ancestral serial number
      *  ancestralSerialNumber", used during a device-to-device restore to map a
      *  profile on the OLD device to one on the new. AOSP returns null when no
-     *  user matches -- and Mac.apk has no restore session, no ancestral device
+     *  user matches -- and Apk on Mac has no restore session, no ancestral device
      *  and exactly one user, so nothing can match. */
     public android.os.UserHandle getUserForAncestralSerialNumber(long ancestralSerialNumber) {
         return null;

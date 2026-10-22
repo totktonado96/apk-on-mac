@@ -1,7 +1,7 @@
 // This device's Google Play Services stance -- ONE answer, read by every surface
 // that gets asked. Do not re-derive either answer anywhere else.
 //
-// WHY THIS CLASS EXISTS. Mac.apk used to answer the Play-Services question in
+// WHY THIS CLASS EXISTS. Apk on Mac used to answer the Play-Services question in
 // four contradictory ways at once, and which contradiction an app heard came
 // down to a classloader flag:
 //   getInstallerPackageName()            -> "com.android.vending"  (a store installed me)
@@ -18,7 +18,7 @@
 // questions with different blast radii, and coupling them is what caused the
 // v1.0.574 regression in the first place:
 //   availability()        -- "is there an implementation of the Play-Services
-//                            CLIENT API behind these classes?"  YES: Mac.apk
+//                            CLIENT API behind these classes?"  YES: Apk on Mac
 //                            ships one in-process.
 //   gmsPackageInstalled() -- "is there an installed com.google.android.gms
 //                            PACKAGE?"  NO: our provider is part of the
@@ -63,7 +63,7 @@ public final class PlayServices {
     /**
      * "Does this device have Google Play Services?"
      *
-     * SUCCESS. Mac.apk implements the Play-Services client API in-process
+     * SUCCESS. Apk on Mac implements the Play-Services client API in-process
      * (com/google/android/gms/**, gms.tasks, gms.common.api, and the real
      * play.core.assetpacks local-delivery impl) the same way it implements the
      * rest of android.* -- as part of the platform rather than as a separate
@@ -92,7 +92,7 @@ public final class PlayServices {
     }
 
     // ======================================================================
-    // THE GMS LAYER (v1.0.1171+): Mac.apk's own macOS-native Play services.
+    // THE GMS LAYER (v1.0.1171+): Apk on Mac's own macOS-native Play services.
     // ======================================================================
     //
     // Everything above answers "what do we tell an app about a Google stack we
@@ -159,7 +159,7 @@ public final class PlayServices {
             && !"false".equalsIgnoreCase(System.getenv("MACAPK_GMS_PRESENT"));
 
     /**
-     * Is Mac.apk's own GMS layer enabled? THE single gate for every new
+     * Is Apk on Mac's own GMS layer enabled? THE single gate for every new
      * GMS-layer code path. Every branch added for it reads
      * {@code if (PlayServices.gmsLayerEnabled())}, the same shape as the
      * existing {@code GMS_HONEST_MISSING &&} guards, so "off" is provably the

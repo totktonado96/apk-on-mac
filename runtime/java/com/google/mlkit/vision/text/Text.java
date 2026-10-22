@@ -6,7 +6,7 @@ import java.util.Collections;
 import java.util.List;
 
 // com.google.mlkit.vision.text.Text -- the OCR result tree (Text > TextBlock >
-// Line > Element > Symbol). Mac.apk runs no OCR model, so a real recognition
+// Line > Element > Symbol). Apk on Mac runs no OCR model, so a real recognition
 // Task fails and an app never receives a Text instance through the success path;
 // this type exists so the success-listener generic and any code that references
 // Text/TextBlock/Line compiles and links. An empty result mirrors "nothing

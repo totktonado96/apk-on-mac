@@ -10,7 +10,7 @@ import java.io.IOException;
  *
  * AOSP does this by reading a geoid-height map out of raw assets shipped in the
  * location module (com.android.internal.location.altitude.GeoidMap, backed by an
- * S2-cell tiled MapParamsProto). Mac.apk does not ship that asset database, and
+ * S2-cell tiled MapParamsProto). Apk on Mac does not ship that asset database, and
  * fabricating a geoid height would be worse than admitting we cannot do it: a
  * wrong MSL altitude is silently wrong for every caller.
  *

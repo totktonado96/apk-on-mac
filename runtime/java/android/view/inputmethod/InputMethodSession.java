@@ -3,7 +3,7 @@
 // Source: frameworks/base
 // core/java/android/view/inputmethod/InputMethodSession.java (android16-release).
 //
-// Mac.apk binds no IME, so nothing in this tree implements or calls it -- but an
+// Apk on Mac binds no IME, so nothing in this tree implements or calls it -- but an
 // InputMethodService subclass in an APK does, and its inner session class
 // implements this interface by name.
 package android.view.inputmethod;

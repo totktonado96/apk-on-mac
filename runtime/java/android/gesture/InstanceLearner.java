@@ -8,7 +8,7 @@
 // `if (predictions.get(0).score > 1.0)`).
 //
 // TWO AOSP EDGE CASES this port reproduces on purpose -- both were measured
-// here on 2026-08-24 and are NOT Mac.apk bugs; "fixing" either would make our
+// here on 2026-08-24 and are NOT Apk on Mac bugs; "fixing" either would make our
 // answers differ from a device's:
 //
 //  1. minimumCosineDistance can return NaN. For two nearly IDENTICAL normalized

@@ -119,19 +119,19 @@ public class Activity extends ContextThemeWrapper
             if (ri == null || resid == 0) return;
             Object tn = ri.getClass().getMethod("macapkTypeNameOf", int.class).invoke(ri, resid);
             if (!(tn instanceof String[])) {
-                com.macapk.loader.NativeLog.i("Mac.apk.Activity",
+                com.macapk.loader.NativeLog.i("Apk on Mac.Activity",
                     "setTheme(0x" + Integer.toHexString(resid) + ") -> no type name; not re-anchored");
                 return;
             }
             String[] a = (String[]) tn;
             if (a.length < 2 || !"style".equals(a[0]) || a[1] == null) {
-                com.macapk.loader.NativeLog.i("Mac.apk.Activity",
+                com.macapk.loader.NativeLog.i("Apk on Mac.Activity",
                     "setTheme(0x" + Integer.toHexString(resid) + ") -> type=" + a[0]
                     + " name=" + (a.length > 1 ? a[1] : "?") + "; not re-anchored");
                 return;
             }
             ri.getClass().getMethod("setApplicationThemeName", String.class).invoke(ri, a[1]);
-            com.macapk.loader.NativeLog.i("Mac.apk.Activity",
+            com.macapk.loader.NativeLog.i("Apk on Mac.Activity",
                 "setTheme(0x" + Integer.toHexString(resid) + ") re-anchored the theme fallback to "
                 + a[1]);
         } catch (Throwable ignored) {
@@ -197,7 +197,7 @@ public class Activity extends ContextThemeWrapper
         // AOSP Activity.attach(): `mCurrentConfig = config;` -- the configuration
         // this instance launches with, which every later configuration change is
         // diffed against (ActivityThread.performActivityConfigurationChanged).
-        // Mac.apk shares ONE Resources between the Application and every
+        // Apk on Mac shares ONE Resources between the Application and every
         // Activity, so the live Resources config cannot serve as that baseline:
         // it has already moved by the time an activity is told. A snapshot can.
         try {
@@ -258,7 +258,7 @@ public class Activity extends ContextThemeWrapper
     public boolean isFinishing()      { return finished; }
     public boolean isDestroyed()      { return finished; }
     // Android: returns true when this Activity is the root of its task
-    // stack (the one launched from the home screen). Mac.apk only
+    // stack (the one launched from the home screen). Apk on Mac only
     // hosts a single Activity per process, so the launchable Activity
     // is always the task root. Engines like axmol / cocos2d-x v4 check
     // isTaskRoot() in onCreate to detect "spurious relaunch" -- if it
@@ -267,7 +267,7 @@ public class Activity extends ContextThemeWrapper
     // from ever loading.
     public boolean isTaskRoot()       { return true; }
     /** AOSP: `return mParent != null` -- true only for an Activity embedded in
-     *  a (long-deprecated) ActivityGroup. Nothing in Mac.apk ever constructs an
+     *  a (long-deprecated) ActivityGroup. Nothing in Apk on Mac ever constructs an
      *  embedded child activity, so mParent is structurally always null and
      *  false is the AOSP-faithful answer for every Activity we can host.
      *  final, matching AOSP (an app cannot have overridden it). */
@@ -292,7 +292,7 @@ public class Activity extends ContextThemeWrapper
         // setting a result" answer.
         Activity requestor = mResultRequestor;
         if (requestor != null) {
-            com.macapk.loader.NativeLog.i("Mac.apk.Activity", "result: " + getClass().getName() + " finished -> "
+            com.macapk.loader.NativeLog.i("Apk on Mac.Activity", "result: " + getClass().getName() + " finished -> "
                 + requestor.getClass().getName() + " requestCode=" + mResultRequestCode + " resultCode=" + mResultCode
                 + " data=" + (mResultData != null));
             mResultRequestor = null;
@@ -302,7 +302,7 @@ public class Activity extends ContextThemeWrapper
         // same NSWindow when it calls setContentView.
     }
     /** AOSP: finish this activity AND every activity below it in the task
-     *  with the same affinity (ActivityClient.finishActivityAffinity). Mac.apk
+     *  with the same affinity (ActivityClient.finishActivityAffinity). Apk on Mac
      *  runs one task per app, whose activities share the package affinity.
      *  v1.0.1642: was plain finish(), so an app's "Exit" from a second screen
      *  left the screens below alive and brought them back. */
@@ -311,7 +311,7 @@ public class Activity extends ContextThemeWrapper
      *  `finish(FINISH_TASK_WITH_ROOT_ACTIVITY)`, and ActivityClientController
      *  .finishActivity (:512-536) removes the task ONLY when this activity is
      *  the task's root (`finishWithRootActivity && r == rootR`); any other
-     *  activity is simply finished. Mac.apk has one task per app. Present since
+     *  activity is simply finished. Apk on Mac has one task per app. Present since
      *  libgdx AndroidLauncher (ShatteredPD, Bouncy Pinball) links against it on
      *  API 21+. Until v1.0.1707 a NON-root caller took the whole task with it:
      *  Epic's EOSAuthHandlerActivity (a browser sign-in redirect, pushed above
@@ -350,7 +350,7 @@ public class Activity extends ContextThemeWrapper
      *  i.e. the DEFAULT implementation saves the view hierarchy, and an app that
      *  overrides this is expected to call super so that still happens.
      *
-     *  Ours was an empty body, which cost nothing while Mac.apk never destroyed
+     *  Ours was an empty body, which cost nothing while Apk on Mac never destroyed
      *  an activity. It costs a lot the moment one is RECREATED (see
      *  ActivityHost.macapkRecreate): without this every EditText goes blank and
      *  every list snaps back to the top on a configuration change, which is the
@@ -432,7 +432,7 @@ public class Activity extends ContextThemeWrapper
      *  framework will assume the app hasn't been updated to leverage this
      *  callback and will in turn send a legacy callback of
      *  onUserLeaveHint() instead" -- the method just above, which is why
-     *  AOSP places the two side by side. Mac.apk has no windowing-mode host
+     *  AOSP places the two side by side. Apk on Mac has no windowing-mode host
      *  to shrink an activity's surface into, so nothing in this runtime
      *  ever calls this (the legacy onUserLeaveHint() path above is what
      *  actually fires); the method exists so an app whose onCreate calls
@@ -478,7 +478,7 @@ public class Activity extends ContextThemeWrapper
             StackTraceElement[] tr = new Throwable().getStackTrace();
             for (int i = 1; i < Math.min(tr.length, 8); i++)
                 st.append("\n  ").append(tr[i]);
-            com.macapk.loader.NativeLog.i("Mac.apk.Menu", st.toString());
+            com.macapk.loader.NativeLog.i("Apk on Mac.Menu", st.toString());
         }
     }
 
@@ -582,7 +582,7 @@ public class Activity extends ContextThemeWrapper
         }
         return fragmentManager;
     }
-    /** Mac.apk loader hook: ActivityHost (the ActivityThread analogue)
+    /** Apk on Mac loader hook: ActivityHost (the ActivityThread analogue)
      *  reports each activity lifecycle phase so fragments follow the
      *  host state, mirroring AOSP Activity.performStart/performResume
      *  calling mFragments.dispatchStart()/dispatchResume(). Late-created
@@ -634,7 +634,7 @@ public class Activity extends ContextThemeWrapper
      *  recently opened context menu, if showing." Real AOSP forwards to
      *  `mWindow.closePanel(FEATURE_CONTEXT_MENU)`, which drives PhoneWindow's
      *  panel-dismissal machinery (hides the popup, then notifies the panel's
-     *  menu via onMenuClosed/onContextMenuClosed). Mac.apk's Window (see
+     *  menu via onMenuClosed/onContextMenuClosed). Apk on Mac's Window (see
      *  android/view/Window.java, owned by another lane) has no panel host
      *  for FEATURE_CONTEXT_MENU to close -- there is no popup overlay behind
      *  View.showContextMenu() in this tree, matching the closeOptionsMenu()/
@@ -645,7 +645,7 @@ public class Activity extends ContextThemeWrapper
      *  has no other effect. */
     public void closeContextMenu() {
         if (sMenuTrace) {
-            com.macapk.loader.NativeLog.i("Mac.apk.Menu", "closeContextMenu()");
+            com.macapk.loader.NativeLog.i("Apk on Mac.Menu", "closeContextMenu()");
         }
     }
 
@@ -663,18 +663,18 @@ public class Activity extends ContextThemeWrapper
     @Override
     public boolean onCreatePanelMenu(int featureId, android.view.Menu menu) {
         if (sMenuTrace) {
-            com.macapk.loader.NativeLog.i("Mac.apk.Menu",
+            com.macapk.loader.NativeLog.i("Apk on Mac.Menu",
                 "onCreatePanelMenu feature=" + featureId + " menu="
                 + (menu == null ? "null" : menu.getClass().getName()));
             StringBuilder st = new StringBuilder("onCreatePanelMenu caller stack:");
             StackTraceElement[] tr = new Throwable().getStackTrace();
             for (int i = 1; i < Math.min(tr.length, 10); i++)
                 st.append("\n  ").append(tr[i]);
-            com.macapk.loader.NativeLog.i("Mac.apk.Menu", st.toString());
+            com.macapk.loader.NativeLog.i("Apk on Mac.Menu", st.toString());
         }
         if (featureId == Window.FEATURE_OPTIONS_PANEL) {
             boolean r = onCreateOptionsMenu(menu);
-            if (sMenuTrace) com.macapk.loader.NativeLog.i("Mac.apk.Menu",
+            if (sMenuTrace) com.macapk.loader.NativeLog.i("Apk on Mac.Menu",
                 "onCreateOptionsMenu(base) -> " + r + " items="
                 + (menu == null ? -1 : menu.size()));
             return r;
@@ -732,7 +732,7 @@ public class Activity extends ContextThemeWrapper
     // SAVED_DIALOGS_TAG) because a real device can destroy-and-recreate the
     // Activity INSTANCE mid-dialog (rotation, low memory, an unhandled
     // config change) and needs to rebuild md.mDialog in the new instance
-    // from the saved id/args/Dialog-state. Mac.apk hosts exactly one
+    // from the saved id/args/Dialog-state. Apk on Mac hosts exactly one
     // Activity instance for the life of a run and never destroys-and-
     // recreates it for a config change (see recreate() below, which
     // re-dispatches the Configuration in place instead of actually
@@ -811,7 +811,7 @@ public class Activity extends ContextThemeWrapper
      *  into Dialog.dispatchOnCreate(state) so a dialog restored after a
      *  real device's destroy-and-recreate resumes with the same state --
      *  see the ManagedDialog comment above for why that state is always
-     *  null here (Mac.apk never recreates the Activity instance a managed
+     *  null here (Apk on Mac never recreates the Activity instance a managed
      *  dialog belongs to). Calling onCreateDialog(id, args) directly and
      *  letting Dialog.show() run its own one-time onCreate(null) (see
      *  Dialog.java) produces the same "onCreate runs exactly once, before
@@ -881,7 +881,7 @@ public class Activity extends ContextThemeWrapper
         // the event into the content view's frame (by the content child's
         // left/top) before dispatching -- exactly what
         // ViewGroup.dispatchTransformedTouchEvent does for every parent->child
-        // hop. Mac.apk has no DecorView ViewGroup between the Activity and
+        // hop. Apk on Mac has no DecorView ViewGroup between the Activity and
         // contentView, so that one offset was being skipped. Meanwhile
         // ViewCanvasDriver DRAWS the content translated DOWN by the status-bar
         // inset (canvas.translate(0, statusBarH); rootView.draw) and lays the
@@ -907,7 +907,7 @@ public class Activity extends ContextThemeWrapper
             finally { ev.offsetLocation(-dx, -dy); }
             if (consumed) {
                 if (sTouchDiag && sTouchDiagN < 40) { sTouchDiagN++;
-                    com.macapk.loader.NativeLog.i("Mac.apk.Touch",
+                    com.macapk.loader.NativeLog.i("Apk on Mac.Touch",
                         "dispatchTouchEvent: content view consumed (action=" + ev.getAction()
                         + ") contentView=" + contentView.getClass().getName()
                         + " tree=[" + macapkDescribeViewTree(contentView, 0) + "]"); }
@@ -921,7 +921,7 @@ public class Activity extends ContextThemeWrapper
                    + " listener=" + (contentView.getOnTouchListener() == null ? "null"
                         : contentView.getOnTouchListener().getClass().getName())
                    + " tree=[" + macapkDescribeViewTree(contentView, 0) + "]");
-            com.macapk.loader.NativeLog.i("Mac.apk.Touch",
+            com.macapk.loader.NativeLog.i("Apk on Mac.Touch",
                 "dispatchTouchEvent: fell through to activity.onTouchEvent (action="
                 + ev.getAction() + ") returned " + ot + " contentView=" + cv); }
         return ot;
@@ -1121,7 +1121,7 @@ public class Activity extends ContextThemeWrapper
         if (mMenuInflater == null) {
             mMenuInflater = new android.view.MenuInflater(this);
         }
-        if (sMenuTrace) com.macapk.loader.NativeLog.i("Mac.apk.Menu",
+        if (sMenuTrace) com.macapk.loader.NativeLog.i("Apk on Mac.Menu",
             "getMenuInflater(base) -> " + mMenuInflater.getClass().getName());
         return mMenuInflater;
     }
@@ -1135,7 +1135,7 @@ public class Activity extends ContextThemeWrapper
 
     /** AOSP API-30 Context.getDisplay(), which an Activity always answers with
      *  the display its window is on (AOSP only throws for a non-display
-     *  context). Mac.apk has exactly one display, which is what the
+     *  context). Apk on Mac has exactly one display, which is what the
      *  WindowManager hands back. */
     public android.view.Display getDisplay() {
         WindowManager wm = getWindowManager();
@@ -1158,7 +1158,7 @@ public class Activity extends ContextThemeWrapper
     /** AOSP setVisible(boolean): the client-side half of "should my window be
      *  shown yet" -- an activity that needs to finish or redirect before
      *  onResume calls setVisible(false) so its UI never flashes. AOSP hides the
-     *  decor view (View.INVISIBLE) and re-shows it via makeVisible(); Mac.apk's
+     *  decor view (View.INVISIBLE) and re-shows it via makeVisible(); Apk on Mac's
      *  window is added at setContentView time and never separately "added by
      *  the server", so the visible-from-server half collapses away and the
      *  decor toggle is the whole behavior. */
@@ -1234,7 +1234,7 @@ public class Activity extends ContextThemeWrapper
     }
 
     // AOSP Activity.getActionBar() -- the PLATFORM (non-AppCompat) action bar.
-    // Mac.apk renders no system action-bar chrome, but plain-theme apps (and,
+    // Apk on Mac renders no system action-bar chrome, but plain-theme apps (and,
     // here, duolingo's background Rx init) call getActionBar() and then
     // setTitle/hide/etc. on the result. A null return would NPE those callers
     // (duolingo dereferenced it in an RxJava flow -> the missing method threw
@@ -1556,7 +1556,7 @@ public class Activity extends ContextThemeWrapper
                 root.addView(c, new android.widget.LinearLayout.LayoutParams(MATCH, 0, 1f));
                 d.addView(root, new android.widget.FrameLayout.LayoutParams(MATCH, MATCH));
             } catch (Throwable t) {
-                com.macapk.loader.NativeLog.w("Mac.apk.Activity",
+                com.macapk.loader.NativeLog.w("Apk on Mac.Activity",
                         "screen_title decor not built, keeping screen_simple: " + t);
                 try {
                     if (root != null && root.getParent() == d) d.removeView(root);
@@ -1629,7 +1629,7 @@ public class Activity extends ContextThemeWrapper
                 }
                 return decor;
             } catch (Throwable t) {
-                com.macapk.loader.NativeLog.w("Mac.apk.Activity",
+                com.macapk.loader.NativeLog.w("Apk on Mac.Activity",
                         "screen_title content install failed, installing the view bare: " + t);
                 return view;
             }
@@ -2268,7 +2268,7 @@ public class Activity extends ContextThemeWrapper
                 }
             }
         } catch (Throwable t) {
-            com.macapk.loader.NativeLog.e("Mac.apk.Activity",
+            com.macapk.loader.NativeLog.e("Apk on Mac.Activity",
                 "setContentView(0x" + Integer.toHexString(layoutResID)
                 + ") inflation failed: " + t);
         }
@@ -2449,7 +2449,7 @@ public class Activity extends ContextThemeWrapper
                     && prevBareSurfaceRoot.isAttachedToWindow()) {
                 try { prevBareSurfaceRoot.macapkDispatchDetachedFromWindow(); }
                 catch (Throwable t) {
-                    com.macapk.loader.NativeLog.w("Mac.apk.Activity", "bare surface root detach failed: " + t);
+                    com.macapk.loader.NativeLog.w("Apk on Mac.Activity", "bare surface root detach failed: " + t);
                 }
             }
             if (bareSurfaceRoot != null && com.macapk.loader.ActivityHost.macapkFocusDelivered(this)) {
@@ -2501,10 +2501,10 @@ public class Activity extends ContextThemeWrapper
         if (v.macapkIsWindowRemoved() || v.isAttachedToWindow()) return;
         try {
             v.macapkDispatchAttachedToWindow();
-            com.macapk.loader.NativeLog.i("Mac.apk.Activity", "window-attached bare surface root "
+            com.macapk.loader.NativeLog.i("Apk on Mac.Activity", "window-attached bare surface root "
                 + v.getClass().getName() + " (no ViewCanvasDriver owns it)");
         } catch (Throwable t) {
-            com.macapk.loader.NativeLog.w("Mac.apk.Activity", "bare surface root attach failed: " + t);
+            com.macapk.loader.NativeLog.w("Apk on Mac.Activity", "bare surface root attach failed: " + t);
         }
     }
 
@@ -2514,7 +2514,7 @@ public class Activity extends ContextThemeWrapper
     private static void macapkReleaseCanvasView(long mtkv) {
         try { NativeCocoa.releaseRenderer(mtkv); }
         catch (Throwable t) {
-            com.macapk.loader.NativeLog.w("Mac.apk.Activity", "releaseRenderer failed: " + t);
+            com.macapk.loader.NativeLog.w("Apk on Mac.Activity", "releaseRenderer failed: " + t);
         }
     }
 
@@ -2554,7 +2554,7 @@ public class Activity extends ContextThemeWrapper
             if (d == null || d == installed) return;
             d.macapkDispatchAttachedToWindow();
         } catch (Throwable t) {
-            com.macapk.loader.NativeLog.w("Mac.apk.Activity",
+            com.macapk.loader.NativeLog.w("Apk on Mac.Activity",
                 "decor attach failed: " + t);
         }
     }
@@ -2709,7 +2709,7 @@ public class Activity extends ContextThemeWrapper
         }
         if (!inTree) return;
         canvasOnlyWiredRoot = null;
-        com.macapk.loader.NativeLog.i("Mac.apk.Activity",
+        com.macapk.loader.NativeLog.i("Apk on Mac.Activity",
             "native surface attached after canvas-only wiring ("
             + added.getClass().getName() + "); rewiring window content to "
             + "its MTKView (AppCompat sub-decor ordering)");
@@ -2733,7 +2733,7 @@ public class Activity extends ContextThemeWrapper
             int pxW = com.macapk.loader.DisplayConfig.realWidthPx();   // v1.0.1637, see above
             int pxH = com.macapk.loader.DisplayConfig.realHeightPx();
             android.view.SurfaceView.macapkSetOverlayDriver(demoted, pxW, pxH);
-            com.macapk.loader.NativeLog.i("Mac.apk.Activity",
+            com.macapk.loader.NativeLog.i("Apk on Mac.Activity",
                 "demoted canvas tree re-registered as the SurfaceView overlay ("
                 + pxW + "x" + pxH + "); the View tree keeps painting");
         }
@@ -2829,7 +2829,7 @@ public class Activity extends ContextThemeWrapper
         // which a view-tree dump cannot. Zero cost when unset.
         if (System.getenv("MACAPK_TRACE_TITLE") != null) {
             try {
-                com.macapk.loader.NativeLog.i("Mac.apk.Activity",
+                com.macapk.loader.NativeLog.i("Apk on Mac.Activity",
                     "getTitle() -> " + (r == null ? "null"
                         : "'" + r + "' len=" + r.length())
                     + "  activity=" + getClass().getName());
@@ -3169,7 +3169,7 @@ public class Activity extends ContextThemeWrapper
         com.macapk.loader.ActivityHost.start(intent);
     }
     // AOSP API-16+ overload: the Bundle is ActivityOptions.toBundle() (launch
-    // animation hints). Mac.apk has no activity transitions, so the options
+    // animation hints). Apk on Mac has no activity transitions, so the options
     // are ignored -- the launch itself is what matters. Apps pair
     // ActivityOptions.makeSceneTransitionAnimation(...).toBundle() with this
     // (e.g. F-Droid's list row opening AppDetails on click).
@@ -3281,7 +3281,7 @@ public class Activity extends ContextThemeWrapper
      *  inside onCreate -- which ActivityHost swallows -- so the trampoline
      *  never routed and the window stayed on a bare IntentHandler fill.
      *
-     *  Mac.apk always materialises a fresh activity instance for a launch
+     *  Apk on Mac always materialises a fresh activity instance for a launch
      *  (ActivityHost has no singleTop/singleTask instance-reuse dedup), so
      *  the "a new instance is not needed" branch cannot arise here and the
      *  honest answer is always TRUE -- a new activity WAS launched, and the
@@ -3415,7 +3415,7 @@ public class Activity extends ContextThemeWrapper
      *  implicit "ask the system to do something" intent an app hands
      *  startActivityForResult -- e.g. BluetoothAdapter.ACTION_REQUEST_ENABLE /
      *  ACTION_REQUEST_DISCOVERABLE, a document picker, a share-target chooser --
-     *  none of which any component in a Mac.apk process implements. Android's
+     *  none of which any component in a Apk on Mac process implements. Android's
      *  observable outcome when such a dialog is dismissed without a choice is
      *  onActivityResult(requestCode, RESULT_CANCELED, null) on a later main-loop
      *  turn; delivering that is what lets the caller's state machine move on
@@ -3618,7 +3618,7 @@ public class Activity extends ContextThemeWrapper
     @Override public PackageManager getPackageManager() { return application != null ? application.getPackageManager() : null; }
 
     /** AOSP API-1+ — return state previously preserved across config
-     *  changes via onRetainNonConfigurationInstance. Mac.apk never
+     *  changes via onRetainNonConfigurationInstance. Apk on Mac never
      *  recreates activities (single fixed configuration); always
      *  returns null. androidx.activity.ComponentActivity reads this
      *  during onCreate to decide whether to re-bind ViewModels. */
@@ -3642,7 +3642,7 @@ public class Activity extends ContextThemeWrapper
     /** AOSP Activity.setTaskDescription(TaskDescription): sets the label, icon
      *  and primary colour the RECENTS screen shows for this task.
      *
-     *  Mac.apk has no recents UI, so there is nothing to display it on -- but
+     *  Apk on Mac has no recents UI, so there is nothing to display it on -- but
      *  the call must LINK and must not throw, because apps set it during
      *  onCreate to theme their recents card and would take a NoSuchMethodError
      *  in the middle of startup. We keep the value so getTaskDescription-style
@@ -3731,7 +3731,7 @@ public class Activity extends ContextThemeWrapper
             new android.content.ComponentName(this, parentName);
         ActivityInfo parentInfo = macapkActivityInfo(target);
         if (parentInfo == null) {
-            com.macapk.loader.NativeLog.e("Mac.apk.Activity",
+            com.macapk.loader.NativeLog.e("Apk on Mac.Activity",
                 "getParentActivityIntent: bad parentActivityName '" + parentName
                 + "' in manifest");
             return null;
@@ -3775,7 +3775,7 @@ public class Activity extends ContextThemeWrapper
     /** AOSP shouldUpRecreateTask(Intent): "true if navigating up should recreate
      *  a new task stack, false if the SAME task should be used for the
      *  destination". AOSP answers false whenever the target shares this
-     *  activity's task affinity; Mac.apk models exactly one task (see
+     *  activity's task affinity; Apk on Mac models exactly one task (see
      *  isTaskRoot()), so up-navigation always stays inside it. */
     public boolean shouldUpRecreateTask(Intent targetIntent) { return false; }
 
@@ -3799,7 +3799,7 @@ public class Activity extends ContextThemeWrapper
      *  `invokevirtual setEnterSharedElementCallback:(Landroid/app/SharedElementCallback;)V`
      *  and an `(Ljava/lang/Object;)V` descriptor is a DIFFERENT method under JVM
      *  resolution, so the call site NoSuchMethodError'd. The body stays a no-op
-     *  (AOSP only stores the callback for the transition engine, and Mac.apk
+     *  (AOSP only stores the callback for the transition engine, and Apk on Mac
      *  runs no window transitions -- same reasoning as postponeEnterTransition
      *  below), but the signature must match or the call never lands. */
     public void setEnterSharedElementCallback(SharedElementCallback callback) {}
@@ -3865,7 +3865,7 @@ public class Activity extends ContextThemeWrapper
     // activity's Resources, then -- for an activity that has NOT declared
     // android:configChanges for the changed bits -- recreates it; for one
     // that HAS declared them, it calls onConfigurationChanged so the app
-    // adapts in place. Mac.apk runs a single fixed configuration per launch
+    // adapts in place. Apk on Mac runs a single fixed configuration per launch
     // (set from --orientation), so historically nothing ever drove this. The
     // method exists so the runtime's window/orientation layer has a faithful
     // entry point to call once a live resize signal is wired up; it updates
@@ -3901,7 +3901,7 @@ public class Activity extends ContextThemeWrapper
     //      ViewRootImpl.updateConfiguration (android14-release
     //      ViewRootImpl.java:5695): `mView.dispatchConfigurationChanged(config);`
     //      and ViewGroup recurses into children (ViewGroup.java:1642-1649).
-    //      Mac.apk has no ViewRootImpl, so the decor view is the equivalent
+    //      Apk on Mac has no ViewRootImpl, so the decor view is the equivalent
     //      root to start from.
     //      ⚠ KNOWN GAP, not fixed here: our ViewGroup does NOT override
     //      dispatchConfigurationChanged, so this reaches the decor view and
@@ -3961,11 +3961,11 @@ public class Activity extends ContextThemeWrapper
                 // configuration up. Say so rather than papering over it by
                 // calling a callback the app never asked for.
                 try {
-                    com.macapk.loader.NativeLog.i("Mac.apk.Activity",
+                    com.macapk.loader.NativeLog.i("Apk on Mac.Activity",
                         "config change 0x" + Integer.toHexString(diff)
                         + " not declared in android:configChanges (declared 0x"
                         + Integer.toHexString(handled) + "); AOSP would relaunch "
-                        + getClass().getName() + ", Mac.apk keeps the instance");
+                        + getClass().getName() + ", Apk on Mac keeps the instance");
                 } catch (Throwable ignored) {}
             }
         }
@@ -4037,7 +4037,7 @@ public class Activity extends ContextThemeWrapper
         if (report) {
             try { onConfigurationChanged(cfg); }
             catch (Throwable t) {
-                com.macapk.loader.NativeLog.w("Mac.apk.Activity",
+                com.macapk.loader.NativeLog.w("Apk on Mac.Activity",
                     getClass().getName() + ".onConfigurationChanged threw: " + t);
             }
         }
@@ -4087,7 +4087,7 @@ public class Activity extends ContextThemeWrapper
 
     // AOSP Activity.recreate() tears the activity down and rebuilds it with
     // the new configuration (onSaveInstanceState -> onDestroy -> new instance
-    // -> onCreate(savedState)). Mac.apk does not yet relaunch an activity
+    // -> onCreate(savedState)). Apk on Mac does not yet relaunch an activity
     // instance (the lifecycle host owns a single instance per run), so a full
     // recreate is a native-layer task. Rather than silently doing nothing --
     // which leaves the app believing a requested config swap took effect --
@@ -4097,7 +4097,7 @@ public class Activity extends ContextThemeWrapper
     //
     // ⚠⚠ TRIPWIRE, measured 2026-08-13. THE DAY THIS METHOD GENUINELY RELAUNCHES,
     // SAVED-INSTANCE-STATE BECOMES MANDATORY IN THE SAME CHANGE. Today Activity
-    // saved state is 100% inert and that is CORRECT, because nothing in Mac.apk
+    // saved state is 100% inert and that is CORRECT, because nothing in Apk on Mac
     // ever destroys-and-recreates an Activity instance: ActivityHost passes a
     // literal null to onCreate, onSaveInstanceState has zero callers, and the
     // back stack restores by OBJECT IDENTITY (ActivityHost.restoreTop) rather
@@ -4146,7 +4146,7 @@ public class Activity extends ContextThemeWrapper
      *  accurate... so you should only use this as an optimization hint."
      *  mConfigChangeFlags is populated by AOSP's ActivityThread immediately
      *  before it destroys-and-recreates an activity that did NOT declare
-     *  the changed bits in android:configChanges. Mac.apk hosts exactly one
+     *  the changed bits in android:configChanges. Apk on Mac hosts exactly one
      *  Activity instance per run and never destroys-and-recreates it for a
      *  config change -- recreate() just above re-dispatches the current
      *  Configuration in place rather than actually relaunching -- so the
@@ -4218,7 +4218,7 @@ public class Activity extends ContextThemeWrapper
     public boolean isImmersive() { return false; }
     public void setImmersive(boolean i) {}
     // API 27+: show over the lock screen / wake the screen. No lock
-    // screen on Mac.apk; flags are inert (Calculator sets both in
+    // screen on Apk on Mac; flags are inert (Calculator sets both in
     // onStart).
     public void setShowWhenLocked(boolean showWhenLocked) {}
     public void setTurnScreenOn(boolean turnScreenOn) {}
@@ -4423,7 +4423,7 @@ public class Activity extends ContextThemeWrapper
         void onScreenCaptured();
     }
 
-    /** AOSP registerScreenCaptureCallback (API 34). Mac.apk does not observe
+    /** AOSP registerScreenCaptureCallback (API 34). Apk on Mac does not observe
      *  host-side screenshots of the app window, so the callback registers but
      *  never fires -- the same as a device where the app is not being captured. */
     public void registerScreenCaptureCallback(java.util.concurrent.Executor executor,
@@ -4432,7 +4432,7 @@ public class Activity extends ContextThemeWrapper
     public void unregisterScreenCaptureCallback(ScreenCaptureCallback callback) { }
 
     /** AOSP setLocusContext (API 30): associate a LocusId with this activity for
-     *  content capture / shortcuts. Mac.apk records nothing. */
+     *  content capture / shortcuts. Apk on Mac records nothing. */
     public void setLocusContext(android.content.LocusId locusContext, android.os.Bundle bundle) { }
 
     protected void onRestart() { macapkManagedCursorsDispatch(1); }
@@ -4509,7 +4509,7 @@ public class Activity extends ContextThemeWrapper
     // Every member below is present on a real device; each mirrors the
     // AOSP body from
     // frameworks/base/core/java/android/app/Activity.java (android16-release)
-    // or, where the AOSP body reaches a system service Mac.apk does not
+    // or, where the AOSP body reaches a system service Apk on Mac does not
     // host, the observable answer that service gives on a device that
     // lacks the corresponding capability. The reason it matters here in
     // particular: ActivityHost.runTolerant SWALLOWS anything thrown out of
@@ -4529,7 +4529,7 @@ public class Activity extends ContextThemeWrapper
 
     /** AOSP Activity.getParent(): {@code return mParent;} -- non-null only for
      *  an Activity embedded in a (long-deprecated) ActivityGroup. Nothing in
-     *  Mac.apk constructs an embedded child activity, which is the same reason
+     *  Apk on Mac constructs an embedded child activity, which is the same reason
      *  isChild() above is a constant false, so mParent is structurally always
      *  null. final, matching AOSP. @deprecated matches AOSP. */
     @Deprecated
@@ -4540,7 +4540,7 @@ public class Activity extends ContextThemeWrapper
     /** AOSP finishActivity(int): "Force finish another activity that you had
      *  previously started with startActivityForResult(Intent, int)." AOSP asks
      *  the ActivityManager to finish the sub-activity recorded under this
-     *  (caller, requestCode) pair. Mac.apk keeps the same pairing on the
+     *  (caller, requestCode) pair. Apk on Mac keeps the same pairing on the
      *  launched Activity itself (mResultRequestor / mResultRequestCode, set in
      *  macapkAttach), so the equivalent lookup is "is the activity currently on
      *  top the one I started with this request code?" -- and if so, finish it,
@@ -4576,7 +4576,7 @@ public class Activity extends ContextThemeWrapper
 
     /** AOSP releaseInstance(): asks the ActivityManager to destroy this
      *  activity instance to reclaim memory, and returns whether it did.
-     *  Mac.apk never releases and re-creates an Activity instance (there is one
+     *  Apk on Mac never releases and re-creates an Activity instance (there is one
      *  process, one window and no low-memory activity reaper), so false -- AOSP's
      *  own answer whenever the release is refused -- is the honest one. */
     public boolean releaseInstance() { return false; }
@@ -4823,7 +4823,7 @@ public class Activity extends ContextThemeWrapper
     public boolean setTranslucent(boolean translucent) { return false; }
 
     /** AOSP setRecentsScreenshotEnabled(boolean): asks the system not to
-     *  screenshot this activity for the Recents thumbnail. Mac.apk has no
+     *  screenshot this activity for the Recents thumbnail. Apk on Mac has no
      *  Recents and never captures the window, so the request is already
      *  satisfied either way. */
     public void setRecentsScreenshotEnabled(boolean enabled) { }
@@ -4835,14 +4835,14 @@ public class Activity extends ContextThemeWrapper
 
     /** AOSP setAllowCrossUidActivitySwitchFromBelow(boolean): an
      *  activity-security-model opt-in that lets activities from other uids
-     *  below this one in the task start activities. Mac.apk runs exactly one
+     *  below this one in the task start activities. Apk on Mac runs exactly one
      *  app in one process, so there is no other uid in the task and the setting
      *  has nothing to permit or deny. */
     public void setAllowCrossUidActivitySwitchFromBelow(boolean allowed) { }
 
     /** AOSP startLockTask(): pins this task ("screen pinning"). For an app no
      *  device owner whitelisted (LOCK_TASK_AUTH_PINNABLE -- every app here,
-     *  Mac.apk has no device owner) AOSP does NOT pin: LockTaskController.
+     *  Apk on Mac has no device owner) AOSP does NOT pin: LockTaskController.
      *  startLockTaskMode asks SystemUI for a pinning request
      *  (statusBarManager.showScreenPinningRequest) and returns, and the task
      *  is pinned only if the USER confirms that prompt. There is no task
@@ -4951,7 +4951,7 @@ public class Activity extends ContextThemeWrapper
 
     // ---- Voice interaction (AOSP Activity.java:2341-2420) ----
     // Every one of these keys off mVoiceInteractor, which is non-null only when
-    // the activity was launched BY a voice interaction session. Mac.apk has no
+    // the activity was launched BY a voice interaction session. Apk on Mac has no
     // VoiceInteractionService, so getVoiceInteractor() above is a constant
     // null and these are its consistent consequences -- exactly what a device
     // with no assistant configured answers.
@@ -5002,7 +5002,7 @@ public class Activity extends ContextThemeWrapper
 
     // ---- ComponentCaller (API 35 / android.security.content_uri_permission_apis) ----
     // AOSP hands the launched activity a ComponentCaller describing who started
-    // it, so it can validate content: URIs it was handed. Mac.apk runs exactly
+    // it, so it can validate content: URIs it was handed. Apk on Mac runs exactly
     // one app in one process: every activity here is started by that app or by
     // our own loader, so the caller is always this package. ComponentCaller's
     // own getUid()/getPackage() answer from the process identity for that
@@ -5062,7 +5062,7 @@ public class Activity extends ContextThemeWrapper
     // ---- Device-aware permissions (API 36) ----
 
     /** AOSP requestPermissions(String[], int, int): the device-aware overload
-     *  ("deviceId" identifies a virtual device). Mac.apk hosts only the default
+     *  ("deviceId" identifies a virtual device). Apk on Mac hosts only the default
      *  device; route through the 2-arg form above so both overloads answer
      *  identically. final, per AOSP. */
     public final void requestPermissions(String[] permissions, int requestCode, int deviceId) {
@@ -5078,7 +5078,7 @@ public class Activity extends ContextThemeWrapper
     }
 
     /** AOSP shouldShowRequestPermissionRationale(String, int): device-aware
-     *  overload of the answer above. Mac.apk hosts only the default device,
+     *  overload of the answer above. Apk on Mac hosts only the default device,
      *  so it is the same answer. */
     public boolean shouldShowRequestPermissionRationale(String permission, int deviceId) {
         return shouldShowRequestPermissionRationale(permission);
@@ -5093,7 +5093,7 @@ public class Activity extends ContextThemeWrapper
      *  device!")} on any device lacking
      *  PackageManager.FEATURE_VR_MODE_HIGH_PERFORMANCE
      *  (services/core/java/com/android/server/wm/ActivityClientController.java
-     *  :1543-1545). Mac.apk does not advertise that feature, so raise exactly
+     *  :1543-1545). Apk on Mac does not advertise that feature, so raise exactly
      *  that -- rather than silently pretending VR mode was entered, which would
      *  leave an app rendering for a headset that is not there. YouTube calls
      *  this. The declared NameNotFoundException is AOSP's answer for "the named
@@ -5138,7 +5138,7 @@ public class Activity extends ContextThemeWrapper
     /** AOSP startNextMatchingActivity(Intent, Bundle): "Special version of
      *  starting an activity, for use when you are replacing other activity
      *  components... @return Returns a boolean indicating whether there was
-     *  another Activity to start". Mac.apk resolves an intent to at most one
+     *  another Activity to start". Apk on Mac resolves an intent to at most one
      *  component (the app's own), so there is never a NEXT match to hand off
      *  to, which is when AOSP returns false. AOSP also throws
      *  UnsupportedOperationException when called from a child activity; we have
@@ -5173,7 +5173,7 @@ public class Activity extends ContextThemeWrapper
     /** AOSP startActivityFromFragment(Fragment, Intent, int, Bundle): AOSP tags
      *  the start with the fragment's "who" token so
      *  Activity.dispatchActivityResult routes the eventual result to THAT
-     *  fragment's onActivityResult rather than to the activity's. Mac.apk has
+     *  fragment's onActivityResult rather than to the activity's. Apk on Mac has
      *  no who-token plumbing, so record the (requestCode -> fragment) pairing
      *  here and consult it in macapkPostActivityResult, which is the same
      *  routing decision AOSP makes one layer up from the app's override.

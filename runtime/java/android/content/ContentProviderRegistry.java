@@ -6,7 +6,7 @@
 // WHY this exists: real Android keeps providers in ActivityThread's
 // mProviderMap keyed by authority; ContentResolver.acquireProvider does
 // a lookup there and dispatches the CRUD call to the matching
-// ContentProvider's transport. Mac.apk runs exactly one app in one
+// ContentProvider's transport. Apk on Mac runs exactly one app in one
 // process, so there is no system_server / Binder hop -- every provider
 // the manifest declares is already a live object in this JVM. This
 // registry is the local stand-in for ActivityThread's map: Boot
@@ -35,7 +35,7 @@ public final class ContentProviderRegistry {
 
     // authority (lower-cased, AOSP treats authorities case-insensitively
     // for matching) -> the live ContentProvider serving it. Process-wide:
-    // there is exactly one provider host process in Mac.apk.
+    // there is exactly one provider host process in Apk on Mac.
     private static final Map<String, ContentProvider> sByAuthority =
         new ConcurrentHashMap<>();
 

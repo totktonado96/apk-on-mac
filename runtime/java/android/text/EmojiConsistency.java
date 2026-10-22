@@ -6,7 +6,7 @@
 // Mirrors frameworks/base/core/java/android/text/EmojiConsistency.java's public
 // surface. AOSP populates the set from a framework resource
 // (com.android.internal.R.array.emoji_consistency_set, a build-time list of
-// codepoint sequences) that Mac.apk does not ship; there is no macOS-side
+// codepoint sequences) that Apk on Mac does not ship; there is no macOS-side
 // equivalent to route to, because the answer is a property of the ANDROID font
 // bundle rather than of the host. An empty set is the honest answer -- and it
 // is a legal one: AOSP's own contract is "the returned set may be empty", and

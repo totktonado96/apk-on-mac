@@ -15,7 +15,7 @@ import java.util.Set;
  * picked, which were shown and ignored, which fields they edited by hand.
  *
  * The platform builds this; a service only reads it, and AOSP returns null from
- * getFillEventHistory() whenever there is nothing to report. Mac.apk has no
+ * getFillEventHistory() whenever there is nothing to report. Apk on Mac has no
  * session to report on, so getEvents() is an empty list rather than a
  * fabricated history.
  *

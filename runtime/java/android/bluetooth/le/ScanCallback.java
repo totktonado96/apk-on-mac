@@ -1,6 +1,6 @@
 // android.bluetooth.le.ScanCallback
 //
-// The callback an app subclasses to receive BLE scan results. Mac.apk has no
+// The callback an app subclasses to receive BLE scan results. Apk on Mac has no
 // radio, so a scan never delivers results; BluetoothLeScanner.startScan
 // reports SCAN_FAILED_INTERNAL_ERROR to onScanFailed so apps don't wait
 // forever. The full overridable surface + SCAN_FAILED_* constants must exist.

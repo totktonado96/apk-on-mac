@@ -1,4 +1,4 @@
-// camera_capture.mm -- native macOS camera capture for Mac.apk.
+// camera_capture.mm -- native macOS camera capture for Apk on Mac.
 //
 // The layer below android.hardware.camera2: an AVCaptureSession +
 // AVCaptureVideoDataOutput engine, plus the JNI seam
@@ -6,7 +6,7 @@
 // onto. See runtime/include/macapk/camera_capture.h for the C contract and
 // runtime/java/com/macapk/loader/CameraBridge.java for the Java side.
 //
-// Mac.apk previously reported no camera at all: Camera.getNumberOfCameras()
+// Apk on Mac previously reported no camera at all: Camera.getNumberOfCameras()
 // returned 0 and openCamera threw. Every MacBook has a camera, so the honest
 // answer is to wire the real one in. This file is that wiring.
 //
@@ -400,7 +400,7 @@ static void warn_if_no_camera_purpose_string() {
     std::fprintf(stderr,
         "[camera] %s has NO NSCameraUsageDescription: macOS denies the camera "
         "WITHOUT prompting. The bundle predates the purpose strings; opening the "
-        "Mac.apk control panel re-stamps it (quit this app first).\n",
+        "Apk on Mac control panel re-stamps it (quit this app first).\n",
         b.bundlePath.UTF8String);
 }
 
@@ -471,7 +471,7 @@ MacapkCamSession* macapk_cam_open(int index) {
             (id)kCVPixelBufferPixelFormatTypeKey : @(wanted_pixel_format()),
         };
 
-        s->queue = dispatch_queue_create("org.macapk.camera",
+        s->queue = dispatch_queue_create("io.github.totktonado96.apkonmac.camera",
                                          DISPATCH_QUEUE_SERIAL);
         s->delegate = [[MacapkCamDelegate alloc] init];
         s->delegate.owner = s;

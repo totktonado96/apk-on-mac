@@ -38,7 +38,7 @@ public class StorageManager {
     public static final UUID UUID_DEFAULT =
             UUID.fromString("41217664-9172-527a-b3d5-edabb50a7d69");
 
-    /** The one storage volume Mac.apk models. A shared instance so a
+    /** The one storage volume Apk on Mac models. A shared instance so a
      *  caller comparing getPrimaryStorageVolume() against
      *  getStorageVolumes().get(0) (AOSP's own documented idiom) sees the
      *  same object, matching "the primary shared storage device" being a
@@ -71,7 +71,7 @@ public class StorageManager {
      *  Aurora quirk. The correct value was already declared two lines above
      *  this method the whole time.
      *
-     *  Mac.apk models exactly one volume (PRIMARY_VOLUME), so every path on it
+     *  Apk on Mac models exactly one volume (PRIMARY_VOLUME), so every path on it
      *  is UUID_DEFAULT. */
     public java.util.UUID getUuidForPath(java.io.File path) {
         return UUID_DEFAULT;
@@ -118,13 +118,13 @@ public class StorageManager {
     public boolean isAllocationSupported(java.io.FileDescriptor fd) { return false; }
 
     /** AOSP getCacheQuotaBytes (API 26): the cache quota for the app on a volume.
-     *  Mac.apk imposes no per-app cache quota; report the volume's free space. */
+     *  Apk on Mac imposes no per-app cache quota; report the volume's free space. */
     public long getCacheQuotaBytes(java.util.UUID storageUuid) { return Long.MAX_VALUE; }
 
     /** AOSP: @NonNull. Returns the shared PRIMARY_VOLUME rather than a fresh
      *  instance, so a caller comparing the result against
      *  getPrimaryStorageVolume() or getStorageVolumes().get(0) sees the same
-     *  identity -- Mac.apk models exactly one volume, and handing back a new
+     *  identity -- Apk on Mac models exactly one volume, and handing back a new
      *  object each call made == fail for no reason a device would. */
     public android.os.storage.StorageVolume getStorageVolume(android.net.Uri uri) {
         return PRIMARY_VOLUME;
@@ -150,7 +150,7 @@ public class StorageManager {
     }
 
     /** AOSP :2146 -- "the size of the cache data owned by the calling app on
-     *  the given storage volume". Mac.apk keeps the app's cache under its data
+     *  the given storage volume". Apk on Mac keeps the app's cache under its data
      *  dir, so this is measurable rather than guessable: walk it. */
     public long getCacheSizeBytes(java.util.UUID storageUuid) throws java.io.IOException {
         java.io.File root = PRIMARY_VOLUME.getDirectory();
@@ -171,7 +171,7 @@ public class StorageManager {
     // ---- Cache behaviour flags (AOSP :2744-:2782). AOSP stores them as
     // EXTENDED ATTRIBUTES on the directory ("user.cache_group" /
     // "user.cache_tombstone") and the OS's cache-clearing pass reads them
-    // back. Mac.apk has no cache-clearing pass at all, so nothing would ever
+    // back. Apk on Mac has no cache-clearing pass at all, so nothing would ever
     // ACT on either flag -- but the read-back is still observable, and AOSP's
     // own contract is that isCacheBehaviorX() returns what setCacheBehaviorX()
     // last set. Keeping that pairing honest costs a map; answering a constant
@@ -202,7 +202,7 @@ public class StorageManager {
     }
 
     /** AOSP :2850 -- filesystem checkpointing (used by the update engine to
-     *  roll back a failed OTA). APFS has snapshots, but nothing in Mac.apk
+     *  roll back a failed OTA). APFS has snapshots, but nothing in Apk on Mac
      *  drives them and there is no OTA to roll back, so the device-accurate
      *  answer is "this build does not support checkpointing". */
     public boolean isCheckpointSupported() { return false; }
@@ -210,7 +210,7 @@ public class StorageManager {
     /** AOSP :1748 -- whether the given file lives on encrypted storage. AOSP
      *  answers isEncrypted() (i.e. ro.crypto.state) for anything under
      *  getDataDirectory(), true under the expand directory, false elsewhere.
-     *  Mac.apk's tree sits on whatever the host volume is; we do not read the
+     *  Apk on Mac's tree sits on whatever the host volume is; we do not read the
      *  host's FileVault state (and a per-file answer derived from it would be
      *  a guess), so report false -- the same answer a device with an
      *  unencrypted userdata partition gives. */
@@ -237,7 +237,7 @@ public class StorageManager {
 
     /** AOSP :753 -- a PendingIntent that launches the given package's
      *  "manage space" activity, @Nullable and documented to be null when the
-     *  package declares no such activity. Mac.apk hosts exactly one app and
+     *  package declares no such activity. Apk on Mac hosts exactly one app and
      *  resolves no other package's manifest, so there is no manage-space
      *  activity to point at. */
     public android.app.PendingIntent getManageSpaceActivityIntent(String packageName,
@@ -263,7 +263,7 @@ public class StorageManager {
             throws java.io.IOException {
         if (callback == null) throw new NullPointerException("callback cannot be null");
         throw new java.io.IOException(
-                "proxy file descriptors are not supported by the Mac.apk runtime");
+                "proxy file descriptors are not supported by the Apk on Mac runtime");
     }
 
     /** AOSP :593 -- notified when a StorageVolume's state changes. */
@@ -272,7 +272,7 @@ public class StorageManager {
     }
 
     // AOSP :617/:637 register against StorageManagerService's volume events.
-    // Mac.apk models one permanently MEDIA_MOUNTED volume that can never
+    // Apk on Mac models one permanently MEDIA_MOUNTED volume that can never
     // change state, so a registered callback is correct in never firing. The
     // registration itself is still tracked so unregister actually unregisters
     // (a caller that re-registers the same object must not accumulate).
@@ -298,7 +298,7 @@ public class StorageManager {
     // asynchronously via the listener once that binder round-trip lands
     // (frameworks/base/core/java/android/os/storage/StorageManager.java,
     // fetched 2026-08-12, android13-release). macOS has no loop-mount /
-    // vold equivalent for Mac.apk to drive, so there is no way to actually
+    // vold equivalent for Apk on Mac to drive, so there is no way to actually
     // honor a mount.
     //
     // DESIGN DECISION: mountObb() must not accept the request and then go
@@ -307,7 +307,7 @@ public class StorageManager {
     // answer would hang forever against a listener we never call. Instead
     // this validates arguments exactly like AOSP (NullPointerException for
     // a null path/listener, IllegalArgumentException for a non-null key --
-    // encrypted OBBs are unsupported in AOSP itself, not a Mac.apk-specific
+    // encrypted OBBs are unsupported in AOSP itself, not a Apk on Mac-specific
     // restriction), then immediately answers with ERROR_COULD_NOT_MOUNT and
     // returns false ("not queued"), because there is genuinely no backend
     // to queue it to. ERROR_COULD_NOT_MOUNT is a real member of AOSP's own
@@ -328,7 +328,7 @@ public class StorageManager {
 
     // Consistent with mountObb() above always failing: nothing is ever
     // mounted, so AOSP's documented "or null if not mounted" branch is the
-    // only one Mac.apk can ever take.
+    // only one Apk on Mac can ever take.
     public String getMountedObbPath(String rawPath) {
         if (rawPath == null) throw new NullPointerException("rawPath cannot be null");
         return null;

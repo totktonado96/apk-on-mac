@@ -4219,7 +4219,7 @@ struct Arm32Lifter::Impl {
     // Deprecated in ARMv7 (ARM ARM A8.6.225) but still emitted by older
     // GCC and seen in shipped binaries (libfmod, libcocos2dx_internal).
     // Semantics: tmp = mem[Rn]; mem[Rn] = Rt2; Rt = tmp. We don't model
-    // atomicity (no LL/SC contention possible in Mac.apk's single-VM
+    // atomicity (no LL/SC contention possible in Apk on Mac's single-VM
     // address space); a plain load+store pair preserves single-thread
     // correctness.
     bool emit_swp(const cs_insn* in, int bits) {
@@ -11132,7 +11132,7 @@ struct Arm32Lifter::Impl {
         return true;
     }
 
-    // STREX Rd, Rs, [Rn] -- store-exclusive. Mac.apk runs the lifted
+    // STREX Rd, Rs, [Rn] -- store-exclusive. Apk on Mac runs the lifted
     // .so in the same address space as the JVM, with no other threads
     // racing on the same memory directly, so we treat it as a plain
     // store and report success (Rd = 0). Real preemptive contention
@@ -13018,7 +13018,7 @@ struct Arm32Lifter::Impl {
             case ARM_INS_STREX: ok = emit_strex(in); break;
             case ARM_INS_LDRD:  ok = emit_ldrd(in); break;
             case ARM_INS_STRD:  ok = emit_strd(in); break;
-            // T-suffixed unprivileged variants. Mac.apk has no
+            // T-suffixed unprivileged variants. Apk on Mac has no
             // user/privileged distinction, so we emit them the same as
             // their normal counterparts.
             case ARM_INS_LDRT:   ok = emit_ldr_size(in, 32, false); break;
@@ -13397,7 +13397,7 @@ struct Arm32Lifter::Impl {
             case ARM_INS_VFNMA: ok = emit_vfp_fma(in, FmaOp::VNMLA); break;
             case ARM_INS_VFNMS: ok = emit_vfp_fma(in, FmaOp::VNMLS); break;
             // Long-tail no-ops: instructions whose effect is invisible
-            // to Mac.apk's runtime model. Coprocessor ops, breakpoints,
+            // to Apk on Mac's runtime model. Coprocessor ops, breakpoints,
             // exclusive-monitor clears, hint instructions, etc. We let
             // them pass so the surrounding function lifts; misuse will
             // surface as wrong behavior, not a build-time failure.
@@ -13436,7 +13436,7 @@ struct Arm32Lifter::Impl {
             // ARM ARM B1.8.5 -- raises an exception to EL2. User-mode
             // code reaching here is dead/junk; lifting as noop is
             // semantically safe because the exception path is unreachable
-            // in Mac.apk's user-only execution model.
+            // in Apk on Mac's user-only execution model.
             case ARM_INS_HVC:
             // SETEND: change endianness. ARM ARM A8.6.158 -- deprecated
             // in ARMv8. macOS host is little-endian fixed; the only
@@ -13742,7 +13742,7 @@ struct Arm32Lifter::Impl {
         //
         // It read `sym.name.compare(0, 17, "__macapk_synth_") == 0`. The
         // literal is 15 characters; the pre-rebrand one, "__macdroid_synth_",
-        // was 17 (commit 0d3691f, "Bug fixes and name change to Mac.apk",
+        // was 17 (commit 0d3691f, "Bug fixes and name change to Apk on Mac",
         // renamed the prefix and left the length). compare(pos, len, s)
         // measures s against a len-character substring, so a 17-char substring
         // could never equal the 15-char literal: `is_synth` was ALWAYS FALSE,

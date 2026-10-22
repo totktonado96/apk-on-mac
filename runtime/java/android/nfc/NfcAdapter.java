@@ -1,6 +1,6 @@
 // android.nfc.NfcAdapter
 //
-// The handle to the device NFC radio. Mac.apk has no NFC hardware. AOSP's
+// The handle to the device NFC radio. Apk on Mac has no NFC hardware. AOSP's
 // NfcAdapter.getDefaultAdapter(Context) returns null on devices without NFC,
 // which is exactly our situation, so callers take their "NFC unavailable" path.
 // We still ship the class so the type resolves (apps reference NfcAdapter in
@@ -86,7 +86,7 @@ public final class NfcAdapter {
     public boolean isSecureNfcSupported() { return false; }
 
     /** AOSP's nested reader-mode callback interface. This has to exist as a
-     *  TYPE even though Mac.apk never dispatches a tag: implementing an
+     *  TYPE even though Apk on Mac never dispatches a tag: implementing an
      *  interface is a class-structure dependency the JVM resolves when the
      *  implementing class is DEFINED, not when its methods run, so a bundled
      *  SDK carrying an unrelated `implements NfcAdapter.ReaderCallback` class
@@ -203,7 +203,7 @@ public final class NfcAdapter {
     }
 
     /** AOSP enableReaderMode's first act is `if (!sHasNfcFeature) throw new
-     *  UnsupportedOperationException();` (NfcAdapter.java:1737-1740). Mac.apk
+     *  UnsupportedOperationException();` (NfcAdapter.java:1737-1740). Apk on Mac
      *  has no NFC radio, so sHasNfcFeature is false for us and that is the
      *  faithful answer -- not a silent no-op, which would leave an app waiting
      *  forever for an onTagDiscovered that cannot come. In practice this is

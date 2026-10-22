@@ -20,7 +20,7 @@ import java.util.List;
  *
  * WHAT MAC.APK CAN AND CANNOT DO HERE. This is the archetype of a service that
  * cannot function on a single-app host: its whole purpose is to see OTHER
- * apps' notifications, and there are none. Mac.apk never binds it, so
+ * apps' notifications, and there are none. Apk on Mac never binds it, so
  * onNotificationPosted / onNotificationRemoved / onListenerConnected never
  * fire.
  *

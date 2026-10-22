@@ -16,7 +16,7 @@
 //   void syncSummaryView(View view)
 //   protected Parcelable onSaveInstanceState() / onRestoreInstanceState(Parcelable)
 //
-// This class did NOT exist in Mac.apk before: CheckBoxPreference extended
+// This class did NOT exist in Apk on Mac before: CheckBoxPreference extended
 // Preference directly and held its own in-memory `checked` field that was never
 // persisted. That is why the whole family is being rebuilt here rather than
 // patched -- a checkbox setting that silently forgets itself between launches is
@@ -79,7 +79,7 @@ public class TwoStatePreference extends Preference {
     public TwoStatePreference(Context context, AttributeSet attrs) { this(context, attrs, 0, 0); }
     public TwoStatePreference(Context context) { this(context, null, 0, 0); }
 
-    /** Not AOSP; kept because the previous Mac.apk CheckBoxPreference chain
+    /** Not AOSP; kept because the previous Apk on Mac CheckBoxPreference chain
      *  allowed a context-less construction. */
     public TwoStatePreference() { super(); }
 
@@ -93,7 +93,7 @@ public class TwoStatePreference extends Preference {
         }
     }
 
-    /** AOSP body, verbatim -- note it PERSISTS, which the old Mac.apk
+    /** AOSP body, verbatim -- note it PERSISTS, which the old Apk on Mac
      *  CheckBoxPreference never did. */
     public void setChecked(boolean checked) {
         final boolean changed = mChecked != checked;
@@ -148,7 +148,7 @@ public class TwoStatePreference extends Preference {
     }
 
     /** AOSP body, with one guard: AOSP casts `(Boolean) defaultValue` and NPEs
-     *  when the XML declared no defaultValue at all. Mac.apk's
+     *  when the XML declared no defaultValue at all. Apk on Mac's
      *  XML may declare no android:defaultValue at all, in which case AOSP's
      *  TypedArray slot is absent and mDefaultValue stays null. A null is treated
      *  as `false`, which is AOSP's own no-attribute default

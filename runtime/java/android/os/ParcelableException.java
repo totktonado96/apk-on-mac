@@ -6,7 +6,7 @@
 // maybeRethrow(FileNotFoundException.class) (DocumentsContract.java,
 // rethrowIfNecessary). Added with the DocumentsProvider URI/call dispatch
 // (MACAPK_DOCSPROVIDER_DISPATCH, docs/document-picker-host-panel_2026-09-27.md):
-// before that, nothing in Mac.apk dispatched a provider call that could throw it.
+// before that, nothing in Apk on Mac dispatched a provider call that could throw it.
 //
 // Mirrors android14-release core/java/android/os/ParcelableException.java
 // verbatim in shape: public final, extends RuntimeException, implements

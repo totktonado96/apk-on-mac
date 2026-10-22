@@ -1,4 +1,4 @@
-// Mac.apk v1.0.101 -- real Gravity constants. Previously a 1-line
+// Apk on Mac v1.0.101 -- real Gravity constants. Previously a 1-line
 // stub; F-Droid's BottomNavigationView, FloatingActionButton,
 // LinearLayout text alignment, and CoordinatorLayout child positioning
 // all read these bits to decide where a child sits within its parent.

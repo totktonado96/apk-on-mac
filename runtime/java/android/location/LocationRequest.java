@@ -1,5 +1,5 @@
 // android.location.LocationRequest -- parameters for a location-update
-// request (interval, quality, etc.). Builder-shaped per AOSP. Mac.apk
+// request (interval, quality, etc.). Builder-shaped per AOSP. Apk on Mac
 // never delivers fixes, but the type + Builder must exist so apps that
 // construct a request and pass it to LocationManager.requestLocationUpdates
 // compile and run. Data holder only.
@@ -69,7 +69,7 @@ public final class LocationRequest implements Parcelable {
     // === Parcelable =========================================================
     // AOSP's own parcel carries several @hide fields (provider, expireAt,
     // hideFromAppOps, adasGnssBypass, bypass, lowPower, WorkSource). Those are
-    // system-server plumbing that no app can set or read, and Mac.apk has no
+    // system-server plumbing that no app can set or read, and Apk on Mac has no
     // system server, so they are not modelled. The public fields are written in
     // AOSP's order so a reader of this parcel sees a coherent, self-consistent
     // request.

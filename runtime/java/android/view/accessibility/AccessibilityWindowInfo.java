@@ -11,7 +11,7 @@ import android.os.Parcelable;
  *
  * Only an accessibility service ever receives one (via
  * AccessibilityService.getWindows()); a normal app references the TYPE while
- * compiling code that walks a window list it will never be given. Mac.apk has
+ * compiling code that walks a window list it will never be given. Apk on Mac has
  * no accessibility service, so the list is empty and this describes an empty
  * window -- but the class must exist and its methods must link, which is why 22
  * of 37 corpus apps need it.
@@ -49,7 +49,7 @@ public final class AccessibilityWindowInfo implements Parcelable {
     /** AOSP AccessibilityWindowInfo(AccessibilityWindowInfo) (API 30): the
      *  public copy constructor that replaced obtain(AccessibilityWindowInfo).
      *  This class holds no mutable per-instance state beyond what its own
-     *  getters compute (every one answers from the single Mac.apk window), so
+     *  getters compute (every one answers from the single Apk on Mac window), so
      *  the copy is structurally identical to the original -- which is what a
      *  copy constructor has to produce. */
     public AccessibilityWindowInfo(AccessibilityWindowInfo info) { }

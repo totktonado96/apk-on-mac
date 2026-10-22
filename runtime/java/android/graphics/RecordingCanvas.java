@@ -97,7 +97,7 @@ public class RecordingCanvas extends Canvas {
             if (!sTripLogged) {
                 sTripLogged = true;
                 try {
-                    com.macapk.loader.NativeLog.i("Mac.apk.RenderNode",
+                    com.macapk.loader.NativeLog.i("Apk on Mac.RenderNode",
                         "[dl-unrecorded] a pixel op reached a display-list recording without an "
                         + "override (inkDelta=" + (macapkDrawOps - tripDrawOps) + "); the node "
                         + "falls back to a bitmap recording. RecordingCanvas is missing an override.");

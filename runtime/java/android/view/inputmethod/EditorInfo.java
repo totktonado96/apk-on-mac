@@ -140,7 +140,7 @@ public class EditorInfo implements android.text.InputType, Parcelable {
 
     /** AOSP EditorInfo.setInitialToolType(int) / getInitialToolType() (API 34):
      *  the MotionEvent.TOOL_TYPE_* that started the editing session, so an IME
-     *  can tell a stylus tap from a finger tap. Mac.apk delivers every pointer
+     *  can tell a stylus tap from a finger tap. Apk on Mac delivers every pointer
      *  as a finger (the Cocoa bridge synthesises TOOL_TYPE_FINGER), so the
      *  default is TOOL_TYPE_UNKNOWN until a caller sets it, which is AOSP's own
      *  default for a session started without a MotionEvent. */

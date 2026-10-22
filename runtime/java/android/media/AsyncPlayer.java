@@ -2,7 +2,7 @@
 // background thread (used by notifications/alarms). AOSP frameworks/base
 // media/java/android/media/AsyncPlayer.java.
 //
-// Mac.apk backs this with MediaPlayer where the Uri is a decodable file; play()
+// Apk on Mac backs this with MediaPlayer where the Uri is a decodable file; play()
 // stops any prior playback and starts the new sound, stop() halts it. A Uri we
 // cannot resolve/decode falls through to a no-op (no crash) so notification
 // posting still proceeds.

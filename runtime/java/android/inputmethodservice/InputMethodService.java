@@ -29,7 +29,7 @@ import java.time.Duration;
  *  onCreateInputView / onStartInputView / onKeyDown to draw and drive a
  *  keyboard.
  *
- *  ⚠ STRUCTURAL LIMIT, stated plainly rather than papered over: Mac.apk runs
+ *  ⚠ STRUCTURAL LIMIT, stated plainly rather than papered over: Apk on Mac runs
  *  ONE app and has no system process, so an APK that IS an input method is
  *  never bound and never displayed. Nothing here fabricates a window, an
  *  InputMethodManagerService, or a privileged-operations channel. The three
@@ -389,7 +389,7 @@ public class InputMethodService extends AbstractInputMethodService {
      *  internal ids inputExtractEditText / inputExtractAction /
      *  inputExtractAccessories, then starts extracting text.
      *
-     *  Mac.apk ships no com.android.internal resources, so the id lookup cannot
+     *  Apk on Mac ships no com.android.internal resources, so the id lookup cannot
      *  work -- but the OBJECT AOSP is looking for is identified just as well by
      *  its type, and finding it that way keeps onUpdateExtractedText,
      *  onUpdateSelection and onExtractedTextClicked functional for an IME that
@@ -486,7 +486,7 @@ public class InputMethodService extends AbstractInputMethodService {
 
     /** AOSP evaluates this against the hard-keyboard configuration: show the
      *  soft input view when there is no hardware keyboard, or when there is one
-     *  but it is folded away. Mac.apk always has the host's physical keyboard,
+     *  but it is folded away. Apk on Mac always has the host's physical keyboard,
      *  and Configuration.keyboard/hardKeyboardHidden carry that -- so this
      *  answers from the same two fields AOSP reads and is honest either way. */
     public boolean onEvaluateInputViewShown() {
@@ -960,7 +960,7 @@ public class InputMethodService extends AbstractInputMethodService {
         mBackDisposition = disposition;
     }
 
-    /** AOSP asks the system to make `id` the current IME. Mac.apk installs no
+    /** AOSP asks the system to make `id` the current IME. Apk on Mac installs no
      *  IME list, so there is no other IME to switch to and nothing to ask. */
     public void switchInputMethod(String id) { }
 
@@ -981,7 +981,7 @@ public class InputMethodService extends AbstractInputMethodService {
     // ---------------------------------------------------------------------
     // Stylus handwriting.
     //
-    // Mac.apk has no stylus and no ink window. AOSP's own defaults for the
+    // Apk on Mac has no stylus and no ink window. AOSP's own defaults for the
     // callbacks are empty/false, so those are faithful; the session-timeout
     // accessors are pure arithmetic on a field and are faithful including the
     // clamp and the IllegalStateException.
@@ -1069,7 +1069,7 @@ public class InputMethodService extends AbstractInputMethodService {
     }
 
     /** AOSP: `return mWindow;` -- the SoftInputWindow Dialog the IME's decor
-     *  lives in. Mac.apk creates no such window; null is the AOSP state before
+     *  lives in. Apk on Mac creates no such window; null is the AOSP state before
      *  onCreate() has run. */
     public Dialog getWindow() { return null; }
 
@@ -1084,7 +1084,7 @@ public class InputMethodService extends AbstractInputMethodService {
     }
 
     /** @deprecated at API 21 -- AOSP now reports whether the device is
-     *  high-end-GFX, and throws if called after onCreate(). Every Mac.apk host
+     *  high-end-GFX, and throws if called after onCreate(). Every Apk on Mac host
      *  is Apple Silicon with a Metal GPU, so the answer is unconditionally
      *  true. */
     @Deprecated public boolean enableHardwareAcceleration() { return true; }

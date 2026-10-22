@@ -3,7 +3,7 @@
 // Source: frameworks/base core/java/android/view/XrWindowProperties.java
 // (android16-release). Constants only -- there is nothing to implement.
 //
-// Mac.apk targets macOS windows, not an XR shell, so nothing reads these; the
+// Apk on Mac targets macOS windows, not an XR shell, so nothing reads these; the
 // class exists so an app that names one resolves.
 package android.view;
 

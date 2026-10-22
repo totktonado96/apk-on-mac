@@ -1,7 +1,7 @@
 package android.view.inspector;
 import java.util.function.IntFunction;
 /** Maps inspectable property names to integer ids, once, during an
- *  InspectionCompanion.mapProperties pass. Mac.apk has no live view inspector,
+ *  InspectionCompanion.mapProperties pass. Apk on Mac has no live view inspector,
  *  so the ids are handed out sequentially and never read back. API 29.
  *  Source: frameworks/base/core/java/android/view/inspector/PropertyMapper.java */
 public interface PropertyMapper {

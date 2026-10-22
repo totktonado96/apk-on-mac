@@ -1,5 +1,5 @@
 // android.os.MemoryFile -- shared-memory region backed by ashmem on Android.
-// Mac.apk has no ashmem and no cross-process consumer, so we back it with a
+// Apk on Mac has no ashmem and no cross-process consumer, so we back it with a
 // plain byte[] of the requested length. Single-process apps that use MemoryFile
 // as a scratch buffer (image decode staging, IPC-style handoff within the app)
 // get correct read/write/stream behavior.

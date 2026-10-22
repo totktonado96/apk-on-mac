@@ -6,7 +6,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.Executor;
-/** Drives activity embedding (multi-pane splits). Mac.apk shows one activity
+/** Drives activity embedding (multi-pane splits). Apk on Mac shows one activity
  *  full-screen and never embeds, so no activity is embedded, no split is ever
  *  reported, and rule/attribute mutations are inert. */
 public interface ActivityEmbeddingComponent {

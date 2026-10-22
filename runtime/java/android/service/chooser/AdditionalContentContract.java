@@ -7,7 +7,7 @@ package android.service.chooser;
  * chooser uses to report a selection change.
  *
  * Pure naming contract -- there is no behaviour here even in AOSP, which is why
- * the outer type is an empty interface. Mac.apk shows no system chooser, so
+ * the outer type is an empty interface. Apk on Mac shows no system chooser, so
  * nothing on our side calls the provider, but an app that IMPLEMENTS the
  * provider references these names and must resolve them.
  *

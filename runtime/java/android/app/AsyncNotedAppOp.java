@@ -10,7 +10,7 @@
 // service -- so the only public surface is the accessors, the Parcelable pair,
 // and the CREATOR, all of which are reproduced here.
 //
-// Mac.apk runs no app-ops service, so nothing in this process ever produces one;
+// Apk on Mac runs no app-ops service, so nothing in this process ever produces one;
 // the type exists because AppOpsManager.OnOpNotedCallback.onAsyncNoted names it
 // in its signature, and without the type that callback cannot be declared at all.
 package android.app;

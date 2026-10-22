@@ -1,6 +1,6 @@
 // android.os.Looper -- per-thread message loop runner.
 //
-// Mac.apk has TWO Looper models that coexist:
+// Apk on Mac has TWO Looper models that coexist:
 //
 //  1. The MAIN looper (singleton `MAIN`). Handlers bound to it enqueue
 //     into Handler.GLOBAL_QUEUE, drained every frame by the Cocoa
@@ -74,7 +74,7 @@ public final class Looper {
     private static final java.util.concurrent.atomic.AtomicBoolean
         heartbeatPending = new java.util.concurrent.atomic.AtomicBoolean(false);
 
-    /** The set of threads Mac.apk considers "main": the
+    /** The set of threads Apk on Mac considers "main": the
      *  ActivityHost.start thread (= "macapk-activity", designated
      *  deterministically by Boot.run() via designateMainThread() before
      *  anything else can run) and the metal callback thread. Both
@@ -104,7 +104,7 @@ public final class Looper {
     // they runOnUiThread their UI, or call it from the GL thread, take the
     // exception and carry on.
     //
-    // Mac.apk has no GLThread: the renderer runs on the AppKit main thread
+    // Apk on Mac has no GLThread: the renderer runs on the AppKit main thread
     // (GLSurfaceView: "Ours has no GLThread"), which is one of `mainThreads`,
     // so myLooper() answered MAIN there and UI calls from the renderer simply
     // WORKED. Measured: Jetpack Joyride's native step() calls
@@ -231,7 +231,7 @@ public final class Looper {
     }
 
     /** Register `t` as a main thread and, the FIRST time, pin it as the MAIN
-     *  looper's thread. Mac.apk treats several threads as "main" (the
+     *  looper's thread. Apk on Mac treats several threads as "main" (the
      *  ActivityHost.start thread and the metal callback thread), but
      *  Looper.getMainLooper().getThread() has to name exactly one and has to
      *  keep naming the same one -- an app that stores it and later compares
@@ -258,7 +258,7 @@ public final class Looper {
      *  enforceMainThreadIfNeeded / LiveData.assertMainThread / SystemJobService
      *  .assertMainThread all route through it -- then throws
      *  "must be called on the main thread" the moment ActivityHost runs on
-     *  the ACTUAL macapk-activity thread, even though that thread is Mac.apk's
+     *  the ACTUAL macapk-activity thread, even though that thread is Apk on Mac's
      *  one true Android main thread. Full root-cause + fix:
      *  docs/lifecycle-mainthread-regression_2026-07-28.md.
      *
@@ -312,7 +312,7 @@ public final class Looper {
      *        null because the queue was quitting -- the v1.0.833 pathology, in
      *        which the activity never runs onCreate.
      *  Reporting (a) as (b) is what the old "(main looper quit)" message did.
-     *  Mac.apk-only helper, hence the macapk prefix, like macapkIsActivityThread
+     *  Apk on Mac-only helper, hence the macapk prefix, like macapkIsActivityThread
      *  and macapkPumpMainLoop -- AOSP exposes no accessor for mQuitting, and
      *  MessageQueue.isQuitting() is package-private, so this is the seam rather
      *  than widening MessageQueue's AOSP surface. */
@@ -374,7 +374,7 @@ public final class Looper {
         }
     }
 
-    /** @hide Mac.apk (MACAPK_CHOREO_VSYNC_THREADS): can this looper receive
+    /** @hide Apk on Mac (MACAPK_CHOREO_VSYNC_THREADS): can this looper receive
      *  display vsync events? True only for a prepared per-thread looper whose
      *  native looper is bound and whose runtime binds the vsync natives. The
      *  main looper answers false: its Choreographer is driven per real frame by
@@ -399,7 +399,7 @@ public final class Looper {
         return s == 1;
     }
 
-    /** @hide Mac.apk: AOSP DisplayEventReceiver.scheduleVsync() for this
+    /** @hide Apk on Mac: AOSP DisplayEventReceiver.scheduleVsync() for this
      *  looper -- request exactly ONE vsync, delivered to {@code receiver} on
      *  this looper's thread. Safe from any thread (the native request is
      *  locked; the wake is the queue's own). Returns false when this looper

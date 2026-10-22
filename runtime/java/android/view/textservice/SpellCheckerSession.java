@@ -2,7 +2,7 @@
 // spell-checker service. Source: frameworks/base
 // core/java/android/view/textservice/SpellCheckerSession.java (android16-release).
 //
-// Mac.apk ships NO spell-checker service, so TextServicesManager.
+// Apk on Mac ships NO spell-checker service, so TextServicesManager.
 // newSpellCheckerSession() returns null (AOSP's own answer when no checker is
 // enabled) and no session is ever created by the framework. A session an app
 // somehow holds reports itself DISCONNECTED, which is the state AOSP puts a

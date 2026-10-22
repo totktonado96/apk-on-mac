@@ -10,7 +10,7 @@ import java.util.List;
  * Managed-configuration (enterprise MDM) restrictions applied to an app by a
  * device-policy controller.
  *
- * Mac.apk is not a managed device and has no device-policy controller, which is
+ * Apk on Mac is not a managed device and has no device-policy controller, which is
  * the same state as an ordinary unmanaged Android phone: AOSP returns an empty
  * Bundle from getApplicationRestrictions() and false from
  * hasRestrictionsProvider(). Apps read the Bundle and fall back to their own
@@ -154,7 +154,7 @@ public class RestrictionsManager {
     }
 
     /** AOSP :479 -- "a List containing a Bundle for each managing agent that
-     *  has set restrictions", @NonNull. Mac.apk is unmanaged, so there is no
+     *  has set restrictions", @NonNull. Apk on Mac is unmanaged, so there is no
      *  managing agent and the list is empty -- the same answer an unmanaged
      *  device gives. Note this is NOT the same as getApplicationRestrictions()
      *  above, which returns one (empty) Bundle rather than a list of them. */

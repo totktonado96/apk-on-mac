@@ -4,7 +4,7 @@ import java.io.InputStream;
 
 // com.google.firebase.storage.StreamDownloadTask -- returned by
 // StorageReference.getStream(...). Real Storage opens an InputStream over the
-// downloading object. On Mac.apk there is no backend, so the task fails cleanly
+// downloading object. On Apk on Mac there is no backend, so the task fails cleanly
 // with StorageException(ERROR_UNKNOWN); the snapshot's stream is null.
 //
 // Signatures mirror the published Firebase Storage Android reference.

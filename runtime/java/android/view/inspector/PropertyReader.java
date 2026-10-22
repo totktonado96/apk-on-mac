@@ -1,6 +1,6 @@
 package android.view.inspector;
 /** Receives inspectable property values during
- *  InspectionCompanion.readProperties. Mac.apk has no inspector consuming these,
+ *  InspectionCompanion.readProperties. Apk on Mac has no inspector consuming these,
  *  so the reads are accepted and discarded. API 29.
  *  Source: frameworks/base/core/java/android/view/inspector/PropertyReader.java */
 public interface PropertyReader {

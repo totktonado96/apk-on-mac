@@ -12,7 +12,7 @@ import java.util.List;
 // enablePendingPurchases().build(), startConnection(), then query products /
 // launch purchase flows.
 //
-// Mac.apk runs as a de-Googled device: there is NO Play Store service to bind
+// Apk on Mac runs as a de-Googled device: there is NO Play Store service to bind
 // to, so this client never reaches the CONNECTED state. Every call resolves to
 // an HONEST negative -- startConnection fires BILLING_UNAVAILABLE, isReady() is
 // false, queries return empty lists, and flow / acknowledge / consume return

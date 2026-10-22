@@ -19,7 +19,7 @@ Java_com_macapk_graphics_NativeSkiaMetal_createDeviceQueue(JNIEnv* env, jclass) 
             env->ThrowNew(env->FindClass("java/lang/IllegalStateException"), "Cannot create Skia Metal command queue");
             return nullptr;
         }
-        queue.label = @"Mac.apk Skia AGSL";
+        queue.label = @"Apk on Mac Skia AGSL";
         jlongArray result = env->NewLongArray(2);
         if (!result) {
             [queue release];

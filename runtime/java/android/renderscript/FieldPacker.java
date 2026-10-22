@@ -230,7 +230,7 @@ public class FieldPacker {
     /**
      * An rs_allocation / rs_element / other object handle. On a 64-bit driver
      * the slot is 32 bytes (four longs), not 8, because the runtime keeps three
-     * more words alongside the pointer. Mac.apk is 64-bit-only, so that is the
+     * more words alongside the pointer. Apk on Mac is 64-bit-only, so that is the
      * branch taken.
      */
     public void addObj(BaseObj obj) {

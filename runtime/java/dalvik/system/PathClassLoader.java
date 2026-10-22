@@ -12,7 +12,7 @@
 // named subclass so the loader-identity checks resolve. We mirror exactly that:
 // a thin BaseDexClassLoader subclass with the two public ctors.
 //
-// Note: Mac.apk's real app loader is com.macapk.loader.AppClassLoader, which is
+// Note: Apk on Mac's real app loader is com.macapk.loader.AppClassLoader, which is
 // NOT this class (it has bespoke APK-serving + native-lib-translate behavior).
 // An app that does `getClassLoader() instanceof PathClassLoader` will see false
 // for the primary app loader; that is acceptable -- the load-bearing need is
@@ -22,7 +22,7 @@ package dalvik.system;
 
 public class PathClassLoader extends BaseDexClassLoader {
 
-    /** Mac.apk-internal: forwards to BaseDexClassLoader's URL[] ctor.
+    /** Apk on Mac-internal: forwards to BaseDexClassLoader's URL[] ctor.
      *
      *  Exists so AppClassLoader can sit UNDER PathClassLoader in the hierarchy.
      *  On a device the app's loader IS a PathClassLoader, and code checks that:

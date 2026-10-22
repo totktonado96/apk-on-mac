@@ -2,7 +2,7 @@ package android.media;
 
 // android.media.Image -- minimal shadow of the camera/codec output buffer
 // handle. The full AOSP type is an abstract class wrapping a hardware image
-// buffer; on Mac.apk there is no camera/codec producing real Image instances,
+// buffer; on Apk on Mac there is no camera/codec producing real Image instances,
 // so this exists only so that signatures which REFERENCE android.media.Image
 // (most notably com.google.mlkit.vision.common.InputImage.fromMediaImage and
 // CameraX's ImageProxy.getImage) link. It is abstract with no concrete
@@ -46,7 +46,7 @@ public abstract class Image implements AutoCloseable {
     }
 
     /** AOSP Image.getHardwareBuffer (API 28): a descriptor of the image's buffer.
-     *  Mac.apk images are software-backed, so this is a format/size descriptor. */
+     *  Apk on Mac images are software-backed, so this is a format/size descriptor. */
     /**
      * API 34. The colour space / transfer / range the pixels are in, as a
      * DataSpace value. AOSP's default is DATASPACE_UNKNOWN (0) until a producer

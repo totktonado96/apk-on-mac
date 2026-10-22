@@ -4,7 +4,7 @@
 //
 // A REAL value object with no device dependency: an app builds these and
 // returns them from a ChooserTargetService. The system share sheet is what
-// would consume them, and Mac.apk has none -- but nothing here pretends
+// would consume them, and Apk on Mac has none -- but nothing here pretends
 // otherwise, because a ChooserTarget makes no claim about being displayed. It
 // is a plain description that the app hands back and forgets.
 //

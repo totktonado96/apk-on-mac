@@ -22,7 +22,7 @@ import java.util.List;
  * which it built, so execute() reports the missing capability in every case
  * rather than sometimes.
  *
- * An app that wants a chain of built-in intrinsics on Mac.apk should call each
+ * An app that wants a chain of built-in intrinsics on Apk on Mac should call each
  * intrinsic's forEach in turn, which is fully supported and is what the driver
  * would end up doing anyway.
  *
@@ -32,7 +32,7 @@ public final class ScriptGroup extends BaseObj {
 
     private static final String NO_ENGINE =
             "ScriptGroup.execute runs a graph of app-authored .rs kernels, which exist only"
-            + " as LLVM bitcode. Mac.apk has no bitcode engine, so the group cannot be"
+            + " as LLVM bitcode. Apk on Mac has no bitcode engine, so the group cannot be"
             + " executed. Call the built-in ScriptIntrinsic forEach methods in sequence"
             + " instead; those are implemented and run on the CPU.";
 

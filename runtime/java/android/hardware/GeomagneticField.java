@@ -15,7 +15,7 @@
  */
 
 // ---------------------------------------------------------------------------
-// Mac.apk note (added with this file, 2026-08-24)
+// Apk on Mac note (added with this file, 2026-08-24)
 // ---------------------------------------------------------------------------
 // Taken from AOSP frameworks/base/core/java/android/hardware/GeomagneticField.java
 // (android16-release), Apache-2.0, essentially VERBATIM. That is deliberate and

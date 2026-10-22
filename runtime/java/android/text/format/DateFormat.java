@@ -39,7 +39,7 @@ public class DateFormat {
     }
 
     /** AOSP: true if the user prefers 24-hour time. No per-user system setting
-     *  on Mac.apk; derive from the host locale's time pattern (whether it uses
+     *  on Apk on Mac; derive from the host locale's time pattern (whether it uses
      *  'H'/'k' 24-hour fields rather than 'h'/'K' + an am/pm marker) so the
      *  answer matches what getTimeFormat would render. */
     public static boolean is24HourFormat(Context context) {

@@ -39,7 +39,7 @@
 //    refuses to persist there, which is technically faithful -- but on AOSP a
 //    Preference an app can reach is essentially always attached, because
 //    PreferenceActivity / PreferenceFragment inflate it through a
-//    PreferenceManager. Mac.apk now HAS that inflater (PreferenceInflater), so
+//    PreferenceManager. Apk on Mac now HAS that inflater (PreferenceInflater), so
 //    an XML-declared hierarchy is attached exactly as on a device -- but a
 //    Preference an app builds in CODE and never adds to a group is still
 //    unattached, and the faithful null would turn every
@@ -52,7 +52,7 @@
 //
 // 2. onCreateView() builds the AOSP `preference` row layout PROGRAMMATICALLY
 //    rather than inflating com.android.internal.R.layout.preference, which does
-//    not exist in Mac.apk. The child ids are the frozen AOSP public ids
+//    not exist in Apk on Mac. The child ids are the frozen AOSP public ids
 //    (verified against core/res/res/values/public-final.xml, quoted below),
 //    because subclasses do
 //    `super.onCreateView(parent).findViewById(android.R.id.title)` and that
@@ -143,7 +143,7 @@ public class Preference implements Comparable<Preference> {
      *  mParentDependencyMet is "my containing group is not disabling me".
      *  isEnabled() is the AND of all three, which is why a dependency can grey a
      *  row out WITHOUT clobbering the app's own setEnabled() value. The old
-     *  Mac.apk onParentChanged called setEnabled(!disableChild), which
+     *  Apk on Mac onParentChanged called setEnabled(!disableChild), which
      *  overwrote it permanently. */
     private boolean mDependencyMet = true;
     private boolean mParentDependencyMet = true;
@@ -163,7 +163,7 @@ public class Preference implements Comparable<Preference> {
     /**
      * AOSP reads the Preference styleable here through
      * obtainStyledAttributes(attrs, com.android.internal.R.styleable.Preference,
-     * ...). Mac.apk has no com.android.internal.R to key that call with, so the
+     * ...). Apk on Mac has no com.android.internal.R to key that call with, so the
      * SAME attribute names are read off the AttributeSet by PreferenceAttrs --
      * same names, same defaults, same place in the lifecycle (before the object
      * escapes the constructor, so a subclass that inspects getKey() in its own
@@ -253,7 +253,7 @@ public class Preference implements Comparable<Preference> {
         this(context, null, 0, 0);
     }
 
-    /** Not AOSP. Retained because the previous Mac.apk stub had it and app code
+    /** Not AOSP. Retained because the previous Apk on Mac stub had it and app code
      *  may reflectively instantiate through it; removing it would be a
      *  gratuitous regression. */
     public Preference() {
@@ -473,7 +473,7 @@ public class Preference implements Comparable<Preference> {
     public boolean shouldDisableDependents() { return !isEnabled(); }
 
     /** AOSP body: walk the registered dependents. This used to be an empty
-     *  method with a note that "Mac.apk has no preference-XML inflater building
+     *  method with a note that "Apk on Mac has no preference-XML inflater building
      *  the dependency graph, so nothing is registered to walk". There is one now
      *  (PreferenceInflater), and setDependency() registers even for a hierarchy
      *  built in code, so the walk is real. */
@@ -499,7 +499,7 @@ public class Preference implements Comparable<Preference> {
         }
     }
 
-    /** AOSP body, verbatim, and PUBLIC (the old Mac.apk copy was package-private
+    /** AOSP body, verbatim, and PUBLIC (the old Apk on Mac copy was package-private
      *  and called setEnabled(!disableChild), which permanently overwrote the
      *  app's own enabled flag instead of toggling the separate parent gate). */
     public void onParentChanged(Preference parent, boolean disableChild) {
@@ -586,7 +586,7 @@ public class Preference implements Comparable<Preference> {
             } catch (Throwable t) {
                 // AOSP lets ActivityNotFoundException escape. Here the caller is
                 // the list adapter's item-click path, where an escaping throwable
-                // tears down the whole settings screen; Mac.apk's Intent routing
+                // tears down the whole settings screen; Apk on Mac's Intent routing
                 // resolves fewer implicit intents than a device, so this would
                 // fire for reasons that are ours and not the app's.
             }
@@ -652,7 +652,7 @@ public class Preference implements Comparable<Preference> {
     // ---- persistence ------------------------------------------------------
 
     /** AOSP returns mPreferenceManager.getSharedPreferences(), or null when
-     *  unattached. See divergence (1) in the file header for why Mac.apk falls
+     *  unattached. See divergence (1) in the file header for why Apk on Mac falls
      *  back to the default store instead of returning null. */
     public SharedPreferences getSharedPreferences() {
         if (mPreferenceManager != null) {
@@ -683,7 +683,7 @@ public class Preference implements Comparable<Preference> {
 
     /** AOSP: "Should this Preference store its value into the
      *  SharedPreferences?" -- persistent AND keyed AND attached to a manager.
-     *  Mac.apk drops the manager requirement for the reason in divergence (1). */
+     *  Apk on Mac drops the manager requirement for the reason in divergence (1). */
     protected boolean shouldPersist() {
         if (!mPersistent || !hasKey()) return false;
         // A data store IS a persistence backend, so its presence satisfies this
@@ -692,7 +692,7 @@ public class Preference implements Comparable<Preference> {
     }
 
     /** AOSP: public, and false when unattached (a write with no manager cannot
-     *  participate in the manager's batch). Mac.apk answers true when
+     *  participate in the manager's batch). Apk on Mac answers true when
      *  unattached for the same reason getSharedPreferences() falls back -- see
      *  divergence (1) in the file header; an unattached Preference must write
      *  through or its value is silently lost. */
@@ -851,7 +851,7 @@ public class Preference implements Comparable<Preference> {
     // ---- view creation ----------------------------------------------------
 
     /** AOSP inflates mLayoutResource (default
-     *  com.android.internal.R.layout.preference) and returns the root. Mac.apk
+     *  com.android.internal.R.layout.preference) and returns the root. Apk on Mac
      *  has no internal layout resources, so this builds the same SHAPE
      *  programmatically -- a horizontal LinearLayout holding
      *  icon / (title over summary) / widget_frame -- carrying the frozen AOSP

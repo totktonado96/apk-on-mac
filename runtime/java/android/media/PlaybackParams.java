@@ -128,7 +128,7 @@ public final class PlaybackParams implements android.os.Parcelable {
         return this;
     }
 
-    // ---- Mac.apk internals (package-private, NOT part of the Android API) ----
+    // ---- Apk on Mac internals (package-private, NOT part of the Android API) ----
     // AudioTrack.setPlaybackParams needs to ask "did the caller set this
     // field?" and to read the raw value without the throwing getter, in order
     // to reproduce AOSP's per-field read-modify-write. AOSP's JNI reads the

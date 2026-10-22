@@ -1,7 +1,7 @@
 // android.appwidget.AppWidgetManager -- the home-screen-widget service. Apps with
 // a Glance/RemoteViews widget (Jetchat) reference AppWidgetManager.getInstance()
 // at startup / in their widget receiver; a missing class threw NoClassDefFoundError
-// (154x -> blank). Mac.apk has no home screen, so there are no placed widgets:
+// (154x -> blank). Apk on Mac has no home screen, so there are no placed widgets:
 // every query honestly returns "no widgets" (empty id arrays), matching a device
 // where the user never added the widget. v1.0.429.
 //

@@ -8,7 +8,7 @@ package com.google.firebase.crashlytics.internal.common;
 // Without a field of exactly this type, GetFieldID throws NoSuchFieldError
 // uncaught on the Unity main thread during nativeRender and stalls Crossy's
 // GameSceneBoot init at the blue title screen. We model the public surface
-// CrashlyticsCore exposes and no-op every body -- consistent with Mac.apk's
+// CrashlyticsCore exposes and no-op every body -- consistent with Apk on Mac's
 // "crash reporting silenced, never call Google's servers" stance. App-agnostic.
 public class CrashlyticsCore {
     // The Crashlytics Unity/C++ plugin reads core.dataCollectionArbiter by JNI

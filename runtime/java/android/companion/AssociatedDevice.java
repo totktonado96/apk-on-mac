@@ -2,7 +2,7 @@
 // an AssociationInfo.
 //
 // NO PUBLIC CONSTRUCTOR on AOSP either: only the system creates one, as part
-// of completing an association through the companion pairing UI. Mac.apk has
+// of completing an association through the companion pairing UI. Apk on Mac has
 // no such UI and no companion transport, so no AssociationInfo and therefore
 // no AssociatedDevice is ever produced (see CompanionDeviceManager). The type
 // is here so an app that names it in a signature can link.

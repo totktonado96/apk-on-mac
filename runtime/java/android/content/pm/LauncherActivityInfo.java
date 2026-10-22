@@ -9,7 +9,7 @@ package android.content.pm;
  *  one); the constructor here is public for the same reason -- nothing else in
  *  this tree could build one.
  *
- *  Mac.apk is not a launcher and hosts one app, so LauncherApps.getActivityList
+ *  Apk on Mac is not a launcher and hosts one app, so LauncherApps.getActivityList
  *  correctly reports an empty list and no instance is ever handed out today.
  *  The CLASS must exist because we present API 36: a `List<LauncherActivityInfo>`
  *  local, an enhanced-for over the empty list, or a checkcast all have to
@@ -44,7 +44,7 @@ public class LauncherActivityInfo {
     }
 
     /** AOSP LauncherActivityInfo.getLoadingProgress() (API 31): the incremental
-     *  install progress in [0,1]. Mac.apk has no incremental delivery, so a
+     *  install progress in [0,1]. Apk on Mac has no incremental delivery, so a
      *  package that exists is fully present -> 1.0, which is what AOSP reports
      *  for any non-incremental install. */
     public float getLoadingProgress() { return 1.0f; }
@@ -60,7 +60,7 @@ public class LauncherActivityInfo {
         return (pm != null) ? pm.getDefaultActivityIcon() : null;
     }
 
-    /** AOSP: "the icon for this activity, badged for the user." Mac.apk has a
+    /** AOSP: "the icon for this activity, badged for the user." Apk on Mac has a
      *  single user and no managed profile, so there is no badge to apply and
      *  the badged icon IS the icon -- the same result
      *  PackageManager.getUserBadgedIcon gives here. */

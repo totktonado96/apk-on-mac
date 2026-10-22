@@ -34,11 +34,11 @@
 // that IS an app bundle's executable; the runtime is not one (the stub execs
 // the shared binary through a symlink), so CoreLocationAgent logged "client
 // bundle is NULL. Skip showing AuthPrompt" for every request and the app
-// waited on an answer that never came. So when "Mac.apk Location.app"
-// (launcher/LocationHelperMain.swift, in Mac.apk.app/Contents/Helpers) can be
+// waited on an answer that never came. So when "Apk on Mac Location.app"
+// (launcher/LocationHelperMain.swift, in Apk on Mac.app/Contents/Helpers) can be
 // found, CoreLocation runs THERE: this file spawns it as a child, speaks its
 // line protocol over a pipe pair, and turns its lines into the same Java
-// callbacks. Without the helper (an old Mac.apk.app, a dev tree) the
+// callbacks. Without the helper (an old Apk on Mac.app, a dev tree) the
 // in-process CLLocationManager below is the fallback, which can read state and
 // fixes for an already-authorized identity but can never get a prompt shown
 // (nativeCanPrompt says so, and Java does not wait on one).
@@ -155,7 +155,7 @@ void ReportAuth() {
     ClearException(env, "onNativeAuthorization");
 }
 
-// ---- the Mac.apk Location helper ------------------------------------------
+// ---- the Apk on Mac Location helper ------------------------------------------
 
 std::mutex              g_hmu;          // guards everything below
 std::condition_variable g_hcv;
@@ -250,7 +250,7 @@ void HelperReader(int fd, pid_t pid) {
         if (g_hin >= 0) { close(g_hin); g_hin = -1; }
     }
     if (!spoke) g_hfails++;
-    std::fprintf(stderr, "[location] Mac.apk Location helper exited (status %d)%s\n", status,
+    std::fprintf(stderr, "[location] Apk on Mac Location helper exited (status %d)%s\n", status,
                  g_hfails >= kMaxHelperFails ? "; not restarting it" : "");
     g_hcv.notify_all();
 }
@@ -291,7 +291,7 @@ bool HelperUpLocked() {
     g_hpid = pid;
     g_hin = in[1];
     std::thread(HelperReader, out[0], pid).detach();
-    if (TraceOn()) std::fprintf(stderr, "[location] started Mac.apk Location helper pid %d\n", pid);
+    if (TraceOn()) std::fprintf(stderr, "[location] started Apk on Mac Location helper pid %d\n", pid);
     return true;
 }
 
@@ -364,7 +364,7 @@ CLLocationManager* Manager() {
 
 // Answers "are the natives registered" without touching CoreLocation: even a
 // probe CLLocationManager registers this process with locationd (it then lists
-// Mac.apk under Location Services), which a mere permission check must not do.
+// Apk on Mac under Location Services), which a mere permission check must not do.
 jboolean JNICALL NativeBound(JNIEnv*, jclass) { return JNI_TRUE; }
 
 void JNICALL NativeSetHelper(JNIEnv* env, jclass, jstring path) {

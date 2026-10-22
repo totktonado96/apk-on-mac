@@ -1,5 +1,5 @@
 // android.os.FileUriExposedException -- thrown by StrictMode when a file:// Uri
-// is exposed beyond the app (e.g. handed to another app via Intent). Mac.apk
+// is exposed beyond the app (e.g. handed to another app via Intent). Apk on Mac
 // does not enforce this, but apps reference the type. extends RuntimeException.
 //
 // AOSP ref: frameworks/base/core/java/android/os/FileUriExposedException.java

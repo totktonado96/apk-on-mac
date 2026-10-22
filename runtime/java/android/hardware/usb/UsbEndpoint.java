@@ -1,6 +1,6 @@
 // android.hardware.usb.UsbEndpoint
 //
-// A USB endpoint descriptor value type. Mac.apk never enumerates a device
+// A USB endpoint descriptor value type. Apk on Mac never enumerates a device
 // (getDeviceList is always empty) so instances are not handed out, but the
 // type + getters must exist for device-inspection code to compile. The
 // accessor math (direction/number/type from the address+attributes bytes)

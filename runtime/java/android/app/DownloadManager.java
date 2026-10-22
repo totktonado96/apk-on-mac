@@ -12,7 +12,7 @@
 // and started nothing, query() always returned an empty Cursor, and every
 // Request setter discarded its argument, so an app that enqueued a download
 // and waited on the completion broadcast waited forever with no error to
-// notice. Since there is no DownloadProvider process to talk to, Mac.apk IS
+// notice. Since there is no DownloadProvider process to talk to, Apk on Mac IS
 // the backend: the transfer runs on a bounded worker pool using JDK 21's
 // java.net.http.HttpClient (no new dependency), the id -> status table lives
 // in this process, and the completion broadcast is posted to the main looper
@@ -247,7 +247,7 @@ public class DownloadManager {
     public Cursor query(Query query, String[] projection) { return query(query); }
 
     /** AOSP returns a content:// Uri into the downloads provider, which the
-     *  app then opens through ContentResolver. Mac.apk has no downloads
+     *  app then opens through ContentResolver. Apk on Mac has no downloads
      *  provider, so the honest reachable answer is the file: Uri of what we
      *  actually wrote; ContentResolver.openInputStream/openOutputStream here
      *  handle the file: scheme, so callers that follow the AOSP idiom still
@@ -584,7 +584,7 @@ public class DownloadManager {
             mDestinationUri = Uri.withAppendedPath(Uri.fromFile(base), subPath);
         }
 
-        /** AOSP marks the finished file for the media scanner. Mac.apk has no
+        /** AOSP marks the finished file for the media scanner. Apk on Mac has no
          *  MediaStore to insert into, so the flag is recorded and nothing is
          *  scanned; the file itself is written to the requested location
          *  either way, which is the part apps observe.

@@ -9,7 +9,7 @@ import android.os.IBinder;
  * (onPrewarm) and unbinds when the gesture resolves (onCooldown, told whether
  * the camera actually launched).
  *
- * Mac.apk has no lock screen and no camera-launch gesture, so nothing binds it.
+ * Apk on Mac has no lock screen and no camera-launch gesture, so nothing binds it.
  * A camera app that ships one still has to load the class and instantiate the
  * subclass, and its onPrewarm/onCooldown pair must be callable in a coherent
  * order if the app drives them itself.

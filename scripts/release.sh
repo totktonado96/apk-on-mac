@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # release.sh [--no-notarize]
 #
-# The ONE command that produces a shippable, notarized, stapled Mac.apk DMG.
+# The ONE command that produces a shippable, notarized, stapled Apk on Mac DMG.
 # Wraps scripts/build_dist.sh with this machine's signing + notary settings so
 # nobody has to remember them (and so they are not pasted into a shell history
 # or a commit message).

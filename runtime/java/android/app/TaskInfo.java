@@ -47,7 +47,7 @@ public class TaskInfo {
     public ComponentName topActivity;
 
     /** AOSP TaskInfo.isVisible(): {@code return isVisible;} over a package-private
-     *  field the system server fills in (TaskInfo.java:389-391). Mac.apk hosts
+     *  field the system server fills in (TaskInfo.java:389-391). Apk on Mac hosts
      *  ONE task in ONE window, and the only task an app can obtain a TaskInfo for
      *  is that one, so it is visible whenever it exists. */
     public boolean isVisible() { return true; }

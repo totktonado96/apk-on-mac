@@ -5,7 +5,7 @@ import android.net.Uri;
 /**
  * The visual-voicemail provider contract.
  *
- * ⚠ Mac.apk registers no voicemail provider (no telephony), so a query against
+ * ⚠ Apk on Mac registers no voicemail provider (no telephony), so a query against
  * these URIs reaches nothing. As everywhere else in this package, the CONSTANTS
  * are still declared: an app that builds a voicemail Uri or names a column has
  * to link, and declaring a Uri registers no provider.

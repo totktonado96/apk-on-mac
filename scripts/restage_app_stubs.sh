@@ -18,7 +18,7 @@
 #
 # v1.0.1592: the PRODUCT does this itself now -- `StubRefresh` in
 # launcher/InstallCore.swift: every stub compares itself with the installed
-# Mac.apk's template on launch and re-executes the fresh copy when it differs,
+# Apk on Mac's template on launch and re-executes the fresh copy when it differs,
 # `RuntimeInstall.install` refreshes every installed bundle right after a
 # runtime (re)stage, and the control panel sweeps once per session. This script
 # stays as the developer's immediate, whole-machine restage after a promote
@@ -46,21 +46,21 @@ done
 # over the repo copy (which rebuild_and_run.sh deletes after promoting anyway).
 if [ -z "$TEMPLATE" ]; then
     for cand in \
-        "${MACAPK_CANONICAL_APP:-/Applications/Mac.apk.app}/Contents/Resources/appstub/MacApkAppStub" \
-        "build/Mac.apk.app/Contents/Resources/appstub/MacApkAppStub"
+        "${MACAPK_CANONICAL_APP:-/Applications/Apk on Mac.app}/Contents/Resources/appstub/MacApkAppStub" \
+        "build/Apk on Mac.app/Contents/Resources/appstub/MacApkAppStub"
     do
         [ -f "$cand" ] && { TEMPLATE="$cand"; break; }
     done
 fi
 if [ ! -f "$TEMPLATE" ]; then
     echo "restage_app_stubs: no stub template found (looked in the canonical app" >&2
-    echo "  and build/Mac.apk.app). Build the launcher first." >&2
+    echo "  and build/Apk on Mac.app). Build the launcher first." >&2
     exit 1
 fi
 WANT="$(md5 -q "$TEMPLATE")"
 echo "==> Stub template: $TEMPLATE ($WANT)"
 
-REG="$HOME/Library/Application Support/Mac.apk/installed_apps.json"
+REG="$HOME/Library/Application Support/Apk on Mac/installed_apps.json"
 if [ ! -f "$REG" ]; then
     echo "    no installed-apps registry at $REG; nothing to restage."
     exit 0

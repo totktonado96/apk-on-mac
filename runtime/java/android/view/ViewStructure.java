@@ -4,7 +4,7 @@ import android.view.autofill.AutofillId;
 /** The structure a View exports for autofill / content-capture / assist. AOSP's
  *  ViewStructure is abstract and the platform supplies the impl; an app only ever
  *  RECEIVES one (in onProvideAutofillStructure / onProvideStructure) and SETS
- *  fields on it. Mac.apk has no autofill/assist consumer, so this is a concrete
+ *  fields on it. Apk on Mac has no autofill/assist consumer, so this is a concrete
  *  sink: setters are accepted and dropped, getExtras/newChild return usable
  *  objects. Source: frameworks/base/core/java/android/view/ViewStructure.java */
 public class ViewStructure {
@@ -105,7 +105,7 @@ public class ViewStructure {
      *  OutcomeReceiver) / getPendingCredentialRequest() /
      *  getPendingCredentialCallback() / clearCredentialManagerRequest()
      *  (API 35): carries View.setPendingCredentialRequest into the structure so
-     *  an autofill service can fulfil it through Credential Manager. Mac.apk
+     *  an autofill service can fulfil it through Credential Manager. Apk on Mac
      *  bridges no credential provider (see View.setPendingCredentialRequest),
      *  but the request round-trips so a caller that writes then reads it back
      *  sees its own value rather than null. */

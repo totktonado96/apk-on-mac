@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * Describes one physical microphone the device exposes (API 28).
  *
- * Mac.apk records through CoreAudio's default input device, and CoreAudio
+ * Apk on Mac records through CoreAudio's default input device, and CoreAudio
  * describes an input as a stream with a channel count -- it does not publish the
  * physical geometry (position, orientation, sensitivity, SPL range, frequency
  * response) that this class was designed to carry. Every such field therefore

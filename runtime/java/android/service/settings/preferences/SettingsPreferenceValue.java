@@ -9,7 +9,7 @@ import android.os.Parcelable;
  * PACKAGE NOTE -- applies to android.service.settings.preferences. This API 36
  * package ("Settings catalyst") lets a privileged app read and write the
  * device's Settings preferences through a bound SettingsPreferenceService.
- * Mac.apk is not an Android Settings host: there is no Settings app to bind,
+ * Apk on Mac is not an Android Settings host: there is no Settings app to bind,
  * and a guest does not get to write the host's system settings. So the SERVICE
  * side is never bound and the CLIENT side reports failure -- see
  * SettingsPreferenceServiceClient, which reports the AOSP "no service" outcome

@@ -38,7 +38,7 @@ public final class UserHandle implements Parcelable {
     public static int getUserId(int uid)   { return USER_SYSTEM; }
     // AOSP: uid % PER_USER_RANGE (strips the user-id component, leaving just the
     // app id). This used to be `return uid;` -- observationally equivalent ONLY
-    // because every uid Mac.apk hands out today is already < PER_USER_RANGE
+    // because every uid Apk on Mac hands out today is already < PER_USER_RANGE
     // (single-user, single-app model), but wrong for any uid a caller
     // synthesizes >= 100000. Process.isApplicationUid()/isApp() below depend on
     // the real formula, not the identity shortcut.

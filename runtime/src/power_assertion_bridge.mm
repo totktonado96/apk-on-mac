@@ -49,9 +49,9 @@ void Apply(IOPMAssertionID* id, CFStringRef type, CFStringRef name, bool want, c
 
 void ApplyAll() {   // g_mu held
     Apply(&g_display_id, kIOPMAssertionTypePreventUserIdleDisplaySleep,
-          CFSTR("Mac.apk: Android keep-screen-on"), g_want_display && !g_window_hidden, "display");
+          CFSTR("Apk on Mac: Android keep-screen-on"), g_want_display && !g_window_hidden, "display");
     Apply(&g_system_id, kIOPMAssertionTypePreventUserIdleSystemSleep,
-          CFSTR("Mac.apk: Android partial wake lock"), g_want_system, "system");
+          CFSTR("Apk on Mac: Android partial wake lock"), g_want_system, "system");
 }
 
 void JNICALL KeepAwake_nativeSet(JNIEnv*, jclass, jint kind, jboolean on) {

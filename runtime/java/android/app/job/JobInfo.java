@@ -277,7 +277,7 @@ public class JobInfo implements android.os.Parcelable {
     @Override public int describeContents() { return 0; }
 
     /** AOSP JobInfo.writeToParcel: JobInfo travels to the JobScheduler service
-     *  over Binder, and an app may also stash one in a Bundle. Mac.apk's
+     *  over Binder, and an app may also stash one in a Bundle. Apk on Mac's
      *  scheduler is in-process (MacApkJobScheduler), so nothing here NEEDS the
      *  marshalling -- but the pair must exist and must round-trip, because the
      *  Parcelable contract is what an app relies on. Written in the field order
@@ -502,7 +502,7 @@ public class JobInfo implements android.os.Parcelable {
             return this;
         }
         /** AOSP setRequiredNetwork (API 28) takes a full NetworkRequest.
-         *  Mac.apk models one always-present unmetered WiFi transport
+         *  Apk on Mac models one always-present unmetered WiFi transport
          *  (ConnectivityManager), so any NetworkRequest a job can express
          *  reduces to "a network is required": record it as NETWORK_TYPE_ANY
          *  rather than discarding it, so the scheduler still knows the job

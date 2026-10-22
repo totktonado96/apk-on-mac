@@ -1,6 +1,6 @@
 // com.macapk.gms.GoogleSignInBroker -- the Google sign-in PROVIDER: what
 // com.google.android.gms answers on a phone when an app asks "sign this user in
-// to me", answered from the central Google account the user added in Mac.apk's
+// to me", answered from the central Google account the user added in Apk on Mac's
 // Accounts panel (com.macapk.gms.GmsStore).
 //
 // TWO CLIENT SURFACES, ONE PROVIDER (docs/gms-google-signin-provider_2026-09-30.md):
@@ -870,7 +870,7 @@ public final class GoogleSignInBroker {
         if (accounts.isEmpty() && r.kind == Kind.GOOGLE_ID) {
             fail(pend, android.credentials.GetCredentialException.TYPE_NO_CREDENTIAL,
                     r.filterByAuthorized ? "No authorized Google account for this app" + grantBasis(r)
-                                         : "No Google account on this device (add one in Mac.apk > Accounts)");
+                                         : "No Google account on this device (add one in Apk on Mac > Accounts)");
             return;
         }
         final String sig = appCertSha1(ctx, r.callerPkg);

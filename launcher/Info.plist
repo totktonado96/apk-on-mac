@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  Info.plist for the Mac.apk launcher.
+  Info.plist for the Apk on Mac launcher.
 
   Document type association: registers .apk and the four bundle formats so
-  double-clicking one in Finder opens Mac.apk, which then INSTALLS it (see
+  double-clicking one in Finder opens Apk on Mac, which then INSTALLS it (see
   MacApkLauncherApp.swift's onOpenURL -> confirmAndInstall). Finder is the
   intended front door, not a fallback, which is why LSHandlerRank is Default
   rather than Alternate.
@@ -16,17 +16,17 @@
     <key>CFBundleDisplayName</key>
     <string>Apk on Mac</string>
     <!--
-      The bundle is named Mac.apk.app so Finder/Dock show "Mac.apk" (macOS
+      The bundle is named Apk on Mac.app so Finder/Dock show "Apk on Mac" (macOS
       ignores CFBundleDisplayName when it does not match the on-disk bundle
       name). The executable inside stays "MacApk" (dot-free, so `pkill -x
       MacApk` still works), so CFBundleExecutable MUST be set explicitly  -
       otherwise macOS derives the executable name from the bundle name
-      ("Mac.apk") and fails to launch.
+      ("Apk on Mac") and fails to launch.
     -->
     <key>CFBundleExecutable</key>
     <string>MacApk</string>
     <key>CFBundleIdentifier</key>
-    <string>org.macapk.launcher</string>
+    <string>io.github.totktonado96.apkonmac.launcher</string>
     <!--
       LaunchServices caches a bundle's type registrations keyed by
       CFBundleVersion, so a plist that gains document types without a
@@ -49,7 +49,7 @@
     <!--
       App icon. build_launcher.sh generates AppIcon.icns from the 512px
       master (images/mac_apk_icon_512.png) into Contents/Resources/ at build
-      time, so the launcher shows the Mac.apk icon in the Dock/Finder.
+      time, so the launcher shows the Apk on Mac icon in the Dock/Finder.
       The same art is also bundled (as macapk_default_icon.png) next to
       the runtime so a launched app with no icon of its own gets it too.
     -->
@@ -101,7 +101,7 @@
             <string>Viewer</string>
             <key>LSItemContentTypes</key>
             <array>
-                <string>org.macapk.apk</string>
+                <string>io.github.totktonado96.apkonmac.apk</string>
             </array>
             <key>LSHandlerRank</key>
             <string>Default</string>
@@ -113,10 +113,10 @@
             <string>Viewer</string>
             <key>LSItemContentTypes</key>
             <array>
-                <string>org.macapk.apkm</string>
-                <string>org.macapk.xapk</string>
-                <string>org.macapk.apks</string>
-                <string>org.macapk.apkx</string>
+                <string>io.github.totktonado96.apkonmac.apkm</string>
+                <string>io.github.totktonado96.apkonmac.xapk</string>
+                <string>io.github.totktonado96.apkonmac.apks</string>
+                <string>io.github.totktonado96.apkonmac.apkx</string>
             </array>
             <key>LSHandlerRank</key>
             <string>Default</string>
@@ -126,10 +126,10 @@
              Why: on a Mac where another app declares a type for the .apk
              extension, LaunchServices can pick THAT type as the canonical one
              for the extension (measured 2026-08-10: org.polyrun.apk; reported
-             2026-10-03 on macOS 27 with Keka installed, Mac.apk-Releases
+             2026-10-03 on macOS 27 with Keka installed, Apk on Mac-Releases
              issue 1). A double-clicked .apk then carries the foreign UTI, and
              a document type bound only through LSItemContentTypes is never a
-             candidate: Mac.apk was missing from Open With entirely.
+             candidate: Apk on Mac was missing from Open With entirely.
 
              Why a SEPARATE dict: 0.3.0 put CFBundleTypeExtensions inside the
              two dicts above, next to LSItemContentTypes. Apple's Information
@@ -167,7 +167,7 @@
       (not imported) because no other vendor defines this type, so we are
       the authority for it.
 
-      Do NOT change the identifier "org.macapk.apk": LaunchServices keys a
+      Do NOT change the identifier "io.github.totktonado96.apkonmac.apk": LaunchServices keys a
       user's chosen default handler off the type identifier, so renaming it
       orphans every existing registration.
     -->
@@ -175,7 +175,7 @@
     <array>
         <dict>
             <key>UTTypeIdentifier</key>
-            <string>org.macapk.apk</string>
+            <string>io.github.totktonado96.apkonmac.apk</string>
             <key>UTTypeDescription</key>
             <string>Android Application Package</string>
             <key>UTTypeConformsTo</key>
@@ -210,7 +210,7 @@
     <array>
         <dict>
             <key>UTTypeIdentifier</key>
-            <string>org.macapk.apkm</string>
+            <string>io.github.totktonado96.apkonmac.apkm</string>
             <key>UTTypeDescription</key>
             <string>Android App Bundle (APKMirror)</string>
             <key>UTTypeConformsTo</key>
@@ -227,7 +227,7 @@
         </dict>
         <dict>
             <key>UTTypeIdentifier</key>
-            <string>org.macapk.xapk</string>
+            <string>io.github.totktonado96.apkonmac.xapk</string>
             <key>UTTypeDescription</key>
             <string>Android App Bundle (APKPure)</string>
             <key>UTTypeConformsTo</key>
@@ -244,7 +244,7 @@
         </dict>
         <dict>
             <key>UTTypeIdentifier</key>
-            <string>org.macapk.apks</string>
+            <string>io.github.totktonado96.apkonmac.apks</string>
             <key>UTTypeDescription</key>
             <string>Android App Bundle (bundletool)</string>
             <key>UTTypeConformsTo</key>
@@ -261,7 +261,7 @@
         </dict>
         <dict>
             <key>UTTypeIdentifier</key>
-            <string>org.macapk.apkx</string>
+            <string>io.github.totktonado96.apkonmac.apkx</string>
             <key>UTTypeDescription</key>
             <string>Android Application Package (APKPure)</string>
             <key>UTTypeConformsTo</key>

@@ -2,7 +2,7 @@
 //
 // AOSP's device-administration service. Apps fetch it via getSystemService(
 // DEVICE_POLICY_SERVICE) and commonly probe isAdminActive / password-policy /
-// management state. Mac.apk is never managed and has no device-admin, so the
+// management state. Apk on Mac is never managed and has no device-admin, so the
 // state queries report "not managed / no admin / no restrictions" -- the honest
 // unmanaged-device result that lets enterprise-aware apps run their consumer
 // path instead of NPE on a null service. Mirrors
@@ -21,7 +21,7 @@ public class DevicePolicyManager {
     //
     // THE ONE RULE THIS WHOLE BLOCK FOLLOWS, and why it is not a cop-out:
     // isAdminActive() above is unconditionally false and always will be --
-    // Mac.apk has no DeviceAdminReceiver activation flow, no work profile, no
+    // Apk on Mac has no DeviceAdminReceiver activation flow, no work profile, no
     // device owner and no system server to hold policy in. AOSP documents, per
     // method, that the call throws SecurityException when the caller is not an
     // active admin / device owner / profile owner. That condition is
@@ -154,10 +154,10 @@ public class DevicePolicyManager {
 
     /** AOSP's one shared refusal. AOSP's own messages are per-call-site and say
      *  which role was required; this says WHY the role can never be held, which
-     *  is the part a developer reading a Mac.apk stack trace needs. */
+     *  is the part a developer reading a Apk on Mac stack trace needs. */
     private static SecurityException notAdmin(String api) {
         return new SecurityException("DevicePolicyManager." + api + ": the caller is not an active"
-                + " device admin, device owner or profile owner. Mac.apk has no device-admin"
+                + " device admin, device owner or profile owner. Apk on Mac has no device-admin"
                 + " activation flow, so isAdminActive() is always false and no caller can hold"
                 + " those roles.");
     }
@@ -215,30 +215,30 @@ public class DevicePolicyManager {
     // were entirely missing (NoSuchMethodError for any real caller), which is
     // the same class of bug as the getters above -- except NOT the same fix.
     // The getters above are correctly hardcoded (isAdminActive() is always
-    // false, matching the file header's "Mac.apk is never managed" design --
+    // false, matching the file header's "Apk on Mac is never managed" design --
     // no ComponentName can ever be a real active admin here), and each of
     // these four is documented to throw SecurityException precisely when
     // called with an admin that "is not an active administrator" / "is not a
-    // profile owner". Since that is unconditionally true on Mac.apk, throwing
+    // profile owner". Since that is unconditionally true on Apk on Mac, throwing
     // is the AOSP-faithful behavior for a genuinely unmanaged device -- not a
     // silently-successful setter, which no real unmanaged phone would give an
     // app that (incorrectly) tries to disable the camera without ever having
     // been granted admin rights.
     public void setMaximumTimeToLock(ComponentName admin, long timeMs) {
         throw new SecurityException(admin + " is not an active admin: no device admin can be"
-            + " activated on Mac.apk");
+            + " activated on Apk on Mac");
     }
     public void setCameraDisabled(ComponentName admin, boolean disabled) {
         throw new SecurityException(admin + " is not an active admin: no device admin can be"
-            + " activated on Mac.apk");
+            + " activated on Apk on Mac");
     }
     public void setOrganizationName(ComponentName admin, CharSequence title) {
         throw new SecurityException(admin + " is not a device or profile owner: no device admin"
-            + " can be activated on Mac.apk");
+            + " can be activated on Apk on Mac");
     }
     public CharSequence getOrganizationName(ComponentName admin) {
         throw new SecurityException(admin + " is not a profile owner: no device admin can be"
-            + " activated on Mac.apk");
+            + " activated on Apk on Mac");
     }
 
     public void acknowledgeDeviceCompliant() {
@@ -573,7 +573,7 @@ public class DevicePolicyManager {
     }
 
     /** AOSP: "@return The current password complexity" and it throws SecurityException 
-     *  only when the caller LACKS REQUEST_PASSWORD_COMPLEXITY -- which Mac.apk grants 
+     *  only when the caller LACKS REQUEST_PASSWORD_COMPLEXITY -- which Apk on Mac grants 
      *  (see Activity.requestPermissions), so the permission branch does not apply. 
      *  There is no lock screen and therefore no password, which is 
      *  PASSWORD_COMPLEXITY_NONE. */
@@ -599,7 +599,7 @@ public class DevicePolicyManager {
     }
 
     /** AOSP body: "if (!pm.hasSystemFeature(FEATURE_SECURE_LOCK_SCREEN)) return 0; 
-     *  return MAX_PASSWORD_LENGTH;" -- Mac.apk has no secure lock screen 
+     *  return MAX_PASSWORD_LENGTH;" -- Apk on Mac has no secure lock screen 
      *  (KeyguardManager.isDeviceSecure() is false), so this takes AOSP's FIRST branch. 
      *  Returning 16 would claim a lock screen we do not have. */
     public int getPasswordMaximumLength(int value0) {
@@ -853,7 +853,7 @@ public class DevicePolicyManager {
     }
 
     /** AOSP: whether the device supports attesting device IDs from hardware keystore. 
-     *  Mac.apk has no Android hardware keystore, so it cannot -- and an admin that 
+     *  Apk on Mac has no Android hardware keystore, so it cannot -- and an admin that 
      *  believed otherwise would issue an attestation request that could never be 
      *  satisfied. */
     public boolean isDeviceIdAttestationSupported() {
@@ -912,7 +912,7 @@ public class DevicePolicyManager {
     }
 
     /** AOSP: "@return whether provisioning is allowed" for the given 
-     *  ACTION_PROVISION_* action. Mac.apk cannot provision a work profile or a device 
+     *  ACTION_PROVISION_* action. Apk on Mac cannot provision a work profile or a device 
      *  owner at all, so no action is allowed -- telling an app otherwise would send it 
      *  into a provisioning flow that cannot complete. */
     public boolean isProvisioningAllowed(String name0) {
@@ -925,7 +925,7 @@ public class DevicePolicyManager {
 
     /** AOSP: "Checks if it's safe to run operations that can be affected by the given 
      *  reason" -- unsafe only while the device is in a transient state such as 
-     *  driving. Mac.apk is never in one. */
+     *  driving. Apk on Mac is never in one. */
     public boolean isSafeOperation(int value0) {
         return true;
     }

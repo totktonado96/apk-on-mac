@@ -15,7 +15,7 @@
 //   protected Object onGetDefaultValue(TypedArray, int)
 //   protected void onSetInitialValue(boolean, Object)
 //
-// THREE CORRECTIONS to the previous Mac.apk version:
+// THREE CORRECTIONS to the previous Apk on Mac version:
 //  - it extended `Preference`, not `DialogPreference`. That made a
 //    `(DialogPreference)` cast fail and hid the whole dialog surface; it is also
 //    why de.tobiasbielefeld.solitaire's measured reference to
@@ -66,7 +66,7 @@ public class ListPreference extends DialogPreference {
     public ListPreference(Context context, AttributeSet attrs) { this(context, attrs, 0, 0); }
     public ListPreference(Context context) { this(context, null, 0, 0); }
 
-    /** Not AOSP; retained from the previous Mac.apk stub. */
+    /** Not AOSP; retained from the previous Apk on Mac stub. */
     public ListPreference() { super(); }
 
     public void setEntries(CharSequence[] entries) { mEntries = entries; }
@@ -151,7 +151,7 @@ public class ListPreference extends DialogPreference {
 
     /** AOSP puts the entries into the builder as a single-choice list and
      *  suppresses the positive button (a row tap closes the dialog). Mirrored
-     *  through Mac.apk's AlertDialog.Builder, which has the same methods. */
+     *  through Apk on Mac's AlertDialog.Builder, which has the same methods. */
     @Override
     protected void onPrepareDialogBuilder(android.app.AlertDialog.Builder builder) {
         if (mEntries == null || mEntryValues == null) {
@@ -190,7 +190,7 @@ public class ListPreference extends DialogPreference {
         return a == null ? null : a.getString(index);
     }
 
-    /** AOSP body, verbatim except for the null-tolerant cast: Mac.apk's
+    /** AOSP body, verbatim except for the null-tolerant cast: Apk on Mac's
      *  XML may declare no android:defaultValue at all, so
      *  defaultValue can be a non-String here where AOSP guarantees a String. */
     @Override

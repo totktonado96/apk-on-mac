@@ -14,7 +14,7 @@
 // the app supports at runtime and always tell them we are the highest one
 // they support"). Real Android's SDK_INT is a device constant, and the
 // platform varies BEHAVIOUR per app through targetSdkVersion compat gates
-// (hundreds of CompatChanges). Mac.apk runs ONE app per process, so it can
+// (hundreds of CompatChanges). Apk on Mac runs ONE app per process, so it can
 // do something a multi-app device cannot: pick the DEVICE LEVEL per
 // process to match the app. From inside the process this is coherent --
 // the app observes one level everywhere, exactly as if it were installed
@@ -404,12 +404,12 @@ public final class PresentedSdk {
      *  is absent (offline drivers). A log failure must never disturb the
      *  computed presentation, so callers treat these as infallible. */
     private static void logw(String msg) {
-        try { NativeLog.w("Mac.apk.PresentedSdk", msg); }
-        catch (Throwable t) { System.err.println("[W] Mac.apk.PresentedSdk: " + msg); }
+        try { NativeLog.w("Apk on Mac.PresentedSdk", msg); }
+        catch (Throwable t) { System.err.println("[W] Apk on Mac.PresentedSdk: " + msg); }
     }
     private static void logi(String msg) {
-        try { NativeLog.i("Mac.apk.PresentedSdk", msg); }
-        catch (Throwable t) { System.err.println("[I] Mac.apk.PresentedSdk: " + msg); }
+        try { NativeLog.i("Apk on Mac.PresentedSdk", msg); }
+        catch (Throwable t) { System.err.println("[I] Apk on Mac.PresentedSdk: " + msg); }
     }
 
     /** The app's declared targetSdkVersion, from the BINARY AndroidManifest

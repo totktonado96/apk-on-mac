@@ -4,7 +4,7 @@ package com.android.billingclient.api;
 // by every Play Billing call (synchronously from launchBillingFlow /
 // isFeatureSupported, and inside every listener callback). Carries a response
 // code (one of BillingClient.BillingResponseCode) plus a human-readable debug
-// message. Mac.apk runs as a de-Googled device with no Play Store service, so
+// message. Apk on Mac runs as a de-Googled device with no Play Store service, so
 // every result we hand back is a clean BILLING_UNAVAILABLE / SERVICE_DISCONNECTED
 // -- never a fabricated OK with a fake purchase. We still ship the full type so
 // paid apps can read getResponseCode() and reach their degrade path.

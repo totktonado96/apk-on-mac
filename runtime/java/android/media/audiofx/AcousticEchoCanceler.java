@@ -1,6 +1,6 @@
 // android.media.audiofx.AcousticEchoCanceler -- mic echo cancellation
 // preprocessor. AOSP frameworks/base media/java/android/media/audiofx/AcousticEchoCanceler.java.
-// Mac.apk has no mic source/preprocessor: isAvailable false, create returns null.
+// Apk on Mac has no mic source/preprocessor: isAvailable false, create returns null.
 package android.media.audiofx;
 
 public class AcousticEchoCanceler extends AudioEffect {

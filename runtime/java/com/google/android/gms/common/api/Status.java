@@ -12,7 +12,7 @@ import android.os.Parcelable;
 // type. The status constants reference CommonStatusCodes.
 //
 // Resolution: a Status may carry a PendingIntent the app can launch to resolve
-// the condition (e.g. RESOLUTION_REQUIRED). On Mac.apk there is no Play Services
+// the condition (e.g. RESOLUTION_REQUIRED). On Apk on Mac there is no Play Services
 // system app, so we never manufacture a resolution PendingIntent; hasResolution
 // is false and startResolutionForResult is a no-op (there is honestly nothing to
 // resolve), exactly like a de-Googled device.
@@ -48,7 +48,7 @@ public final class Status implements Result, Parcelable {
 
     @Override public Status getStatus() { return this; }
 
-    /** Launches the resolution PendingIntent if one exists. On Mac.apk a Status
+    /** Launches the resolution PendingIntent if one exists. On Apk on Mac a Status
      *  never carries a resolution (no Play Services system app to resolve
      *  against), so this is a clean no-op exactly like a de-Googled device.
      *  The checked-exception declaration matches the GMS signature so callers

@@ -12,7 +12,7 @@
 // id, while android.hardware.input.InputManager -- carrying a comment
 // explaining this exact self-contradiction -- held the correct answers. Apps
 // call android.view.InputDevice, so the correct half was unreachable and every
-// InputDevice capability question Mac.apk answered was 0 against the emulator's
+// InputDevice capability question Apk on Mac answered was 0 against the emulator's
 // 1. The device SET, and the reasoning for what is and is not in it, lives in
 // android.hardware.input.InputManager. Read it before changing anything here.
 package android.view;
@@ -67,7 +67,7 @@ public final class InputDevice implements android.os.Parcelable {
 
     /** AOSP declares this constructor PRIVATE and calls it from native code
      *  (@UnsupportedAppUsage, InputDevice.java:428-431) as the input reader
-     *  discovers devices. Mac.apk has no native input registry: the registry is
+     *  discovers devices. Apk on Mac has no native input registry: the registry is
      *  android.hardware.input.InputManager, which is in a different package, so
      *  this has to be reachable from there. Widening it is safe in the way that
      *  matters -- the constructor is absent from the Android SDK stubs, so no
@@ -96,7 +96,7 @@ public final class InputDevice implements android.os.Parcelable {
     }
 
     /** Not AOSP API (AOSP has no public no-arg constructor). Kept because it
-     *  has been in Mac.apk's framework jar since the Crossy bringup and
+     *  has been in Apk on Mac's framework jar since the Crossy bringup and
      *  removing a public constructor from a shipped jar is a needless
      *  compatibility risk; it now yields the same virtual-keyboard identity the
      *  registry publishes at id -1, so it can no longer contradict it. */
@@ -368,7 +368,7 @@ public final class InputDevice implements android.os.Parcelable {
     }
 
     /** AOSP InputDevice.isEnabled(): whether the device is currently enabled
-     *  for input. Every device Mac.apk synthesises (the touchscreen the Cocoa
+     *  for input. Every device Apk on Mac synthesises (the touchscreen the Cocoa
      *  bridge feeds, the virtual keyboard) is live for the whole run, so this
      *  is true -- there is no disable path to report. */
     public boolean isEnabled() { return true; }
@@ -385,7 +385,7 @@ public final class InputDevice implements android.os.Parcelable {
 
     // ⚠ AOSP InputDevice.getSensorManager() (API 31) is NOT implemented, and
     // deliberately so. It must return a SensorManager scoped to THIS input
-    // device -- for every device Mac.apk synthesises that means an EMPTY sensor
+    // device -- for every device Apk on Mac synthesises that means an EMPTY sensor
     // catalog (a touchscreen and a virtual keyboard have no built-in
     // accelerometer). The only SensorManager this tree can hand out is the
     // process-wide one, whose catalog is the host's synthesised motion sensors;
@@ -406,7 +406,7 @@ public final class InputDevice implements android.os.Parcelable {
     private android.hardware.SensorManager mSensorManager;
 
     /** AOSP InputDevice.getSensorManager() (API 31): a SensorManager scoped to
-     *  the sensors built into THIS input device. Every device Mac.apk
+     *  the sensors built into THIS input device. Every device Apk on Mac
      *  synthesises -- a touchscreen, a virtual keyboard -- has none, so the
      *  catalog is empty. AOSP returns an empty-catalog manager for such a
      *  device too; this is the ordinary answer, not a degraded one. */
@@ -442,7 +442,7 @@ public final class InputDevice implements android.os.Parcelable {
         /** AOSP ViewBehavior.shouldSmoothScroll(int axis, int source): should a
          *  View animate scrolls driven by this axis? AOSP answers true only for
          *  a device whose driver reports high-resolution scroll (a precision
-         *  mouse wheel or trackpad). Mac.apk delivers scroll through the Cocoa
+         *  mouse wheel or trackpad). Apk on Mac delivers scroll through the Cocoa
          *  bridge as discrete MotionEvent axis values with no resolution
          *  metadata, so the answer is false -- the same as for an ordinary
          *  detented mouse wheel on a device. */

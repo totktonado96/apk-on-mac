@@ -1,5 +1,5 @@
 /*
- * Mac.apk java.base overlay (--patch-module java.base). This REPLACES the JDK's
+ * Apk on Mac java.base overlay (--patch-module java.base). This REPLACES the JDK's
  * java.io.FileReader. It is byte-for-byte the JDK 21 public API (five
  * constructors delegating to a FileInputStream + the inherited InputStreamReader
  * behaviour) with ONE addition: it redirects a read of the Linux procfs paths
@@ -56,7 +56,7 @@ public class FileReader extends InputStreamReader {
         super(macapkOpen(file), charset);
     }
 
-    // ---- Mac.apk /proc redirect (see the class comment) --------------------
+    // ---- Apk on Mac /proc redirect (see the class comment) --------------------
 
     // A minimal but well-formed smaps carrying exactly the fields a page-size
     // probe scans. One synthetic mapping is enough: the probe reads the first

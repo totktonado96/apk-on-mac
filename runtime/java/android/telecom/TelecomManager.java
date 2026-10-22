@@ -415,7 +415,7 @@ public class TelecomManager {
      * The transactional calling API. AOSP itself throws
      * {@code IllegalStateException("Telecom service is not present")} here when
      * the Telecom binder is null (TelecomManager.java:2948), so this is AOSP's
-     * own code path for our situation rather than a Mac.apk invention.
+     * own code path for our situation rather than a Apk on Mac invention.
      *
      * <p>Note it must NOT report the failure through {@code pendingControl}
      * instead: AOSP throws synchronously, and an app that catches the throw

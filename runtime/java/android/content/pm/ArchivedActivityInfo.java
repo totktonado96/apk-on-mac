@@ -9,7 +9,7 @@ package android.content.pm;
  *  android15-release (a @DataClass with genSetters=true, hence the fluent
  *  setters returning `this`).
  *
- *  Mac.apk does not implement app archiving -- there is no macOS analogue and
+ *  Apk on Mac does not implement app archiving -- there is no macOS analogue and
  *  nothing in the runtime ever archives a package -- so no instance of this
  *  class is ever produced by the framework. It exists because
  *  ArchivedPackageInfo.getLauncherActivities() is declared to return

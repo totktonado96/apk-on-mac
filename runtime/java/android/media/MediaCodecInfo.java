@@ -85,7 +85,7 @@ public final class MediaCodecInfo {
      * API 36. How the codec is isolated from the app.
      *
      * SANDBOXED is the truthful answer here and the safer one to be wrong
-     * about. Mac.apk's codecs are AudioToolbox/VideoToolbox, which decode
+     * about. Apk on Mac's codecs are AudioToolbox/VideoToolbox, which decode
      * out-of-process in Apple's own coreaudiod / VTDecoderXPCService rather
      * than inside the app -- so the app's address space is not where untrusted
      * bitstream is parsed, which is exactly what SANDBOXED asserts.
@@ -116,7 +116,7 @@ public final class MediaCodecInfo {
 
     public static final class CodecCapabilities {
         // AOSP CodecCapabilities.FEATURE_* (frameworks/base .../MediaCodecInfo.java).
-        // Mac.apk implements NONE of these -- most importantly
+        // Apk on Mac implements NONE of these -- most importantly
         // FEATURE_SecurePlayback: this project does not implement DRM (see
         // CLAUDE.md, "Explicitly OUT of scope"), so isFeatureSupported below
         // must never answer true for it, and isFormatSupported must reject a

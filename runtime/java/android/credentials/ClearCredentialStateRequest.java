@@ -8,7 +8,7 @@ import android.os.Parcelable;
  *  Source: frameworks/base/core/java/android/credentials/ClearCredentialStateRequest.java
  *
  *  Parcelable on AOSP because the request crosses the binder to the credential
- *  manager service. Mac.apk has no such service, but the interface and CREATOR
+ *  manager service. Apk on Mac has no such service, but the interface and CREATOR
  *  must exist: apps put these objects in Bundles / Intents and a missing
  *  CREATOR is an unrecoverable BadParcelableException at read time. */
 public final class ClearCredentialStateRequest implements Parcelable {

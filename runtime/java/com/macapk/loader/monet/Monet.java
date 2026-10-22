@@ -30,7 +30,7 @@
 //     from GOOGLE_BLUE but roles from Hct.fromInt(0), hue 0) is a boot transient we have no
 //     reason to reproduce.
 //
-// Cached on disk (~/Library/Caches/Mac.apk/monet/) keyed by the picture's identity, so the
+// Cached on disk (~/Library/Caches/Apk on Mac/monet/) keyed by the picture's identity, so the
 // render+quantize+scheme work (measured ~0.3 s cold) runs once per wallpaper change, not once
 // per launch. And it runs OFF the boot path: ResourceIndex.<clinit> only calls prefetch()
 // (its own daemon thread) and lays the overlay over its table on the first system_* READ, so
@@ -228,7 +228,7 @@ public final class Monet {
 
     static File cacheFile() {
         String home = com.macapk.loader.SharedStorage.hostHome();
-        return new File(home, "Library/Caches/Mac.apk/monet/palette.txt");
+        return new File(home, "Library/Caches/Apk on Mac/monet/palette.txt");
     }
 
     static State readCache(File f, String key) {
@@ -294,7 +294,7 @@ public final class Monet {
         return sb.toString();
     }
 
-    /** Write-then-rename, so a concurrent reader (several Mac.apk apps launching at once)
+    /** Write-then-rename, so a concurrent reader (several Apk on Mac apps launching at once)
      *  sees the old file or the new one, never a torn one. Best effort. */
     static void writeCache(File f, String key, State s) {
         if (key.indexOf('\n') >= 0 || s.mainColors.length == 0) return;

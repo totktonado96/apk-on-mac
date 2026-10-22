@@ -9,12 +9,12 @@
 // virtually every AndroidX app's manifest. CoreComponentFactory overrides
 // these methods and calls super.instantiateXxx(...) for the real
 // construction step, so the default bodies below must exist with these
-// EXACT signatures even before any Mac.apk call site routes through this
+// EXACT signatures even before any Apk on Mac call site routes through this
 // class -- otherwise resolving CoreComponentFactory's super call throws
 // NoSuchMethodError the first time anything invokes it.
 //
 // Previously this was a v1.0.92 auto-generated empty stub (ctor only, zero
-// methods). Mac.apk's own loader (ActivityHost.performLaunch, Boot's
+// methods). Apk on Mac's own loader (ActivityHost.performLaunch, Boot's
 // Application/ContentProvider bring-up, ServiceRegistry) still does direct
 // reflection today rather than consulting this factory or parsing the
 // manifest's android:appComponentFactory attribute -- routing those call

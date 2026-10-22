@@ -5,7 +5,7 @@
 //
 // WHY THIS IS A SEPARATE FILE FROM media_video.mm, AND WHAT IT REUSES.
 // media_video.mm (v1.0.485, 2026-06-21) already proved the hard, novel part
-// of VideoToolbox-on-Mac.apk end to end: VTDecompressionSession -> CVPixelBuffer
+// of VideoToolbox-on-Apk on Mac end to end: VTDecompressionSession -> CVPixelBuffer
 // -> CVMetalTextureCache -> a full-screen render pass -> CAMetalLayer. That
 // half (macapk_vd_present_create / macapk_vd_present_to_layer, declared
 // extern below) is REUSED VERBATIM here, and by CocoaPresentVideoFrame in

@@ -2,7 +2,7 @@ package com.google.firebase.storage;
 
 // com.google.firebase.storage.ControllableTask<TResult> -- a CancellableTask
 // that can additionally be paused/resumed. Real upload/download tasks extend
-// this. On Mac.apk there is no live transfer to pause, so pause/resume return
+// this. On Apk on Mac there is no live transfer to pause, so pause/resume return
 // false (nothing to control), but the type and pause-listener surface exist so
 // app code compiles and degrades cleanly.
 //

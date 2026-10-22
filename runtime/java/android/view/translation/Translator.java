@@ -2,7 +2,7 @@
 // Source: frameworks/base core/java/android/view/translation/Translator.java
 // (android16-release).
 //
-// Mac.apk ships NO on-device translator: TranslationManager reports an empty
+// Apk on Mac ships NO on-device translator: TranslationManager reports an empty
 // capability set and never calls back with a Translator, so nothing in this tree
 // hands one out. The type exists because createOnDeviceTranslator names it, and
 // because a caller that somehow holds one must not hang -- translate() answers

@@ -11,7 +11,7 @@ import java.util.Objects;
 /**
  * One URSP route-selection descriptor.
  *
- * Immutable value type; Mac.apk never produces one.
+ * Immutable value type; Apk on Mac never produces one.
  *
  * Source: frameworks/base/telephony/java/android/telephony/data/RouteSelectionDescriptor.java
  */

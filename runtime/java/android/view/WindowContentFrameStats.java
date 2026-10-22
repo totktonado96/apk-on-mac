@@ -1,7 +1,7 @@
 // android.view.WindowContentFrameStats -- FrameStats plus the posted/ready
 // timestamps for a window's CONTENT frames. Source: frameworks/base
 // core/java/android/view/WindowContentFrameStats.java (android16-release).
-// Only UiAutomation produces one, and Mac.apk hosts none -- see FrameStats.
+// Only UiAutomation produces one, and Apk on Mac hosts none -- see FrameStats.
 package android.view;
 
 public final class WindowContentFrameStats extends FrameStats

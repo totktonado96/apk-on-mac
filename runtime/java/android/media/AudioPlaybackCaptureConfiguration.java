@@ -11,7 +11,7 @@ import android.media.projection.MediaProjection;
 // type has to exist for that method to be declarable at all. The capture it
 // configures does NOT exist and cannot: on Android, playback capture inserts a
 // loopback AudioMix into AudioFlinger's policy engine and re-routes other apps'
-// output into it. Mac.apk runs exactly one Android app per process and mixes it
+// output into it. Apk on Mac runs exactly one Android app per process and mixes it
 // straight into CoreAudio -- there is no second app whose output could be
 // captured, and no policy engine to insert a mix into.
 //
@@ -106,7 +106,7 @@ public final class AudioPlaybackCaptureConfiguration {
          * @throws NullPointerException if projection is null (AOSP:
          *         Preconditions.checkNotNull).
          * @throws IllegalArgumentException if the projection cannot project
-         *         audio. On Mac.apk none can -- see the class comment and
+         *         audio. On Apk on Mac none can -- see the class comment and
          *         MediaProjection.canProjectAudio. This throw is the whole point
          *         of the class existing: an app finds out here, at the call it
          *         made, instead of after recording a file of nothing.

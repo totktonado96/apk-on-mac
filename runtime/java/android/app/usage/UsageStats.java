@@ -6,7 +6,7 @@
 // UsageStatsService fills it in, and UsageStatsManager.queryUsageStats hands
 // copies out.
 //
-// Mac.apk collects no usage history (see UsageStatsManager's class comment), so
+// Apk on Mac collects no usage history (see UsageStatsManager's class comment), so
 // the manager returns an empty list and nothing here is ever populated by the
 // runtime. The class exists because queryUsageStats's element type names it --
 // an app iterating the list must be able to declare the loop variable -- and

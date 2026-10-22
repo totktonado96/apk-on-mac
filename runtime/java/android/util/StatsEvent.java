@@ -1,5 +1,5 @@
 package android.util;
-/** A statsd atom event. Mac.apk has no statsd; a built event is inert. */
+/** A statsd atom event. Apk on Mac has no statsd; a built event is inert. */
 public final class StatsEvent {
     private StatsEvent() {}
     public int getAtomId() { return 0; }

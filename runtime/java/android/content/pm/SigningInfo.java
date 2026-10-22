@@ -4,7 +4,7 @@ package android.content.pm;
 // PackageInfo.signingInfo via JNI GetFieldID during Firebase init; without
 // the field (and its declared type) GetFieldID throws NoSuchFieldError
 // uncaught on the Unity main thread and stalls Crossy's GameSceneBoot. We
-// report no signers -- consistent with Mac.apk returning null PackageInfo
+// report no signers -- consistent with Apk on Mac returning null PackageInfo
 // .signatures (see MacApkPackageManager.getPackageInfo): GMS can't verify a
 // Google-platform signature, so signature-gated features degrade gracefully
 // rather than mis-authenticate. App-agnostic.
@@ -46,7 +46,7 @@ public final class SigningInfo implements android.os.Parcelable {
     // than naming a scheme we did not verify. A caller that knows the scheme
     // -- MacApkPackageManager.readApkSignatures does, it walks v3.1/v3/v2 then
     // v1 -- should use the AOSP 4-arg constructor below instead, which is
-    // public API and needs no Mac.apk-specific surface.
+    // public API and needs no Apk on Mac-specific surface.
     public SigningInfo(Signature[] signers) {
         this.signers = signers != null ? signers : new Signature[0];
         this.pastSigners = new Signature[0];

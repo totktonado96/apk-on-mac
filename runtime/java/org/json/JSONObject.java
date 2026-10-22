@@ -179,7 +179,7 @@ public class JSONObject {
         Long result = JSON.toLong(map.get(key));
         return result != null ? result : f;
     }
-    /** AOSP default is NaN (unlike JSONArray.optDouble(int), which Mac.apk
+    /** AOSP default is NaN (unlike JSONArray.optDouble(int), which Apk on Mac
      *  deliberately keeps at a pre-existing 0.0 default -- see that file). */
     public double optDouble(String key)  { return optDouble(key, Double.NaN); }
     public double optDouble(String key, double f) {
@@ -381,7 +381,7 @@ public class JSONObject {
         //
         // Measured on Plague Inc (com.miniclip.plagueinc), which the 2026-08-27
         // full-fleet census recorded as one of only two DEAD apps:
-        //     [E] Mac.apk.Boot: FATAL EXCEPTION: main
+        //     [E] Apk on Mac.Boot: FATAL EXCEPTION: main
         //     java.lang.NullPointerException: Cannot invoke "String.length()"
         //         because "<parameter1>" is null
         //         at org.json.JSONObject.quote(JSONObject.java:339)

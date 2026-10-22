@@ -845,7 +845,7 @@ public class SimpleDateFormat extends DateFormat {
             }
 
             int tag;
-            // Mac.apk addition: 'c' (standalone day of week) is legal on real
+            // Apk on Mac addition: 'c' (standalone day of week) is legal on real
             // Android (AOSP libcore's SimpleDateFormat, ojluni fork) but not in
             // vanilla OpenJDK -- see PATTERN_STANDALONE_DAY_OF_WEEK above. Checked
             // before the shared DateFormatSymbols.patternChars table so that
@@ -1053,7 +1053,7 @@ public class SimpleDateFormat extends DateFormat {
         return delegate.getIterator(sb.toString());
     }
 
-    // Mac.apk addition (docs/jetfix_2026-07-31.md): pattern index 23, one past
+    // Apk on Mac addition (docs/jetfix_2026-07-31.md): pattern index 23, one past
     // vanilla OpenJDK 21's last index (22, 'L'). DateFormatSymbols.patternChars
     // (the vanilla 23-letter legality table this class normally consults via
     // `import static java.text.DateFormatSymbols.*`) is NOT extended -- 'c' is
@@ -1089,7 +1089,7 @@ public class SimpleDateFormat extends DateFormat {
         CalendarBuilder.ISO_DAY_OF_WEEK,   // Pseudo Calendar field
         Calendar.ZONE_OFFSET,
         Calendar.MONTH,
-        Calendar.DAY_OF_WEEK              // Mac.apk addition: index 23, 'c'. Same
+        Calendar.DAY_OF_WEEK              // Apk on Mac addition: index 23, 'c'. Same
                                            // underlying field as 'E'/'e' (index 9) --
                                            // 'c' only changes HOW it renders (standalone
                                            // vs. context form), never WHICH field.
@@ -1120,7 +1120,7 @@ public class SimpleDateFormat extends DateFormat {
         DateFormat.DAY_OF_WEEK_FIELD,
         DateFormat.TIMEZONE_FIELD,
         DateFormat.MONTH_FIELD,
-        DateFormat.DAY_OF_WEEK_FIELD       // Mac.apk addition: index 23, 'c'
+        DateFormat.DAY_OF_WEEK_FIELD       // Apk on Mac addition: index 23, 'c'
     };
 
     // Maps from DecimalFormatSymbols index to Field constant
@@ -1148,7 +1148,7 @@ public class SimpleDateFormat extends DateFormat {
         Field.DAY_OF_WEEK,
         Field.TIME_ZONE,
         Field.MONTH,
-        Field.DAY_OF_WEEK                 // Mac.apk addition: index 23, 'c'
+        Field.DAY_OF_WEEK                 // Apk on Mac addition: index 23, 'c'
     };
 
     /**
@@ -1182,7 +1182,7 @@ public class SimpleDateFormat extends DateFormat {
         int style = (count >= 4) ? Calendar.LONG : Calendar.SHORT;
         if (!useDateFormatSymbols && field < Calendar.ZONE_OFFSET
             && patternCharIndex != PATTERN_MONTH_STANDALONE
-            // Mac.apk addition: PATTERN_STANDALONE_DAY_OF_WEEK ('c') also opts
+            // Apk on Mac addition: PATTERN_STANDALONE_DAY_OF_WEEK ('c') also opts
             // out of this generic fallback and computes its own value below,
             // exactly like PATTERN_MONTH_STANDALONE ('L') already does -- see
             // that case for why (it always wants the STANDALONE style bit,
@@ -1294,7 +1294,7 @@ public class SimpleDateFormat extends DateFormat {
             }
             break;
 
-        // Mac.apk addition (docs/jetfix_2026-07-31.md): 'c', standalone day of
+        // Apk on Mac addition (docs/jetfix_2026-07-31.md): 'c', standalone day of
         // week. Modeled directly on PATTERN_MONTH_STANDALONE ('L') just above --
         // day-of-week standalone is the exact same shape of problem AOSP added
         // 'c' to solve (AOSP libcore SimpleDateFormat.java, "BEGIN Android-added:
@@ -2176,7 +2176,7 @@ public class SimpleDateFormat extends DateFormat {
                 }
                 break parsing;
 
-            // Mac.apk addition (docs/jetfix_2026-07-31.md): 'c', standalone day
+            // Apk on Mac addition (docs/jetfix_2026-07-31.md): 'c', standalone day
             // of week -- parse side. Matches against the SAME format-context
             // weekday arrays 'E' uses above: recognizing WHICH weekday a string
             // names doesn't require the standalone/format grammatical
@@ -2411,7 +2411,7 @@ public class SimpleDateFormat extends DateFormat {
                             c = to.charAt(ci);
                         }
                     } else if (c == 'c') {
-                        // Mac.apk addition: 'c' (PATTERN_STANDALONE_DAY_OF_WEEK)
+                        // Apk on Mac addition: 'c' (PATTERN_STANDALONE_DAY_OF_WEEK)
                         // is deliberately absent from DateFormatSymbols.
                         // patternChars/getLocalPatternChars() in both directions
                         // (see compile() above) -- so `from.indexOf('c')` always

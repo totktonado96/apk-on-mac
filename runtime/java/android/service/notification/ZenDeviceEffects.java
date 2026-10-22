@@ -8,7 +8,7 @@ import android.os.Parcelable;
  * (grayscale display, dimmed wallpaper, night mode, ambient display off) as
  * opposed to which notifications get through.
  *
- * Mac.apk applies none of these to the host -- a guest does not get to grayscale
+ * Apk on Mac applies none of these to the host -- a guest does not get to grayscale
  * the user's Mac -- but the object is pure state and an app that builds one,
  * attaches it to an AutomaticZenRule and reads it back gets exactly what it
  * put in.

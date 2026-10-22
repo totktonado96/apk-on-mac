@@ -1095,7 +1095,7 @@ DisplayBudget WindowAsDisplay(const LiveState& l, int w_pt, int h_pt) {
 // ---- the C1 side hold (owner decision 2026-09-25; retired with Stage-2 relaunch) ----
 // A C1 activity that does not declare orientation AND screenSize in
 // configChanges is RELAUNCHED by Android when its Configuration changes side.
-// Mac.apk does not relaunch yet (MACAPK_RESIZE_RELAUNCH, default off), so the
+// Apk on Mac does not relaunch yet (MACAPK_RESIZE_RELAUNCH, default off), so the
 // kept instance would sit in a Configuration it never agreed to handle. A live
 // drag is therefore clamped to the window's side (AllowedUserResize); anything
 // the drag clamp cannot reach -- a window-manager resize (tiling, Fill, Zoom),
@@ -1447,7 +1447,7 @@ LiveOutcome EnterFullScreen(const WindowTraits& t, const DeviceSettings& s,
         AppPx(cur, &cw, &ch);
         const int vw = d.policy_applies ? d.app_bounds.width() : fs.width_px;
         const int vh = d.policy_applies ? d.app_bounds.height() : fs.height_px;
-        // Mac.apk reports WINDOWING_MODE_FULLSCREEN, so no upscale unless the
+        // Apk on Mac reports WINDOWING_MODE_FULLSCREEN, so no upscale unless the
         // device setting says always (mutant 28: the desktop clause always on).
         const bool desktop = s.size_compat_upscale == SizeCompatUpscale::kAlways || WP_MUTANT(28);
         n.compat_scale = SizeCompatScale(cw, ch, vw, vh, desktop);

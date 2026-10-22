@@ -5,7 +5,7 @@
 // core/java/android/view/inputmethod/ConnectionlessHandwritingCallback.java
 // (android16-release).
 //
-// Mac.apk has no stylus source and no IME, so onResult is never reached; the
+// Apk on Mac has no stylus source and no IME, so onResult is never reached; the
 // manager reports CONNECTIONLESS_HANDWRITING_ERROR_UNSUPPORTED, which is the
 // error a device raises when the current IME does not support the feature.
 package android.view.inputmethod;

@@ -11,7 +11,7 @@ import java.util.List;
  * API 30+ description of a gesture the platform recognised on behalf of an
  * accessibility service, delivered to AccessibilityService.onGesture().
  *
- * Mac.apk never recognises accessibility gestures (nothing enables touch
+ * Apk on Mac never recognises accessibility gestures (nothing enables touch
  * exploration), so we never construct one -- but the CONSTRUCTOR is public in
  * AOSP and a service's own tests build these, so the value object is real: what
  * you put in is what the getters return.

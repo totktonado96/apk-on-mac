@@ -4,7 +4,7 @@
 // though: AOSP's contract is that lockCanvas never returns null (failure is
 // OutOfResourcesException/IllegalArgumentException/IllegalStateException
 // instead), so a bare `new Surface()` handed out by SurfaceHolder.getSurface()
-// or TextureView's (Mac.apk-internal convenience) getSurface() must work on
+// or TextureView's (Apk on Mac-internal convenience) getSurface() must work on
 // its own -- apps that cache that Surface and lock/unlock it directly
 // (bypassing the holder every frame) are a common idiom and must not NPE on
 // the very next statement. We mirror the same bitmap-backed Canvas +
@@ -101,7 +101,7 @@ public class Surface implements android.os.Parcelable {
     public void release() { mReleased = true; }
 
     /** The SurfaceTexture this Surface produces into, or null when it was not
-     *  constructed from one. Mac.apk framework-internal (macapk prefix, same
+     *  constructed from one. Apk on Mac framework-internal (macapk prefix, same
      *  convention as ImageReader.macapkReaderForSurface): it is how the camera
      *  capture session recognises a SurfaceTexture-backed output -- on real
      *  Android that association is the BufferQueue behind the Surface. */
@@ -109,7 +109,7 @@ public class Surface implements android.os.Parcelable {
         return mSurfaceTexture;
     }
 
-    /** Mac.apk framework-internal (same convention as macapkGetSurfaceTexture
+    /** Apk on Mac framework-internal (same convention as macapkGetSurfaceTexture
      *  above): the SurfaceView this Surface belongs to, or null when it is not
      *  a SurfaceHolder-vended Surface. Set once by SurfaceHolderImpl's
      *  constructor; read by MediaCodec.configure/setOutputSurface to register
@@ -121,7 +121,7 @@ public class Surface implements android.os.Parcelable {
         return mOwnerSurfaceView;
     }
 
-    /** Mac.apk framework-internal, called by the Bionic shim's
+    /** Apk on Mac framework-internal, called by the Bionic shim's
      *  ANativeWindow_fromSurface (bionic_shim.cpp) on the Surface a native
      *  producer is taking: on a device that is android_view_Surface_getNativeWindow
      *  reading THIS Surface's window, i.e. the owning SurfaceView's surface is now
@@ -160,7 +160,7 @@ public class Surface implements android.os.Parcelable {
     }
     public android.graphics.Canvas lockHardwareCanvas() {
         // AOSP routes this through a separate GL/HWUI-backed context
-        // (HwuiContext). Mac.apk has no such layer, so -- matching
+        // (HwuiContext). Apk on Mac has no such layer, so -- matching
         // SurfaceHolderImpl.lockHardwareCanvas() -- share the same
         // software-canvas path as lockCanvas().
         return lockCanvas(null);
@@ -258,7 +258,7 @@ public class Surface implements android.os.Parcelable {
     }
 
     // ======================================================================
-    //  AOSP API-36 surface completion (Mac.apk API-gap lane, android.view).
+    //  AOSP API-36 surface completion (Apk on Mac API-gap lane, android.view).
     // ======================================================================
 
     /** AOSP Surface.unlockCanvas(Canvas), deprecated since API 1 and documented
@@ -359,7 +359,7 @@ public class Surface implements android.os.Parcelable {
     // Intent-extra type checks fail silently instead of throwing, and every
     // `instanceof Parcelable` on a Surface goes the wrong way. A Surface is a
     // live handle onto a buffer queue, so AOSP marshals a native token and the
-    // reader re-attaches to the SAME queue. Mac.apk is a single process, and
+    // reader re-attaches to the SAME queue. Apk on Mac is a single process, and
     // Parcel here keeps a live object reference for exactly this case (see
     // android/os/Parcel.java writeParcelableBody / readParcelableBody): an empty
     // writeToParcel makes the Parcel carry the Surface ITSELF, so the reader

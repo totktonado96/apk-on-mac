@@ -1,7 +1,7 @@
 // android.view.WindowAnimationFrameStats -- FrameStats for a window ANIMATION.
 // Deprecated at API 33 (window animations moved out of the app process).
 // Source: frameworks/base core/java/android/view/WindowAnimationFrameStats.java.
-// Only UiAutomation produces one, and Mac.apk hosts none -- see FrameStats.
+// Only UiAutomation produces one, and Apk on Mac hosts none -- see FrameStats.
 package android.view;
 
 @Deprecated

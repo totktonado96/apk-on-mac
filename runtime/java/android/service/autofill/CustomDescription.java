@@ -13,7 +13,7 @@ import java.util.List;
  * A custom layout for the save dialog: a RemoteViews template plus rules that
  * transform its children from the values being saved.
  *
- * Pure value object with a builder. Mac.apk shows no save dialog, so the
+ * Pure value object with a builder. Apk on Mac shows no save dialog, so the
  * template is never inflated -- but the builder's validation (which is what
  * rejects a third-party Transformation, keeping the interface closed) runs
  * exactly as on a device.

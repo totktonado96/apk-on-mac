@@ -1,4 +1,4 @@
-// dalvik.system.MacApkDexConverter -- internal (Mac.apk-only) helper that
+// dalvik.system.MacApkDexConverter -- internal (Apk on Mac-only) helper that
 // turns a DEX (a file on disk, or raw bytes from a ByteBuffer) into a .jar of
 // JVM bytecode loadable into a live ClassLoader. This is the single shared
 // primitive behind every dynamic class-loading entry point that AOSP backs
@@ -12,7 +12,7 @@
 //     launch)
 //   * DexFile.loadDex / new DexFile (legacy + MultiDex bootstrap)
 //
-// On a real device ART loads DEX directly. Mac.apk has no DEX interpreter, so
+// On a real device ART loads DEX directly. Apk on Mac has no DEX interpreter, so
 // we reuse the EXACT same DEX->JAR converter the runtime uses for the primary
 // app dex: com.macapk.dex, called in this JVM. The result is fed to a plain
 // URLClassLoader.
@@ -39,7 +39,7 @@
 //     DexLocationToOdexFilename); we deliberately use code_cache instead,
 //     because Context.getCodeCacheDir() promises exactly the lifetime a
 //     JAVA_ID-keyed artifact needs -- wiped when the app is upgraded AND when
-//     the platform is upgraded -- and Mac.apk already wipes it on update
+//     the platform is upgraded -- and Apk on Mac already wipes it on update
 //     (apk_unpacker.cpp, InstallCore.swift). That placement is a RECONCILE with
 //     ART, not a copy of it. A second launch of the same SDK is a hit: no
 //     conversion, no write.

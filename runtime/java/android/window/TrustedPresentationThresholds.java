@@ -11,7 +11,7 @@ import android.os.Parcelable;
  * "trusted presented". Apps use it to know their content was really shown to the
  * user (anti-overlay / anti-tapjacking checks) before enabling a sensitive action.
  *
- * Mac.apk stores the thresholds faithfully; see WindowManager's listener pair for
+ * Apk on Mac stores the thresholds faithfully; see WindowManager's listener pair for
  * what we can and cannot answer about them.
  */
 public final class TrustedPresentationThresholds implements Parcelable {

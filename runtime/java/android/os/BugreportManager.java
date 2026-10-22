@@ -1,6 +1,6 @@
 // android.os.BugreportManager -- triggers a system bug report (privileged,
 // getSystemService(BUGREPORT_SERVICE)). No bug-report subsystem exists on the
-// Mac.apk host, so startBugreport immediately reports the error path to the
+// Apk on Mac host, so startBugreport immediately reports the error path to the
 // callback and cancel/request are no-ops. The type is provided so references
 // from diagnostic/feedback SDKs resolve.
 //

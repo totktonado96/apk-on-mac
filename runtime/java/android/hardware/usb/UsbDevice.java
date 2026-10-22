@@ -1,6 +1,6 @@
 // android.hardware.usb.UsbDevice
 //
-// A connected USB device descriptor. Mac.apk never exposes host USB to the
+// A connected USB device descriptor. Apk on Mac never exposes host USB to the
 // guest (UsbManager.getDeviceList is always empty), so instances are not
 // handed out in practice -- but apps reference UsbDevice in fields/casts and
 // inspect descriptors, so the full getter surface + interface/config

@@ -4,7 +4,7 @@
 // keystore/BackendBusyException.java. Unchecked (ProviderException), so a JCA
 // caller sees it through Cipher/Signature init.
 //
-// Mac.apk never raises this -- there is no KeyMint and no slot pressure -- but
+// Apk on Mac never raises this -- there is no KeyMint and no slot pressure -- but
 // apps CATCH it around every keystore operation, and a missing class makes that
 // catch block fail to link.
 package android.security.keystore;

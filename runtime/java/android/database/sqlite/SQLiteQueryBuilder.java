@@ -7,7 +7,7 @@
 // buildQueryString does the raw assembly; query() ANDs the builder's
 // accumulated WHERE with the caller's selection (each parenthesized).
 //
-// Mac.apk implements the assembly faithfully and runs it through our
+// Apk on Mac implements the assembly faithfully and runs it through our
 // real SQLite-backed SQLiteDatabase.rawQueryWithFactory. We DO NOT
 // implement the "strict" anti-injection re-parse (setStrict*/validate)
 // because that path needs SQLiteConnection.validateSql, which our

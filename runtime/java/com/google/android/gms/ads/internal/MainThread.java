@@ -1,6 +1,6 @@
 // com.google.android.gms.ads.internal.MainThread
 //
-// Mac.apk-internal helper (NOT part of the public GMS API surface) used
+// Apk on Mac-internal helper (NOT part of the public GMS API surface) used
 // by our ads shims to deliver load/init callbacks asynchronously on the
 // main thread, matching how the real Google Mobile Ads SDK delivers ad
 // load errors off the caller's stack. Lives in an internal package so it

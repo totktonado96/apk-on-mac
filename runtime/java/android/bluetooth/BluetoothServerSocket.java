@@ -1,6 +1,6 @@
 // android.bluetooth.BluetoothServerSocket -- a listening Bluetooth socket.
 //
-// Mac.apk exposes no Bluetooth bridge, so nothing can ever be accepted.
+// Apk on Mac exposes no Bluetooth bridge, so nothing can ever be accepted.
 // accept() throws IOException, which is AOSP's own documented failure ("on
 // error, for example this socket has already been closed") and the only answer
 // that does not leave a server thread blocked forever on a link that cannot
@@ -20,7 +20,7 @@ public class BluetoothServerSocket implements Closeable {
     public BluetoothSocket accept() throws IOException { return accept(-1); }
 
     public BluetoothSocket accept(int timeout) throws IOException {
-        throw new IOException("Mac.apk: no Bluetooth radio");
+        throw new IOException("Apk on Mac: no Bluetooth radio");
     }
 
     /** AOSP returns the assigned L2CAP PSM, or throws when the socket is not

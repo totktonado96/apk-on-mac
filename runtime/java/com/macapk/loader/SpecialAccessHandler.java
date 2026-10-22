@@ -685,7 +685,7 @@ public final class SpecialAccessHandler {
     // Our control surface for it is the helper's `app-details` verb: one alert
     // with a check box per storage permission group the app requests and per
     // special access it declares, drawn by a system process and written only
-    // by the helper, like S1. It is not the Mac.apk control panel because a
+    // by the helper, like S1. It is not the Apk on Mac control panel because a
     // GRANT must come from the human answering an alert whose identity the
     // helper takes from its parent process (the panel can only revoke), and
     // because the app expects to be covered and resumed around it.

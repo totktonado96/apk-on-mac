@@ -2,7 +2,7 @@
 //
 // The interface implemented by all Bluetooth profile proxies; its real value
 // here is the STATE_* / profile-id constant set that apps and BluetoothGatt
-// reference. Mac.apk has no radio, so connections are always DISCONNECTED.
+// reference. Apk on Mac has no radio, so connections are always DISCONNECTED.
 // Mirrors frameworks/base/core/java/android/bluetooth/BluetoothProfile.java.
 package android.bluetooth;
 

@@ -423,7 +423,7 @@ public abstract class Animation implements Cloneable {
     // These describe what the WINDOW MANAGER paints behind a window-transition
     // animation; they have no effect on a View animation and AOSP's own bodies
     // are plain field round-trips (WindowManagerService reads them out of the
-    // Animation when it runs a window transition). Mac.apk runs no window
+    // Animation when it runs a window transition). Apk on Mac runs no window
     // transitions, so the values round-trip and nothing consumes them -- which
     // is also true on a device for any Animation not handed to the window
     // manager, i.e. every animation an app runs on a View.

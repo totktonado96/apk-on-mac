@@ -7,7 +7,7 @@ import java.lang.ref.WeakReference;
 import java.util.HashMap;
 import java.util.Map;
 
-// Mac.apk-internal glue between android.webkit.WebView and the native
+// Apk on Mac-internal glue between android.webkit.WebView and the native
 // WKWebView engine (runtime/src/webview_bridge.mm). NOT an AOSP class; apps
 // never reference it (AOSP hides its engine glue behind WebViewProvider the
 // same way). Everything here is package-private or gated so the public

@@ -1,5 +1,5 @@
 package org.apache.http.protocol;
-/** Sends a request and receives a response over a connection. Mac.apk drives no
+/** Sends a request and receives a response over a connection. Apk on Mac drives no
  *  apache transport, so this is a structural holder. */
 public class HttpRequestExecutor {
     public static final int DEFAULT_WAIT_FOR_CONTINUE = 3000;

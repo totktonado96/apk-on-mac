@@ -7,7 +7,7 @@ import java.util.concurrent.TimeUnit;
 
 // com.google.firebase.functions.HttpsCallableReference -- a handle to a single
 // callable Cloud Function. Real Functions POSTs the argument to the function URL
-// and resolves with its result. On Mac.apk there is no backend, so call(...)
+// and resolves with its result. On Apk on Mac there is no backend, so call(...)
 // fails cleanly with FirebaseFunctionsException(Code.INTERNAL) -- we never
 // fabricate a function result. Configuration (timeout) is recorded locally.
 //

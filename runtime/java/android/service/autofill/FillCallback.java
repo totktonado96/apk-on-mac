@@ -4,7 +4,7 @@ package android.service.autofill;
  * The handle AutofillService.onFillRequest answers through: exactly one of
  * onSuccess / onFailure, once.
  *
- * Mac.apk never issues a fill request, so no instance is handed to a service --
+ * Apk on Mac never issues a fill request, so no instance is handed to a service --
  * but the type is named in the abstract method's signature and must resolve.
  * The double-call guard is AOSP's and is kept: a service that answers twice
  * gets the IllegalStateException here that it would get on a device, rather

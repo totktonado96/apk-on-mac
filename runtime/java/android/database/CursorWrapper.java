@@ -8,7 +8,7 @@
 //
 // Note on the notification-URI list overloads: the AOSP Cursor
 // interface declares setNotificationUris(ContentResolver,List<Uri>)
-// and getNotificationUris(), but Mac.apk's android.database.Cursor
+// and getNotificationUris(), but Apk on Mac's android.database.Cursor
 // does not (it predates that API surface). They are declared here as
 // plain public methods (no @Override) so callers invoking them on a
 // CursorWrapper reference still resolve; they forward to the wrapped
@@ -99,7 +99,7 @@ public class CursorWrapper implements Cursor {
     @Override public Uri getNotificationUri() { return mCursor.getNotificationUri(); }
 
     /** AOSP Cursor.setNotificationUris(ContentResolver, List<Uri>) --
-     *  not on Mac.apk's Cursor interface, so declared plainly (no
+     *  not on Apk on Mac's Cursor interface, so declared plainly (no
      *  @Override) and forwarded only if the wrapped cursor supports it.
      *  Falls back to the single-URI form with the first entry. */
     public void setNotificationUris(ContentResolver cr, List<Uri> uris) {
@@ -108,7 +108,7 @@ public class CursorWrapper implements Cursor {
         }
     }
 
-    /** AOSP Cursor.getNotificationUris() -- not on Mac.apk's Cursor
+    /** AOSP Cursor.getNotificationUris() -- not on Apk on Mac's Cursor
      *  interface; returns the single notification URI (if any) as a
      *  one-element list to satisfy callers expecting the list form. */
     public List<Uri> getNotificationUris() {

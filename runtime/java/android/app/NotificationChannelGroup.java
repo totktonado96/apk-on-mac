@@ -3,7 +3,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 // android.app.NotificationChannelGroup (API 26+). A named container for a set of
-// NotificationChannels. Apps create groups at startup; Mac.apk records them so
+// NotificationChannels. Apps create groups at startup; Apk on Mac records them so
 // the get/list round-trip is faithful even though we render no system notifs.
 public final class NotificationChannelGroup implements android.os.Parcelable {
     private final String id;

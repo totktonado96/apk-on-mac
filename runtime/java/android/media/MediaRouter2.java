@@ -11,7 +11,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.Executor;
 import java.util.function.Consumer;
 
-/** The modern (API 30) media-routing client. Mac.apk plays audio/video through
+/** The modern (API 30) media-routing client. Apk on Mac plays audio/video through
  *  the host's own default output and hosts no route providers (no Cast, no DLNA,
  *  no Bluetooth route service), so the only route that exists is the built-in
  *  speaker -- exactly what a real Android device with no route providers
@@ -132,7 +132,7 @@ public final class MediaRouter2 {
      * The privileged "proxy" router: an app holding MEDIA_ROUTING_CONTROL or
      * MEDIA_CONTENT_CONTROL observes ANOTHER package's routing. API 35.
      *
-     * Mac.apk runs exactly one app per process and has no other package's
+     * Apk on Mac runs exactly one app per process and has no other package's
      * routing to proxy, so the returned instance observes the same (only)
      * session this process has. AOSP invokes onInstanceInvalidatedListener when
      * the proxied package stops being visible; here it never does, because the
@@ -246,7 +246,7 @@ public final class MediaRouter2 {
     }
 
     /** API 34. The app's preferred output-switcher listing. Stored and read back
-     *  (see RouteListingPreference); Mac.apk has no output switcher to show it in. */
+     *  (see RouteListingPreference); Apk on Mac has no output switcher to show it in. */
     public void setRouteListingPreference(RouteListingPreference routeListingPreference) {
         mRouteListingPreference = routeListingPreference;
         for (ListingPreferenceCallbackRecord record : mListingPreferenceCallbackRecords) {
@@ -285,7 +285,7 @@ public final class MediaRouter2 {
     /** API 34. Asks System UI to show the output switcher.
      *  AOSP's own local implementation returns whatever the router service
      *  answers, and returns FALSE when the service is unreachable
-     *  (MediaRouter2.java L3782-3791). Mac.apk has no System UI and no output
+     *  (MediaRouter2.java L3782-3791). Apk on Mac has no System UI and no output
      *  switcher, so nothing was shown and false is the truthful answer -- an app
      *  that checks the return value falls back to its own in-app picker, which is
      *  the behaviour we want. */

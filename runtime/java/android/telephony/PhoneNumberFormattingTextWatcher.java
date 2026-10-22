@@ -8,7 +8,7 @@ import java.util.Locale;
 /**
  * A TextWatcher that formats a phone number as the user types.
  *
- * ⚠ AOSP drives this with libphonenumber's AsYouTypeFormatter, which Mac.apk
+ * ⚠ AOSP drives this with libphonenumber's AsYouTypeFormatter, which Apk on Mac
  * does not vendor (see PhoneNumberUtils's note on the same subject). So:
  *
  *   - For NANP countries the formatting IS real: it runs

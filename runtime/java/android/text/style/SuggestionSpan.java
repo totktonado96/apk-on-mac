@@ -5,7 +5,7 @@
 //
 // Editors and IME spell-check set these on a span'd word. We carry the
 // suggestion data + flags faithfully and draw the standard misspelled/grammar
-// underline color; Mac.apk hosts no suggestion-pick popup, so the action
+// underline color; Apk on Mac hosts no suggestion-pick popup, so the action
 // constants exist for callers that read them but drive no UI.
 package android.text.style;
 
@@ -68,7 +68,7 @@ public class SuggestionSpan extends CharacterStyle implements ParcelableSpan {
      * Those are derived from a theme we do not resolve, so the payload here is
      * the four fields this class actually has, and writeToParcelInternal below
      * is its exact inverse. In-process the round trip is lossless; the bytes
-     * are not interchangeable with a device's, which nothing in Mac.apk can
+     * are not interchangeable with a device's, which nothing in Apk on Mac can
      * observe (there is no IPC).
      */
     public SuggestionSpan(Parcel src) {

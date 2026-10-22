@@ -15,7 +15,7 @@ import java.util.concurrent.TimeUnit;
  * or MediaPlayer. API 26.
  *
  * This is a REAL implementation, not a stub. AOSP runs the curve inside the
- * native mixer, where it multiplies the track's own volume; Mac.apk has no
+ * native mixer, where it multiplies the track's own volume; Apk on Mac has no
  * mixer-side ramp hook, so the ramp is driven from Java -- a shared daemon
  * scheduler samples the curve and pushes the resulting scale into the target's
  * existing volume path (AudioTrack.setVolume / MediaPlayer.setVolume), which

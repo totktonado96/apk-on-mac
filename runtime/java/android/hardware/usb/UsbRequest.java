@@ -1,6 +1,6 @@
 // android.hardware.usb.UsbRequest
 //
-// An async USB transfer request paired with a UsbDeviceConnection. Mac.apk
+// An async USB transfer request paired with a UsbDeviceConnection. Apk on Mac
 // never opens a device, so initialize() always fails (no endpoint); the type
 // + method surface must resolve for async-transfer code to compile.
 // Mirrors frameworks/base/core/java/android/hardware/usb/UsbRequest.java.

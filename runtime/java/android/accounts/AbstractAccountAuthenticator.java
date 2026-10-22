@@ -4,7 +4,7 @@ import android.os.Bundle;
 import android.os.IBinder;
 /** The SPI an app implements to add an account type (a sync/login provider).
  *  On real Android the AccountManagerService binds to the app's authenticator
- *  service and drives these. Mac.apk has no AccountManagerService, so the
+ *  service and drives these. Apk on Mac has no AccountManagerService, so the
  *  authenticator is constructed but never bound; getIBinder returns a real
  *  transport Binder so the app's service.onBind can hand it back. API 5.
  *  Source: frameworks/base/core/java/android/accounts/AbstractAccountAuthenticator.java */

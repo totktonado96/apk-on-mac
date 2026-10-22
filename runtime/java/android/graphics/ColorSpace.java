@@ -14,7 +14,7 @@
 // single sRGB stub for every Named entry was a fabrication; the math below is
 // AOSP's own, so the descriptive answers are now genuinely correct.
 //
-// What stays an approximation is the PIXEL path: Mac.apk decodes through
+// What stays an approximation is the PIXEL path: Apk on Mac decodes through
 // ImageIO, which is sRGB, so nothing here performs gamut remapping on actual
 // bitmap data. toXyz/fromXyz are exact, but a decoded Bitmap is still sRGB.
 package android.graphics;
@@ -127,7 +127,7 @@ public abstract class ColorSpace {
         mId = id;
     }
 
-    /** Legacy Mac.apk argument order, kept so any pre-existing subclass in the
+    /** Legacy Apk on Mac argument order, kept so any pre-existing subclass in the
      *  tree keeps compiling. Delegates to the AOSP-shaped constructor above. */
     protected ColorSpace(String name, int id, Model model) {
         this(name, model, id);

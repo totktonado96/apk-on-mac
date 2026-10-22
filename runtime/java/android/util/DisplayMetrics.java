@@ -39,7 +39,7 @@ public class DisplayMetrics {
      *  @hide-annotated on AOSP but NOT final -- the platform reassigns it when
      *  a runtime density override is applied.
      *
-     *  Mac.apk applies no runtime density override, so it never diverges from
+     *  Apk on Mac applies no runtime density override, so it never diverges from
      *  DENSITY_DEVICE_STABLE. It is declared non-final to match AOSP's shape:
      *  guest code (and the platform's own compat layer) can assign it. */
     @Deprecated
@@ -58,7 +58,7 @@ public class DisplayMetrics {
      *  window, a secondary display). Apps use it as the invariant denominator
      *  when they need a size that must not move when the display is rescaled.
      *
-     *  Mac.apk models exactly ONE display whose density is decided once, at
+     *  Apk on Mac models exactly ONE display whose density is decided once, at
      *  launch, from the screen the app opens on (v1.0.2187; 320 on Retina, 160
      *  on a 1x monitor, so one dp is one Mac point on both), and has no
      *  display-size setting and no runtime density override, so the device's
@@ -87,7 +87,7 @@ public class DisplayMetrics {
      *      }
      *  Our SystemProperties answers ro.sf.lcd_density with the launch density
      *  (320 or 160, see above) and leaves qemu.sf.lcd_density unset (it is an
-     *  EMULATOR-only override, and Mac.apk is not an emulator). The DENSITY_DEFAULT (160)
+     *  EMULATOR-only override, and Apk on Mac is not an emulator). The DENSITY_DEFAULT (160)
      *  fallback is kept rather than short-circuited so that if the property
      *  ever goes missing the failure is AOSP's failure, not a new one. */
     private static int getDeviceDensity() {
@@ -96,7 +96,7 @@ public class DisplayMetrics {
                                                    DENSITY_DEFAULT));
     }
 
-    /** Mac.apk: the device density as px per dp (DENSITY_DEVICE_STABLE / 160)
+    /** Apk on Mac: the device density as px per dp (DENSITY_DEVICE_STABLE / 160)
      *  -- 2.0 on a Retina screen, 1.0 on a 1x monitor. For framework code that
      *  needs a density with no Resources in hand; anything that has a
      *  Resources reads its DisplayMetrics instead, as AOSP does. */

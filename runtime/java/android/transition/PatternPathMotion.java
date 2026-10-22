@@ -32,7 +32,7 @@ public class PatternPathMotion extends PathMotion {
      * Note it does NOT chain to super(context, attrs) on AOSP either -- PathMotion
      * declares no attributes of its own.
      *
-     * ⚠ Mac.apk has no android.util.PathParser (it is @hide on a device, so no
+     * ⚠ Apk on Mac has no android.util.PathParser (it is @hide on a device, so no
      * app can call it directly). The equivalent parser that DOES exist here is
      * private to android.graphics.drawable.VectorDrawable, which this package
      * cannot reach, so the SVG path-data grammar is parsed below. See

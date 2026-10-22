@@ -123,7 +123,7 @@ fi
 # manifest's permission/feature declarations (40 more) -- and aapt2 refuses
 # both compile and link without a value for every flag named. A flag only
 # selects between two shipped alternatives; the values that matter to a
-# RESOURCE table read by Mac.apk are none of them (the manifest ones gate
+# RESOURCE table read by Apk on Mac are none of them (the manifest ones gate
 # platform permissions our own PackageManager answers). Every flag found in
 # the tree is set to its RELEASED state (:ro=true) unless FEATURE_FLAGS
 # overrides the whole list ("a=true,b:ro=false").

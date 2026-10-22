@@ -9,7 +9,7 @@ import java.util.Objects;
 /**
  * One signal-measurement threshold set, used by SignalStrengthUpdateRequest.
  *
- * Immutable value type; no radio required to build or read one. Mac.apk never
+ * Immutable value type; no radio required to build or read one. Apk on Mac never
  * reports a threshold crossing because there is no radio to cross one.
  *
  * Source: frameworks/base/telephony/java/android/telephony/SignalThresholdInfo.java

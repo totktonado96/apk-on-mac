@@ -1,7 +1,7 @@
 // android.hardware.usb.UsbManager
 //
 // AOSP's USB host/accessory service. Apps fetch it via getSystemService(
-// USB_SERVICE) then enumerate devices. Mac.apk does not expose host USB to the
+// USB_SERVICE) then enumerate devices. Apk on Mac does not expose host USB to the
 // guest, so getDeviceList() is an empty map and getAccessoryList() is null (the
 // two different "nothing attached" answers AOSP itself gives) -- the honest
 // "no USB peripherals" result. Mirrors

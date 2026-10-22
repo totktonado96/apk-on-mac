@@ -59,7 +59,7 @@ public interface MenuItem {
     // shortcuts, e.g. Ctrl+Shift+letter). AOSP's own default bodies only
     // accept a modifier combination that reduces to plain Ctrl once masked to
     // the supported bits, and otherwise delegate to the 1-arg forms above --
-    // reproduced verbatim below, including that validation, since Mac.apk
+    // reproduced verbatim below, including that validation, since Apk on Mac
     // runs single-window with no multi-modifier chrome to honor a richer
     // modifier anyway.
     default MenuItem setShortcut(char numericChar, char alphaChar,

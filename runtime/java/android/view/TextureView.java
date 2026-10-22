@@ -250,7 +250,7 @@ public class TextureView extends View {
     // android13-release -- it declares no such method; a real app instead
     // does `new Surface(textureView.getSurfaceTexture())`, or uses the
     // SurfaceTexture handed to onSurfaceTextureAvailable directly). It is
-    // kept here as a pre-existing Mac.apk-internal convenience (mSurface is
+    // kept here as a pre-existing Apk on Mac-internal convenience (mSurface is
     // already built and cached; nothing above this method depends on the
     // method NOT existing), but the video-decode-target registration lives
     // in Surface's own SurfaceTexture-arg constructor instead -- see that

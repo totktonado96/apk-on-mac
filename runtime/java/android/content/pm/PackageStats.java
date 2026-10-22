@@ -1,7 +1,7 @@
 package android.content.pm;
 import android.os.Parcel;
 import android.os.Parcelable;
-/** On-disk size accounting for a package. Mac.apk reports zeros. */
+/** On-disk size accounting for a package. Apk on Mac reports zeros. */
 public class PackageStats implements Parcelable {
     public String packageName;
     public int userHandle;

@@ -6,7 +6,7 @@
 // FontCollection -> FontFamily -> Font -> MinikinFont graph), copying out each font's
 // {path, weight, slant, ttcIndex, axes, locale} into its own registry (device dump
 // refs/dev_regat_str_16643_523; the fields authoritatively == the NDK iterator's set,
-// AOSP native/android/system_fonts.cpp:249-261). Mac.apk has NO native font stack (our
+// AOSP native/android/system_fonts.cpp:249-261). Apk on Mac has NO native font stack (our
 // fonts are Java + CoreText), so the fold reads empty, the VM steers wrong, and the
 // frontier stops at 16645 (FORCE test MACAPK_PAIRIP_C2_FROM_GOLD walks the device path and
 // SIGBUS @16666 on our null font pointers -> proof pairip derefs real font-structure ptrs).
@@ -312,7 +312,7 @@ extern "C" size_t __macapk_pairip_font_graph_count() {
 // ---------------------------------------------------------------------------
 //
 // Device libminikin getInstance() (0x346ec) returns &SystemFonts at +0x50ff0, in the .bss LOAD
-// (vaddr 0x50dd8, memsz 0x300); the getInstance guard byte is at +0x51080. On Mac.apk libminikin
+// (vaddr 0x50dd8, memsz 0x300); the getInstance guard byte is at +0x51080. On Apk on Mac libminikin
 // is fake-mapped (maps text only, no backing). We back the page(s) covering 0x50ff0 and 0x51080
 // via mach_vm_allocate(VM_FLAGS_FIXED) -- the same pattern macapk_install_fake_art_jnienv uses to
 // place fake libart at its device VA -- then placement-new the graph root there and set the guard.

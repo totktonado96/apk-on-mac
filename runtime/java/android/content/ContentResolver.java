@@ -1,6 +1,6 @@
 // android.content.ContentResolver -- concrete per AOSP. Apps reach
 // for it via Context.getContentResolver(); it brokers reads/writes
-// against ContentProviders. Mac.apk doesn't host real providers, so
+// against ContentProviders. Apk on Mac doesn't host real providers, so
 // most methods return null/0/empty -- but the resolver itself must be
 // non-null because callers (Compose's WindowRecomposer animation-
 // scale flow, Settings observers, etc.) hold a reference and
@@ -127,7 +127,7 @@ public class ContentResolver {
     //
     // Real Android's ContentResolver brokers each call to the
     // ContentProvider that serves the URI's authority (via the
-    // ContentProviderClient transport over Binder). Mac.apk runs every
+    // ContentProviderClient transport over Binder). Apk on Mac runs every
     // declared provider in this same JVM, so we look the provider up in
     // the process-wide ContentProviderRegistry (populated by Boot from
     // the manifest's android:authorities) and call it directly. The
@@ -172,7 +172,7 @@ public class ContentResolver {
     // see the Aurora SQLite commit-swallow in changelog.md.
     //
     // WHAT THE NARROWING LOOKS LIKE IN-PROCESS. RemoteException and
-    // DeadObjectException are CHECKED and describe a dead binder peer. Mac.apk
+    // DeadObjectException are CHECKED and describe a dead binder peer. Apk on Mac
     // hosts every provider in this same JVM (see providerFor above), so
     // ContentProvider's methods do not declare them and they cannot be thrown;
     // `catch (RemoteException e)` would not even compile here. The faithful
@@ -703,7 +703,7 @@ public class ContentResolver {
     // AOSP android14-release core/java/android/content/ContentResolver.java
     // :2948-3031: each is a thin call into UriGrantsManagerService
     // (takePersistableUriPermission / releasePersistableUriPermission /
-    // getUriPermissions(pkg, incoming, persistedOnly=true)). Mac.apk's stand-in for
+    // getUriPermissions(pkg, incoming, persistedOnly=true)). Apk on Mac's stand-in for
     // that service is MacApkUriGrants (the grant records a document-picker result
     // creates, and the persisted ones reloaded at start); its header lists the
     // mirrored lines and the divergences. With the gate =0 these are the pre-change
@@ -726,7 +726,7 @@ public class ContentResolver {
         if (!MacApkUriGrants.ENABLED) return Collections.emptyList();
         return MacApkUriGrants.persisted();
     }
-    /** Grants FROM this app to another that the other app persisted. Mac.apk runs
+    /** Grants FROM this app to another that the other app persisted. Apk on Mac runs
      *  one app, so no other app can hold one: always empty (see MacApkUriGrants). */
     public List<UriPermission> getOutgoingPersistedUriPermissions() {
         return Collections.emptyList();
@@ -775,14 +775,14 @@ public class ContentResolver {
 
     // AOSP static getSyncAdapterTypes() (core/java/android/content/
     // ContentResolver.java). android.content.SyncAdapterType landed v1.0.733;
-    // Mac.apk registers no sync adapters, so an empty array is the honest
+    // Apk on Mac registers no sync adapters, so an empty array is the honest
     // answer (stale "type does not exist yet" note from an earlier pass
     // removed -- it now contradicts the line directly below it).
     public static android.content.SyncAdapterType[] getSyncAdapterTypes() { return new android.content.SyncAdapterType[0]; }
 
     // ==== Sync framework, the rest of the API-36 surface =====================
     //
-    // Mac.apk hosts no SyncManager, so nothing here ever RUNS a sync -- which
+    // Apk on Mac hosts no SyncManager, so nothing here ever RUNS a sync -- which
     // is the state of a device whose master sync toggle is off, and
     // getMasterSyncAutomatically() above already reports exactly that. The
     // registration state, however, is real: a periodic sync an app adds is
@@ -967,7 +967,7 @@ public class ContentResolver {
      *
      *  ⚠ STATED GAP. AOSP's MimeIconUtils maps a MIME type to a framework
      *  drawable and a LOCALIZED label from a built-in table
-     *  (com.android.internal.R.string.mime_type_*). Mac.apk ships neither that
+     *  (com.android.internal.R.string.mime_type_*). Apk on Mac ships neither that
      *  table nor those drawables. Rather than invent English labels -- which
      *  would be unlocalized and often wrong -- the label and content
      *  description are the MIME type itself, which is true and identifies the

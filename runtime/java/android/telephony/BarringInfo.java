@@ -10,7 +10,7 @@ import java.util.Objects;
 /**
  * Which services the network is barring.
  *
- * Mac.apk has no network, so BarringInfo is never delivered. A
+ * Apk on Mac has no network, so BarringInfo is never delivered. A
  * default-constructed instance reports BARRING_TYPE_UNKNOWN for every service,
  * which is AOSP's own "the network has not told us" value -- NOT
  * BARRING_TYPE_NONE, which would positively claim nothing is barred.

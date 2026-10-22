@@ -13,7 +13,7 @@
 //   protected Object onGetDefaultValue(TypedArray, int)
 //   protected void onSetInitialValue(boolean, Object)
 //
-// THREE CORRECTIONS to the previous Mac.apk version:
+// THREE CORRECTIONS to the previous Apk on Mac version:
 //  - it extended `Preference`, not `DialogPreference` (AOSP's actual base).
 //  - setValues() did not persist -- the selection was lost on the next launch.
 //    persistStringSet is the load-bearing call here: the F-Droid regression noted

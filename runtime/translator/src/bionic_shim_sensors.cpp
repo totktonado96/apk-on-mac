@@ -1,5 +1,5 @@
 // bionic_shim_sensors.cpp -- the NDK sensor API (libandroid ASensorManager_* /
-// ASensorEventQueue_* / ASensor_*) backed by Mac.apk's Java SensorManager.
+// ASensorEventQueue_* / ASensor_*) backed by Apk on Mac's Java SensorManager.
 //
 // WHY. A native game reads motion through this API, not through
 // android.hardware.SensorManager: Unity's Input.acceleration / gyro, Gameloft's
@@ -509,7 +509,7 @@ extern "C" const char* __macapk_arm64_ASensor_getName(void const* sensor) {
     return s ? s->name.c_str() : nullptr;
 }
 extern "C" const char* __macapk_arm64_ASensor_getVendor(void const* sensor) {
-    return AsSensor(sensor) ? "Mac.apk" : nullptr;   // Sensor.getVendor()
+    return AsSensor(sensor) ? "Apk on Mac" : nullptr;   // Sensor.getVendor()
 }
 extern "C" int __macapk_arm64_ASensor_getType(void const* sensor) {
     MacApkSensor* s = AsSensor(sensor);

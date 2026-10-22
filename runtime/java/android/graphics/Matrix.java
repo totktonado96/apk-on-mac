@@ -836,7 +836,7 @@ public class Matrix {
     }
 
     // ---------------------------------------------------------------------
-    // Mac.apk internal hooks (NOT AOSP surface)
+    // Apk on Mac internal hooks (NOT AOSP surface)
     // ---------------------------------------------------------------------
 
     /** Internal: the AFFINE PROJECTION of this matrix, for the Java2D-backed

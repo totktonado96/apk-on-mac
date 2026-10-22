@@ -1,6 +1,6 @@
 // com.google.firebase.messaging.RemoteMessage -- the payload object an FCM
 // push consumer receives in FirebaseMessagingService.onMessageReceived and
-// can also build to send upstream. On Mac.apk there is no FCM channel (this
+// can also build to send upstream. On Apk on Mac there is no FCM channel (this
 // is a de-Googled / no-Play-services device), so onMessageReceived is never
 // auto-invoked. The class still has to expose the FULL published getter
 // surface so push-consumer code compiles against our shadow and so apps that

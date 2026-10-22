@@ -1,5 +1,5 @@
 // android.os.VibratorManager -- the API-31+ multi-actuator entry point
-// (getSystemService(VIBRATOR_MANAGER_SERVICE)). Mac.apk has no vibrators, so
+// (getSystemService(VIBRATOR_MANAGER_SERVICE)). Apk on Mac has no vibrators, so
 // getVibratorIds() is empty and getDefaultVibrator() returns an inert no-op
 // Vibrator. AOSP marks this abstract; we make it concrete so the service
 // lookup can return a usable instance.

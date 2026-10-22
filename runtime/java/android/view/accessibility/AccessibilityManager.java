@@ -18,7 +18,7 @@ public class AccessibilityManager {
 
     // AOSP: true only when the CURRENT AccessibilityNodeInfo request came from
     // a caller flagged isAccessibilityTool() (AccessibilityManager.java:1115,
-    // backed by mRequestFromAccessibilityTool). Mac.apk has no live
+    // backed by mRequestFromAccessibilityTool). Apk on Mac has no live
     // AccessibilityService-binding infrastructure (see
     // getInstalledAccessibilityServiceList below), so no request is ever
     // attributed to one; false is the honest, always-correct answer here.
@@ -53,7 +53,7 @@ public class AccessibilityManager {
     }
     public void addAccessibilityServicesStateChangeListener(java.util.concurrent.Executor executor,
             AccessibilityServicesStateChangeListener listener) {
-        // Mac.apk has no executor-scoped dispatch loop to post onto (the
+        // Apk on Mac has no executor-scoped dispatch loop to post onto (the
         // listener never fires either way); keep the registration so remove()
         // and any future real dispatch see a consistent list.
         if (listener != null && !mServicesStateListeners.contains(listener)) mServicesStateListeners.add(listener);
@@ -74,7 +74,7 @@ public class AccessibilityManager {
 
     /** AOSP AccessibilityManager.sendAccessibilityEvent (API 4), correctly typed
      *  (an older loose Object overload also exists). No a11y client consumes
-     *  events in Mac.apk, so the event is accepted and dropped. */
+     *  events in Apk on Mac, so the event is accepted and dropped. */
     public void sendAccessibilityEvent(android.view.accessibility.AccessibilityEvent event) { }
 
 
@@ -85,9 +85,9 @@ public class AccessibilityManager {
     }
 
     // ======================================================================
-    //  AOSP API-36 surface completion (Mac.apk API-gap lane, android.view).
+    //  AOSP API-36 surface completion (Apk on Mac API-gap lane, android.view).
     //
-    //  Mac.apk bridges NO accessibility service to NSAccessibility, and this
+    //  Apk on Mac bridges NO accessibility service to NSAccessibility, and this
     //  class already answers that honestly: isEnabled() and
     //  isTouchExplorationEnabled() are false and the service lists are empty.
     //  Every answer below is the one a device with no service connected and no
@@ -148,7 +148,7 @@ public class AccessibilityManager {
     }
 
     /** AOSP AccessibilityManager.isAccessibilityButtonSupported(): whether the
-     *  navigation bar can host the accessibility shortcut button. Mac.apk draws
+     *  navigation bar can host the accessibility shortcut button. Apk on Mac draws
      *  no navigation bar, so it cannot. */
     public static boolean isAccessibilityButtonSupported() { return false; }
 

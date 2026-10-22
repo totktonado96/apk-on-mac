@@ -51,7 +51,7 @@
 // containers and translated pages included (treeparse's legacy path cannot
 // see scrollX, and put Telegram's off-screen intro page on screen).
 //
-// FORMAT (tag Mac.apk.TextDump; one line per record, text JSON-escaped):
+// FORMAT (tag Apk on Mac.TextDump; one line per record, text JSON-escaped):
 //   BEGIN seq=N root=l,t,r,b
 //   WIN seq=N id=a|oK b=l,t,r,b modal=0|1 touchable=0|1 cls=Name
 //   NODE seq=N win=a d=D b=l,t,r,b clk=0|1 lclk=0|1 edit=0|1 web=0|1 prov=0|1
@@ -85,7 +85,7 @@ import java.util.function.Consumer;
 public final class ViewTextDump {
     private ViewTextDump() {}
 
-    public static final String TAG = "Mac.apk.TextDump";
+    public static final String TAG = "Apk on Mac.TextDump";
 
     /** Read once: the dump is a harness facility, and the harness sets both
      *  variables before launch. MACAPK_DUMP_TREE_EVERY is what drive_app.sh,

@@ -99,7 +99,7 @@ public class LocalSocket implements java.io.Closeable {
         return toLocalSocketAddress(channelAddressQuietly(false));
     }
 
-    /** @deprecated Mac.apk-only alias kept for callers that predate the
+    /** @deprecated Apk on Mac-only alias kept for callers that predate the
      *  AOSP-correct name. Use {@link #getRemoteSocketAddress()}. */
     @Deprecated
     public LocalSocketAddress getPeerSocketAddress() { return getRemoteSocketAddress(); }

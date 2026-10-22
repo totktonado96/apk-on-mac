@@ -22,7 +22,7 @@
 // getViewRootNames()/getRootView(name)/getWindowViews() -- for on-screen /
 // obstruction checks that need to see windows OTHER than the caller's own.
 //
-// Mac.apk owns exactly ONE NSWindow (see android.view.ViewRootImpl's own
+// Apk on Mac owns exactly ONE NSWindow (see android.view.ViewRootImpl's own
 // header: "Single-window model... a process singleton"), so there is no
 // per-window IWindowManager/Binder-token machinery to reproduce, and doing so
 // would be substantial infrastructure with no real caller on this platform.
@@ -39,7 +39,7 @@
 // SurfaceControl plumbing (setWindowManagerServiceForSystemProcess,
 // registerBatchedSurfaceControlInputReceiver, etc.) are intentionally omitted:
 // they are OS-internal system_server APIs, not something third-party/ad-SDK
-// code calls, and Mac.apk has no system_server to back them with.
+// code calls, and Apk on Mac has no system_server to back them with.
 package android.view;
 
 import android.os.IBinder;

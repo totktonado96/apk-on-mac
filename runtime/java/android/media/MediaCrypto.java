@@ -2,7 +2,7 @@
 // protected codec input (MediaCodec.configure / queueSecureInputBuffer).
 // Mirrors AOSP frameworks/base media/java/android/media/MediaCrypto.java.
 //
-// Mac.apk has no DRM backend (AMediaDrm_* is absent), but the TYPE must resolve:
+// Apk on Mac has no DRM backend (AMediaDrm_* is absent), but the TYPE must resolve:
 // MediaCodec.configure's published descriptor names MediaCrypto, so without this
 // class a guest's configure(format, surface, crypto, flags) call would throw
 // NoSuchMethodError on descriptor mismatch. isCryptoSchemeSupported answers

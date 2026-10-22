@@ -1,7 +1,7 @@
 // com.macapk.gms.GoogleAuthenticator -- the `com.google` account authenticator.
 //
 // On a device this is a component inside Google Play Services that
-// AccountManagerService binds to. Mac.apk is one process with no
+// AccountManagerService binds to. Apk on Mac is one process with no
 // AccountManagerService, so android.accounts.AccountManager calls straight in
 // here. The SHAPE of the contract is preserved exactly: a cached token returns
 // without network traffic, a miss goes to Google, and a failure surfaces as

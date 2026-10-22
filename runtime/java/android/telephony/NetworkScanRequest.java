@@ -10,7 +10,7 @@ import java.util.Objects;
 /**
  * Parameters for a manual network scan.
  *
- * Faithful value type. Mac.apk cannot run the scan (no radio), and reports
+ * Faithful value type. Apk on Mac cannot run the scan (no radio), and reports
  * NetworkScan.ERROR_UNSUPPORTED rather than an empty successful result -- an
  * empty success would tell the app "there are no networks here", which is a
  * different and false claim.

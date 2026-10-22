@@ -6,7 +6,7 @@ import android.os.Parcelable;
 /**
  * AOSP android.hardware.SyncFence (API 33), core/java/android/hardware/SyncFence.java.
  *
- * A handle to a Linux sync_file: a GPU/display fence you can wait on. Mac.apk has no
+ * A handle to a Linux sync_file: a GPU/display fence you can wait on. Apk on Mac has no
  * sync_file -- the host synchronisation primitive is a Metal shared event, reached
  * through ANGLE, and nothing in this tree hands a fence fd out to guest Java.
  *

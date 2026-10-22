@@ -1,6 +1,6 @@
 package android.window;
 import android.view.AttachedSurfaceControl;
-/** Groups several surfaces so they present atomically. Mac.apk composites a
+/** Groups several surfaces so they present atomically. Apk on Mac composites a
  *  single window, so there is nothing to synchronize: add() invokes the
  *  when-ready callback immediately and markSyncReady is a no-op. API 34.
  *  Source: frameworks/base/core/java/android/window/SurfaceSyncGroup.java */

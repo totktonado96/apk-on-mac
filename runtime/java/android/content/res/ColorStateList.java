@@ -292,7 +292,7 @@ public class ColorStateList implements android.os.Parcelable {
         // conclusions from the same code -- so this is the one-run answer.
         if (System.getenv("MACAPK_TRACE_CSL_INFLATE") != null) {
             try {
-                com.macapk.loader.NativeLog.i("Mac.apk.CSL",
+                com.macapk.loader.NativeLog.i("Apk on Mac.CSL",
                     "OUR inflate() running for " + parser.getPositionDescription());
             } catch (Throwable ignored) {}
         }

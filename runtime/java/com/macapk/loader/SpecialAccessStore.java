@@ -19,7 +19,7 @@
 //     a SEPARATE PROCESS that identifies the calling app from its parent process
 //     (never from arguments) and asks the user through a CFUserNotification that
 //     a system process draws. The helper records the answer in
-//     ~/Library/Application Support/Mac.apk/appops/app-ops.json.
+//     ~/Library/Application Support/Apk on Mac/appops/app-ops.json.
 //   * THIS CLASS NEVER WRITES. It reads that file, and it believes an entry only
 //     when (a) it carries an ECDSA P-256 signature that verifies against the
 //     helper's public key (signing-key.pub beside the store; the private half
@@ -143,7 +143,7 @@ public final class SpecialAccessStore {
     public static File storeFile() { return STORE_FILE; }
     static File defaultStoreFile() {
         return new File(SharedStorage.hostHome(),
-                "Library/Application Support/Mac.apk/appops/app-ops.json");
+                "Library/Application Support/Apk on Mac/appops/app-ops.json");
     }
     static File publicKeyFile() {
         File dir = STORE_FILE.getParentFile();
@@ -159,7 +159,7 @@ public final class SpecialAccessStore {
     static File registryFile() { return defaultRegistryFile(); }
     static File defaultRegistryFile() {
         return new File(SharedStorage.hostHome(),
-                "Library/Application Support/Mac.apk/installed_apps.json");
+                "Library/Application Support/Apk on Mac/installed_apps.json");
     }
 
     // ---- the snapshot ------------------------------------------------------
@@ -550,7 +550,7 @@ public final class SpecialAccessStore {
      *
      *  Not modelled, stated: hasLegacyExternalStorage (an UPGRADE from an
      *  already-legacy install, which is what preserveLegacyExternalStorage
-     *  keeps) -- Mac.apk keeps no per-install storage history, so every
+     *  keeps) -- Apk on Mac keeps no per-install storage history, so every
      *  install is a fresh one; and FLAG_PERMISSION_APPLY_RESTRICTION, which
      *  every store/sideload installer whitelists away. */
     public static int legacyStorageMode() {
@@ -676,7 +676,7 @@ public final class SpecialAccessStore {
 
     /** The location runtime permissions (2026-10-05). Same tokens, same signed
      *  store, same helper verb (--prompt location). macOS authorizes location
-     *  for Mac.apk as a whole -- locationd keys the client by the shared
+     *  for Apk on Mac as a whole -- locationd keys the client by the shared
      *  runtime's signing identifier -- so the PER-APP Android grant has to be
      *  kept here; MacApkPackageManager.locationPermissionGranted reads it, and
      *  the macOS authorization behind it is only the host's own gate. */
@@ -787,7 +787,7 @@ public final class SpecialAccessStore {
      * KotlinUtils.isPhotoPickerPromptEnabled (lineage-21.0 :232-239):
      * isPhotoPickerPromptSupported() (U+, not Auto/TV/Wear) AND DeviceConfig
      * privacy/photo_picker_prompt_enabled, default true on a phone. OFF here:
-     * Mac.apk has no photo picker until stage S8, and the prompt's "Select
+     * Apk on Mac has no photo picker until stage S8, and the prompt's "Select
      * photos and videos" answer is only honest with one -- without it the
      * choice records limited access with nothing selected, and the follow-up
      * states (SELECT_MORE_PHOTOS, NO_UI_PHOTO_PICKER_REDIRECT) promise a picker

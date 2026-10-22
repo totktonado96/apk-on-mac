@@ -53,7 +53,7 @@ public class DragEvent implements android.os.Parcelable {
                 + " result=" + mDragResult + "}";
     }
 
-    /** Mac.apk-internal factory (not AOSP public surface) for the drag bridge. */
+    /** Apk on Mac-internal factory (not AOSP public surface) for the drag bridge. */
     public static DragEvent obtain(int action, float x, float y, Object localState,
             ClipDescription description, ClipData data, boolean result) {
         DragEvent e = new DragEvent();

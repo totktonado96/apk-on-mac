@@ -7,7 +7,7 @@
 // fromRawResource() is the one that matters most in practice: the standard
 // idiom is to ship res/raw/gestures produced by the Gesture Builder app and
 // load it at startup. It routes through Resources.openRawResource, which
-// Mac.apk implements, so a shipped gesture library really does get learned.
+// Apk on Mac implements, so a shipped gesture library really does get learned.
 package android.gesture;
 
 import android.content.Context;

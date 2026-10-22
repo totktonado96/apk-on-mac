@@ -98,7 +98,7 @@ public class ViewDebug {
 
     /** AOSP ViewDebug.dumpCapturedView(String, Object) writes the object's
      *  @ExportedProperty fields to the view-server socket for HierarchyViewer.
-     *  Mac.apk runs no view server (there is no ViewDebug socket and no
+     *  Apk on Mac runs no view server (there is no ViewDebug socket and no
      *  ddmlib client to read it), so AOSP's own early-out for "no capture
      *  target" is what happens -- the call is accepted and produces nothing. */
     public static void dumpCapturedView(String tag, Object view) { }

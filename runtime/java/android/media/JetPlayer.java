@@ -8,7 +8,7 @@ import android.os.Handler;
  * MIDI segments an app queues and mutes in real time -- through the platform's
  * built-in synthesiser and SONiVOX DLS bank.
  *
- * Mac.apk has no MIDI synthesiser: nothing in this tree renders a MIDI stream to
+ * Apk on Mac has no MIDI synthesiser: nothing in this tree renders a MIDI stream to
  * PCM (the android.media.midi package here exposes no devices either, and there
  * is no soft-synth in the native audio bridge), and JET files carry no PCM of
  * their own to fall back on. So every operation reports FAILURE the way AOSP's

@@ -3,7 +3,7 @@
 // debug.*, etc.). Not public SDK, but it lives on the bootclasspath, so apps
 // and bundled libraries reference it directly.
 //
-// Why Mac.apk needs it (v1.0.406): Chromium Cronet's CronetLibraryLoader
+// Why Apk on Mac needs it (v1.0.406): Chromium Cronet's CronetLibraryLoader
 // .initializeOnInitThread() (Reddit's HTTP stack) reaches a helper that reads
 // android.os.SystemProperties; with the class absent it threw
 // NoClassDefFoundError on the CronetInit thread, aborting init before it built
@@ -122,7 +122,7 @@ public class SystemProperties {
         // DIAGNOSTIC (MACAPK_PAIRIP_DEVICE_IDENTITY, default OFF): the pairip integrity
         // VM reads ~40 ro.* properties AND the /proc/self/maps + dl_iterate_phdr module
         // set. Our module set is transcribed from a genuine Google API34 emulator, but
-        // these properties describe "Mac.apk / Voltare / apple_silicon" -- an incoherent
+        // these properties describe "Apk on Mac / ApkOnMac / apple_silicon" -- an incoherent
         // Frankendevice a real Android never is, and every non-Android token is folded
         // into pairip's per-record accumulator (mod 186 -> bracket test), tipping it into
         // the poison bracket. This gate makes the DEVICE IDENTITY coherent with the module
@@ -180,12 +180,12 @@ public class SystemProperties {
                 com.macapk.loader.NativeCocoa.setSystemProperty(e.getKey(), e.getValue());
                 pushed++;
             } catch (Throwable t) {
-                com.macapk.loader.NativeLog.w("Mac.apk.SystemProperties",
+                com.macapk.loader.NativeLog.w("Apk on Mac.SystemProperties",
                     "could not push " + e.getKey() + " to the native store: " + t);
                 return;   // the bridge is missing entirely; one line, not N
             }
         }
-        com.macapk.loader.NativeLog.i("Mac.apk.SystemProperties",
+        com.macapk.loader.NativeLog.i("Apk on Mac.SystemProperties",
             "pushed " + pushed + " properties to the native store"
             + " (ro.build.version.sdk=" + KNOWN.get("ro.build.version.sdk") + ")");
     }
@@ -230,7 +230,7 @@ public class SystemProperties {
         return def;
     }
 
-    /** Mac.apk has no writable property store; AOSP set() requires the
+    /** Apk on Mac has no writable property store; AOSP set() requires the
      *  "init"/"shell" UID anyway, so apps treat failures as no-ops. */
     public static void set(String key, String val) {}
 

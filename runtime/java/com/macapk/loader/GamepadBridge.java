@@ -61,7 +61,7 @@ import android.view.View;
  * is the pre-change surface (getInputDeviceIds() has no gamepad).
  */
 public final class GamepadBridge {
-    private static final String TAG = "Mac.apk.Gamepad";
+    private static final String TAG = "Apk on Mac.Gamepad";
 
     public static final boolean ON = !"0".equals(System.getenv("MACAPK_GAMEPAD"));
 
@@ -755,7 +755,7 @@ public final class GamepadBridge {
     }
     public static void macapkTestDisconnect(long handle) { onDisconnected(handle); }
 
-    /** A virtual controller driven from inside Mac.apk (ArrowPad, "Arrow Keys
+    /** A virtual controller driven from inside Apk on Mac (ArrowPad, "Arrow Keys
      *  as D-pad"): registered and delivered exactly like a real one; its state
      *  goes through macapkTestState and its removal through
      *  macapkTestDisconnect. Not gated on MACAPK_GAMEPAD: it is a user choice

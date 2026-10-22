@@ -9,8 +9,8 @@
 //
 // ---- WHAT WE SEND, AND THE THINGS WE DELIBERATELY DO NOT --------------------
 // We send what we honestly are: the Build fields android.os.Build already
-// reports to every guest (BRAND "Mac.apk", MODEL "Mac.apk", the real SDK level,
-// the real ABI list, the real screen metrics). We register as a Mac.apk device
+// reports to every guest (BRAND "Apk on Mac", MODEL "Apk on Mac", the real SDK level,
+// the real ABI list, the real screen metrics). We register as a Apk on Mac device
 // because that is what this is.
 //
 // microG's reference implementation fabricates several identifiers that we
@@ -56,9 +56,9 @@ public final class CheckinClient {
     /** microG sends this hard-coded UA rather than deriving one from Build
      *  (CheckinClient.java:60). We send OURS, because the whole point of this
      *  request is to say what this device is, and the Build fields inside the
-     *  body already say "Mac.apk" -- a UA claiming to be a vbox86p emulator
+     *  body already say "Apk on Mac" -- a UA claiming to be a vbox86p emulator
      *  image would contradict the body it is attached to. */
-    private static final String USER_AGENT = "Android-Checkin/2.0 (Mac.apk); gzip";
+    private static final String USER_AGENT = "Android-Checkin/2.0 (Apk on Mac); gzip";
 
     /** microG SettingsContract.kt:120. The literal first-checkin digest; the
      *  server hands back a new one to echo on later requests. */
@@ -390,7 +390,7 @@ public final class CheckinClient {
     }
 
     static void log(String m) {
-        try { com.macapk.loader.NativeLog.i("Mac.apk.GMS", "checkin: " + m); }
+        try { com.macapk.loader.NativeLog.i("Apk on Mac.GMS", "checkin: " + m); }
         catch (Throwable t) { System.err.println("[checkin] " + m); }
     }
 }

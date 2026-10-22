@@ -4,7 +4,7 @@
 // Source: frameworks/base core/java/android/view/ScrollCaptureSession.java
 // (android16-release).
 //
-// Mac.apk runs no scroll-capture (long-screenshot) host, so the framework never
+// Apk on Mac runs no scroll-capture (long-screenshot) host, so the framework never
 // constructs one -- but an app that implements ScrollCaptureCallback compiles
 // against these getters, and a test can build a session itself with the public
 // constructor AOSP provides.
@@ -15,7 +15,7 @@ public class ScrollCaptureSession {
     private final android.graphics.Rect mScrollBounds;
     private final android.graphics.Point mPositionInWindow;
 
-    /** @hide -- Mac.apk keeps the no-arg form the tree already handed out. */
+    /** @hide -- Apk on Mac keeps the no-arg form the tree already handed out. */
     public ScrollCaptureSession() {
         this(null, new android.graphics.Rect(), new android.graphics.Point());
     }

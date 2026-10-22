@@ -6,7 +6,7 @@
 // __mod_init_func, the older format that dyld still accepts) entirely
 // in memory, writes it to out_path, then ad-hoc-signs it via
 // `codesign -s -` (codesign ships with base macOS). The point is that
-// Mac.apk can wrap an arm64 Android .so into a loadable macOS dylib
+// Apk on Mac can wrap an arm64 Android .so into a loadable macOS dylib
 // on a clean Mac with no Xcode toolchain installed.
 //
 // The emitted dylib is semantically identical to the clang-produced

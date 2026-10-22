@@ -1,5 +1,5 @@
 package android.os.health;
-/** Key constants for a UidHealthStats HealthStats bucket. Mac.apk populates no health data,
+/** Key constants for a UidHealthStats HealthStats bucket. Apk on Mac populates no health data,
  *  but the keys resolve.
  *
  *  Values = HealthKeys.BASE_UID (10000) + the per-field offset AOSP assigns in

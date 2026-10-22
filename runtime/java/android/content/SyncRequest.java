@@ -8,7 +8,7 @@
 // runs, and an app that relies on one (e.g. calling syncOnce() twice) must see
 // the same IllegalArgumentException here as on a device.
 //
-// Note that Mac.apk has no SyncManager, so a built request is never EXECUTED
+// Note that Apk on Mac has no SyncManager, so a built request is never EXECUTED
 // (see ContentResolver.requestSync). Building one still has to work: the
 // object is constructed, validated and inspected entirely within the app.
 package android.content;

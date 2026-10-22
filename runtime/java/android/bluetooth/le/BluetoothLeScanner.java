@@ -1,10 +1,10 @@
 // android.bluetooth.le.BluetoothLeScanner
 //
 // The BLE scan entry point obtained from BluetoothAdapter.getBluetoothLeScanner.
-// Mac.apk has no radio, so a scan never finds anything; startScan reports
+// Apk on Mac has no radio, so a scan never finds anything; startScan reports
 // SCAN_FAILED_INTERNAL_ERROR to the callback so apps stop waiting, and stopScan
 // is a no-op. The class is reachable only if an adapter exists, which on
-// Mac.apk it generally does not, but the type must resolve for fields/casts.
+// Apk on Mac it generally does not, but the type must resolve for fields/casts.
 // Mirrors frameworks/base/core/java/android/bluetooth/le/BluetoothLeScanner.java.
 package android.bluetooth.le;
 

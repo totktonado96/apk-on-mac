@@ -11,7 +11,7 @@ import java.util.concurrent.Executor;
 
 // com.google.firebase.storage.StorageTask<TResult> -- the concrete base for
 // UploadTask / FileDownloadTask / StreamDownloadTask. Real Storage uses an
-// elaborate internal state machine driving an HTTP transfer. On Mac.apk there
+// elaborate internal state machine driving an HTTP transfer. On Apk on Mac there
 // is no backend, so every StorageTask completes by FAILING cleanly with a
 // StorageException(ERROR_UNKNOWN) -- we never fabricate a successful transfer
 // or any transferred bytes.

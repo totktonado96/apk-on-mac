@@ -40,7 +40,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public final class Boot {
-    private static final String TAG = "Mac.apk.Boot";
+    private static final String TAG = "Apk on Mac.Boot";
 
     /** MACAPK_ACTIVITYTHREAD_LAUNCH -- route Application construction through
      *  the AOSP chain android.app.ActivityThread.handleBindApplication ->
@@ -90,7 +90,7 @@ public final class Boot {
      *  `[boot-clock] +<ms> ms <phase>` line per boot phase, in ms since the
      *  PROCESS started (the kernel's p_starttime, the same epoch main.cpp's
      *  native lines use), so any log -- a fleet run.log, a stub log, a user's
-     *  bug report -- carries its own boot timeline. Before this no Mac.apk log
+     *  bug report -- carries its own boot timeline. Before this no Apk on Mac log
      *  carried a single timestamp, and every boot-time question needed a live
      *  debug/boottime.sh run with its poll-cadence sidecar.
      *  debug/bootspeed_clock.py digests the lines. Observational only. */
@@ -159,7 +159,7 @@ public final class Boot {
                 sBootT0Ms = t0;
             }
             long now = System.currentTimeMillis();
-            NativeLog.i("Mac.apk.BootClock", "[boot-clock] +" + (t0 > 0 ? now - t0 : -1)
+            NativeLog.i("Apk on Mac.BootClock", "[boot-clock] +" + (t0 > 0 ? now - t0 : -1)
                 + " ms " + phase + " (" + Thread.currentThread().getName() + ")");
         } catch (Throwable ignored) {
             // observational only
@@ -229,7 +229,7 @@ public final class Boot {
      *  "Failed to create file in /data/local/tmp: No such file or directory".
      *
      *  THE VALUE is getCacheDir().getAbsolutePath(), exactly as AOSP computes it,
-     *  and on Mac.apk that is the HOST path of the app's cache directory
+     *  and on Apk on Mac that is the HOST path of the app's cache directory
      *  (&lt;android root&gt;/data/data/&lt;pkg&gt;_&lt;ver&gt;/cache, the same File the
      *  Application's getCacheDir() returns). That is also the only spelling that
      *  works on BOTH sides: guest native open/openat pass an absolute host path
@@ -285,7 +285,7 @@ public final class Boot {
     // Concurrent string-pool capture (MACAPK_PAIRIP_POOLDUMP). The genuine pairip startup VM
     // (GATE_OFF) decodes the per-build pool into the app's static String fields as it runs; this
     // daemon polls those fields and writes the most-populated snapshot as JSONL (the shape
-    // debug/pool_json_to_inject.py reads), so a build's pool is captured on Mac.apk itself -- no
+    // debug/pool_json_to_inject.py reads), so a build's pool is captured on Apk on Mac itself -- no
     // emulator. Read-only (reflection get on static fields); runs off the <clinit> thread so it
     // survives to write even if that thread later crashes. List = MACAPK_PAIRIP_POOLDUMP_LIST
     // ("<dotted.class> <field>" per line, e.g. debug/pairip_pooldump/pool_fields_523.txt).
@@ -871,7 +871,7 @@ public final class Boot {
         // Looper.getMainLooper().getThread() == Thread.currentThread();`) --
         // throws "must be called on the main thread" the moment
         // ActivityHost actually runs on macapk-activity later, even though
-        // macapk-activity IS Mac.apk's one true Android main thread. Hit
+        // macapk-activity IS Apk on Mac's one true Android main thread. Hit
         // Smash Hit's GameActivity/ComponentActivity constructor and three
         // separate call sites in F-Droid (LifecycleRegistry, LiveData,
         // WorkManager's SystemJobService), on both arm64 and forced-ARM32
@@ -1024,7 +1024,7 @@ public final class Boot {
         // ZygoteInit.warmUpJcaProviders(), which installs AndroidKeyStoreProvider
         // for exactly this reason -- "By doing it here we avoid that each app
         // does it when requesting a service from the provider for the first
-        // time"). Mac.apk has no Zygote-equivalent, so until now this project
+        // time"). Apk on Mac has no Zygote-equivalent, so until now this project
         // registered a full BouncyCastleProvider SYNCHRONOUSLY on the boot
         // thread, before Application existed, on every single launch of every
         // app -- see the original rationale + the actual Security.addProvider
@@ -1046,7 +1046,7 @@ public final class Boot {
         // the app ever touches a BC-named algorithm. Grepped the entire
         // framework (runtime/java/**) for any OTHER "BC"/BouncyCastle reference
         // (`grep -rn '"BC"\|BouncyCastle' runtime/java`): none exists outside
-        // this provider install -- nothing in Mac.apk's OWN boot-time framework
+        // this provider install -- nothing in Apk on Mac's OWN boot-time framework
         // code depends on BC being registered. Only APP-authored bytecode (a
         // static initializer, an auto-init ContentProvider.onCreate, or
         // Application.onCreate) can observe it.
@@ -1061,7 +1061,7 @@ public final class Boot {
         // Security.addProvider from this thread: that call stays at its
         // ORIGINAL position (the "3b" block below, after AndroidKeyStore/
         // Conscrypt installs, immediately before "---- 4. Application ----"),
-        // gated on this latch -- so the provider LIST ORDER Mac.apk produces
+        // gated on this latch -- so the provider LIST ORDER Apk on Mac produces
         // (AndroidKeyStore, then Conscrypt/GmsCore_OpenSSL, then BC, in
         // add-order) is byte-for-byte unchanged from before this change; only
         // the WALL-CLOCK TIMING of the expensive construction moves. Combined
@@ -1308,7 +1308,7 @@ public final class Boot {
         // literal global process name, and an absent attribute inherits the
         // application's, which defaults to the package name as noted above.
         //
-        // Mac.apk hosts every component of an app in this ONE runtime
+        // Apk on Mac hosts every component of an app in this ONE runtime
         // process, so a component AOSP would have isolated can reach state
         // -- most damagingly the process lifetime -- that on a device it
         // could not. ClassFileRewriter's Pattern H uses this table to stop
@@ -1642,17 +1642,17 @@ public final class Boot {
             if (forced != null && !forced.isEmpty()) KeyBindProfiles.setActiveByName(forced);
             else KeyBindProfiles.autoSelectForPackage(manifest.packageName);
         } catch (Throwable t) {
-            NativeLog.w("Mac.apk.KeyBind", "profile init failed: " + t);
+            NativeLog.w("Apk on Mac.KeyBind", "profile init failed: " + t);
         }
         // Tilt Control (Controls menu): this app's remembered on/off.
         try { TiltControl.loadForPackage(manifest.packageName); }
-        catch (Throwable t) { NativeLog.w("Mac.apk.Tilt", "init failed: " + t); }
+        catch (Throwable t) { NativeLog.w("Apk on Mac.Tilt", "init failed: " + t); }
         // Arrow Keys as D-pad (Controls menu): this app's remembered on/off.
         try { ArrowPad.loadForPackage(manifest.packageName); }
-        catch (Throwable t) { NativeLog.w("Mac.apk.ArrowPad", "init failed: " + t); }
+        catch (Throwable t) { NativeLog.w("Apk on Mac.ArrowPad", "init failed: " + t); }
         // Space Bar Taps Center (Controls menu): this app's remembered on/off.
         try { SpaceTap.loadForPackage(manifest.packageName); }
-        catch (Throwable t) { NativeLog.w("Mac.apk.SpaceTap", "init failed: " + t); }
+        catch (Throwable t) { NativeLog.w("Apk on Mac.SpaceTap", "init failed: " + t); }
         // v1.0.486: render the app's launcher icon -> appDir/icon.png so the
         // launcher's library tile shows the REAL icon. The C++ unpacker only
         // copies a RASTER mipmap; apps that ship only an adaptive/vector icon
@@ -1692,7 +1692,7 @@ public final class Boot {
             // DELETED and A13_NO_LEGACY_ROOT in the install gate fails if
             // anything recreates it, so do not put the old path back.
             androidRoot = System.getProperty("user.home")
-                    + "/Library/Caches/Mac.apk/scratch/android";
+                    + "/Library/Caches/Apk on Mac/scratch/android";
         }
         // Defense in depth: expand a leading "~". The native runtime
         // normally hands us an already-expanded path via the
@@ -1971,7 +1971,7 @@ public final class Boot {
         //   mInstrumentation.callApplicationOnCreate(app);        (L7720)
         // Application CONSTRUCTION, ContentProvider install, and
         // Application.onCreate() are ONE unit that always runs on Android's
-        // real main thread. Mac.apk used to run this whole block on the boot
+        // real main thread. Apk on Mac used to run this whole block on the boot
         // thread (the JVM's own primordial thread) instead of
         // "macapk-activity" -- which used to be merely a mis-attributed
         // IDENTITY bug (fixed by designateMainThread() at the top of this
@@ -2027,7 +2027,7 @@ public final class Boot {
                 macapkSetupGraphicsSupportTmpdir(manifest.packageName, cacheDir);
                 // AOSP ActivityThread.handleBindApplication (L7420, before L7680's
                 // makeApplicationInner): Process.setStartTimes(SystemClock.elapsedRealtime(),
-                // SystemClock.uptimeMillis(), requestedElapsed, requestedUptime) -- Mac.apk has
+                // SystemClock.uptimeMillis(), requestedElapsed, requestedUptime) -- Apk on Mac has
                 // no zygote fork, so the "requested" pair equals the "actual" pair (see
                 // Process.getStartRequestedElapsedRealtime's own comment) and only the two
                 // actual timestamps are threaded through. Must run before the Application is
@@ -2069,12 +2069,12 @@ public final class Boot {
                     Class<?> appClass = Application.class;
                     // MACAPK_PAIRIP_GATE_EMU (default OFF): the app's Application <clinit> (run by
                     // Class.forName(..., true) below) calls com.pairip.StartupLauncher.launch() ->
-                    // VMRunner.executeVM, whose pairip integrity VM FALSELY detonates on Mac.apk's
+                    // VMRunner.executeVM, whose pairip integrity VM FALSELY detonates on Apk on Mac's
                     // HotSpot-on-macOS process structure (not tampering -- we don't patch .text,
                     // forge signatures, or attach a debugger). RE-confirmed SEPARABLE gate. So BEFORE
                     // that <clinit> runs, force-init com.pairip.VMRunner (whose own <clinit> is just
                     // System.loadLibrary("pairipcore"), registering executeVM) and rebind executeVM to
-                    // Mac.apk's in-layer integrity gate. Detection preserved: the gate re-checks
+                    // Apk on Mac's in-layer integrity gate. Detection preserved: the gate re-checks
                     // P_TRACED, and the app's own SignatureCheck.verifyIntegrity still runs in
                     // attachBaseContext. NOT a .text patch (pairip's bytes stay pristine, self-hash
                     // still passes). docs/pairip-frontier-301578-refutations_2026-09-17.md.
@@ -2127,7 +2127,7 @@ public final class Boot {
                 // On real Android the app's PathClassLoader IS the process
                 // system classloader from process start, so a native
                 // library's JNI_OnLoad calling FindClass for an app-bundled
-                // class always resolves. Mac.apk's HotSpot-system-loader-
+                // class always resolves. Apk on Mac's HotSpot-system-loader-
                 // only FindClass only gets an app-classloader retry once
                 // ActivityHost knows the loader -- and that used to happen
                 // only after this entire method's caller finished awaiting
@@ -2198,7 +2198,7 @@ public final class Boot {
                 // per-app-language Context wrap), precisely BECAUSE it is the
                 // earliest app code the framework runs.
                 //
-                // Mac.apk never invoked it. Application's constructor installs the
+                // Apk on Mac never invoked it. Application's constructor installs the
                 // ContextImpl-shaped terminator with `super.attachBaseContext(...)`
                 // (invokespecial -> ContextWrapper's impl) on purpose -- calling an
                 // overridable method from a constructor is unsafe -- and its own
@@ -2233,7 +2233,7 @@ public final class Boot {
                 // (getSharedPreferences / getCacheDir / getResources).
                 //
                 // Tolerant like the Application.onCreate call below: real Android
-                // would kill the process, but Mac.apk logs and continues so one
+                // would kill the process, but Apk on Mac logs and continues so one
                 // unsupported line in an override cannot cost us the whole launch.
                 try {
                     android.content.Context appBase = application.getBaseContext();
@@ -2296,7 +2296,7 @@ public final class Boot {
                 // ~15 bootstrap .so; the 55 superpack dylibs are exposed HERE, now
                 // that they exist on disk, and BEFORE any provider/onCreate loads
                 // one (profilo -> libearlystartup). Without this, a COLD launch
-                // (fresh install, or the first launch after any Mac.apk update
+                // (fresh install, or the first launch after any Apk on Mac update
                 // invalidates the lib-compressed cache) dies in onCreate with
                 // SoLoaderDSONotFoundError. Generic + idempotent; a no-op for a
                 // non-SoLoader app and for an already-warm launch. See
@@ -2475,7 +2475,7 @@ public final class Boot {
                             }
                         };
                         com.macapk.gms.McsClient.setDispatcher(deliver);
-                        // LAZY START (v1.0.1179). Mac.apk runs ONE PROCESS PER APP,
+                        // LAZY START (v1.0.1179). Apk on Mac runs ONE PROCESS PER APP,
                         // so unlike a real device -- where a single GMS process holds
                         // one MCS socket for everything -- starting the channel here
                         // unconditionally means every launched app opens its own
@@ -2510,7 +2510,7 @@ public final class Boot {
                     // Application.onCreate frequently fails on APKs whose
                     // setup expects state that hasn't been provisioned
                     // (SharedPreferences keys, FCM tokens, analytics ids).
-                    // Real Android would tear down the process; Mac.apk
+                    // Real Android would tear down the process; Apk on Mac
                     // is more lenient -- the Activity might still draw
                     // something useful (cocos2d-x engine reaches the
                     // render loop, libgdx draws via fallback, etc.).
@@ -2553,7 +2553,7 @@ public final class Boot {
 
         // ---- 5. Launchable Activity ----
         // Hold this app's run lock even when no stub started us (a launch from
-        // the Mac.apk window): permission dialogs and single-instance need it.
+        // the Apk on Mac window): permission dialogs and single-instance need it.
         try { RunLock.ensureHeld(); } catch (Throwable t) { NativeLog.w(TAG, "run lock: " + t); }
         ActivityHost.init(application, appCl);
         // Touch dispatcher: Cocoa mouse events route here, then to the
@@ -2666,7 +2666,7 @@ public final class Boot {
         }
         // Cross-app arrival (stage 3b, MACAPK_XAPP_RECEIVE, v1.0.1652;
         // docs/cross-app-launch-and-implicit-start-design_2026-09-26.md section 7):
-        // another installed Mac.apk app started one of our activities and its
+        // another installed Apk on Mac app started one of our activities and its
         // envelope is waiting in this bundle's inbox. The oldest one becomes the
         // ROOT intent (IntentInbox binds the doorbell first, so no arrival can
         // fall between the drain and the ring); the MAIN/LAUNCHER intent stays
@@ -3269,7 +3269,7 @@ public final class Boot {
      *  has just told us the effective appearance is `dark`.
      *
      *  THREADING. This is called on the AppKit main thread, which is NOT
-     *  Android's main thread here -- Mac.apk's Android main thread is the
+     *  Android's main thread here -- Apk on Mac's Android main thread is the
      *  "macapk-activity" worker that run() pins as Looper's main-thread identity
      *  (see the long note at the top of run()). Everything downstream of a
      *  configuration change is main-thread-confined on Android and androidx
@@ -3683,7 +3683,7 @@ public final class Boot {
                 //
                 // ⚠ SEPARATELY GATED, and DEFAULT-OFF, deliberately. This is
                 // the only sub-change whose AOSP justification rests on
-                // multi-process semantics Mac.apk deliberately does not model,
+                // multi-process semantics Apk on Mac deliberately does not model,
                 // and it silently removes an authority from
                 // ContentProviderRegistry -- a ContentResolver query against
                 // org.fdroid.fdroid.acra would start returning nothing where it
@@ -3944,7 +3944,7 @@ public final class Boot {
      *  or not) through PackageManager the moment the app is INSTALLED --
      *  PackageItemInfo.loadIcon / LauncherActivityInfo.getIcon read straight
      *  off the parsed manifest + resource table, no running process required.
-     *  Mac.apk's only rasterizer capable of the same (writeLauncherIcon,
+     *  Apk on Mac's only rasterizer capable of the same (writeLauncherIcon,
      *  below) lived exclusively inside a live JVM (called from run(), which
      *  only executes on a REAL launch) -- main.cpp's `--extract-only` install
      *  pass never starts a JVM at all (see the call site in main.cpp), so an

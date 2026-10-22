@@ -75,12 +75,12 @@ public final class KeyBindProfiles {
     // ---- storage -----------------------------------------------------------
     //
     // Alongside the Swift launcher's own state, which already lives at
-    // ~/Library/Application Support/Mac.apk/installed_apps.json -- one location
-    // for user-level Mac.apk state rather than inventing a second.
+    // ~/Library/Application Support/Apk on Mac/installed_apps.json -- one location
+    // for user-level Apk on Mac state rather than inventing a second.
 
     private static File profilesDir() {
         String home = System.getProperty("user.home");
-        return new File(home + "/Library/Application Support/Mac.apk/keybinds");
+        return new File(home + "/Library/Application Support/Apk on Mac/keybinds");
     }
 
     private static File profileFile(String name) {
@@ -138,7 +138,7 @@ public final class KeyBindProfiles {
                                root.has("package") ? root.optString("package") : null,
                                bs);
         } catch (Throwable t) {
-            NativeLog.w("Mac.apk.KeyBind", "load(" + name + ") failed: " + t);
+            NativeLog.w("Apk on Mac.KeyBind", "load(" + name + ") failed: " + t);
             return null;
         }
     }
@@ -149,7 +149,7 @@ public final class KeyBindProfiles {
         try {
             File dir = profilesDir();
             if (!dir.isDirectory() && !dir.mkdirs()) {
-                NativeLog.w("Mac.apk.KeyBind", "cannot create " + dir);
+                NativeLog.w("Apk on Mac.KeyBind", "cannot create " + dir);
                 return false;
             }
             JSONArray arr = new JSONArray();
@@ -171,7 +171,7 @@ public final class KeyBindProfiles {
             }
             return true;
         } catch (Throwable t) {
-            NativeLog.w("Mac.apk.KeyBind", "save(" + p.name + ") failed: " + t);
+            NativeLog.w("Apk on Mac.KeyBind", "save(" + p.name + ") failed: " + t);
             return false;
         }
     }
@@ -193,7 +193,7 @@ public final class KeyBindProfiles {
 
     public static void setActive(Profile p) {
         sActive = p;
-        NativeLog.i("Mac.apk.KeyBind", "active profile -> "
+        NativeLog.i("Apk on Mac.KeyBind", "active profile -> "
             + (p == null ? "(none)" : p.name + " (" + p.bindings.size() + " bindings)"));
     }
 
@@ -264,7 +264,7 @@ public final class KeyBindProfiles {
      * coordinates is in the v1.0.826 entry in changelog.md.
      */
     public static void installDefaultsIfAbsent() {
-        // v1.0.1034: Mac.apk now DOES ship profiles. They live as classpath
+        // v1.0.1034: Apk on Mac now DOES ship profiles. They live as classpath
         // resources under com/macapk/loader/keybinds/ inside macapk-loader.jar,
         // which is already a member of RuntimeInstall.payload -- so they reach
         // an INSTALLED app (which execs the staged runtime, not the bundle)
@@ -288,15 +288,15 @@ public final class KeyBindProfiles {
             try {
                 File dir = profilesDir();
                 if (!dir.isDirectory() && !dir.mkdirs()) {
-                    NativeLog.w("Mac.apk.KeyBind", "cannot create " + dir);
+                    NativeLog.w("Apk on Mac.KeyBind", "cannot create " + dir);
                     return;
                 }
                 try (FileOutputStream out = new FileOutputStream(dest)) {
                     out.write(data);
                 }
-                NativeLog.i("Mac.apk.KeyBind", "installed shipped profile " + name);
+                NativeLog.i("Apk on Mac.KeyBind", "installed shipped profile " + name);
             } catch (IOException e) {
-                NativeLog.w("Mac.apk.KeyBind",
+                NativeLog.w("Apk on Mac.KeyBind",
                             "could not install " + name + ": " + e);
             }
         }

@@ -3,7 +3,7 @@
 // commonly-used subset. ExoPlayer's SimpleCache index (and many AndroidX/
 // Room helpers) call DatabaseUtils.queryNumEntries / longForQuery /
 // sqlEscapeString; the class was missing entirely, NoClassDefFoundError'ing
-// those code paths. Backed by Mac.apk's real libsqlite3-based
+// those code paths. Backed by Apk on Mac's real libsqlite3-based
 // android.database.sqlite.* implementation.
 package android.database;
 
@@ -700,7 +700,7 @@ public class DatabaseUtils {
     // nothing and reads back as "no exception". That is Parcel's gap, not
     // DatabaseUtils' -- mirroring AOSP's structure here keeps the fix in the
     // one place it belongs. It is also close to unreachable: these methods
-    // exist to cross a Binder boundary, and Mac.apk runs the app and the
+    // exist to cross a Binder boundary, and Apk on Mac runs the app and the
     // "system" in one process.
     // ------------------------------------------------------------------
 

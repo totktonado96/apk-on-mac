@@ -6,7 +6,7 @@ import java.util.concurrent.TimeUnit;
 // async result handle returned by GMS Api.* calls made through a
 // GoogleApiClient. Apps either block on await() or register a
 // ResultCallback. This is the public abstract surface; concrete results are
-// produced by GoogleApiClient-backed calls (which, on Mac.apk, fail cleanly
+// produced by GoogleApiClient-backed calls (which, on Apk on Mac, fail cleanly
 // with SERVICE_MISSING -- see GoogleApiClient).
 public abstract class PendingResult<R extends Result> {
 

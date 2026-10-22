@@ -3319,7 +3319,7 @@ bool XlatCore::do_trap(const cs_insn* in, bool is_breakpoint,
 //
 // Read that carefully, because it determines the whole implementation:
 // maskval clears the IT, J, SS, IL and T bits, and at EL0 (which is the
-// only privilege Mac.apk's guest ever runs at) the E bit, bits<9:6> and
+// only privilege Apk on Mac's guest ever runs at) the E bit, bits<9:6> and
 // the whole M field are UNKNOWN. What is LEFT architecturally defined is
 // exactly N(31) Z(30) C(29) V(28), Q(27) and GE[19:16]. So a
 // specification-faithful MRS at EL0 is: host PSTATE.NZCV, plus Q and

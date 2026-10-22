@@ -10,7 +10,7 @@ import android.os.IBinder;
  * AutomaticZenRule's condition becomes true or false.
  *
  * Deprecated but NOT gone: apps that still ship one subclass this, and the
- * class must load. Mac.apk has no zen subsystem to subscribe the provider, so
+ * class must load. Apk on Mac has no zen subsystem to subscribe the provider, so
  * onSubscribe/onUnsubscribe/onConnected never fire and notifyCondition has
  * nowhere to report -- exactly the state a provider is in on a device before
  * the user grants it access, which is a state the provider already handles.

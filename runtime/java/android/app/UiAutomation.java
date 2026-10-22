@@ -6,7 +6,7 @@
 // (android16-release). Every method there is a round trip over the
 // UiAutomationConnection to the system server / accessibility service.
 //
-// Mac.apk runs no instrumentation and hosts no UiAutomationConnection: there is
+// Apk on Mac runs no instrumentation and hosts no UiAutomationConnection: there is
 // no test harness that could have obtained a connected instance in the first
 // place (Instrumentation.getUiAutomation() is the only public source of one).
 // So each method gives AOSP's answer for a connection that yields nothing --
@@ -163,13 +163,13 @@ public final class UiAutomation {
 
     // ---- Shell identity / permissions ----
     // AOSP's implementations reach UiAutomationConnection, which is only
-    // reachable from an instrumented test process holding the shell uid. Mac.apk
+    // reachable from an instrumented test process holding the shell uid. Apk on Mac
     // has no shell uid and no second process to adopt one from.
 
     /** AOSP adoptShellPermissionIdentity(): "Executes all following calls on the
      *  UI automation in a manner that they can only be executed by the shell
      *  user." There is no shell identity here to adopt, and no permission gate
-     *  it would open: Mac.apk auto-grants runtime permissions already (see
+     *  it would open: Apk on Mac auto-grants runtime permissions already (see
      *  Activity.requestPermissions), so the post-condition the caller wants
      *  already holds. */
     public void adoptShellPermissionIdentity() { }
@@ -179,14 +179,14 @@ public final class UiAutomation {
     public void dropShellPermissionIdentity() { }
 
     /** AOSP grantRuntimePermission(String, String): grants a runtime permission
-     *  to a package. Mac.apk hosts exactly one package and already answers
+     *  to a package. Apk on Mac hosts exactly one package and already answers
      *  PERMISSION_GRANTED for every runtime permission it is asked about, so the
      *  requested post-condition holds without a permission database to write. */
     public void grantRuntimePermission(String packageName, String permission) { }
     public void grantRuntimePermissionAsUser(String packageName, String permission,
             UserHandle userHandle) { }
 
-    /** AOSP revokeRuntimePermission(String, String): the inverse. Mac.apk cannot
+    /** AOSP revokeRuntimePermission(String, String): the inverse. Apk on Mac cannot
      *  make a permission check answer DENIED -- there is no permission database
      *  behind PackageManager.checkPermission to write to -- so this cannot be
      *  honoured. AOSP's own failure path swallows the RemoteException, which is
@@ -254,7 +254,7 @@ public final class UiAutomation {
     static boolean sRunAsMonkey;
 
     /** AOSP setAnimationScale(float scale): sets the three global animator
-     *  scales at once. Mac.apk runs no window transitions to scale (see
+     *  scales at once. Apk on Mac runs no window transitions to scale (see
      *  Activity.overridePendingTransition), so the scale has nothing to apply
      *  to. */
     public void setAnimationScale(float scale) { }

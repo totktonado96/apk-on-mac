@@ -1,6 +1,6 @@
 // android.media.audiofx.Virtualizer -- stereo/surround virtualization effect.
 // AOSP frameworks/base media/java/android/media/audiofx/Virtualizer.java. Inert
-// on Mac.apk: strength stored + read back, audio unchanged.
+// on Apk on Mac: strength stored + read back, audio unchanged.
 package android.media.audiofx;
 
 public class Virtualizer extends AudioEffect {

@@ -1,7 +1,7 @@
 package com.google.mlkit.vision.label;
 
 // com.google.mlkit.vision.label.ImageLabel -- one label produced by the image
-// labeler. Mac.apk runs no labeling model, so a label Task fails and apps never
+// labeler. Apk on Mac runs no labeling model, so a label Task fails and apps never
 // receive an ImageLabel via the success path; the type exists so success-listener
 // generics and field reads link. Mirrors the published accessors (text,
 // confidence, index). Ref: developers.google.com/android/reference/.../label/ImageLabel

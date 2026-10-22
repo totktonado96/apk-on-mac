@@ -12,7 +12,7 @@
 //       default void onZipEntryAccess(String path) throws ZipException {}
 //   }
 //
-// Mac.apk uses the JDK's own java.util.zip stack, which already validates entry
+// Apk on Mac uses the JDK's own java.util.zip stack, which already validates entry
 // names; we do not wire this callback into that stack, so the validator never
 // fires. We retain the installed callback so getter-style probes see what was
 // set, but no zip read invokes it (an honest no-op: the guard exists but is not

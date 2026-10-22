@@ -6,7 +6,7 @@ import java.io.IOException;
 /**
  * A device's MIDI INPUT port -- the endpoint an app SENDS messages to. API 23.
  *
- * Mac.apk exposes no MIDI transport (MidiManager reports no devices), so a port
+ * Apk on Mac exposes no MIDI transport (MidiManager reports no devices), so a port
  * is never handed out by the platform and nothing consumes what is written to
  * one. The type has to exist for MidiDevice.openInputPort/connectPorts to be
  * declarable, and because MidiInputPort IS a MidiReceiver -- an app that holds

@@ -1,4 +1,4 @@
-// android.os.Vibrator -- Mac.apk has no haptics hardware, so every vibrate
+// android.os.Vibrator -- Apk on Mac has no haptics hardware, so every vibrate
 // path is a no-op and hasVibrator() reports false. The full API surface is
 // mirrored so modern apps (which call the VibrationEffect-based overloads and
 // query hasAmplitudeControl/areEffectsSupported during init) do not hit

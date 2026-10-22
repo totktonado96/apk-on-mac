@@ -3,7 +3,7 @@
 // AutofillManager.notifyVirtualViewsReady. Source: frameworks/base
 // core/java/android/view/autofill/VirtualViewFillInfo.java (android16-release).
 //
-// Mac.apk bridges no autofill service (AutofillManager.isEnabled() is honestly
+// Apk on Mac bridges no autofill service (AutofillManager.isEnabled() is honestly
 // false), so nothing consumes the info -- but it is a plain immutable value
 // object on AOSP too and round-trips exactly what the caller set.
 package android.view.autofill;

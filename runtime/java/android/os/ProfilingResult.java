@@ -1,5 +1,5 @@
 package android.os;
-/** The result of a requestProfiling call. API 35. Mac.apk runs no profiler, so
+/** The result of a requestProfiling call. API 35. Apk on Mac runs no profiler, so
  *  no result is ever delivered; the type exists for the Consumer<ProfilingResult>
  *  callbacks apps register.
  *  Source: frameworks/base/core/java/android/os/ProfilingResult.java */

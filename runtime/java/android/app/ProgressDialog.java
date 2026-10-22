@@ -3,7 +3,7 @@
 // apps' loading screens. AOSP API-1+.
 //
 // AOSP ref: frameworks/base/core/java/android/app/ProgressDialog.java
-// (extends AlertDialog). Mac.apk doesn't render dialog chrome, so the
+// (extends AlertDialog). Apk on Mac doesn't render dialog chrome, so the
 // progress state is recorded but not displayed; the static show()
 // factory + setters resolve so a "loading..." dialog never throws.
 package android.app;

@@ -7,7 +7,7 @@ import java.util.List;
  * How well one field matched the categories in the service's UserData, as
  * reported back through FillEventHistory.Event.getFieldsClassification().
  *
- * The platform builds these; a service only reads them. Mac.apk runs no
+ * The platform builds these; a service only reads them. Apk on Mac runs no
  * classification pass, so none are produced -- but the type is named in the
  * event's return signature and its Match list must resolve.
  *

@@ -1,7 +1,7 @@
 // android.bluetooth.BluetoothManager
 //
 // AOSP's high-level entry point to the Bluetooth subsystem. Apps obtain it via
-// getSystemService(BLUETOOTH_SERVICE) and immediately call getAdapter(). Mac.apk
+// getSystemService(BLUETOOTH_SERVICE) and immediately call getAdapter(). Apk on Mac
 // has no Bluetooth backend, so getAdapter() returns the (null-capable) default
 // adapter and the connected-device queries return empty lists -- the honest
 // "no Bluetooth hardware" result rather than a null service that NPEs the cast.

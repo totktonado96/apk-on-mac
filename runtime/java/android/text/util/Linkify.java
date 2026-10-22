@@ -3,7 +3,7 @@
 // behaves as a tappable link. AOSP:
 //   frameworks/base/core/java/android/text/util/Linkify.java
 //
-// Why this class exists in Mac.apk: androidx core's LinkifyCompat.addLinks
+// Why this class exists in Apk on Mac: androidx core's LinkifyCompat.addLinks
 // delegates straight to android.text.util.Linkify on API >= 28
 // (shouldAddLinksFallbackToFramework() -> true; our Build.SDK_INT == 29).
 // F-Droid's AppDetailsRecyclerViewAdapter$HeaderViewHolder.bindModel calls

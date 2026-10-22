@@ -41,7 +41,7 @@
 // that getInsets(statusBars()) now answers the STATUS BAR rather than the
 // whole rect, which is what AndroidX and Material actually ask for.
 //
-// The values come from Mac.apk's runtime (`ViewCanvasDriver.dispatchSystemBarInsets`)
+// The values come from Apk on Mac's runtime (`ViewCanvasDriver.dispatchSystemBarInsets`)
 // reflecting the macOS-side status bar (top) + gesture-nav inset (bottom).
 package android.view;
 
@@ -98,7 +98,7 @@ public class WindowInsets {
     }
 
     /** Stand-in for AOSP's `DisplayCutout.NO_CUTOUT`: a non-null but EMPTY
-     *  cutout. The distinction matters even though Mac.apk windows never have a
+     *  cutout. The distinction matters even though Apk on Mac windows never have a
      *  notch, because "there is a cutout slot and it is empty" and "the cutout
      *  has been consumed" are different states and isConsumed() reads the
      *  difference. android/view/DisplayCutout.java does not define the constant
@@ -262,7 +262,7 @@ public class WindowInsets {
     }
 
     /** Returns the DisplayCutout for the window, or null if there is none.
-     *  Mac.apk windows have no notch, so an empty cutout normalises to null in
+     *  Apk on Mac windows have no notch, so an empty cutout normalises to null in
      *  the constructor exactly as AOSP does. */
     public DisplayCutout getDisplayCutout() { return mDisplayCutout; }
 
@@ -396,7 +396,7 @@ public class WindowInsets {
     }
 
     /** AOSP WindowInsets.isRound (API 20): true only on a circular (watch)
-     *  display. Mac.apk targets rectangular windows, so nothing in this tree
+     *  display. Apk on Mac targets rectangular windows, so nothing in this tree
      *  ever sets it, but the flag is carried so a copy round-trips. */
     public boolean isRound() { return mIsRound; }
 
@@ -531,7 +531,7 @@ public class WindowInsets {
         private DisplayCutout mDisplayCutout;
         private boolean mIsRound;
         private boolean mAlwaysConsumeSystemBars;
-        // API 34: the display shape carried by these insets. Mac.apk windows are
+        // API 34: the display shape carried by these insets. Apk on Mac windows are
         // rectangular so the shape is informational; kept so a chain that sets
         // it round-trips.
         private DisplayShape mDisplayShape = DisplayShape.NONE;
@@ -658,7 +658,7 @@ public class WindowInsets {
         public Builder setDisplayShape(DisplayShape displayShape) {
             mDisplayShape = displayShape; return this;
         }
-        // API 31/35 setters Mac.apk has no geometry for. Kept as accepted
+        // API 31/35 setters Apk on Mac has no geometry for. Kept as accepted
         // no-ops so an androidx builder chain resolves and completes.
         public Builder setBoundingRects(int typeMask, java.util.List<Rect> rects) { return this; }
         public Builder setBoundingRectsIgnoringVisibility(int typeMask, java.util.List<Rect> rects) { return this; }
@@ -719,7 +719,7 @@ public class WindowInsets {
         public static int all() { return LEFT | TOP | RIGHT | BOTTOM; }
     }
 
-    /** AOSP WindowInsets.getDisplayShape (API 34). Mac.apk windows are
+    /** AOSP WindowInsets.getDisplayShape (API 34). Apk on Mac windows are
      *  rectangular, so this is the rectangular (empty path) DisplayShape unless
      *  a Builder chain supplied one. */
     public DisplayShape getDisplayShape() { return mBuiltDisplayShape; }
@@ -729,7 +729,7 @@ public class WindowInsets {
     public Rect getPrivacyIndicatorBounds() { return null; }
 
     /** AOSP WindowInsets.getBoundingRects (API 35): the rects a type occupies.
-     *  Mac.apk system bars are simple full-width strips with no sub-rects. */
+     *  Apk on Mac system bars are simple full-width strips with no sub-rects. */
     public java.util.List<Rect> getBoundingRects(int typeMask) { return java.util.Collections.emptyList(); }
     public java.util.List<Rect> getBoundingRectsIgnoringVisibility(int typeMask) { return java.util.Collections.emptyList(); }
 

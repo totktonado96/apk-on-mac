@@ -1,7 +1,7 @@
 // WindowOverlayStack -- the process-wide stack of floating windows added via
 // WindowManager.addView (v1.0.691).
 //
-// Mac.apk owns ONE NSWindow, so every Dialog / PopupWindow / PopupMenu / Spinner
+// Apk on Mac owns ONE NSWindow, so every Dialog / PopupWindow / PopupMenu / Spinner
 // dropdown / AutoCompleteTextView suggestion list / Toast that AOSP would put in
 // its own window is instead an OVERLAY LAYER composited over the Activity's
 // content view. Before this, MacApkWindowManager.addView was a hard no-op, so
@@ -212,7 +212,7 @@ public final class WindowOverlayStack {
         catch (Throwable ignored) { /* a view that refuses to attach still shows */ }
         sDirty = true;
         try {
-            NativeLog.i("Mac.apk.Overlay", "addView " + view.getClass().getName()
+            NativeLog.i("Apk on Mac.Overlay", "addView " + view.getClass().getName()
                     + " (stack=" + size() + ") w=" + wlp.width + " h=" + wlp.height
                     + " gravity=" + wlp.gravity + " type=" + wlp.type
                     + " flags=0x" + Integer.toHexString(wlp.flags)
@@ -343,7 +343,7 @@ public final class WindowOverlayStack {
         // a real removal), so kept unconditionally like the add() log.
         if (removed) {
             try {
-                NativeLog.i("Mac.apk.Overlay", "removeView " + view.getClass().getName()
+                NativeLog.i("Apk on Mac.Overlay", "removeView " + view.getClass().getName()
                     + " (stack now=" + size() + ")");
             } catch (Throwable ignored) { }
         }
@@ -375,7 +375,7 @@ public final class WindowOverlayStack {
         }
         for (View v : doomed) {
             try {
-                NativeLog.w("Mac.apk.Overlay", a.getClass().getName()
+                NativeLog.w("Apk on Mac.Overlay", a.getClass().getName()
                     + " has leaked window " + v.getClass().getName()
                     + " that was originally added here -- removing it");
             } catch (Throwable ignored) { }
@@ -442,7 +442,7 @@ public final class WindowOverlayStack {
                     handled = v.dispatchGenericMotionEvent(ev);
                 }
             } catch (Throwable t) {
-                try { NativeLog.w("Mac.apk.Overlay", "overlay generic motion threw: " + t); } catch (Throwable ig) { }
+                try { NativeLog.w("Apk on Mac.Overlay", "overlay generic motion threw: " + t); } catch (Throwable ig) { }
             }
             sDirty = true;
             return handled ? OVERLAY_HANDLED : OVERLAY_UNHANDLED;
@@ -476,7 +476,7 @@ public final class WindowOverlayStack {
                     if (cb != null) cb.dispatchGenericMotionEvent(ev);
                     else v.dispatchGenericMotionEvent(ev);
                 } catch (Throwable t) {
-                    try { NativeLog.w("Mac.apk.Overlay", "overlay wheel threw: " + t); } catch (Throwable ig) { }
+                    try { NativeLog.w("Apk on Mac.Overlay", "overlay wheel threw: " + t); } catch (Throwable ig) { }
                 } finally {
                     ev.offsetLocation(-dx, -dy);
                 }
@@ -535,7 +535,7 @@ public final class WindowOverlayStack {
                 if (cb != null) cb.dispatchGenericMotionEvent(ev);
                 else layerView.dispatchGenericMotionEvent(ev);
             } catch (Throwable t) {
-                try { NativeLog.w("Mac.apk.Overlay", "overlay hover threw: " + t); } catch (Throwable ig) { }
+                try { NativeLog.w("Apk on Mac.Overlay", "overlay hover threw: " + t); } catch (Throwable ig) { }
             } finally {
                 ev.offsetLocation(-dx, -dy);
             }
@@ -564,7 +564,7 @@ public final class WindowOverlayStack {
                     handled = v.dispatchKeyEvent(ev);
                 }
             } catch (Throwable t) {
-                try { NativeLog.w("Mac.apk.Overlay", "overlay key threw: " + t); } catch (Throwable ig) { }
+                try { NativeLog.w("Apk on Mac.Overlay", "overlay key threw: " + t); } catch (Throwable ig) { }
             }
             // AOSP ViewRootImpl.java:6972-6984: only after the view tree
             // declined, on the SAME focused window's DecorView. Same
@@ -577,13 +577,13 @@ public final class WindowOverlayStack {
                         ? (cb != null ? cb.dispatchKeyShortcutEvent(ev) : d.dispatchKeyShortcutEvent(ev))
                         : v.dispatchKeyShortcutEvent(ev);
                 } catch (Throwable t) {
-                    try { NativeLog.w("Mac.apk.Overlay", "overlay key shortcut threw: " + t); } catch (Throwable ig) { }
+                    try { NativeLog.w("Apk on Mac.Overlay", "overlay key shortcut threw: " + t); } catch (Throwable ig) { }
                 }
             }
             sDirty = true;
             try {
                 if (ev.getKeyCode() == android.view.KeyEvent.KEYCODE_BACK) {
-                    NativeLog.i("Mac.apk.Overlay", "BACK "
+                    NativeLog.i("Apk on Mac.Overlay", "BACK "
                         + (ev.getAction() == android.view.KeyEvent.ACTION_DOWN ? "down" : "up")
                         + " -> focused window " + v.getClass().getName()
                         + " handled=" + handled);
@@ -907,7 +907,7 @@ public final class WindowOverlayStack {
             h.post(() -> {
                 sOwnerPassPending.set(false);
                 try { presentForGlHere(sPendingW, sPendingH); }
-                catch (Throwable t) { NativeLog.w("Mac.apk.Overlay", "presentForGl threw: " + t); }
+                catch (Throwable t) { NativeLog.w("Apk on Mac.Overlay", "presentForGl threw: " + t); }
             });
             return;
         }
@@ -955,7 +955,7 @@ public final class WindowOverlayStack {
             try {
                 for (Layer layer : layers) {
                     if (layer.view == null) continue;
-                    NativeLog.i("Mac.apk.Overlay", "DIAG layer bounds(content-space)=" + layer.bounds
+                    NativeLog.i("Apk on Mac.Overlay", "DIAG layer bounds(content-space)=" + layer.bounds
                         + " statusBarH=" + statusBarH + " surface=" + surfaceW + "x" + surfaceH);
                     // layer.view.getLeft()/getTop() are ALREADY absolute (measureAndLayout
                     // calls v.layout() with absolute content-space coords, and this view
@@ -1034,7 +1034,7 @@ public final class WindowOverlayStack {
                 layer.lastRasterBounds.set(layer.bounds);
             }
         } catch (Throwable t) {
-            try { NativeLog.w("Mac.apk.Overlay", "presentForGl threw: " + t); } catch (Throwable ignored) { }
+            try { NativeLog.w("Apk on Mac.Overlay", "presentForGl threw: " + t); } catch (Throwable ignored) { }
         }
     }
 
@@ -1045,7 +1045,7 @@ public final class WindowOverlayStack {
         if (v == null) return;
         int absL = offX + v.getLeft(), absT = offY + v.getTop();
         if (v instanceof android.widget.Button) {
-            NativeLog.i("Mac.apk.Overlay", "DIAG Button text=\"" + KeyLogPolicy.viewText((android.widget.Button) v, ((android.widget.Button) v).getText())
+            NativeLog.i("Apk on Mac.Overlay", "DIAG Button text=\"" + KeyLogPolicy.viewText((android.widget.Button) v, ((android.widget.Button) v).getText())
                 + "\" abs=(" + absL + "," + absT + ")-(" + (absL + v.getWidth()) + "," + (absT + v.getHeight())
                 + ") vis=" + v.getVisibility());
         }
@@ -1238,7 +1238,7 @@ public final class WindowOverlayStack {
             // consume so the touch does not leak to content behind it.
             if (sConsumeLogged++ < 8) {
                 try {
-                    NativeLog.i("Mac.apk.Overlay", "touch CONSUMED as modal-outside by "
+                    NativeLog.i("Apk on Mac.Overlay", "touch CONSUMED as modal-outside by "
                         + v.getClass().getName() + " bounds=" + layer.bounds
                         + " flags=0x" + Integer.toHexString(flags)
                         + " at (" + contentX + "," + contentY + ")");
@@ -1318,7 +1318,7 @@ public final class WindowOverlayStack {
             ev = TouchDispatcher.touchEvent(down, t, action, lx, ly, 0);
         }
         try { v.dispatchTouchEvent(ev); }
-        catch (Throwable thr) { try { NativeLog.w("Mac.apk.Overlay", "overlay touch threw: " + thr); } catch (Throwable ig) {} }
+        catch (Throwable thr) { try { NativeLog.w("Apk on Mac.Overlay", "overlay touch threw: " + thr); } catch (Throwable ig) {} }
         finally { ev.recycle(); }
     }
 }

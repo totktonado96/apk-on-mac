@@ -289,7 +289,7 @@ public class AudioRecord implements AudioRecordingMonitor, AudioRouting, Microph
      *  restored. @return true if successful, false if the specified
      *  AudioDeviceInfo is non-null and does not correspond to a valid audio
      *  input device." AOSP validates deviceInfo.isSource() before accepting
-     *  it; Mac.apk's only AudioDeviceInfo instance today is the built-in
+     *  it; Apk on Mac's only AudioDeviceInfo instance today is the built-in
      *  output speaker (isSource() == false, see AudioDeviceInfo.java, a file
      *  this lane does not own), so a non-null argument always fails that
      *  check here -- the same false a real device returns when handed an
@@ -690,7 +690,7 @@ public class AudioRecord implements AudioRecordingMonitor, AudioRouting, Microph
         /** API 30. Marks the capture as privacy-sensitive, which on Android
          *  prevents another app sharing the input. Recorded so
          *  AudioRecord.isPrivacySensitive() reads back what was set instead of
-         *  falling to the per-source default. Mac.apk runs one app per process,
+         *  falling to the per-source default. Apk on Mac runs one app per process,
          *  so there is no concurrent capture for the flag to exclude -- the
          *  guarantee holds trivially rather than being ignored. */
         public Builder setPrivacySensitive(boolean privacySensitive) {
@@ -729,8 +729,8 @@ public class AudioRecord implements AudioRecordingMonitor, AudioRouting, Microph
             if (playbackCaptureConfig != null) {
                 // AOSP routes this through AudioPolicy.createAudioRecordSink(),
                 // which needs AudioFlinger's policy-mixer engine to intercept
-                // another app's output -- infrastructure Mac.apk does not have
-                // (Mac.apk runs one Android app per process straight into
+                // another app's output -- infrastructure Apk on Mac does not have
+                // (Apk on Mac runs one Android app per process straight into
                 // CoreAudio; see AudioPlaybackCaptureConfiguration's class
                 // comment). In practice this is unreachable: that class's own
                 // Builder(MediaProjection) constructor already throws

@@ -1,6 +1,6 @@
 // android.os.TestLooperManager -- a test-only handle for manually pumping a
 // Looper's MessageQueue from instrumentation tests
-// (InstrumentationRegistry.getInstrumentation().acquireLooperManager()). Mac.apk
+// (InstrumentationRegistry.getInstrumentation().acquireLooperManager()). Apk on Mac
 // is not a test host, so this is provided only so the type resolves; the message
 // inspection/dispatch helpers operate on the supplied Looper's live queue where
 // the public Message API allows. Apps proper do not use this.

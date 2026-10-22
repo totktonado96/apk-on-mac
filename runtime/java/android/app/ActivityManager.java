@@ -149,7 +149,7 @@ public class ActivityManager {
     /** AOSP: "or null if there are no running processes (it will not
      *  return an empty list)". This can only be called from within a
      *  live app process, so on a real device the caller's own process
-     *  is always present. Mac.apk runs one app per runtime process;
+     *  is always present. Apk on Mac runs one app per runtime process;
      *  describe that process the same way getMyMemoryState() below
      *  already does, so the two never disagree. */
     public List<RunningAppProcessInfo> getRunningAppProcesses() {
@@ -165,7 +165,7 @@ public class ActivityManager {
     }
 
     /** AOSP: null (not empty) when nothing is currently in an error
-     *  condition -- see ProcessErrorStateInfo below. Mac.apk has no
+     *  condition -- see ProcessErrorStateInfo below. Apk on Mac has no
      *  separate-process crash/ANR watchdog today, so "nothing
      *  reported" is the honest, contract-faithful answer. */
     public List<ProcessErrorStateInfo> getProcessesInErrorState() { return null; }
@@ -447,7 +447,7 @@ public class ActivityManager {
     }
     /** AOSP ProcessErrorStateInfo -- one entry per process currently
      *  crashed or ANR'd, as returned by getProcessesInErrorState().
-     *  The type must exist even though Mac.apk has no watchdog to
+     *  The type must exist even though Apk on Mac has no watchdog to
      *  populate one yet, so code that names the class resolves. */
     public static class ProcessErrorStateInfo implements android.os.Parcelable {
         public static final int NO_ERROR = 0;
@@ -724,7 +724,7 @@ public class ActivityManager {
 
         // ---- AOSP API-36 surface completion ----
         // AOSP's TaskDescription also carries the system-bar colours the
-        // recents/overview card paints behind the task snapshot. Mac.apk draws
+        // recents/overview card paints behind the task snapshot. Apk on Mac draws
         // no recents card, but the pair is a plain value an app sets and reads
         // back (and Builder.setStatusBarColor is the only way to set it), so the
         // round trip has to work. AOSP's unset value is 0.
@@ -830,7 +830,7 @@ public class ActivityManager {
     }
 
     /** AOSP getHistoricalProcessExitReasons (API 30): recent process-death
-     *  records for a package. Mac.apk keeps no exit history (one process, one
+     *  records for a package. Apk on Mac keeps no exit history (one process, one
      *  run), so this reports an empty list. */
     public java.util.List<ApplicationExitInfo> getHistoricalProcessExitReasons(
             String packageName, int pid, int maxNum) {
@@ -839,7 +839,7 @@ public class ActivityManager {
 
 
     /** AOSP getHistoricalProcessStartReasons (API 35): recent start records for
-     *  this app. Mac.apk keeps none. */
+     *  this app. Apk on Mac keeps none. */
     public java.util.List<android.app.ApplicationStartInfo> getHistoricalProcessStartReasons(int maxNum) {
         return java.util.Collections.emptyList();
     }
@@ -851,7 +851,7 @@ public class ActivityManager {
     // ================================================================
     // AOSP API-36 surface completion (android.app.ActivityManager).
     // AOSP ref: frameworks/base/core/java/android/app/ActivityManager.java
-    // (android16-release). Mac.apk hosts ONE app, in ONE process, with ONE task
+    // (android16-release). Apk on Mac hosts ONE app, in ONE process, with ONE task
     // and no system server, so the task/process-management calls have nothing
     // to manage. Each answer below is the one AOSP gives for a request that the
     // activity manager cannot honour, never a claimed success.
@@ -896,7 +896,7 @@ public class ActivityManager {
     }
 
     /** AOSP getAppTaskThumbnailSize(): the size of the thumbnail an app supplies
-     *  to addAppTask. AOSP reads it from the activity task manager. Mac.apk
+     *  to addAppTask. AOSP reads it from the activity task manager. Apk on Mac
      *  never renders a recents thumbnail; the size an app would allocate for one
      *  is meaningless, and AOSP's own uninitialised value is an empty Size. */
     public android.util.Size getAppTaskThumbnailSize() {
@@ -905,7 +905,7 @@ public class ActivityManager {
 
     /** AOSP addAppTask(Activity, Intent, TaskDescription, Bitmap): "Adds a new
      *  entry to the list of recent tasks... @return the task id, or -1 if the
-     *  activity manager was unable to add the task." Mac.apk has no recents
+     *  activity manager was unable to add the task." Apk on Mac has no recents
      *  list, so -1 -- AOSP's documented failure value -- is the truthful answer;
      *  minting a fake id would leave the caller holding a handle to nothing.
      *  AOSP's own argument requirements are kept. */
@@ -926,7 +926,7 @@ public class ActivityManager {
     }
 
     /** AOSP isActivityStartAllowedOnDisplay(Context, int displayId, Intent):
-     *  whether the given activity may be launched on the given display. Mac.apk
+     *  whether the given activity may be launched on the given display. Apk on Mac
      *  has exactly one display, so a launch is allowed on it and on nothing
      *  else. Display.DEFAULT_DISPLAY is 0. */
     public boolean isActivityStartAllowedOnDisplay(android.content.Context context, int displayId,
@@ -937,14 +937,14 @@ public class ActivityManager {
     /** AOSP appNotResponding(String message): "Query whether the user has
      *  enabled development settings" -- no: it makes the CALLING app report
      *  itself as not responding, raising an ANR dialog. It is a test/debug hook
-     *  (AOSP requires the caller to be instrumented or debuggable). Mac.apk has
+     *  (AOSP requires the caller to be instrumented or debuggable). Apk on Mac has
      *  no ANR watchdog and no ANR dialog, so nothing is raised. Deliberately not
      *  a crash: an app calling this expects the SYSTEM to react, not to die. */
     public void appNotResponding(String message) { }
 
     /** AOSP setWatchHeapLimit(long pssSize): asks the system to report when this
      *  process's PSS exceeds the limit, by broadcasting
-     *  ACTION_REPORT_HEAP_LIMIT. Mac.apk does not sample PSS and has nothing to
+     *  ACTION_REPORT_HEAP_LIMIT. Apk on Mac does not sample PSS and has nothing to
      *  broadcast to, so the watch never fires -- the same as a process that
      *  simply never crosses the limit. */
     public void setWatchHeapLimit(long pssSize) { }
@@ -952,7 +952,7 @@ public class ActivityManager {
     public void clearWatchHeapLimit() { }
 
     /** AOSP setVrThread(int tid): marks a thread as the VR rendering thread so
-     *  the scheduler can prioritise it. STATIC in AOSP. Mac.apk advertises no VR
+     *  the scheduler can prioritise it. STATIC in AOSP. Apk on Mac advertises no VR
      *  support (see Activity.setVrModeEnabled), and AOSP itself ignores the
      *  request on a device that is not in VR mode. */
     public static void setVrThread(int tid) { }
@@ -960,14 +960,14 @@ public class ActivityManager {
     /** AOSP dumpPackageState(FileDescriptor, String packageName): asks the
      *  system to dump the package's state (activity manager, package manager,
      *  battery stats, ...) into the descriptor. Requires DUMP and reaches
-     *  services Mac.apk does not run, so nothing is written -- and writing a
+     *  services Apk on Mac does not run, so nothing is written -- and writing a
      *  fabricated dump would be worse than an empty one for the crash reporters
      *  that call this. */
     public void dumpPackageState(java.io.FileDescriptor fd, String packageName) { }
 
     // ---- ApplicationStartInfo completion listeners (API 35) ----
     // AOSP calls the listener once the START INFO for this process's launch is
-    // complete. Mac.apk's ApplicationStartInfo is fully populated the moment it
+    // complete. Apk on Mac's ApplicationStartInfo is fully populated the moment it
     // is constructed (every field is derived from the live process), so the
     // record is already complete when a listener is added -- which is why the
     // callback fires immediately rather than never. AOSP's contract is that the

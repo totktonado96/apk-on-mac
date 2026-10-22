@@ -98,7 +98,7 @@ public class TypefaceSpan extends MetricAffectingSpan implements android.text.Pa
     // class name because entries are never removed, and it is by construction
     // IN-PROCESS ONLY -- an index written by one process is meaningless in
     // another, which is a documented property of the real thing, not a
-    // shortcut taken here. Mac.apk runs one process, so the round trip is
+    // shortcut taken here. Apk on Mac runs one process, so the round trip is
     // exact for every case that can actually occur.
     //
     // This lives on TypefaceSpan rather than in a new class so the package

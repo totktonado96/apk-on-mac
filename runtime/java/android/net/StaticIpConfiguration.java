@@ -1,7 +1,7 @@
 // android.net.StaticIpConfiguration
 //
 // A static IP setup (address + DNS + gateway + domains). Pure value type +
-// Builder. Mac.apk does not configure interfaces, but apps build these to pass
+// Builder. Apk on Mac does not configure interfaces, but apps build these to pass
 // to (no-op) network config, so the type + Builder must resolve. Mirrors AOSP
 // android.net.StaticIpConfiguration public API.
 package android.net;

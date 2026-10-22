@@ -1,7 +1,7 @@
 package android.app;
 
 /**
- * Per-app grammatical gender preference (API 34). Mac.apk stores the requested
+ * Per-app grammatical gender preference (API 34). Apk on Mac stores the requested
  * gender and reads it back; there is no system-level grammatical-gender store to
  * consult, so the effective value is what the app last set (default UNSPECIFIED),
  * which is what an app reads to localise gendered strings.

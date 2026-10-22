@@ -52,7 +52,7 @@ public class PowerManager {
     // API 33/34 siblings of isDeviceIdleMode() above (AOSP:
     // frameworks/base/core/java/android/os/PowerManager.java,
     // isDeviceLightIdleMode / isLowPowerStandbyEnabled). Same rationale:
-    // Mac.apk is never in any Android-specific idle/standby mode.
+    // Apk on Mac is never in any Android-specific idle/standby mode.
     public boolean isDeviceLightIdleMode() { return false; }
     public boolean isLowPowerStandbyEnabled() { return false; }
     public boolean isIgnoringBatteryOptimizations(String packageName) { return true; }
@@ -129,7 +129,7 @@ public class PowerManager {
     }
 
     // AOSP registers the listener with the thermal HAL and calls back only on
-    // a CHANGE. Mac.apk has no thermal HAL: getCurrentThermalStatus() is
+    // a CHANGE. Apk on Mac has no thermal HAL: getCurrentThermalStatus() is
     // permanently THERMAL_STATUS_NONE and getThermalHeadroom() permanently
     // 0.0f, so there is never a change to report and a correctly-implemented
     // registration is one that never fires -- which is also what a device that
@@ -181,7 +181,7 @@ public class PowerManager {
 
     /** AOSP :1873 -- whether the platform supports a wake-lock LEVEL. AOSP
      *  answers from PowerManagerService, which knows the levels the device
-     *  build supports. Mac.apk implements newWakeLock() for every level
+     *  build supports. Apk on Mac implements newWakeLock() for every level
      *  uniformly (WakeLock below is level-agnostic), so the honest answer is
      *  "yes, for any defined level" -- and false for an undefined one, which
      *  is what a device reports for a level it does not know. */
@@ -212,7 +212,7 @@ public class PowerManager {
     public boolean isBatteryDischargePredictionPersonalized() { return false; }
 
     /** AOSP :2615/:2631/:2643 -- all three are documented to return TRUE when
-     *  Low Power Standby is DISABLED, i.e. "nothing is restricted". Mac.apk's
+     *  Low Power Standby is DISABLED, i.e. "nothing is restricted". Apk on Mac's
      *  isLowPowerStandbyEnabled() is false above, so all three must be true or
      *  the class would contradict itself. */
     public boolean isExemptFromLowPowerStandby() { return true; }
@@ -239,7 +239,7 @@ public class PowerManager {
                     "Attempted userspace reboot on a device that doesn't support it");
         }
         throw new UnsupportedOperationException(
-                "Mac.apk cannot reboot the host (requested reason: " + reason + ")");
+                "Apk on Mac cannot reboot the host (requested reason: " + reason + ")");
     }
 
     /** AOSP :3928 */
@@ -267,7 +267,7 @@ public class PowerManager {
         private boolean mHeld;
         private WorkSource mWorkSource;
         // AOSP synchronizes on the service-side mToken (an IBinder handed
-        // to PowerManagerService). Mac.apk has no such service to token
+        // to PowerManagerService). Apk on Mac has no such service to token
         // against; a private Object gives the same property that matters
         // here -- a monitor external callers cannot reach by
         // synchronizing on the WakeLock instance itself.
@@ -344,12 +344,12 @@ public class PowerManager {
 
         // AOSP attributes the lock's power cost to this WorkSource via
         // PowerManagerService so battery stats can charge the right app.
-        // Mac.apk has no such accounting service, so this is pure
+        // Apk on Mac has no such accounting service, so this is pure
         // bookkeeping (the value round-trips for app logic that reads it
         // back) -- matching the "no real enforcement underneath" pattern
         // already established by the other stubs in this class.
         /** AOSP :4295 -- register/replace the wake-lock state listener; a null
-         *  listener clears it. Mac.apk never disables a held wake lock (there
+         *  listener clears it. Apk on Mac never disables a held wake lock (there
          *  is no quota and no app-standby bucket), so a registered listener is
          *  correct in never firing -- the state genuinely never changes. AOSP
          *  itself does not call back on registration either. */

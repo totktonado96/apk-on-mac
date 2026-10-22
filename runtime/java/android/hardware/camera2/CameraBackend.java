@@ -25,7 +25,7 @@
 //   L967-971   isCameraDeviceSetupSupported
 //                                        -> "Camera ID '<id>' not available on device."
 //
-// Mac.apk is in exactly that state whenever AVFoundation reports no capture
+// Apk on Mac is in exactly that state whenever AVFoundation reports no capture
 // device, so the types and message text below are copied from those sites: an
 // app cannot tell us apart from a real device whose camera service is
 // unavailable, which is the whole point.

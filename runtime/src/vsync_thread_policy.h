@@ -9,7 +9,7 @@
 // DisplayEventReceiver on the Looper it was created with ("@param looper The
 // looper to use when invoking callbacks", frameworks/base core/java/android/view/
 // DisplayEventReceiver.java:105-108 (aosp-mirror master)). A busy UI thread delays its own frame only.
-// Mac.apk generated every vsync inside drawInMTKView on the main thread, so a
+// Apk on Mac generated every vsync inside drawInMTKView on the main thread, so a
 // main-thread stall withheld vsync from every paced guest thread.
 // docs/subway-frame-hitches_2026-09-28.md.
 #pragma once

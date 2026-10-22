@@ -4,7 +4,7 @@
 // Google apps, e.g. Calculator) probes for this class by reflection
 // at Platform init and, when present, derives every logger's name
 // via getStackClass2(). Without it BOTH of Flogger's caller-finder
-// strategies fail on Mac.apk -- the VMStack path (class missing) and
+// strategies fail on Apk on Mac -- the VMStack path (class missing) and
 // the StackTraceElement path (gated on Build.FINGERPRINT being null
 // or "robolectric") -- so findLoggingClass returns null and the
 // first FluentLogger.forEnclosingClass() dies with an NPE inside a

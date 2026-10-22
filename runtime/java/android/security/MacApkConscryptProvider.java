@@ -3,7 +3,7 @@
 // "GmsCore_OpenSSL") that DELEGATES to the host JDK's JSSE/crypto by copying
 // the existing providers' service table under the new provider name.
 //
-// WHY (not an AOSP class, hence the MacApk prefix -- this is Mac.apk wiring,
+// WHY (not an AOSP class, hence the MacApk prefix -- this is Apk on Mac wiring,
 // not a faked Android API):
 //   On a real Android device the security provider list contains a provider
 //   literally named "Conscrypt" (AOSP's BoringSSL-backed JSSE). Libraries do
@@ -21,7 +21,7 @@
 //   We deliberately do NOT satisfy (b): we ship no org.conscrypt.* classes.
 //   That is the SAFE choice -- OkHttp's ConscryptPlatform.isSupported probes
 //   for the class "org.conscrypt.Conscrypt$Version"; when it is absent, OkHttp
-//   falls back to its standard JDK TLS path, which works correctly on Mac.apk.
+//   falls back to its standard JDK TLS path, which works correctly on Apk on Mac.
 //   Shipping a partial org.conscrypt.Conscrypt would instead make OkHttp TRY
 //   to use Conscrypt sockets and then fail on a missing method / bad cast,
 //   regressing HTTPS. So name-based lookups: yes; class-surface impersonation:
@@ -45,7 +45,7 @@ public final class MacApkConscryptProvider extends Provider {
     private static final String GMS_NAME = "GmsCore_OpenSSL";
 
     private MacApkConscryptProvider(String name) {
-        super(name, "1.0", "Mac.apk Conscrypt alias delegating to the host JDK JSSE/JCE");
+        super(name, "1.0", "Apk on Mac Conscrypt alias delegating to the host JDK JSSE/JCE");
         copyHostServices();
     }
 

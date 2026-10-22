@@ -6,7 +6,7 @@ package android.view.inputmethod;
  *  Source: frameworks/base .../view/inputmethod/InsertModeGesture.java
  *  (android16-release).
  *
- *  Mac.apk has no stylus source and no handwriting IME, so no gesture is ever
+ *  Apk on Mac has no stylus source and no handwriting IME, so no gesture is ever
  *  performed -- InputConnection.performHandwritingGesture is a no-op default.
  *  The type exists because an IME constructs one and because
  *  EditorInfo.setSupportedHandwritingGestures names the class. */

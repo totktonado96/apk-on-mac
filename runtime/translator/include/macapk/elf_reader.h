@@ -1,4 +1,4 @@
-// elf_reader.h -- minimal ELF32 reader for the Mac.apk translator.
+// elf_reader.h -- minimal ELF32 reader for the Apk on Mac translator.
 //
 // Only the slice we actually need to lift an ARM32 Bionic shared
 // object: the file header, program headers, dynamic table, symbol
@@ -9,7 +9,7 @@
 // from Capstone (the ARM disassembler).
 //
 // Endianness: ARM Bionic .so files are always little-endian on the
-// target platforms Mac.apk cares about. We read structs by raw memcpy
+// target platforms Apk on Mac cares about. We read structs by raw memcpy
 // from the mmap'd file and trust the host (Apple Silicon) is also
 // little-endian.
 

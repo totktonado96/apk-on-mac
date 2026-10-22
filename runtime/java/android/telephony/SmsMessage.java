@@ -1,6 +1,6 @@
 // android.telephony.SmsMessage
 //
-// A received/parsed SMS PDU. Mac.apk never receives SMS, so these are not
+// A received/parsed SMS PDU. Apk on Mac never receives SMS, so these are not
 // produced from the radio, but apps that parse SMS_RECEIVED broadcast PDUs
 // reference the static createFromPdu factory + getters. We parse what the
 // caller hands us where trivial and otherwise return honest empties. Mirrors
@@ -73,7 +73,7 @@ public class SmsMessage {
     // ========================================================================
     // API-36 surface added 2026-08-24.
     //
-    // Mac.apk has no radio, so no SmsMessage is ever produced FROM one; the
+    // Apk on Mac has no radio, so no SmsMessage is ever produced FROM one; the
     // only instances that exist are the ones an app builds via createFromPdu.
     // Because this class does not decode the TPDU (there is no GSM/CDMA stack
     // to decode it against), the header/flag getters below report the same

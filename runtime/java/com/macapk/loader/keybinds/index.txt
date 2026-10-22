@@ -1,5 +1,5 @@
-# Key-bind profiles SHIPPED with Mac.apk, installed into
-# ~/Library/Application Support/Mac.apk/keybinds/ on first launch by
+# Key-bind profiles SHIPPED with Apk on Mac, installed into
+# ~/Library/Application Support/Apk on Mac/keybinds/ on first launch by
 # KeyBindProfiles.installDefaultsIfAbsent().
 #
 # One filename per line; blank lines and #-comments ignored. An explicit index

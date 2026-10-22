@@ -14,7 +14,7 @@
 // READS IT. We present a WKWebView on accounts.google.com, watch its cookie jar
 // for the `oauth_token` the completed flow leaves behind, and take that one
 // value. There is no form scraping, no keystroke observation, no JS injected
-// into the login page, and no credential ever reaches Mac.apk. The cookie jar is
+// into the login page, and no credential ever reaches Apk on Mac. The cookie jar is
 // a NON-PERSISTENT store created per sign-in, so the Google session dies with
 // the window instead of lingering in a shared jar the guest could reach.
 #pragma once

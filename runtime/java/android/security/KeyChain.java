@@ -14,7 +14,7 @@
 // isKeyAlgorithmSupported, isBoundKeyAlgorithm (deprecated), and the ACTION_*/
 // EXTRA_* String constants with their exact values.
 //
-// Mac.apk behavior: there is no on-device system credential store or
+// Apk on Mac behavior: there is no on-device system credential store or
 // credential-chooser UI on macOS. We are CNF-safe and signature-faithful:
 //   - the constants resolve so apps that merely reference them load,
 //   - choosePrivateKeyAlias delivers null to the callback ("user chose
@@ -135,7 +135,7 @@ public final class KeyChain {
     // --- credential management app (API 30) -------------------------------
     // On a device, ONE app may be granted the right to manage the user's
     // KeyChain credentials on unmanaged hardware. The grant is made by the user
-    // through Settings, in response to the Intent below. Mac.apk has no Settings
+    // through Settings, in response to the Intent below. Apk on Mac has no Settings
     // app and no KeyChain service, so no app is or can become the credential
     // management app -- and the four answers below say exactly that. None of
     // them is a bypass: they REFUSE the capability rather than pretending the

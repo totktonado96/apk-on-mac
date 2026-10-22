@@ -8,7 +8,7 @@ import android.os.IBinder;
  * Base for a wallet app's quick-access provider.
  *
  * PACKAGE NOTE -- see GetWalletCardsRequest. System UI's power-button wallet
- * binds this service; Mac.apk has no such surface, so nothing binds it and none
+ * binds this service; Apk on Mac has no such surface, so nothing binds it and none
  * of the three abstract callbacks fires. The request/response value objects are
  * faithful, and nothing here handles a payment credential -- AOSP's WalletCard
  * carries only an Icon, a label and a PendingIntent back into the wallet app.

@@ -5,7 +5,7 @@ package android.media;
  * carries a metadata track (ID3 in HLS, EMSG in DASH). API 23.
  *
  * A plain (timestamp, bytes) value type with a public constructor, so it is
- * fully implementable and fully implemented. What Mac.apk does not have is a
+ * fully implementable and fully implemented. What Apk on Mac does not have is a
  * PRODUCER: nothing in the extractor path parses a metadata track, so
  * MediaPlayer.setOnTimedMetaDataAvailableListener registers a listener the
  * platform never calls -- which is also what happens on Android for content

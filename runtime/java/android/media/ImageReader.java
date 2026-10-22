@@ -1,7 +1,7 @@
 // android.media.ImageReader -- a consumer of Images produced into a Surface.
 // AOSP frameworks/base media/java/android/media/ImageReader.java.
 //
-// This is the CONSUMER END of Mac.apk's camera pipeline, and the only output
+// This is the CONSUMER END of Apk on Mac's camera pipeline, and the only output
 // type that actually receives camera frames. The producer end is the
 // AVFoundation capture session behind com.macapk.loader.CameraBridge;
 // android.hardware.camera2.CameraCaptureSessionImpl joins the two by calling

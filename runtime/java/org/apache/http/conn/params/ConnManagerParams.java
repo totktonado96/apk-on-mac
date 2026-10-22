@@ -1,6 +1,6 @@
 package org.apache.http.conn.params;
 import org.apache.http.params.HttpParams;
-/** Connection-manager parameter names + setters. Inert on Mac.apk (no pooled
+/** Connection-manager parameter names + setters. Inert on Apk on Mac (no pooled
  *  Apache transport runs) but the parameter contract resolves. */
 public final class ConnManagerParams {
     public static final String MAX_TOTAL_CONNECTIONS = "http.conn-manager.max-total";

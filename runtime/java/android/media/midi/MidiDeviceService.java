@@ -9,7 +9,7 @@ import android.os.IBinder;
  * software synth, a controller bridge). API 23.
  *
  * This half of the MIDI API is app-side, not device-side: the app supplies the
- * receivers and the system binds to the service. Mac.apk has no MidiService to
+ * receivers and the system binds to the service. Apk on Mac has no MidiService to
  * do the binding, so onBind() returns null -- AOSP's own answer for a bind it
  * cannot service -- and getDeviceInfo() reports null because no device record
  * was ever created for this service. The abstract method the subclass must

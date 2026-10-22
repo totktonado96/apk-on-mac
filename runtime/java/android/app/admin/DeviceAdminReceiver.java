@@ -13,7 +13,7 @@
 // even be LINKED, so anything that loaded it -- a manifest-driven receiver
 // instantiation, a class scan -- died with NoClassDefFoundError.
 //
-// Honest-capability note: nothing on Mac.apk ever SENDS these broadcasts (there
+// Honest-capability note: nothing on Apk on Mac ever SENDS these broadcasts (there
 // is no DevicePolicyManagerService and no admin-activation flow, which is why
 // our DevicePolicyManager.isAdminActive() is always false). So an admin app sees
 // what it sees on a device where it was never activated: no onEnabled(), and

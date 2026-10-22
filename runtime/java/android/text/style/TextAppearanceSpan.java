@@ -181,7 +181,7 @@ public class TextAppearanceSpan extends MetricAffectingSpan implements Parcelabl
                 try { a.recycle(); } catch (Throwable ignored) {}
             }
             if (colorList >= 0 && MACAPK_COLORLIST_WARNED.compareAndSet(false, true)) {
-                com.macapk.loader.NativeLog.w("Mac.apk.TextAppearanceSpan",
+                com.macapk.loader.NativeLog.w("Apk on Mac.TextAppearanceSpan",
                     "colorList=" + colorList + " indexes the INTERNAL R.styleable.Theme,"
                     + " which is build-specific and not reproducible here; keeping the"
                     + " appearance's own textColor");
@@ -255,7 +255,7 @@ public class TextAppearanceSpan extends MetricAffectingSpan implements Parcelabl
      * collapses to its default colour across a parcel round trip. Everything
      * else round-trips exactly, and writeToParcelInternal below is the precise
      * inverse of this constructor, so an in-process round trip is lossless
-     * apart from that one collapse. Mac.apk has no IPC, so this format is
+     * apart from that one collapse. Apk on Mac has no IPC, so this format is
      * never read by anything but its own writer.
      */
     public TextAppearanceSpan(Parcel src) {

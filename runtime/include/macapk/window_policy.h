@@ -219,12 +219,12 @@ const ComponentTraits* FindComponent(const WindowTraits& t, const std::string& n
 // its target (so an alias and its target are one record), else `name`.
 std::string CanonicalComponent(const WindowTraits& t, const std::string& name);
 
-// The device-maker settings Mac.apk owns (AOSP config.xml + device config).
+// The device-maker settings Apk on Mac owns (AOSP config.xml + device config).
 enum class UniversalMode { kSdk36, kAll, kOff };
 enum class IgnoreOrientationMode { kAuto, kOn, kOff };
 // Whether a size-compat app may be scaled UP. SCM16:560-573 allows it only in
 // desktop mode (a FREEFORM task on a device that can enter desktop mode,
-// ACU16:294-297); Mac.apk reports WINDOWING_MODE_FULLSCREEN, so the faithful
+// ACU16:294-297); Apk on Mac reports WINDOWING_MODE_FULLSCREEN, so the faithful
 // default is kByWindowingMode: fullscreen never upscales, a user drag (the
 // desktop-windowing analogue, DPCU16:145-155) may. kAlways is the desktop rule
 // everywhere.
@@ -269,7 +269,7 @@ struct DeviceSettings {
     // API-34 box 1796x1636 instead of 1636x1636: an unresizable portrait app at
     // the 1.0208 split-screen ratio then takes the "containing is wider"
     // branch and comes out 1670 px wide, not 1603 (Subway / Temple Run 2 on the
-    // API-34 tablet oracle, measured 2026-09-25). 36 = what Mac.apk ships.
+    // API-34 tablet oracle, measured 2026-09-25). 36 = what Apk on Mac ships.
     int   wm_api_level = 36;
 
     // ---- phase 2: fullscreen and user resize ----
@@ -297,14 +297,14 @@ struct DeviceSettings {
     bool  relaunch_on_resize = false;
 };
 
-// The display the decision is made for. Mac.apk passes its content budget
+// The display the decision is made for. Apk on Mac passes its content budget
 // (screen visible frame minus the title bar) converted to PIXELS with the
 // screen's real backing scale, and the process's display density, which since
 // v1.0.2187 IS the launch screen's backing scale (CocoaDisplayDensity), so a
 // point is one dp on a 1x monitor and on Retina alike. (Before, density was a
 // fixed 2.0 and a 1x monitor's points were half the dp, so every 1x screen read
 // as a phone.) Insets exist for the emulator-oracle comparison only (its status
-// bar and taskbar); Mac.apk draws no bars and passes zero.
+// bar and taskbar); Apk on Mac draws no bars and passes zero.
 struct DisplayBudget {
     int   width_px = 0, height_px = 0;
     float density = 2.0f;          // densityDpi / 160
@@ -390,7 +390,7 @@ struct RequestOverride {
     // The side is the policy's C1 side hold (see LiveState::held_side), not the
     // app's request. Universal resizability drops an APP's fixed request (AR16
     // isRestrictedFixedOrientation) because Android relaunches a universal app
-    // into its new Configuration; the hold exists exactly because Mac.apk does
+    // into its new Configuration; the hold exists exactly because Apk on Mac does
     // not relaunch yet, so it is not dropped.
     bool policy_hold = false;
 };
@@ -670,7 +670,7 @@ enum class ActivityEvent {
     // reuses the task), so X gets the START fit rule, never "the window takes
     // it"; and with no opaque activity left below it, a translucent X resolves
     // its own box (TransparentPolicy.java:198-203 skips when there is none).
-    // Mac.apk's finish() is synchronous and its start posted, so the stack is
+    // Apk on Mac's finish() is synchronous and its start posted, so the stack is
     // EMPTY at X's launch for both idioms; ActivityHost tells a live task from
     // an ended one.
     kStartOverFinishing
@@ -787,7 +787,7 @@ int ParsePolicySwitch(const std::string& value);
 // MACAPK_WINDOW_BUDGET=<W>x<H>[~<swDp>], POINTS: replace the screen's content
 // budget with this one (the scale stays the screen's). A diagnostic for the
 // tablet A/B: the emulator's app area is 1680x818dp with a display-level
-// sw850dp (its bars), so `1680x818~850` puts Mac.apk on the same logical
+// sw850dp (its bars), so `1680x818~850` puts Apk on Mac on the same logical
 // display. False (and nothing written) when the text is not of that form.
 bool ParseBudgetOverride(const std::string& value, int* w_pt, int* h_pt, int* sw_dp);
 

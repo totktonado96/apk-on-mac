@@ -2,7 +2,7 @@
 //
 // AOSP's role service (default browser/SMS/dialer/etc.). Apps fetch it via
 // getSystemService(ROLE_SERVICE) to check whether they hold a role or to request
-// one. Mac.apk has no role assignment, so the app holds no roles and roles are
+// one. Apk on Mac has no role assignment, so the app holds no roles and roles are
 // not available -- the honest "no role system" result. Mirrors
 // frameworks/base/core/java/android/app/role/RoleManager.java.
 package android.app.role;

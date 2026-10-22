@@ -5,7 +5,7 @@
 // WHAT A MAC DOES NOT HAVE, and why nothing here can be faked. An association
 // is created by a SYSTEM PAIRING UI: the platform scans (BLE / classic
 // Bluetooth / Wi-Fi), shows the user a chooser, and records the user's choice.
-// Mac.apk is a single-app host with no system UI to show, no companion
+// Apk on Mac is a single-app host with no system UI to show, no companion
 // transport, and no Bluetooth bridge at all (see android.bluetooth). So NO
 // association can exist, and every per-association operation below is being
 // asked about a device this app is not associated with.

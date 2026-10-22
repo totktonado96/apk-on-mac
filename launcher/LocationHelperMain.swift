@@ -1,10 +1,10 @@
-// LocationHelperMain.swift -- "Mac.apk Location", the process that talks to
+// LocationHelperMain.swift -- "Apk on Mac Location", the process that talks to
 // CoreLocation on behalf of every Android app's runtime (2026-10-06).
 //
 // WHY A SEPARATE APP. macOS shows its Location Services prompt only for a
 // process whose executable IS an app bundle's CFBundleExecutable. The runtime
 // is not one: an installed app's stub execs the SHARED runtime through a
-// symlink, and the real binary lives in ~/Library/Application Support/Mac.apk/
+// symlink, and the real binary lives in ~/Library/Application Support/Apk on Mac/
 // runtime. CoreLocationAgent logged, for every request the runtime made:
 //   Getting bundleRecord failed ... "This process is not the executable of a bundle."
 //   client bundle is NULL. Skip showing AuthPrompt
@@ -23,8 +23,8 @@
 //                           <speedAcc> <course> <courseAcc> <timeMs> <0|1 simulated>
 //                       cached none | cached <same 12 fields as fix>
 //                       error <CLError code>
-// macOS asks once for "Mac.apk Location" (the identity locationd keys it by is
-// this bundle's), and Mac.apk's own per-app dialog stays in front of it.
+// macOS asks once for "Apk on Mac Location" (the identity locationd keys it by is
+// this bundle's), and Apk on Mac's own per-app dialog stays in front of it.
 // It exits when its stdin closes, i.e. when the runtime that started it dies.
 
 import CoreLocation

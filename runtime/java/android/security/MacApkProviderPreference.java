@@ -1,13 +1,13 @@
 // android.security.MacApkProviderPreference -- make the password-based (PBE)
 // crypto services resolve to the "BC" provider, as they do on Android.
 //
-// WHY (not an AOSP class, hence the MacApk prefix -- this is Mac.apk wiring):
+// WHY (not an AOSP class, hence the MacApk prefix -- this is Apk on Mac wiring):
 //   On a device the provider list is AndroidOpenSSL (Conscrypt) first, then BC.
 //   Conscrypt implements NO PBE SecretKeyFactory, NO PKCS#5 v1 / PKCS#12 PBE
 //   Cipher and NO PBEWithHmac* Mac (google/conscrypt OpenSSLProvider.java: its
 //   SecretKeyFactory table is DESEDE + SCRYPT only), so an unqualified
 //   Cipher/SecretKeyFactory/Mac.getInstance("PBEWith...") is answered by BC.
-//   On Mac.apk the host's SunJCE sits ahead of BC (Boot adds BC at the END, so
+//   On Apk on Mac the host's SunJCE sits ahead of BC (Boot adds BC at the END, so
 //   it only fills gaps) and answers those names with JDK semantics instead:
 //     - PBES1 (PBEWithMD5AndDES): SunJCE throws "Salt must be 8 bytes long" for
 //       any other salt; BC, i.e. Android, takes any length. Pocket Casts 8.22

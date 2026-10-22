@@ -1,4 +1,4 @@
-// android.net.MacApkHostNetwork -- Mac.apk-internal (package-private, so no
+// android.net.MacApkHostNetwork -- Apk on Mac-internal (package-private, so no
 // app can see it): the ONE place that asks macOS what network this host
 // actually has.
 //

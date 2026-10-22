@@ -1,7 +1,7 @@
 package android.app;
 import android.content.ComponentName;
 /** Metadata describing a searchable activity (parsed from an app's searchable
- *  XML). A value holder read by SearchView / the search dialog. Mac.apk does not
+ *  XML). A value holder read by SearchView / the search dialog. Apk on Mac does not
  *  parse searchable.xml into a live registry, so an app that constructs/receives
  *  one gets inert defaults; the accessors must all resolve.
  *  Source: frameworks/base/core/java/android/app/SearchableInfo.java */

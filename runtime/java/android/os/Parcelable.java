@@ -1,5 +1,5 @@
 // android.os.Parcelable -- empty marker. Real Android uses this for
-// IPC. Mac.apk has no IPC, so methods here are stubs that satisfy the
+// IPC. Apk on Mac has no IPC, so methods here are stubs that satisfy the
 // app's @Override expectations.
 package android.os;
 

@@ -4,7 +4,7 @@
 //
 // WHAT THIS PLATFORM CAN HONESTLY ANSWER. Recognition on Android is performed
 // by a separate app that publishes a RecognitionService; the framework class
-// is only a binder client. Mac.apk has no such service installed, so
+// is only a binder client. Apk on Mac has no such service installed, so
 // isRecognitionAvailable() / isOnDeviceRecognitionAvailable() return false --
 // and that is not a stub, it is the same answer a real device with no voice
 // app gives. Every well-behaved caller checks it first.

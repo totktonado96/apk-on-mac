@@ -393,7 +393,7 @@ public final class MacApkFont {
     }
     /** The `hhea` table's lineGap (int16 at offset +8), in font units. 0 when
      *  the table is absent or unreadable, which is also the overwhelmingly
-     *  common real value -- every face Mac.apk bundles has gap 0. */
+     *  common real value -- every face Apk on Mac bundles has gap 0. */
     private static int readHheaLineGap(byte[] b, int base, int numTables) {
         try {
             for (int i = 0; i < numTables; i++) {

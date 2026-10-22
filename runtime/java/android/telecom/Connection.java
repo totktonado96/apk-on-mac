@@ -7,7 +7,7 @@
 // ordinary object state, and AOSP keeps it in exactly these fields. So the
 // setters really do move the state machine here, and the getters really do
 // report it. An app that calls setActive() and asserts getState() ==
-// STATE_ACTIVE behaves the same on Mac.apk as on Android.
+// STATE_ACTIVE behaves the same on Apk on Mac as on Android.
 //
 // WHAT IS HONESTLY ABSENT: the half that talks to the Telecom SERVICE. On
 // Android each setter also notifies Telecom, which drives the system in-call

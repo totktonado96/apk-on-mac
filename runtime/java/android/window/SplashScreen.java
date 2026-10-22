@@ -1,5 +1,5 @@
 package android.window;
-/** Controls the system splash screen for an activity. Mac.apk shows no separate
+/** Controls the system splash screen for an activity. Apk on Mac shows no separate
  *  splash window, so exit-animation listeners never fire and the theme override
  *  is inert. Source: frameworks/base/core/java/android/window/SplashScreen.java */
 public interface SplashScreen {

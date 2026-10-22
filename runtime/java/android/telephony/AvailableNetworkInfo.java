@@ -11,7 +11,7 @@ import java.util.Objects;
 /**
  * One candidate network for opportunistic-subscription selection.
  *
- * Faithful immutable value type; Mac.apk has no opportunistic subscriptions to
+ * Faithful immutable value type; Apk on Mac has no opportunistic subscriptions to
  * apply it to (updateAvailableNetworks reports
  * UPDATE_AVAILABLE_NETWORKS_NO_OPPORTUNISTIC_SUB_AVAILABLE).
  *

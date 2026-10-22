@@ -2,7 +2,7 @@ package android.content.pm;
 
 /**
  * A checksum of an installed APK's split, from PackageManager.requestChecksums.
- * Mac.apk can compute the real digest of the split file on disk, so getType /
+ * Apk on Mac can compute the real digest of the split file on disk, so getType /
  * getValue return actual data rather than a stub.
  *
  * Source: frameworks/base/core/java/android/content/pm/ApkChecksum.java

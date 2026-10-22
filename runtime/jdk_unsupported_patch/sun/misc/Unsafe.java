@@ -190,7 +190,7 @@ public final class Unsafe {
         }
         // AOSP gates the record rejection on
         // forbidObtainingRecordFieldOffsets(), i.e. SDK > BAKLAVA on BOTH the
-        // device and the app's target. Mac.apk presents SDK 29, so that gate
+        // device and the app's target. Apk on Mac presents SDK 29, so that gate
         // is false and AOSP would ALLOW a record field offset here. The host's
         // jdk.internal.misc.Unsafe rejects records unconditionally, so a guest
         // asking for a record field offset gets UnsupportedOperationException

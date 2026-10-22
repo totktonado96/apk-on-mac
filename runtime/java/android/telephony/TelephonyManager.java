@@ -264,7 +264,7 @@ public class TelephonyManager {
     public String  getSimSerialNumber() { return ""; }
     public String  getLine1Number()     { return ""; }
     public String  getNetworkOperator() { return ""; }
-    public String  getNetworkOperatorName() { return "Mac.apk"; }
+    public String  getNetworkOperatorName() { return "Apk on Mac"; }
     public String  getNetworkCountryIso()   { return "us"; }
     public String  getSimOperator()     { return ""; }
     public String  getSimOperatorName() { return ""; }
@@ -411,7 +411,7 @@ public class TelephonyManager {
     }
 
     /** AOSP getSubscriptionId (API 30): the subscription id backing this manager.
-     *  Mac.apk has no SIM, so INVALID_SUBSCRIPTION_ID (-1). */
+     *  Apk on Mac has no SIM, so INVALID_SUBSCRIPTION_ID (-1). */
     public int getSubscriptionId() { return SubscriptionManager.INVALID_SUBSCRIPTION_ID; }
 
     /**
@@ -426,7 +426,7 @@ public class TelephonyManager {
 
     public boolean isDataEnabled() { return true; }
 
-    /** AOSP getCellLocation (deprecated): no cellular on Mac.apk. */
+    /** AOSP getCellLocation (deprecated): no cellular on Apk on Mac. */
     public android.telephony.CellLocation getCellLocation() { return null; }
 
     public int getDataActivity() { return DATA_ACTIVITY_NONE; }

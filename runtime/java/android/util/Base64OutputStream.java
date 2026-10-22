@@ -1,14 +1,14 @@
 // android.util.Base64OutputStream -- AOSP-faithful reimplementation
 // (frameworks/base core/java/android/util/Base64OutputStream.java, verbatim).
 //
-// Why Mac.apk needs this: FirebaseCrashlytics references
+// Why Apk on Mac needs this: FirebaseCrashlytics references
 // android.util.Base64OutputStream while persisting crash reports; with the
 // class absent the app hit `NoClassDefFoundError: android/util/Base64OutputStream`
 // on a Crashlytics disk-worker thread (observed on Duolingo while persisting a
 // NON-FATAL event). Generic -- any Crashlytics-bundling app loads this.
 //
 // AOSP annotations (@UnsupportedAppUsage, @android.ravenwood.*) are stripped
-// per Mac.apk convention; the logic is unchanged. Operates on a Base64.Coder
+// per Apk on Mac convention; the logic is unchanged. Operates on a Base64.Coder
 // (the incremental encoder/decoder added to android.util.Base64).
 package android.util;
 

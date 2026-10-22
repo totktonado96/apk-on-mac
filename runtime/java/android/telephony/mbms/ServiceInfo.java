@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 /** Describes one eMBMS (cell-broadcast multicast) service. No MBMS middleware
- *  on Mac.apk, so an app never receives a populated instance; the accessors
+ *  on Apk on Mac, so an app never receives a populated instance; the accessors
  *  return empty. API 28.
  *  Source: frameworks/base/telephony/java/android/telephony/mbms/ServiceInfo.java */
 public class ServiceInfo {
@@ -13,7 +13,7 @@ public class ServiceInfo {
     public CharSequence getNameForLocale(Locale locale) { return ""; }
     public Set<Locale> getNamedContentLocales() { return Collections.emptySet(); }
 
-    // API-36 surface added 2026-08-24. Mac.apk has no MBMS middleware, so an
+    // API-36 surface added 2026-08-24. Apk on Mac has no MBMS middleware, so an
     // app never receives a populated instance -- but AOSP's own accessors are
     // @NonNull for the collections and the id/class name, so the honest answer
     // is "empty", not null, and the session window is the epoch rather than an

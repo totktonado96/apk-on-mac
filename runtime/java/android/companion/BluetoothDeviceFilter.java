@@ -4,7 +4,7 @@
 //
 // A REAL value type built by its own Builder: the criteria are just data the
 // app supplies, so building one behaves the same as on Android. Nothing here
-// SCANS -- Mac.apk exposes no Bluetooth bridge (see android.bluetooth) and no
+// SCANS -- Apk on Mac exposes no Bluetooth bridge (see android.bluetooth) and no
 // companion pairing UI, so no filter is ever evaluated.
 //
 // The public API is only the Builder plus Parcelable, which is why there are

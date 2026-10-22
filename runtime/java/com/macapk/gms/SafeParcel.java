@@ -4,7 +4,7 @@
 // WHY THIS EXISTS. Every object GMS hands an app across the process boundary
 // (GoogleSignInAccount, SignInAccount, Scope, ...) travels as a SafeParcel: the
 // app's OWN bundled play-services classes read it back through their CREATOR.
-// Mac.apk's GMS stand-in runs in the app's process, but the app still owns those
+// Apk on Mac's GMS stand-in runs in the app's process, but the app still owns those
 // classes (the GMS family is child-first; docs/gms-device-oracle-parent-first_
 // 2026-08-01.md) and still casts the result to its own class. So we do what the
 // real GMS process does: WRITE the wire bytes, and let the app's CREATOR build

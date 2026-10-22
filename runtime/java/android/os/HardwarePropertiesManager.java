@@ -1,7 +1,7 @@
 // android.os.HardwarePropertiesManager
 //
 // AOSP's hardware-sensor service (CPU/GPU/battery/skin temperatures, fan speeds).
-// Apps fetch it via getSystemService(HARDWARE_PROPERTIES_SERVICE). Mac.apk does
+// Apps fetch it via getSystemService(HARDWARE_PROPERTIES_SERVICE). Apk on Mac does
 // not expose thermal/fan telemetry to the guest, so the temperature and fan
 // queries return empty arrays -- the honest "no hardware-property telemetry"
 // result. Mirrors

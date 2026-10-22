@@ -3,7 +3,7 @@
 // game-controller player-id LED strip, etc). Referenced by anarchre, which
 // calls into InputDevice.getLightsManager() (see android/view/InputDevice.java).
 //
-// Mac.apk has no peripheral-light hardware and no lights HAL, so this class
+// Apk on Mac has no peripheral-light hardware and no lights HAL, so this class
 // is never asked to describe a real light: LightsManager.getLights() (see
 // LightsManager.java in this package) always returns an empty list, and
 // nothing in our framework ever constructs one. This file exists so the

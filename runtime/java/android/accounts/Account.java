@@ -1,5 +1,5 @@
 // android.accounts.Account -- identifies a single account (name + type) in the
-// AccountManager. Apps reference it for sync/backup/sign-in flows. Mac.apk has
+// AccountManager. Apps reference it for sync/backup/sign-in flows. Apk on Mac has
 // no account system, so AccountManager hands back none, but the class itself
 // must exist and round-trip (Parcelable) because app code (e.g. Google
 // Calculator's CalculatorApplication.onCreate) loads it during init. Mirrors

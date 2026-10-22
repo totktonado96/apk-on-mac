@@ -319,7 +319,7 @@ public class LayerDrawable extends Drawable implements Drawable.Callback {
     }
     /** AOSP splits this in two: Drawable.setState stores the set and calls
      *  onStateChange, LayerDrawable.onStateChange forwards to the children.
-     *  Mac.apk's base Drawable.setState returns false without dispatching, so
+     *  Apk on Mac's base Drawable.setState returns false without dispatching, so
      *  the store-and-dispatch half lives here, the same way StateListDrawable
      *  and DrawableWrapper in this package already handle it. Without this the
      *  View-side `background.setState(getDrawableState())` call reached a

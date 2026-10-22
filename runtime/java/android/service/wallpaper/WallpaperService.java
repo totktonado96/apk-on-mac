@@ -2,7 +2,7 @@ package android.service.wallpaper;
 
 /** Base for a live-wallpaper service.
  *
- *  ⚠ STRUCTURAL LIMIT: Mac.apk runs ONE app and has no home screen, no
+ *  ⚠ STRUCTURAL LIMIT: Apk on Mac runs ONE app and has no home screen, no
  *  wallpaper picker and no WallpaperManagerService, so an APK that IS a live
  *  wallpaper is never bound, never given a surface and never displayed.
  *  Nothing here fabricates that -- onBind() returns null (as it already did),
@@ -160,7 +160,7 @@ public abstract class WallpaperService extends android.app.Service {
 
         /** AOSP: the Context bound to the DISPLAY this engine draws on, which
          *  differs from the service's Context only on a multi-display device.
-         *  Mac.apk presents one display, so the service Context is that
+         *  Apk on Mac presents one display, so the service Context is that
          *  context. @Nullable in the SDK, and AOSP returns null before the
          *  engine is attached. */
         public android.content.Context getDisplayContext() {

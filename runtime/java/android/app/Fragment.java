@@ -178,7 +178,7 @@ public class Fragment implements android.content.ComponentCallbacks2,
      *  point at which they are available. AOSP's body then loads the
      *  fragment*Transition attrs off R.styleable.Fragment and chains to the two
      *  deprecated overloads; we keep the chain (which is the part apps override)
-     *  and skip the transition loading, since Mac.apk runs no fragment
+     *  and skip the transition loading, since Apk on Mac runs no fragment
      *  transitions. NOTE for androidx: NavHostFragment reads its navGraph here,
      *  which is why omitting this call leaves a NavHostFragment with no graph. */
     public void onInflate(Context context, AttributeSet attrs, Bundle savedInstanceState) {
@@ -500,11 +500,11 @@ public class Fragment implements android.content.ComponentCallbacks2,
                 ? getSharedElementEnterTransition() : mSharedElementReturnTransition;
     }
 
-    // Context-menu registration + assist dump (API 11). Mac.apk has no context
+    // Context-menu registration + assist dump (API 11). Apk on Mac has no context
     // menus / dumpsys, so these are no-ops.
     /** AOSP Fragment.isInLayout() (Fragment.java:893) returns mInLayout -- true
      *  for a fragment declared by a `<fragment>` tag. Was hardcoded false while
-     *  Mac.apk could not inflate the tag; it now can, and apps branch on this. */
+     *  Apk on Mac could not inflate the tag; it now can, and apps branch on this. */
     public boolean isInLayout() { return mInLayout; }
     public void registerForContextMenu(android.view.View view) { }
     public void unregisterForContextMenu(android.view.View view) { }

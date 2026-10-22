@@ -2,7 +2,7 @@
 // companion-device association.
 //
 // NO PUBLIC CONSTRUCTOR on AOSP either: the system creates one when the user
-// confirms a device in the companion pairing UI. Mac.apk has no such UI and no
+// confirms a device in the companion pairing UI. Apk on Mac has no such UI and no
 // companion transport, so no association is ever created and
 // CompanionDeviceManager.getMyAssociations() is empty -- see that class. The
 // type is here so an app that names it (notably in its own Callback override)

@@ -4,7 +4,7 @@ package android.media;
  * The platform's recommended JPEG encoding quality for camera stills (API 8).
  *
  * These are per-device tuning values read from a media_profiles XML the OEM
- * ships. Mac.apk exposes no camera, so there is no OEM profile to read -- and
+ * ships. Apk on Mac exposes no camera, so there is no OEM profile to read -- and
  * AOSP's own fallback when a device declares none is the same fixed ladder
  * used here (quality 70 / 80 / 90 for LOW / MEDIUM / HIGH, the values in
  * frameworks/av's default media_profiles.xml). Those are the numbers an app

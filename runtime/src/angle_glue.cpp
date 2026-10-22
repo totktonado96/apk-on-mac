@@ -1016,7 +1016,7 @@ void AngleResize(int width, int height) {
 
 // Blob-cache installer for EGLDisplays this file does not own.
 //
-// EGL_ANDROID_blob_cache is per-EGLDisplay, and Mac.apk creates TWO displays:
+// EGL_ANDROID_blob_cache is per-EGLDisplay, and Apk on Mac creates TWO displays:
 // the framework one above (GLSurfaceView / Java GLES -> cocoa_bridge ->
 // AngleInit), and a second one inside the Bionic shim for apps that drive EGL
 // natively (__macapk_arm64_eglGetDisplay in translator/src/bionic_shim.cpp,

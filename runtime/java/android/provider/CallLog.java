@@ -1,6 +1,6 @@
 // android.provider.CallLog -- the call-log content provider contract.
 // Apps read recent calls via ContentResolver against Calls.CONTENT_URI; a
-// dialer/telecom app would also write entries. Mac.apk has no telephony or
+// dialer/telecom app would also write entries. Apk on Mac has no telephony or
 // telecom stack behind this authority, so queries return null (no rows) --
 // the same honest "empty call log" a factory-reset device gives, per the
 // same pattern as ContactsContract's "no contacts provider" handling.
@@ -432,7 +432,7 @@ public class CallLog {
     /**
      * The (very small) table of geocoded call locations.
      *
-     * Mac.apk registers no call-log provider, so a query returns nothing --
+     * Apk on Mac registers no call-log provider, so a query returns nothing --
      * which is what a device with no call history returns too.
      *
      * Source: frameworks/base/core/java/android/provider/CallLog.java

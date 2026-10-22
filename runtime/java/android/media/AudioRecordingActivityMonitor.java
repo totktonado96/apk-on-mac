@@ -7,7 +7,7 @@ package android.media;
 // Android the registry lives in the system server
 // (com.android.server.audio.RecordingActivityMonitor, reached from
 // AudioManager over IAudioService: registerRecordingCallback /
-// getActiveRecordingConfigurations). Mac.apk has no system server and no
+// getActiveRecordingConfigurations). Apk on Mac has no system server and no
 // binder, so the registry has to live in the process -- and it has to be
 // STATIC, because the AudioManager instance that registers a callback is
 // usually not the one that would have seen the recorder start. Static here is

@@ -168,7 +168,7 @@ bool Capture(const std::string& cmd, std::string* out) {
 // builds them as `new Resources(assets, mDisplayMetrics, null)` (PPU16:598),
 // and ResourcesImpl.updateConfiguration hands the AssetManager
 // Build.VERSION.RESOURCES_SDK_INT -- the PLATFORM's level, which is the
-// android16 model this policy ports, not the SDK Mac.apk presents to the app.
+// android16 model this policy ports, not the SDK Apk on Mac presents to the app.
 constexpr uint32_t kParserResourcesSdk = 36;
 
 // ResTable_config (AOSP ResourceTypes.h; the same offsets ArscReader.java

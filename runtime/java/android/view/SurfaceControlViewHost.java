@@ -3,7 +3,7 @@
 // (SurfaceView.setChildSurfacePackage). Source: frameworks/base
 // core/java/android/view/SurfaceControlViewHost.java (android16-release).
 //
-// Mac.apk is a SINGLE process with a single Cocoa window and no SurfaceFlinger
+// Apk on Mac is a SINGLE process with a single Cocoa window and no SurfaceFlinger
 // (see SurfaceControl's header), so there is no second process to embed a
 // hierarchy from and nothing composites an embedded layer. The host therefore
 // holds the view it is given and reports it back -- every getter answers what

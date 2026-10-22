@@ -12,7 +12,7 @@ import java.util.Objects;
  *
  * This is app-supplied REQUEST data; whether the request can be honoured is
  * answered separately by AudioManager.getSupportedMixerAttributes(), which
- * reports none on this host (CoreAudio owns the mix and Mac.apk cannot hand an
+ * reports none on this host (CoreAudio owns the mix and Apk on Mac cannot hand an
  * app an exclusive-mode bit-perfect path). So an app can build and inspect these
  * objects exactly as on Android, and the platform honestly says it supports
  * none.

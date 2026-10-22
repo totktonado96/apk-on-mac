@@ -2,7 +2,7 @@
 // Source: frameworks/base
 // core/java/android/view/contentcapture/ContentCaptureManager.java (android16-release).
 //
-// Mac.apk bridges NO content-capture service. Every answer below is the one AOSP
+// Apk on Mac bridges NO content-capture service. Every answer below is the one AOSP
 // gives when no service is bound -- which is what every device reports unless a
 // system content-capture provider is installed and enabled -- rather than a
 // stand-in for "unimplemented". In particular shareData() REJECTS through the

@@ -9,7 +9,7 @@ import java.util.List;
 
 /**
  * Base for a media-browser service (Auto/Assistant/Wear browse trees). Apps
- * extend it and override onGetRoot/onLoadChildren. Mac.apk has no external
+ * extend it and override onGetRoot/onLoadChildren. Apk on Mac has no external
  * browse client, so the service runs its lifecycle but nothing queries it --
  * the same as a device with no connected browser. The type + lifecycle hooks
  * must exist for the app's subclass to compile and instantiate.

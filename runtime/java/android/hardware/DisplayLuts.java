@@ -4,7 +4,7 @@
 // Mirrors frameworks/base/core/java/android/hardware/DisplayLuts.java
 // (android16-release).
 //
-// Mac.apk's compositor has no LUT stage, so a DisplayLuts an app builds is
+// Apk on Mac's compositor has no LUT stage, so a DisplayLuts an app builds is
 // never applied -- OverlayProperties.getLutProperties() reports an empty array,
 // which is the device saying "I apply no LUTs", and an app that checks it
 // first will not attach one.

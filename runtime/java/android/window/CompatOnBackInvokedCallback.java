@@ -10,7 +10,7 @@
 // WindowOnBackInvokedDispatcher.Checker is the only reader: a registration that
 // is not enabled for the app is DROPPED unless its callback is one of these.
 // AOSP's one implementor is ViewRootImpl's compat callback, which turns a system
-// back GESTURE into a KEYCODE_BACK pair for a legacy app; Mac.apk has no system
+// back GESTURE into a KEYCODE_BACK pair for a legacy app; Apk on Mac has no system
 // gesture (every BACK already arrives as a key), so nothing here implements it
 // yet. The type exists so the Checker is the verbatim AOSP rule.
 package android.window;

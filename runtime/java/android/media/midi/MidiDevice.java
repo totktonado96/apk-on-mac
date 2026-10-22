@@ -1,5 +1,5 @@
 package android.media.midi;
-/** An opened MIDI device. Never produced on Mac.apk. */
+/** An opened MIDI device. Never produced on Apk on Mac. */
 public final class MidiDevice implements java.io.Closeable {
     MidiDevice() {}
     public MidiDeviceInfo getInfo() { return null; }

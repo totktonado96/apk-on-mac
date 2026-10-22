@@ -46,7 +46,7 @@ public class Process {
     public static UserHandle myUserHandle() { return UserHandle.CURRENT; }
     // AOSP Process.isApplicationUid(uid) delegates to UserHandle.isApp(uid):
     // true if the uid's app-id falls in [FIRST_APPLICATION_UID, LAST_APPLICATION_UID]
-    // (frameworks/base/core/java/android/os/{Process,UserHandle}.java). Mac.apk
+    // (frameworks/base/core/java/android/os/{Process,UserHandle}.java). Apk on Mac
     // runs the app at FIRST_APPLICATION_UID, so app uids qualify. (Google
     // Calculator calls this in its Application.onCreate.)
     //
@@ -61,7 +61,7 @@ public class Process {
     // Per AOSP frameworks/base/core/java/android/os/Process.java,
     // isIsolated() == isIsolatedUid(myUid()), where the isolated_app
     // UID range is [99000, 99999] (FIRST_ISOLATED_UID..LAST_ISOLATED_UID)
-    // or the app-zygote isolated range. Mac.apk runs the app in our
+    // or the app-zygote isolated range. Apk on Mac runs the app in our
     // host process (not an Android isolated_app sandbox) and myUid()
     // returns FIRST_APPLICATION_UID (10000), which is outside both
     // ranges -- so the canonical AOSP-equivalent value is always false.
@@ -78,7 +78,7 @@ public class Process {
     public static final boolean isIsolatedUid(int uid) { return false; }
 
     // Android nice-levels (-20..19) do not map onto macOS scheduling in a way
-    // that helps us: Mac.apk manages the UI thread's QoS natively (USER_INTERACTIVE,
+    // that helps us: Apk on Mac manages the UI thread's QoS natively (USER_INTERACTIVE,
     // native_methods.cpp) to keep the frame clock from starving, and honoring an
     // app's request to *lower* a background worker's nice level on macOS would risk
     // re-introducing exactly the coroutine-worker starvation we fixed. So we do not
@@ -202,7 +202,7 @@ public class Process {
     // the entire basis of the "restart myself" idiom, and it is what apps that
     // call this are relying on.
     //
-    // WHY WE CANNOT DO THE LITERAL THING. Mac.apk hosts the guest IN the runtime
+    // WHY WE CANNOT DO THE LITERAL THING. Apk on Mac hosts the guest IN the runtime
     // process by design (no emulation, no virtualization, no Zygote), so there is
     // no process to kill that is not also ours. Actually leaving would take the
     // runtime down, and the only sanctioned exit is macapk_terminate_now (see
@@ -279,9 +279,9 @@ public class Process {
             sSelfKillGeneration++;
         }
         try {
-            com.macapk.loader.NativeLog.i("Mac.apk.Process",
+            com.macapk.loader.NativeLog.i("Apk on Mac.Process",
                 "killProcess(myPid()) #" + sSelfKillGeneration + ": the app asked"
-                + " for its own process to end. Mac.apk hosts the guest in the"
+                + " for its own process to end. Apk on Mac hosts the guest in the"
                 + " runtime process, so instead of exiting we tear the activity"
                 + " stack down the way a dead process leaves it -- anything the"
                 + " app has already queued still runs, into an empty task.");
@@ -293,7 +293,7 @@ public class Process {
             // window hiding and exit backstop must not apply.
             com.macapk.loader.ActivityHost.macapkTerminate(2000L, false);
         } catch (Throwable t) {
-            com.macapk.loader.NativeLog.w("Mac.apk.Process",
+            com.macapk.loader.NativeLog.w("Apk on Mac.Process",
                 "killProcess teardown threw: " + t);
         } finally {
             synchronized (Process.class) { sSelfKillInProgress = false; }
@@ -301,7 +301,7 @@ public class Process {
     }
 
     /** AOSP Process.isSdkSandbox (API 34): whether the caller runs in the SDK
-     *  sandbox. Mac.apk loads SDKs in-process, so false. */
+     *  sandbox. Apk on Mac loads SDKs in-process, so false. */
     public static boolean isSdkSandbox() { return false; }
 
     public static String myProcessName() { return "com.macapk.app"; }

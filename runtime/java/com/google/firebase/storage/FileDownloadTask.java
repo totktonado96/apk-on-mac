@@ -2,7 +2,7 @@ package com.google.firebase.storage;
 
 // com.google.firebase.storage.FileDownloadTask -- returned by
 // StorageReference.getFile(...). Real Storage streams the object into the target
-// File. On Mac.apk there is no backend, so the download fails cleanly with
+// File. On Apk on Mac there is no backend, so the download fails cleanly with
 // StorageException(ERROR_UNKNOWN) and nothing is written to the target file.
 //
 // Signatures mirror the published Firebase Storage Android reference.

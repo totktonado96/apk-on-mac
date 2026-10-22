@@ -1,6 +1,6 @@
 // android.media.MediaActionSound -- plays the camera shutter/focus/record
 // sounds. AOSP frameworks/base media/java/android/media/MediaActionSound.java.
-// Mac.apk has no bundled shutter samples wired into the mixer, so load() is a
+// Apk on Mac has no bundled shutter samples wired into the mixer, so load() is a
 // no-op and play() does nothing audible; the contract (camera UIs call play
 // after capture, expecting no return) holds.
 package android.media;
@@ -26,7 +26,7 @@ public class MediaActionSound {
      * CameraManager's per-camera "shutter sound must play" characteristic.
      *
      * false here, and honestly: this is not a permission we are granting
-     * ourselves -- Mac.apk exposes no camera at all, so there is no shutter to
+     * ourselves -- Apk on Mac exposes no camera at all, so there is no shutter to
      * mandate a sound for, and the enforcement AOSP performs lives in the camera
      * HAL rather than in this class. An app that checks this to decide whether
      * to offer a "silent shutter" toggle gets the right answer for the device it

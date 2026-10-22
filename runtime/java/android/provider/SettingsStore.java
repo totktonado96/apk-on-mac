@@ -2,7 +2,7 @@
 // Settings.System / Secure / Global. Package-private helper (not part of
 // the public Android API; lives in android.provider so Settings can use
 // it). Real Android keeps settings in a SQLite DB owned by the Settings
-// provider and exposes them through ContentResolver; Mac.apk has no such
+// provider and exposes them through ContentResolver; Apk on Mac has no such
 // provider, so we back the three namespaces with an in-process map that
 // persists to a .properties file under the android-root data tree. This
 // makes putInt/putString round-trip and survive across runs, which is
@@ -43,7 +43,7 @@ final class SettingsStore {
             // "~/Documents/android" until 2026-08-12 -- that shared root is
             // DELETED and A13_NO_LEGACY_ROOT fails if anything recreates it.
             root = System.getProperty("user.home", ".")
-                    + "/Library/Caches/Mac.apk/scratch/android";
+                    + "/Library/Caches/Apk on Mac/scratch/android";
         }
         if (root.equals("~") || root.startsWith("~/")) {
             String home = System.getProperty("user.home");
@@ -194,13 +194,13 @@ final class SettingsStore {
      *      RANDOM ONE and persists it. The app sees a different device.
      *   2. This file is DEVICE-GLOBAL, not per-app. One app's crash mid-write
      *      resets settings for every app in the install.
-     *   3. `synchronized (LOCK)` guards one JVM. Two Mac.apk processes (a
+     *   3. `synchronized (LOCK)` guards one JVM. Two Apk on Mac processes (a
      *      launcher run and an installed app stub) share this file, so the lock
      *      does not span the actual contenders.
      *
      *  Because of (3) the AOSP rename-aside-a-backup dance used for prefs is NOT
      *  the right answer here -- that is safe for a per-app file, and this one is
-     *  shared. SettingsStore is Mac.apk wiring, not an AOSP-observable format, so
+     *  shared. SettingsStore is Apk on Mac wiring, not an AOSP-observable format, so
      *  the host-first ladder applies: `Files.move(..., ATOMIC_MOVE)` is rename(2),
      *  atomic on APFS. A concurrent reader in another process sees either the old
      *  file or the new one, never a truncated one, and there is no instant at
@@ -212,7 +212,7 @@ final class SettingsStore {
         if (sFile == null || sProps == null) return false;
         java.io.File tmp = new java.io.File(sFile.getPath() + ".tmp");
         try (FileOutputStream out = new FileOutputStream(tmp)) {
-            sProps.store(out, "Mac.apk Settings store");
+            sProps.store(out, "Apk on Mac Settings store");
             out.flush();
             // Without the sync the RENAME can be durable while the CONTENT is
             // not, which is the corruption this whole dance exists to prevent.

@@ -65,7 +65,7 @@ public class AndroidKeyStoreSpi extends KeyStoreSpi {
     //     //                  entries with no password.
     //     if ((protParam == null) || protParam instanceof KeyStore.PasswordProtection) {
     //
-    // Mac.apk runs on the HOST OpenJDK, whose UNPATCHED KeyStoreSpi still
+    // Apk on Mac runs on the HOST OpenJDK, whose UNPATCHED KeyStoreSpi still
     // throws at that site, so `keyStore.getEntry(alias, null)` -- the normal
     // Android idiom -- failed for every app. Measured 2026-07-30 on Signal:
     //     java.security.UnrecoverableKeyException: requested entry requires a password
@@ -237,7 +237,7 @@ public class AndroidKeyStoreSpi extends KeyStoreSpi {
     @Override
     public void engineSetCertificateEntry(String alias, Certificate cert)
             throws KeyStoreException {
-        // AOSP supports trusted-certificate entries; no consumer on Mac.apk
+        // AOSP supports trusted-certificate entries; no consumer on Apk on Mac
         // has needed them yet. Implement (with on-disk cert serialization)
         // when one does, rather than silently dropping the cert here.
         throw new KeyStoreException(

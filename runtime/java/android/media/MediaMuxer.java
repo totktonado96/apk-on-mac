@@ -1,7 +1,7 @@
 // android.media.MediaMuxer -- multiplexes encoded elementary streams into a
 // container file. AOSP frameworks/base media/java/android/media/MediaMuxer.java.
 //
-// Mac.apk has no muxer backend, so this implements the full state machine
+// Apk on Mac has no muxer backend, so this implements the full state machine
 // (addTrack before start, writeSampleData while started, stop) but writes no
 // container data: the output file is created empty. Apps that drive a muxer
 // (screen recorders, transcoders) run their loop without a NoSuchMethodError or

@@ -21,7 +21,7 @@ public final class Message implements Parcelable {
     public Messenger replyTo;
 
     /** AOSP UID_NONE default. Real Android fills sendingUid from the Binder
-     *  calling identity when a message crosses processes; Mac.apk is
+     *  calling identity when a message crosses processes; Apk on Mac is
      *  single-process, so it stays UID_NONE unless an app sets it directly. */
     public static final int UID_NONE = -1;
     public int sendingUid = UID_NONE;

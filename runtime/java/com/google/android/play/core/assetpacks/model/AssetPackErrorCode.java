@@ -1,7 +1,7 @@
 package com.google.android.play.core.assetpacks.model;
 
 // Play Core asset-pack error codes. Values match the Play Core library
-// (NO_ERROR=0 is the only one we report -- every pack on Mac.apk is an
+// (NO_ERROR=0 is the only one we report -- every pack on Apk on Mac is an
 // install-time pack already present in the APK assets, so it is always
 // COMPLETED with no error).
 public final class AssetPackErrorCode {

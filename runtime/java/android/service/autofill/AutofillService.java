@@ -9,7 +9,7 @@ import android.os.IBinder;
  *
  * PACKAGE NOTE -- applies to every class in android.service.autofill.
  * An AutofillService is bound by the system so it can fill fields in OTHER
- * apps. Mac.apk runs ONE app and binds no autofill service, so onFillRequest /
+ * apps. Apk on Mac runs ONE app and binds no autofill service, so onFillRequest /
  * onSaveRequest never fire and no FillResponse is ever consumed. This is the
  * second archetype (with NotificationListenerService) of a service that cannot
  * function on a single-app host.

@@ -6,7 +6,7 @@ import android.content.Context;
 // (typically in Application.attachBaseContext or an Activity's attachBaseContext)
 // to make on-demand-delivered module code/resources loadable on pre-O devices.
 //
-// On Mac.apk all of the app's code already lives in the single loaded classpath
+// On Apk on Mac all of the app's code already lives in the single loaded classpath
 // (we do not split-deliver modules at runtime), so there is nothing to splice in:
 // install() is a successful no-op. This is the important one to ship -- apps that
 // call SplitCompat.install(this) in attachBaseContext crash EARLY (before any UI)

@@ -13,7 +13,7 @@ import android.os.RemoteException;
  * Base class for a service that injects a row into the system Location settings
  * screen.
  *
- * Mac.apk has no Settings app, so nothing ever binds to a subclass of this.
+ * Apk on Mac has no Settings app, so nothing ever binds to a subclass of this.
  * The class is still implemented faithfully rather than stubbed: an app can
  * declare and start the service itself, and AOSP's contract -- onStartCommand
  * calls onGetSummary()/onGetEnabled() and replies through the Messenger in the

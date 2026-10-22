@@ -604,7 +604,7 @@ AddrPlan plan_address(XlatMemCtx& cx, const cs_insn* in, int mem_idx,
 }
 
 // LDR / LDRB / LDRH / LDRSB / LDRSH / STR / STRB / STRH plus the unprivileged
-// T-suffixed twins. Mac.apk has a single privilege level, so LDRT/STRT
+// T-suffixed twins. Apk on Mac has a single privilege level, so LDRT/STRT
 // translate identically to LDR/STR (the same choice arm32_lifter.cpp made).
 bool xlat_ldst_single(XlatMemCtx& cx, const cs_insn* in, int bits,
                       bool is_load, bool sign_ext, XlatResult* res) {
@@ -758,7 +758,7 @@ bool xlat_ldm_stm(XlatMemCtx& cx, const cs_insn* in, bool is_load,
     if (d.usermode) {
         // LDM/STM (User registers) and LDM (exception return) are privileged.
         // At PL0, where every Android .so runs, they are UNPREDICTABLE
-        // (DDI 0406C.d B9.3.5 / B9.3.6). Mac.apk models a single privilege
+        // (DDI 0406C.d B9.3.5 / B9.3.6). Apk on Mac models a single privilege
         // level with no banked registers, so the faithful lowering of what the
         // guest can actually reach is the ordinary form. Recorded rather than
         // silently accepted.

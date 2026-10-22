@@ -15,7 +15,7 @@ import java.io.InputStream;
 /**
  * The deprecated pre-ContactsContract Contacts provider surface.
  *
- * ⚠ Mac.apk deliberately registers NO contacts provider (that is a standing,
+ * ⚠ Apk on Mac deliberately registers NO contacts provider (that is a standing,
  * separately-tracked design decision, not an oversight). Everything in this
  * file is therefore CONSTANTS and CLIENT-SIDE HELPERS: the URI/column names old
  * apps compile against resolve, and the helper methods run AOSP's exact
@@ -56,7 +56,7 @@ public class Contacts {
     /**
      * AOSP reads these from com.android.internal.R.array.phoneTypes /
      * emailAddressTypes / postalAddressTypes, which are platform string
-     * resources Mac.apk does not ship. The English defaults are inlined below,
+     * resources Apk on Mac does not ship. The English defaults are inlined below,
      * in AOSP's exact order, so getDisplayLabel returns the right LABEL for the
      * right type; only localisation is lost, and a wrong label would be worse
      * than an unlocalised one.

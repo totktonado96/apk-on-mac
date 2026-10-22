@@ -1,6 +1,6 @@
 // android.hardware.SensorManager -- mirrors AOSP's public surface.
 //
-// Mac.apk has no sensor hardware. Two halves of the contract:
+// Apk on Mac has no sensor hardware. Two halves of the contract:
 //
 //  (1) The static math utilities (getRotationMatrix, getOrientation,
 //      remapCoordinateSystem, getInclination, getAltitude,
@@ -182,25 +182,25 @@ public class SensorManager {
     protected SensorManager() {
         // Synthesize the "device still" sensor set. Continuous sensors carry a
         // 10000us (100Hz) minDelay like a typical phone.
-        mSensors.add(new Sensor(Sensor.TYPE_ACCELEROMETER, "Mac.apk Accelerometer",
+        mSensors.add(new Sensor(Sensor.TYPE_ACCELEROMETER, "Apk on Mac Accelerometer",
             Sensor.STRING_TYPE_ACCELEROMETER, 2f * STANDARD_GRAVITY, 0.01f, 0.1f,
             10000, Sensor.REPORTING_MODE_CONTINUOUS));
-        mSensors.add(new Sensor(Sensor.TYPE_GYROSCOPE, "Mac.apk Gyroscope",
+        mSensors.add(new Sensor(Sensor.TYPE_GYROSCOPE, "Apk on Mac Gyroscope",
             Sensor.STRING_TYPE_GYROSCOPE, 8.7f, 0.001f, 0.1f,
             10000, Sensor.REPORTING_MODE_CONTINUOUS));
-        mSensors.add(new Sensor(Sensor.TYPE_GRAVITY, "Mac.apk Gravity",
+        mSensors.add(new Sensor(Sensor.TYPE_GRAVITY, "Apk on Mac Gravity",
             Sensor.STRING_TYPE_GRAVITY, 2f * STANDARD_GRAVITY, 0.01f, 0.1f,
             10000, Sensor.REPORTING_MODE_CONTINUOUS));
-        mSensors.add(new Sensor(Sensor.TYPE_LINEAR_ACCELERATION, "Mac.apk Linear Acceleration",
+        mSensors.add(new Sensor(Sensor.TYPE_LINEAR_ACCELERATION, "Apk on Mac Linear Acceleration",
             Sensor.STRING_TYPE_LINEAR_ACCELERATION, 2f * STANDARD_GRAVITY, 0.01f, 0.1f,
             10000, Sensor.REPORTING_MODE_CONTINUOUS));
-        mSensors.add(new Sensor(Sensor.TYPE_ROTATION_VECTOR, "Mac.apk Rotation Vector",
+        mSensors.add(new Sensor(Sensor.TYPE_ROTATION_VECTOR, "Apk on Mac Rotation Vector",
             Sensor.STRING_TYPE_ROTATION_VECTOR, 1f, 0.0001f, 0.1f,
             10000, Sensor.REPORTING_MODE_CONTINUOUS));
-        mSensors.add(new Sensor(Sensor.TYPE_GAME_ROTATION_VECTOR, "Mac.apk Game Rotation Vector",
+        mSensors.add(new Sensor(Sensor.TYPE_GAME_ROTATION_VECTOR, "Apk on Mac Game Rotation Vector",
             Sensor.STRING_TYPE_GAME_ROTATION_VECTOR, 1f, 0.0001f, 0.1f,
             10000, Sensor.REPORTING_MODE_CONTINUOUS));
-        mSensors.add(new Sensor(Sensor.TYPE_ORIENTATION, "Mac.apk Orientation",
+        mSensors.add(new Sensor(Sensor.TYPE_ORIENTATION, "Apk on Mac Orientation",
             Sensor.STRING_TYPE_ORIENTATION, 360f, 0.1f, 0.1f,
             10000, Sensor.REPORTING_MODE_CONTINUOUS));
         // No TYPE_STEP_COUNTER / TYPE_STEP_DETECTOR: a Mac has no pedometer.
@@ -297,7 +297,7 @@ public class SensorManager {
     }
 
     public Sensor getDefaultSensor(int type, boolean wakeUp) {
-        // Mac.apk synthesizes only non-wakeup sensors.
+        // Apk on Mac synthesizes only non-wakeup sensors.
         if (wakeUp) return null;
         return getDefaultSensor(type);
     }
@@ -633,7 +633,7 @@ public class SensorManager {
     // The POSE the synthetic device is in: HELD UPRIGHT in portrait, facing the
     // user, tilted back about 5 degrees. NOT lying on a table.
     //
-    // WHY NOT (0, 0, +g). A Mac.apk window is something the user is looking AT,
+    // WHY NOT (0, 0, +g). A Apk on Mac window is something the user is looking AT,
     // head on, so the honest analogue of the host's physical situation is a phone
     // held up in front of you. (0, 0, +g) is the face-up-on-a-desk pose, and it is
     // DEGENERATE: both pitch and roll come out exactly zero, so every app that
@@ -1053,7 +1053,7 @@ public class SensorManager {
 
     // --- TriggerEventListener (one-shot sensors) -------------------------
     public boolean requestTriggerSensor(TriggerEventListener listener, Sensor sensor) {
-        // Mac.apk's flat-and-still device never satisfies a significant-motion
+        // Apk on Mac's flat-and-still device never satisfies a significant-motion
         // trigger, so the request is accepted but never fires. Honest no-op.
         return listener != null && sensor != null;
     }

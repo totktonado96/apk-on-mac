@@ -7,7 +7,7 @@ import android.content.Context;
 
 // com.google.mlkit.vision.common.InputImage -- the image wrapper every ML Kit
 // vision detector consumes. ML Kit runs all inference on-device with bundled or
-// downloaded models; Mac.apk ships no model backend, so detectors fail their
+// downloaded models; Apk on Mac ships no model backend, so detectors fail their
 // Task cleanly (see vision/text|barcode|face|label). InputImage itself is pure
 // data, so we mirror its real factories faithfully: an app builds an InputImage
 // the normal way, then process() returns a failed Task. This lets ML Kit-using

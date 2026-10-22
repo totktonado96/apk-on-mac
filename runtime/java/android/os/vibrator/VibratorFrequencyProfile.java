@@ -9,7 +9,7 @@
 // directly, and every accessor computes from it exactly as AOSP's does --
 // including the linear interpolation getOutputAccelerationGs() documents.
 //
-// Mac.apk has no haptics hardware, so Vibrator.getFrequencyProfile() returns
+// Apk on Mac has no haptics hardware, so Vibrator.getFrequencyProfile() returns
 // null, which is AOSP's own documented answer for a vibrator with no frequency
 // control. The class still exists (and is constructible) because an app may
 // reference the TYPE -- a field, a cast, a method signature -- whether or not

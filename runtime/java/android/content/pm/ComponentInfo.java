@@ -15,7 +15,7 @@ public class ComponentInfo extends PackageItemInfo {
     /** AOSP API-31 ComponentInfo.attributionTags: "the attribution tags of this
      *  component" -- the `android:attributionTags` manifest attribute, used by
      *  the AppOps/privacy plumbing to say which attribution a component's
-     *  operations are charged to. Mac.apk's manifest parser does not read the
+     *  operations are charged to. Apk on Mac's manifest parser does not read the
      *  attribute yet, so this stays null on the *Info objects we generate,
      *  which is the same value AOSP reports for a component that declares
      *  none (the overwhelming majority). The field must EXIST because we

@@ -15,7 +15,7 @@ import java.util.Objects;
 /**
  * A carrier data plan (billing cycle, data cap, usage).
  *
- * Mac.apk has no carrier and no subscription, so
+ * Apk on Mac has no carrier and no subscription, so
  * SubscriptionManager.getSubscriptionPlans() is empty. The value type and its
  * cycle iterator are pure date arithmetic and are faithful, so an app that
  * builds a plan for its own bookkeeping behaves identically.

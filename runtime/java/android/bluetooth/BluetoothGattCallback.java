@@ -1,6 +1,6 @@
 // android.bluetooth.BluetoothGattCallback
 //
-// The callback an app subclasses to receive GATT client events. Mac.apk has no
+// The callback an app subclasses to receive GATT client events. Apk on Mac has no
 // radio; the only event we ever deliver is onConnectionStateChange(FAILURE,
 // DISCONNECTED) from connectGatt. The full overridable surface must exist so
 // subclasses compile. Mirrors

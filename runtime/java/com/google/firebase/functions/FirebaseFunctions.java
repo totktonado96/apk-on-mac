@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 // com.google.firebase.functions.FirebaseFunctions -- entry point to the Cloud
-// Functions client SDK. On Mac.apk it is a real, fully-constructable client; the
+// Functions client SDK. On Apk on Mac it is a real, fully-constructable client; the
 // callable references it hands out fail cleanly when invoked (no backend, no
 // fabricated results). getInstance is cached per app+region so identity-comparing
 // apps see a stable instance, mirroring the published SDK.

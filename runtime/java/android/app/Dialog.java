@@ -1,6 +1,6 @@
 // android.app.Dialog -- Per AOSP source at
 // https://cs.android.com/.../app/Dialog.java. Apps create Dialog
-// instances for showing modal content. Mac.apk impl is minimal --
+// instances for showing modal content. Apk on Mac impl is minimal --
 // the dialog is created but never actually displayed (no system
 // dialog host). All listener callbacks fire correctly because the
 // lifecycle methods (show/dismiss/cancel) just toggle internal
@@ -399,7 +399,7 @@ public class Dialog implements DialogInterface, android.content.DialogInterface.
         } catch (Throwable ignored) {}
     }
 
-    // Concrete android.view.Window for a Dialog. Headless (Mac.apk has no system
+    // Concrete android.view.Window for a Dialog. Headless (Apk on Mac has no system
     // dialog host), but every method is non-null-safe so app-side window
     // customization does not NPE. Backed by a FrameLayout decor like
     // ActivityWindow, so getWindow().getDecorView() / findViewById work.
@@ -532,7 +532,7 @@ public class Dialog implements DialogInterface, android.content.DialogInterface.
             }
             if (System.getenv("MACAPK_TRACE_DIALOG_THEME") != null) {
                 try {
-                    com.macapk.loader.NativeLog.i("Mac.apk.Dialog", "generateLayout ctx="
+                    com.macapk.loader.NativeLog.i("Apk on Mac.Dialog", "generateLayout ctx="
                         + (mContext == null ? "null" : mContext.getClass().getName())
                         + " source=" + mMacapkDimSource + " floating=" + floating
                         + " dimEnabled=" + dimEnabled + " dimAmount=" + params.dimAmount
@@ -1003,7 +1003,7 @@ public class Dialog implements DialogInterface, android.content.DialogInterface.
                 // Measured victim: unitconverter's Help dialog, which is an
                 // androidx AlertDialog whose AlertController.installContent()
                 // calls exactly this method with abc_alert_dialog_material.
-                com.macapk.loader.NativeLog.w("Mac.apk.Dialog",
+                com.macapk.loader.NativeLog.w("Apk on Mac.Dialog",
                     "setContentView(0x" + Integer.toHexString(layoutResID)
                     + ") inflate FAILED -> dialog will be blank: " + t);
             }
@@ -1033,10 +1033,10 @@ public class Dialog implements DialogInterface, android.content.DialogInterface.
             StackTraceElement[] st = t.getStackTrace();
             int n = Math.min(st.length, 8);
             for (int i = 0; i < n; i++) {
-                com.macapk.loader.NativeLog.w("Mac.apk.Dialog", "    at " + st[i]);
+                com.macapk.loader.NativeLog.w("Apk on Mac.Dialog", "    at " + st[i]);
             }
             Throwable c = t.getCause();
-            if (c != null) com.macapk.loader.NativeLog.w("Mac.apk.Dialog", "  caused by: " + c);
+            if (c != null) com.macapk.loader.NativeLog.w("Apk on Mac.Dialog", "  caused by: " + c);
         } catch (Throwable ignored) {}
     }
     public void show()      {
@@ -1057,7 +1057,7 @@ public class Dialog implements DialogInterface, android.content.DialogInterface.
         macapkDispatchOnCreate();
         try { onStart(); }
         catch (Throwable t) {
-            com.macapk.loader.NativeLog.w("Mac.apk.Dialog", "onStart THREW: " + t);
+            com.macapk.loader.NativeLog.w("Apk on Mac.Dialog", "onStart THREW: " + t);
             macapkLogTrace(t);
         }
         // v1.0.691: AOSP show() ends with mWindowManager.addView(mDecor, params).
@@ -1137,7 +1137,7 @@ public class Dialog implements DialogInterface, android.content.DialogInterface.
             try { mShowListener.onShow(this); }
             catch (Throwable t) {
                 try {
-                    com.macapk.loader.NativeLog.w("Mac.apk.Dialog",
+                    com.macapk.loader.NativeLog.w("Apk on Mac.Dialog",
                         "OnShowListener THREW -> the app's show-time setup did not finish: " + t);
                 } catch (Throwable ignored) {}
                 macapkLogTrace(t);
@@ -1719,7 +1719,7 @@ public class Dialog implements DialogInterface, android.content.DialogInterface.
             mCreated = true;
             try { onCreate(null); }
             catch (Throwable t) {
-                com.macapk.loader.NativeLog.w("Mac.apk.Dialog",
+                com.macapk.loader.NativeLog.w("Apk on Mac.Dialog",
                     "onCreate THREW -> dialog will be blank/partial: " + t);
                 macapkLogTrace(t);
             }

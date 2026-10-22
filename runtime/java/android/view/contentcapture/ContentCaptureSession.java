@@ -1,6 +1,6 @@
 // android.view.contentcapture.ContentCaptureSession -- API 29+ session
 // object for ContentCapture (Google's system-managed screen-content
-// indexer). Mac.apk doesn't run ContentCapture; the class only needs
+// indexer). Apk on Mac doesn't run ContentCapture; the class only needs
 // to exist so View.getContentCaptureSession() can declare it as a
 // return type. Hit by RecyclerView's ViewHolder.itemView setup chain.
 package android.view.contentcapture;
@@ -9,7 +9,7 @@ public abstract class ContentCaptureSession implements AutoCloseable {
     public ContentCaptureSession() {}
     @Override public void close() {}
 
-    // Content-capture notifications (API 29). Mac.apk has no content-capture
+    // Content-capture notifications (API 29). Apk on Mac has no content-capture
     // service consuming them, so they are accepted and dropped; the *ViewStructure
     // / *AutofillId factories return usable objects.
     public android.view.ViewStructure newViewStructure(android.view.View view) { return new android.view.ViewStructure(); }
@@ -23,7 +23,7 @@ public abstract class ContentCaptureSession implements AutoCloseable {
     public void notifyViewsAppeared(java.util.List<android.view.autofill.AutofillId> appearedNodes) { }
 
     // ======================================================================
-    //  AOSP API-36 surface completion (Mac.apk API-gap lane, android.view).
+    //  AOSP API-36 surface completion (Apk on Mac API-gap lane, android.view).
     //  No content-capture service is bound (see ContentCaptureManager), so
     //  nothing here reaches a consumer -- but the session's own STATE
     //  (context, id, destroyed) round-trips, which is what a caller observes.

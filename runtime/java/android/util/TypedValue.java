@@ -162,7 +162,7 @@ public class TypedValue {
 
     public static float applyDimension(int unit, float value, DisplayMetrics metrics) {
         // AOSP dereferences metrics unconditionally (it is @NonNull there).
-        // Mac.apk keeps a null guard because framework code here can reach
+        // Apk on Mac keeps a null guard because framework code here can reach
         // applyDimension before a Display is attached; returning the raw
         // value is the identity conversion (PX) rather than an NPE.
         if (metrics == null) return value;
@@ -314,7 +314,7 @@ public class TypedValue {
     }
 
     // ------------------------------------------------------------------
-    // Mac.apk internal: compile a NUMERIC resource literal exactly the way
+    // Apk on Mac internal: compile a NUMERIC resource literal exactly the way
     // aapt does, so a value we parse at runtime carries the same type+data
     // the emulator's resources.arsc carries. This exists because our
     // resource pipeline keeps values as SOURCE TEXT (apktool output) where

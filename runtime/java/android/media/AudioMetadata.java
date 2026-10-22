@@ -9,7 +9,7 @@ import java.util.Objects;
  *
  * This is a complete, working implementation -- the map is ordinary in-process
  * data structure work with nothing platform-specific about it, so there is
- * nothing to stub. What Mac.apk does not have is a source that PRODUCES one: the
+ * nothing to stub. What Apk on Mac does not have is a source that PRODUCES one: the
  * maps AOSP delivers come from an offloaded hardware codec reporting a format
  * change, and this host decodes in software (see AudioManager's offload
  * answers). So an app can build, populate and read these maps exactly as on

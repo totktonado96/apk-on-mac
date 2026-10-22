@@ -2,7 +2,7 @@
 // ContentResolver.getCurrentSyncs().
 //
 // AOSP ref: frameworks/base/core/java/android/content/SyncInfo.java
-// (android16-release). Mac.apk runs no SyncManager, so getCurrentSyncs()
+// (android16-release). Apk on Mac runs no SyncManager, so getCurrentSyncs()
 // returns an empty list and nothing constructs one of these -- the type exists
 // because the API names it.
 package android.content;

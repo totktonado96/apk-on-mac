@@ -86,7 +86,7 @@ public final class AutofillId implements android.os.Parcelable {
 
     /** AOSP AutofillId.getSessionId() / isInAutofillSession() (API 36): which
      *  autofill SESSION this id belongs to. AOSP's NO_SESSION sentinel is 0, and
-     *  an id built by an app (which is every id here -- Mac.apk bridges no
+     *  an id built by an app (which is every id here -- Apk on Mac bridges no
      *  autofill service, so no session is ever created) carries no session. */
     public int getSessionId() { return 0; }
     public boolean isInAutofillSession() { return false; }

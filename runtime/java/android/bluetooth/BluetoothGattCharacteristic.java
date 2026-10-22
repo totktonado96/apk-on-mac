@@ -1,6 +1,6 @@
 // android.bluetooth.BluetoothGattCharacteristic
 //
-// A GATT characteristic value holder. Mac.apk never connects, so these are
+// A GATT characteristic value holder. Apk on Mac never connects, so these are
 // never read off a radio, but apps construct them (e.g. when writing) and
 // reference the PROPERTY_*/PERMISSION_*/WRITE_TYPE_* constants, so the value
 // type must resolve faithfully. Mirrors

@@ -330,7 +330,7 @@ public class KeyCharacterMap implements android.os.Parcelable {
     private KeyCharacterMap(int deviceId) { mDeviceId = deviceId; }
     public KeyCharacterMap() { mDeviceId = VIRTUAL_KEYBOARD; }
 
-    /** AOSP factory. Returns the char map for the given device. Mac.apk has a
+    /** AOSP factory. Returns the char map for the given device. Apk on Mac has a
      *  single host keyboard whose layout is the same US-QWERTY that Virtual.kcm
      *  describes, so every device id gets that one map rather than a per-device
      *  file. MUST be non-null and non-throwing -- Unity calls this
@@ -619,13 +619,13 @@ public class KeyCharacterMap implements android.os.Parcelable {
         return true;
     }
 
-    /** AOSP: synthesize the key events that would type `chars`. Mac.apk
+    /** AOSP: synthesize the key events that would type `chars`. Apk on Mac
      *  returns null (callers treat null as "cannot be typed"), which is
      *  safe -- the host keyboard path injects events directly. */
     public KeyEvent[] getEvents(char[] chars) { return null; }
 
     /** AOSP asks InputManager which ATTACHED devices can produce the keycode
-     *  (KeyCharacterMap.java:700-702). Mac.apk answers for the host: there is
+     *  (KeyCharacterMap.java:700-702). Apk on Mac answers for the host: there is
      *  always a keyboard, and no other input device class exists here.
      *
      *  KNOWN DIVERGENCE from the API-30 emulator golden, left deliberately:

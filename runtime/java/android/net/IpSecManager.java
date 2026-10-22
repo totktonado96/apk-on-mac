@@ -1,6 +1,6 @@
 // android.net.IpSecManager
 //
-// Manages IPsec security associations + transforms. Mac.apk has no IPsec
+// Manages IPsec security associations + transforms. Apk on Mac has no IPsec
 // subsystem, so SPI allocation fails with the documented
 // SpiUnavailableException and UDP-encap socket allocation fails with
 // ResourceUnavailableException -- the honest "no IPsec" result rather than a

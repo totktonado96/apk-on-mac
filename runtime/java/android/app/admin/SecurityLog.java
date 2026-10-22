@@ -5,7 +5,7 @@
 // AOSP ref: frameworks/base/core/java/android/app/admin/SecurityLog.java
 // (android16-release). The class is a constant holder plus the nested
 // SecurityEvent; the actual log buffer lives in the system and is only readable
-// by a device owner, which Mac.apk never has -- so no SecurityEvent is ever
+// by a device owner, which Apk on Mac never has -- so no SecurityEvent is ever
 // produced here (see DevicePolicyManager.retrieveSecurityLogs).
 package android.app.admin;
 

@@ -6,7 +6,7 @@ import android.os.PatternMatcher;
 // inheritance is LOAD-BEARING: AndroidX-Startup's InitializationProvider.onCreate
 // reads the provider's <meta-data> via `getfield
 // android/content/pm/PackageItemInfo.metaData` on a ProviderInfo instance to
-// enumerate Initializer classes; FirebaseInitProvider does similar. Mac.apk
+// enumerate Initializer classes; FirebaseInitProvider does similar. Apk on Mac
 // runs the guest JVM with -Xverify:none, so a getfield of an inherited field on
 // a receiver whose class does NOT actually extend the field's declaring class
 // is not rejected -- it reads a WRONG offset and returns a garbage (non-null)
@@ -28,7 +28,7 @@ public class ProviderInfo extends ComponentInfo implements android.os.Parcelable
      *  run in different process. If false, a single instances is always run in
      *  processName." Default false, as AOSP declares it.
      *
-     *  Mac.apk is single-process, so this field is never ACTED on -- it exists
+     *  Apk on Mac is single-process, so this field is never ACTED on -- it exists
      *  because guests READ it. rikka.shizuku.ShizukuProvider (bundled by Aurora
      *  Store 4.8.4) does a plain getfield on it during provider setup and threw
      *  `NoSuchFieldError: Class android.content.pm.ProviderInfo does not have
@@ -102,7 +102,7 @@ public class ProviderInfo extends ComponentInfo implements android.os.Parcelable
     /** AOSP ProviderInfo.java:95-100: "Options that have been set in the
      *  provider declaration in the manifest. These include: FLAG_SINGLE_USER."
      *
-     *  Mac.apk is single-user and single-process, so FLAG_SINGLE_USER is never
+     *  Apk on Mac is single-user and single-process, so FLAG_SINGLE_USER is never
      *  ACTED on -- but it is still REPORTED faithfully from android:singleUser
      *  because ContentProvider.attachInfo reads it into mSingleUser and guest
      *  code can read it back. FLAG_VISIBLE_TO_INSTANT_APP is never set: we do

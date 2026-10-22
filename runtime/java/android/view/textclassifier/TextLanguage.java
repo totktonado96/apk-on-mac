@@ -3,7 +3,7 @@
 // Source: frameworks/base
 // core/java/android/view/textclassifier/TextLanguage.java (android16-release).
 //
-// Mac.apk has no on-device language model, so TextClassifier.detectLanguage
+// Apk on Mac has no on-device language model, so TextClassifier.detectLanguage
 // returns EMPTY (zero hypotheses) -- AOSP's own answer for a classifier with no
 // model, which is what NO_OP is.
 package android.view.textclassifier;

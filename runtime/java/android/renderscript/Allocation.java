@@ -33,7 +33,7 @@ import java.nio.ByteOrder;
  *
  * WHAT IS NOT REAL HERE. USAGE_IO_INPUT / USAGE_IO_OUTPUT connect an Allocation
  * to a BufferQueue so a camera or display can produce or consume frames.
- * Mac.apk has no RenderScript driver to own that queue, so getSurface(),
+ * Apk on Mac has no RenderScript driver to own that queue, so getSurface(),
  * setSurface(), ioSend() and ioReceive() throw rather than silently dropping
  * frames the app believes were delivered.
  *
@@ -83,7 +83,7 @@ public class Allocation extends BaseObj {
 
     /**
      * Notification that a new buffer is available on a USAGE_IO_INPUT
-     * Allocation. Mac.apk never has a producer attached (see the class
+     * Allocation. Apk on Mac never has a producer attached (see the class
      * comment), so an installed listener is retained but never invoked.
      */
     public interface OnBufferAvailableListener {
@@ -283,7 +283,7 @@ public class Allocation extends BaseObj {
 
     /**
      * Timestamp of the most recent buffer received via ioReceive(). Stays at
-     * the platform default of -1 here, because Mac.apk never receives one.
+     * the platform default of -1 here, because Apk on Mac never receives one.
      */
     public long getTimeStamp() {
         return mTimeStamp;
@@ -995,7 +995,7 @@ public class Allocation extends BaseObj {
     }
 
     /**
-     * Copies an array of RS object handles. Mac.apk has no driver-side object
+     * Copies an array of RS object handles. Apk on Mac has no driver-side object
      * table, so there is nothing meaningful to store; the validation still runs
      * so an app pouring the wrong array type in fails the same way.
      */
@@ -1007,7 +1007,7 @@ public class Allocation extends BaseObj {
                     + mCurrentCount + ", array length = " + d.length);
         }
         throw new RSDriverException(
-                "Allocations of RS object handles need a RenderScript driver, which Mac.apk"
+                "Allocations of RS object handles need a RenderScript driver, which Apk on Mac"
                 + " does not have. Only data Elements are supported.");
     }
 
@@ -1646,7 +1646,7 @@ public class Allocation extends BaseObj {
     /**
      * Fills every mipmap level below 0 by 2x2 box filtering the level above it.
      *
-     * This is real work rather than a no-op on purpose. Nothing in Mac.apk
+     * This is real work rather than a no-op on purpose. Nothing in Apk on Mac
      * samples a mipmap chain today, but an app that calls this and gets an
      * exception fails where a device would not, and an app that calls it and
      * gets silence has an Allocation whose upper levels are zeros. Box
@@ -1867,7 +1867,7 @@ public class Allocation extends BaseObj {
 
     /**
      * Only ever meaningful for USAGE_GRAPHICS_TEXTURE, which needs a GL/driver
-     * texture object. Mac.apk has no RenderScript texture to sync to, and there
+     * texture object. Apk on Mac has no RenderScript texture to sync to, and there
      * is nothing to lose by returning: the script-visible bytes are already the
      * single copy.
      */
@@ -1891,7 +1891,7 @@ public class Allocation extends BaseObj {
 
     /**
      * A USAGE_IO_* Allocation is one end of a BufferQueue owned by the
-     * RenderScript driver. Mac.apk has no such driver and cannot fabricate the
+     * RenderScript driver. Apk on Mac has no such driver and cannot fabricate the
      * Surface, so this reports the missing capability instead of handing back
      * something that silently drops every frame.
      */
@@ -1900,7 +1900,7 @@ public class Allocation extends BaseObj {
             throw new RSInvalidStateException("Allocation is not a surface texture.");
         }
         throw new RSDriverException(
-                "USAGE_IO_INPUT needs a RenderScript driver BufferQueue, which Mac.apk does not"
+                "USAGE_IO_INPUT needs a RenderScript driver BufferQueue, which Apk on Mac does not"
                 + " have. Read the Allocation with copyTo() instead.");
     }
 
@@ -1910,7 +1910,7 @@ public class Allocation extends BaseObj {
             throw new RSInvalidStateException("Allocation is not USAGE_IO_OUTPUT.");
         }
         throw new RSDriverException(
-                "USAGE_IO_OUTPUT needs a RenderScript driver BufferQueue, which Mac.apk does not"
+                "USAGE_IO_OUTPUT needs a RenderScript driver BufferQueue, which Apk on Mac does not"
                 + " have. Write the result to a Bitmap with copyTo() instead.");
     }
 
@@ -1921,7 +1921,7 @@ public class Allocation extends BaseObj {
                     "Can only send buffer if IO_OUTPUT usage specified.");
         }
         throw new RSDriverException(
-                "ioSend needs a RenderScript driver BufferQueue, which Mac.apk does not have.");
+                "ioSend needs a RenderScript driver BufferQueue, which Apk on Mac does not have.");
     }
 
     public void ioReceive() {
@@ -1931,7 +1931,7 @@ public class Allocation extends BaseObj {
                     "Can only receive if IO_INPUT usage specified.");
         }
         throw new RSDriverException(
-                "ioReceive needs a RenderScript driver BufferQueue, which Mac.apk does not have.");
+                "ioReceive needs a RenderScript driver BufferQueue, which Apk on Mac does not have.");
     }
 
     /**

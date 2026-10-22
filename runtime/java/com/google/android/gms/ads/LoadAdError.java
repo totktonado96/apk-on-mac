@@ -1,7 +1,7 @@
 // com.google.android.gms.ads.LoadAdError
 //
 // GMS Ads reference: the error passed to AdListener.onAdFailedToLoad and
-// the *AdLoadCallback.onAdFailedToLoad callbacks. Mac.apk always reports
+// the *AdLoadCallback.onAdFailedToLoad callbacks. Apk on Mac always reports
 // ERROR_CODE_NO_FILL with the SDK's mediation domain -- the honest result
 // a device with no reachable ad backend returns.
 package com.google.android.gms.ads;

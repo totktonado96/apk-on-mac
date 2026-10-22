@@ -1,7 +1,7 @@
 // android.media.MediaMetadataRetriever -- pulls metadata + frames out of a
 // media file. AOSP frameworks/base media/java/android/media/MediaMetadataRetriever.java.
 //
-// Mac.apk has no full (stagefright-class) demuxer/decoder backend wired into
+// Apk on Mac has no full (stagefright-class) demuxer/decoder backend wired into
 // the JVM side, so frame extraction (getFrameAtTime and friends) and any key
 // that needs a decoded video track (HAS_VIDEO / VIDEO_WIDTH / VIDEO_HEIGHT)
 // stay null -- those need runtime/src/media_video.mm's macapk_vd_* core wired

@@ -1,6 +1,6 @@
 // android.telephony.PhoneStateListener -- the pre-API-31 telephony callback.
 //
-// Mac.apk has no radio, so beyond the ONE immediate snapshot AOSP's
+// Apk on Mac has no radio, so beyond the ONE immediate snapshot AOSP's
 // TelephonyRegistry delivers at registration time (see TelephonyManager.listen)
 // nothing ever fires. All 22 callbacks are declared so an app's @Override
 // compiles and so listen() can dispatch the ones it can answer.

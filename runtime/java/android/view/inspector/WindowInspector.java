@@ -1,7 +1,7 @@
 package android.view.inspector;
 import java.util.Collections;
 import java.util.List;
-/** Test/inspection hook listing the process's attached window root views. Mac.apk
+/** Test/inspection hook listing the process's attached window root views. Apk on Mac
  *  drives its own windowing, so the list is empty. */
 public final class WindowInspector {
     private WindowInspector() {}
@@ -10,7 +10,7 @@ public final class WindowInspector {
     /** AOSP WindowInspector.addGlobalWindowViewsListener(Executor,
      *  Consumer&lt;List&lt;View&gt;&gt;) (API 36): told whenever the set of
      *  attached window roots changes, and (per its javadoc) called IMMEDIATELY
-     *  with the current set. Mac.apk drives its own windowing and
+     *  with the current set. Apk on Mac drives its own windowing and
      *  getGlobalWindowViews() above reports an empty list, so the immediate
      *  callback carries that empty list and nothing further is ever delivered.
      *  Delivering the initial callback is the part a caller depends on to

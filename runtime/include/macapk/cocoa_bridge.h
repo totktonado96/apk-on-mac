@@ -266,7 +266,7 @@ void CocoaClearOverlayBitmap();
 // macapk_terminate_now in cocoa_bridge.mm for the deadlock). When
 // relaunch_intents_file is non-null the app bundle is reopened once this
 // process is gone, with MACAPK_RESTART_INTENTS naming that file, which is how
-// Mac.apk plays the ActivityManager's part in the "restart myself" idiom
+// Apk on Mac plays the ActivityManager's part in the "restart myself" idiom
 // (com.macapk.loader.MacApkProcessExit). Does not return.
 void CocoaExitProcess(int code, const char* relaunch_intents_file);
 

@@ -1,4 +1,4 @@
-# Mac.apk translator -- standalone CLI that converts an ARM32 Bionic
+# Apk on Mac translator -- standalone CLI that converts an ARM32 Bionic
 # ELF .so into an arm64-apple-darwin Mach-O dylib.
 #
 # Stage 0 is leaf-function only (PUSH, POP, MOV, ADD, SUB, STR, LDR,
@@ -233,7 +233,7 @@ if(EXISTS "${ANGLE_LIB_DIR}/libGLESv2.dylib"
    AND EXISTS "${ANGLE_LIB_DIR}/libEGL.dylib"
    AND EXISTS "${ANGLE_ROOT}/include/GLES2/gl2.h")
     set(SHIM_HAS_ANGLE ON)
-    message(STATUS "Mac.apk bionic-shim: ANGLE found at ${ANGLE_ROOT}")
+    message(STATUS "Apk on Mac bionic-shim: ANGLE found at ${ANGLE_ROOT}")
 endif()
 if(SHIM_HAS_ANGLE)
     target_compile_definitions(macapk-bionic-shim PRIVATE MACAPK_HAS_ANGLE=1)

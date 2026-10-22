@@ -16,7 +16,7 @@
 
 package com.google.firebase.app.internal.cpp;
 
-// NOTE FOR Mac.apk (why this lives in runtime/java instead of the APK):
+// NOTE FOR Apk on Mac (why this lives in runtime/java instead of the APK):
 // the real Firebase C++ SDK ships this helper class as dexed bytes embedded
 // in libFirebaseCppApp.so (app_resources_data). At init the native
 // firebase::util::Initialize calls
@@ -24,7 +24,7 @@ package com.google.firebase.app.internal.cpp;
 // then RegisterNatives(nativeLog) on it; if the class can't be found,
 // util::Initialize RETURNS false and firebase::App::Create returns null --
 // aborting the entire Firebase native bridge. On real Android the class is
-// recovered from the embedded resources; Mac.apk does not surface those
+// recovered from the embedded resources; Apk on Mac does not surface those
 // embedded dex resources on the classpath, so FindClass threw
 // ClassNotFoundException and Firebase init failed. Per the no-shortcuts
 // rule we provide the real class (byte-for-byte the upstream

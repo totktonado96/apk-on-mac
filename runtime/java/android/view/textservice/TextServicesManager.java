@@ -3,7 +3,7 @@
 // AOSP's spell-checker / text-services manager. Apps (and the framework's own
 // TextView SpellChecker) fetch it via
 // getSystemService(TEXT_SERVICES_MANAGER_SERVICE) and query the enabled
-// spell-checkers. Mac.apk ships NO spell-checker service, so the enabled lists
+// spell-checkers. Apk on Mac ships NO spell-checker service, so the enabled lists
 // are empty, isSpellCheckerEnabled() is false, and newSpellCheckerSession()
 // returns null -- which is precisely what AOSP returns when no spell checker is
 // enabled, and what every caller already null-checks for. That is the honest

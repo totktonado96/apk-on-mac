@@ -6,7 +6,7 @@ import android.net.Uri;
 /**
  * The Telephony provider contract (SMS/MMS/carriers).
  *
- * ⚠ Mac.apk deliberately registers NO telephony provider -- that is a standing,
+ * ⚠ Apk on Mac deliberately registers NO telephony provider -- that is a standing,
  * separately-tracked design decision, not an oversight. This file therefore
  * declares only the CONTRACT: URI and column-name constants an SMS-aware app
  * compiles against, plus the one accessor AOSP answers from PackageManager
@@ -67,7 +67,7 @@ public final class Telephony {
 
         /**
          * AOSP answers this from RoleManager/PackageManager, not from the SMS
-         * provider. Mac.apk has no SMS-capable app installed and no role
+         * provider. Apk on Mac has no SMS-capable app installed and no role
          * assignment, so null -- AOSP's documented "no default SMS app" -- is
          * the accurate answer.
          */
@@ -107,7 +107,7 @@ public final class Telephony {
 
         /**
          * The SMS broadcast actions. An SMS app declares a receiver with these
-         * in its manifest; without the constants it cannot even build. Mac.apk
+         * in its manifest; without the constants it cannot even build. Apk on Mac
          * never broadcasts them (no radio), so the receiver simply never fires
          * -- the same as a device with SMS disabled.
          */

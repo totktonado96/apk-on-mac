@@ -1,5 +1,5 @@
 #!/bin/bash
-# Verify a built/installed Mac.apk runtime carries EVERY entitlement it needs.
+# Verify a built/installed Apk on Mac runtime carries EVERY entitlement it needs.
 #
 # Why this exists: on 2026-08-21 the release path (scripts/build_dist.sh) was
 # found signing macapk-runtime with launcher/MacApk.entitlements, which lacks
@@ -10,7 +10,7 @@
 #
 # Usage: debug/entitlements_check.sh [path-to-macapk-runtime]
 set -uo pipefail
-BIN="${1:-/Applications/Mac.apk.app/Contents/Resources/macapk-runtime}"
+BIN="${1:-/Applications/Apk on Mac.app/Contents/Resources/macapk-runtime}"
 [ -f "$BIN" ] || { echo "FAIL: no such binary: $BIN"; exit 1; }
 REQUIRED=(
   com.apple.security.cs.allow-jit

@@ -208,7 +208,7 @@ struct Pending { Image* img; size_t idx; };
 std::vector<Pending> g_pending;
 
 // The NDK's stable system libraries (developer.android.com/ndk/guides/stable_apis).
-// A DT_NEEDED name in this set is answered by Mac.apk's own implementation of
+// A DT_NEEDED name in this set is answered by Apk on Mac's own implementation of
 // that library; any other unregistered name is taken to be an APK library that
 // has not registered yet (-> PROVISIONAL).
 bool is_system_lib(const std::string& n) {
@@ -684,7 +684,7 @@ struct Result {
     uint32_t S = 0;
     bool provisional = false;
     // A FUNC name reached a system library with no host-function fallback:
-    // a device's libc would define it, Mac.apk has no guest-ABI body for it.
+    // a device's libc would define it, Apk on Mac has no guest-ABI body for it.
     bool system_func_unprovided = false;
     const Image* provider = nullptr;
     std::string where;   // provider name, for logs
@@ -819,7 +819,7 @@ bool bind_one(Image& im, size_t i, Counts* c, int* n_logged, bool late) {
                 e.name.c_str(), im.basename.c_str(),
                 r.provisional ? " (pending: a DT_NEEDED library has not registered)"
                 : r.system_func_unprovided
-                    ? " (a system library defines it on a device; Mac.apk has no "
+                    ? " (a system library defines it on a device; Apk on Mac has no "
                       "guest-ABI body for it -- the slot keeps its in-place word)"
                     : "");
         }

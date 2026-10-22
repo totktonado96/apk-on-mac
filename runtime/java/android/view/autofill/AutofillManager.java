@@ -51,9 +51,9 @@ public class AutofillManager {
     public void unregisterCallback(AutofillCallback callback) {}
 
     // ======================================================================
-    //  AOSP API-36 surface completion (Mac.apk API-gap lane, android.view).
+    //  AOSP API-36 surface completion (Apk on Mac API-gap lane, android.view).
     //
-    //  Mac.apk bridges NO autofill service. isEnabled() and
+    //  Apk on Mac bridges NO autofill service. isEnabled() and
     //  hasEnabledAutofillServices() above already say so honestly, and every
     //  answer below is the one AOSP gives when no service is bound -- a real,
     //  common device state (it is what every device reports before the user

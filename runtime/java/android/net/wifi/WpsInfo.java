@@ -1,6 +1,6 @@
 // android.net.wifi.WpsInfo
 //
-// Wi-Fi Protected Setup configuration value type. Mac.apk has no Wi-Fi stack,
+// Wi-Fi Protected Setup configuration value type. Apk on Mac has no Wi-Fi stack,
 // but apps construct WpsInfo for (no-op) WPS connect calls, so the type +
 // setup-method constants + public fields must resolve. Mirrors AOSP
 // android.net.wifi.WpsInfo public API.

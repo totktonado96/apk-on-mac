@@ -19,7 +19,7 @@ import android.view.accessibility.AccessibilityEvent;
  * Base for a screensaver ("dream"). API 17.
  *
  * WHAT MAC.APK CAN AND CANNOT DO HERE. A dream is started by the system when
- * the device docks or idles. Mac.apk runs one app in one window and has no
+ * the device docks or idles. Apk on Mac runs one app in one window and has no
  * idle/dock notion, so a declared dream is never started and never attached to
  * a window. What must work is everything the CLASS promises: the subclass has
  * to load, its lifecycle hooks have to be callable in a coherent order, and --
@@ -89,7 +89,7 @@ public class DreamService extends android.app.Service implements Window.Callback
     public final void wakeUp() { onWakeUp(); }
 
     // ---- window / content ---------------------------------------------------
-    /** Null until the dream is attached to a window, exactly as AOSP. Mac.apk
+    /** Null until the dream is attached to a window, exactly as AOSP. Apk on Mac
      *  never attaches one. */
     public Window getWindow() { return null; }
 

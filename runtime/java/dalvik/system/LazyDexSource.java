@@ -16,7 +16,7 @@
 // v763: this used to drive a `python -m enjarify.server` SUBPROCESS over a
 // pipe, with a hand-rolled length-prefixed protocol that could not use a
 // BufferedReader (it would swallow the binary body) and a resident Python
-// interpreter for the life of the app. Mac.apk's own converter runs IN THIS
+// interpreter for the life of the app. Apk on Mac's own converter runs IN THIS
 // JVM, so all of that is gone: no process, no pipe, no framing, no Python, and
 // -- the part that actually matters -- it is by construction the SAME code the
 // install path runs, so a lazily converted class cannot drift from the eager

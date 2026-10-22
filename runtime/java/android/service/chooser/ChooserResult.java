@@ -9,7 +9,7 @@ import android.os.Parcelable;
  * as Intent.EXTRA_CHOOSER_RESULT_INTENT_SENDER: what the user picked, and
  * whether they picked a component, a shortcut, "copy", or "edit".
  *
- * Mac.apk shows no chooser, so we never send one -- an app's result callback
+ * Apk on Mac shows no chooser, so we never send one -- an app's result callback
  * simply never fires, which is also what happens on a device when the user
  * dismisses the sheet. The class must exist because the callback's signature
  * names the type, and a value object costs nothing to get right.

@@ -8,7 +8,7 @@ import java.util.Objects;
 /**
  * One 5G network slice (S-NSSAI) description.
  *
- * Immutable value type. Mac.apk has no 5G modem, so
+ * Immutable value type. Apk on Mac has no 5G modem, so
  * TelephonyManager.getNetworkSlicingConfiguration() reports an empty config.
  *
  * Source: frameworks/base/telephony/java/android/telephony/data/NetworkSliceInfo.java

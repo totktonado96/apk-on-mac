@@ -1,6 +1,6 @@
 // android.net.VpnService
 //
-// Base class an app extends to provide a VPN. Mac.apk does not implement a
+// Base class an app extends to provide a VPN. Apk on Mac does not implement a
 // guest VPN transport (no TUN device exposed), so prepare() returns a consent
 // Intent of null (already-prepared on a device with no VPN) and
 // Builder.establish() returns null (the documented "could not establish"

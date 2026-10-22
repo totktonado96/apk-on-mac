@@ -6,7 +6,7 @@ package android.media.effect;
  *
  * Every one of these is implemented by AOSP's private mediaframework filter
  * graph (androidx-era apps use RenderEffect or their own shaders instead), and
- * Mac.apk ships none of it. So isEffectSupported() reports FALSE for every name
+ * Apk on Mac ships none of it. So isEffectSupported() reports FALSE for every name
  * and createEffect() throws IllegalArgumentException -- which is exactly AOSP's
  * documented behaviour for an unsupported effect name, and is the pair of
  * answers an app's capability check is written against.

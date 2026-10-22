@@ -1,6 +1,6 @@
 // android.hardware.camera2.CaptureRequest -- an immutable package of
 // settings + outputs for one capture. Built via Builder (obtained from
-// CameraDevice.createCaptureRequest). Mac.apk never submits one to real
+// CameraDevice.createCaptureRequest). Apk on Mac never submits one to real
 // hardware, but the type + Builder + Key set must exist for camera apps
 // to compile and run their setup code. Key<T> is a typed metadata key
 // per AOSP.

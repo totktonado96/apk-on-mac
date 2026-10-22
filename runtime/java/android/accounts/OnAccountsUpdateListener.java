@@ -4,7 +4,7 @@ package android.accounts;
  * Callback for changes to the set of accounts on the device.
  *
  * ⚠ This is a TOP-LEVEL interface in AOSP (android.accounts.OnAccountsUpdateListener),
- * NOT a nested AccountManager.OnAccountsUpdateListener. Mac.apk previously declared
+ * NOT a nested AccountManager.OnAccountsUpdateListener. Apk on Mac previously declared
  * only a nested copy, so AccountManager.addOnAccountsUpdatedListener carried the
  * descriptor Landroid/accounts/AccountManager$OnAccountsUpdateListener; and any app
  * calling it -- every app does, the real one is the only type javac will emit --

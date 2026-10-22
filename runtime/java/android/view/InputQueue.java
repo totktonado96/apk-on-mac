@@ -11,7 +11,7 @@
 // events here before the view hierarchy, as ViewRootImpl's native input stages
 // do.
 //
-// One Mac.apk-specific piece: macapkPostFinish. AOSP's native queue posts a
+// One Apk on Mac-specific piece: macapkPostFinish. AOSP's native queue posts a
 // MSG_FINISH_INPUT to the creating thread's native Looper and calls
 // finishInputEvent there; ours calls macapkPostFinish from whichever thread
 // ran AInputQueue_finishEvent, and it posts finishInputEvent to the creating

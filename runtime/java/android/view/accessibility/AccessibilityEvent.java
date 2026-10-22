@@ -2,7 +2,7 @@
 // something accessibility-relevant happens (click, focus, text change, content
 // change). Was a bare stub (default ctor only), so View.sendAccessibilityEvent /
 // announceForAccessibility and any caller invoking obtain()/getEventType()/
-// setSource()/recycle() NoSuchMethodError'd. Mac.apk does not bridge to
+// setSource()/recycle() NoSuchMethodError'd. Apk on Mac does not bridge to
 // NSAccessibility, but the event object must exist with the full property bag so
 // the dispatch path completes (AccessibilityManager is disabled, so events are
 // constructed-then-dropped, exactly like real Android with no a11y service).
@@ -153,7 +153,7 @@ public class AccessibilityEvent extends AccessibilityRecord implements android.o
     public boolean isAccessibilityDataSensitive() { return mAccessibilityDataSensitive; }
 
     // ======================================================================
-    //  AOSP API-36 surface completion (Mac.apk API-gap lane, android.view).
+    //  AOSP API-36 surface completion (Apk on Mac API-gap lane, android.view).
     // ======================================================================
 
     /** AOSP AccessibilityEvent.SPEECH_STATE_* (API 34): the bits reported by a

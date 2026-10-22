@@ -2,7 +2,7 @@
 // session (transport controls, metadata, playback state). AOSP frameworks/base
 // media/java/android/media/session/MediaSession.java.
 //
-// Mac.apk has no system MediaSessionService, so a session is a local holder:
+// Apk on Mac has no system MediaSessionService, so a session is a local holder:
 // setMetadata/setPlaybackState store the latest values (readable via the paired
 // MediaController) and setActive/setCallback record state. Since v1.0.2243 the
 // media-button session is also mirrored into macOS Now Playing, and its
@@ -32,14 +32,14 @@ public final class MediaSession {
     // MediaController(context, token) the app constructs itself elsewhere in
     // the same process -- see Token below) that have registerCallback()'d.
     // AOSP delivers these through a Binder round-trip to a system session
-    // record; Mac.apk has no such record, so this session IS the source of
+    // record; Apk on Mac has no such record, so this session IS the source of
     // truth and notifies its controllers' callbacks directly.
     private final java.util.List<MediaController.Callback> mControllerCallbacks =
         new java.util.concurrent.CopyOnWriteArrayList<MediaController.Callback>();
 
     // The process-wide list of live sessions, and which of them most recently
     // became active. AOSP keeps this in MediaSessionService and hands it to
-    // MediaSessionManager over binder; Mac.apk has no such service, so the
+    // MediaSessionManager over binder; Apk on Mac has no such service, so the
     // sessions themselves ARE the registry. This is what lets
     // MediaSessionManager answer getMediaKeyEventSession() and lets
     // AudioManager.dispatchMediaKeyEvent() actually reach the app's own session
@@ -136,7 +136,7 @@ public final class MediaSession {
      *  the app is not running. AOSP rejects a receiver outside the session's own
      *  package (MediaSession.java L390-400); the same check is applied here
      *  because accepting one would silently misroute the app's buttons.
-     *  Mac.apk never delivers a media button to a stopped app -- there is no
+     *  Apk on Mac never delivers a media button to a stopped app -- there is no
      *  system button router and no way for the process to be resumed by one --
      *  so the value is stored (and read back) rather than acted on. */
     public void setMediaButtonBroadcastReceiver(android.content.ComponentName broadcastReceiver) {
@@ -151,7 +151,7 @@ public final class MediaSession {
     }
     // AOSP forwards to a system session record with no local getter (the
     // record IS the source of truth there). This session plays that role on
-    // Mac.apk, so the value is actually stored -- otherwise a now-playing
+    // Apk on Mac, so the value is actually stored -- otherwise a now-playing
     // notification/activity PendingIntent an app configures is silently
     // dropped and getController().getSessionActivity() always answers null.
     public void setSessionActivity(android.app.PendingIntent pi) { mSessionActivity = pi; }
@@ -203,7 +203,7 @@ public final class MediaSession {
         }
     }
     public Token getSessionToken() { return mToken; }
-    // AOSP returns a MediaController bound to this session. Mac.apk's
+    // AOSP returns a MediaController bound to this session. Apk on Mac's
     // MediaController is a minimal handle (no in-process transport routing), so we
     // hand back a fresh one; an in-app controller-to-session loop is not wired,
     // matching the "no active sessions" model the controller/manager use.
@@ -223,7 +223,7 @@ public final class MediaSession {
 
     // Package-private: MediaController.register/unregisterCallback delegate
     // here when the controller was built from THIS session's Token (the only
-    // case Mac.apk can route -- see Token below). Object identity is the
+    // case Apk on Mac can route -- see Token below). Object identity is the
     // correct de-dup key (Callback has no equals()/hashCode() override),
     // matching AOSP's own register/unregister-by-reference contract.
     void addControllerCallback(MediaController.Callback cb) {
@@ -236,7 +236,7 @@ public final class MediaSession {
     public static final class Token implements android.os.Parcelable {
         // AOSP's real Token carries (uid, ISessionController) -- a Binder
         // reference the system session service hands out, resolved by a
-        // MediaController through IPC. Mac.apk has no cross-process
+        // MediaController through IPC. Apk on Mac has no cross-process
         // transport (see CLAUDE.md: no emulation/virtualization/IPC layer to
         // a separate system process), so a Token that stays in this same JVM
         // can just keep a direct reference to its owning session instead.
@@ -332,7 +332,7 @@ public final class MediaSession {
     }
 
     /** AOSP: who sent the command currently being handled. It is @NonNull, and
-     *  AOSP throws IllegalStateException when called outside a Callback. Mac.apk
+     *  AOSP throws IllegalStateException when called outside a Callback. Apk on Mac
      *  runs exactly one app per process, so the only party that can ever be
      *  controlling this session is that app itself -- which is a real, correct,
      *  non-null answer, and a better one than the null this used to return (an

@@ -1,5 +1,5 @@
 // android.hardware.camera2.CameraManager -- the camera2 entry point.
-// Mac.apk has no camera, which in AOSP terms is exactly the
+// Apk on Mac has no camera, which in AOSP terms is exactly the
 // CameraManagerGlobal.sCameraServiceDisabled state, and AOSP has a precise
 // contract for it: getCameraIdList returns an empty array, and every id-taking
 // entry point throws IllegalArgumentException("No cameras available on
@@ -155,7 +155,7 @@ public final class CameraManager {
      * AOSP checks null first, then bails out if sCameraServiceDisabled OR the
      * id is absent from getCameraIdList(), throwing IllegalArgumentException
      * "Camera ID '<id>' not available on device." (CameraManager.java:961-975).
-     * Mac.apk is permanently in that first state, so this reaches the identical
+     * Apk on Mac is permanently in that first state, so this reaches the identical
      * throw by the identical route.
      */
     public boolean isCameraDeviceSetupSupported(String cameraId) throws CameraAccessException {

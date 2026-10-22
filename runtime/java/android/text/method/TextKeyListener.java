@@ -1,6 +1,6 @@
 package android.text.method;
 import android.text.InputType;
-/** The default full-keyboard input handler. Mac.apk routes real key events
+/** The default full-keyboard input handler. Apk on Mac routes real key events
  *  through the host, so this holds capitalization/auto-text policy and reports
  *  the input type; it does not itself mutate the buffer. */
 // AOSP: `public class TextKeyListener extends BaseKeyListener implements

@@ -11,7 +11,7 @@
 // Mac's equivalent of that system surface is MPNowPlayingInfoCenter (what is
 // shown) + MPRemoteCommandCenter (the commands, including the keyboard's media
 // keys), so this is rung 1 of the decision ladder: route the session there.
-// Mac.apk runs one app per process, so "the session that has media-button
+// Apk on Mac runs one app per process, so "the session that has media-button
 // focus" (MediaSession.getMediaButtonSession, the most recently activated one)
 // IS the process's Now Playing entry, as MediaSessionService picks it on a
 // device. Every app that publishes a platform MediaSession gets it, including
@@ -243,7 +243,7 @@ public final class MacApkNowPlaying {
                 }
             } catch (Throwable t) {
                 try {
-                    com.macapk.loader.NativeLog.w("Mac.apk.NowPlaying", "remote command " + cmd + " threw: " + t);
+                    com.macapk.loader.NativeLog.w("Apk on Mac.NowPlaying", "remote command " + cmd + " threw: " + t);
                 } catch (Throwable ignored) {}
             }
         };

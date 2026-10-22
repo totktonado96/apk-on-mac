@@ -31,7 +31,7 @@ import org.w3c.dom.Document;
  * System.exit(10). Generic: any app that parses compiled XML it holds in memory
  * (Meta's Bloks/Litho layouts are the measured case) reaches for this.
  *
- * THIS IS A REAL IMPLEMENTATION, NOT A STUB. Mac.apk already parses compiled
+ * THIS IS A REAL IMPLEMENTATION, NOT A STUB. Apk on Mac already parses compiled
  * binary XML -- {@link BinaryXmlParser#parse(byte[])} produces a DOM and
  * {@link DomXmlResourceParser} presents a DOM as an
  * {@link android.content.res.XmlResourceParser} -- so newParser() hands back a

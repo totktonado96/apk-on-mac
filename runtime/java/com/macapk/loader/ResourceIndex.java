@@ -30,7 +30,7 @@ import java.util.List;
 import java.util.Map;
 
 public final class ResourceIndex {
-    private static final String TAG = "Mac.apk.Resources";
+    private static final String TAG = "Apk on Mac.Resources";
 
     /** Map: resource id -> {type, name}. e.g. 0x7f040000 -> {"raw","atlas"} */
     private final Map<Integer, String[]> idToTypeName = new HashMap<>();
@@ -156,7 +156,7 @@ public final class ResourceIndex {
      *  cards / bottom-nav / FAB chrome. Real Android resolves the
      *  theme per-Activity via ActivityThread.handleLaunchActivity
      *  calling `Activity.setTheme(activityInfo.theme)`; we simplify
-     *  to the app-level theme because every Mac.apk activity in
+     *  to the app-level theme because every Apk on Mac activity in
      *  steady-state shares the application theme (per-activity
      *  overrides like Theme.App.Transparent apply only to dialog-
      *  shaped activities that don't reach the chrome painter). */
@@ -3519,7 +3519,7 @@ public final class ResourceIndex {
     // layouts reference these via `?attr/X` (e.g. cards use
     // `?attr/colorSurfaceContainerHigh` as their background).
     //
-    // Pre-v1.0.128, Mac.apk's Resources.Theme.resolveAttribute() always
+    // Pre-v1.0.128, Apk on Mac's Resources.Theme.resolveAttribute() always
     // returned false, so chrome painters fell back to Material's
     // hardcoded defaults (white card, purple nav pill). This was visible
     // in F-Droid as "right layout, wrong colors."
@@ -4077,7 +4077,7 @@ public final class ResourceIndex {
                 // in resolveColorRef's "@android:color/" branch. Sending the
                 // name to the wrong resolver returns null and this whole block
                 // is inert -- measured exactly that way on the first attempt,
-                // with Mac.apk.getValue logging `UNRESOLVED id=0x106000d`.
+                // with Apk on Mac.getValue logging `UNRESOLVED id=0x106000d`.
                 // resolveColorRef is also the path that consults the platform
                 // arsc first when the gate IS on, so the two agree by
                 // construction rather than by coincidence.
@@ -6444,7 +6444,7 @@ public final class ResourceIndex {
      *  platform table's config-selected entry for `id` is TYPE_STRING
      *  carrying the compiled path inside the framework apk
      *  ("res/drawable/btn_check_material_anim.xml"), and the bytes are
-     *  that zip entry's. This is the Mac.apk analogue of AOSP
+     *  that zip entry's. This is the Apk on Mac analogue of AOSP
      *  ResourcesImpl.loadDrawableForCookie (android11-release), whose
      *  non-xml branch is `mAssets.openNonAsset(value.assetCookie, file,
      *  ACCESS_STREAMING)` and whose xml branch hands the same
@@ -6735,7 +6735,7 @@ public final class ResourceIndex {
     // n1_100-800, n2_600-900). The sole outlier is accent3_10 (#FFFBFF vs #FFFBFA, delta 5 in blue
     // at tone 99 -- both essentially white, nothing paints it at size).
     //
-    // A fixed table is the RIGHT shape while Mac.apk has no wallpaper: a device derives these from
+    // A fixed table is the RIGHT shape while Apk on Mac has no wallpaper: a device derives these from
     // the wallpaper seed via CAM16/HCT, and with no usable seed monet's own code falls back to
     // GOOGLE_BLUE, so (seed, TONAL_SPOT) -> palette is deterministic and this is a cache of exactly
     // what AOSP would compute.

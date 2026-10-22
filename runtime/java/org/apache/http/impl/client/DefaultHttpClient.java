@@ -6,7 +6,7 @@
 // status line, headers and body.
 //
 // Every execute(...) overload here used to throw
-// ClientProtocolException("network disabled in Mac.apk"). That was written for
+// ClientProtocolException("network disabled in Apk on Mac"). That was written for
 // one 2013 game whose only use of HttpClient was optional analytics, and it
 // generalized into a lie the guest cannot detect: the app is told the network
 // failed while every other path in the same process (HttpURLConnection, OkHttp,

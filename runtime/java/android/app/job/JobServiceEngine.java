@@ -12,7 +12,7 @@
 // it. Its processor loop then pulls each unit of work with
 // params.dequeueWork() and stops when it gets null.
 //
-// Mac.apk has no binder transport, so getBinder() returns null and the
+// Apk on Mac has no binder transport, so getBinder() returns null and the
 // binder route is a dead end. Before v1.0.834 that meant a JobIntentService
 // was unreachable: the scheduler saw "a Service but not a JobService" and
 // dropped the job silently, and even if it had reached it, the engine's
@@ -35,7 +35,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public abstract class JobServiceEngine {
-    /** Engines by hosting-Service class name. This is Mac.apk's stand-in
+    /** Engines by hosting-Service class name. This is Apk on Mac's stand-in
      *  for the IJobService binder system_server would hold: the scheduler
      *  needs a way to reach the engine that belongs to a component. Bounded
      *  by the number of distinct Service classes in the app, and the
@@ -58,7 +58,7 @@ public abstract class JobServiceEngine {
     public JobServiceEngine() { mService = null; }
 
     /** AOSP: the IBinder apps return from Service.onBind so JobScheduler
-     *  can drive jobs over IPC. Mac.apk is single-process with no binder
+     *  can drive jobs over IPC. Apk on Mac is single-process with no binder
      *  transport, so this stays null and the scheduler reaches the engine
      *  through sEngines instead. */
     public IBinder getBinder() { return null; }
@@ -79,7 +79,7 @@ public abstract class JobServiceEngine {
     /** AOSP JobServiceEngine.onNetworkChanged(JobParameters params) (API 34):
      *  "Called when the network the job was scheduled with changes" so a
      *  transfer can be re-targeted. AOSP's base body is empty -- the engine
-     *  subclass overrides it -- and Mac.apk never fires it: the job's Network
+     *  subclass overrides it -- and Apk on Mac never fires it: the job's Network
      *  (JobParameters.getNetwork) is resolved once at start and our single
      *  always-present transport never changes underneath a running job. Present
      *  because a JobServiceEngine subclass overriding it must resolve the

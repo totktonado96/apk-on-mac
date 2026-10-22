@@ -1,7 +1,7 @@
-// Mac.apk GMS-availability shim (app-agnostic, any Google-Play-Services app).
+// Apk on Mac GMS-availability shim (app-agnostic, any Google-Play-Services app).
 //
 // Why this exists, and what the HONEST answer is:
-// Mac.apk is a device with NO Google Play Services installed -- exactly like an
+// Apk on Mac is a device with NO Google Play Services installed -- exactly like an
 // Amazon Fire tablet or a de-Googled (no-gapps) phone. On such a device the real
 // Google client library (play-services-basement) does:
 //     getPackageInfo("com.google.android.gms", GET_SIGNATURES)
@@ -12,7 +12,7 @@
 // FIS/FCM, Crossy Road, Among Us, Minecraft Bedrock -- read this int, see it != 0,
 // and take their non-GMS / degrade path; they run fine on Fire tablets and they
 // run fine here. (SUCCESS(0) is ONLY what a microG-EQUIPPED device returns, because
-// microG *is* a GMS implementation. Mac.apk ships no GMS provider, so copying
+// microG *is* a GMS implementation. Apk on Mac ships no GMS provider, so copying
 // microG's SUCCESS would be a Play-Services spoof, not faithfulness.)
 //
 // HISTORY -- why this used to (wrongly) return SUCCESS, and why that was removed:
@@ -49,7 +49,7 @@ import android.content.Intent;
 
 /**
  * Lightweight half of the GMS availability API. The full
- * {@link GoogleApiAvailability} extends this. On Mac.apk, Google Play Services
+ * {@link GoogleApiAvailability} extends this. On Apk on Mac, Google Play Services
  * is reported MISSING (ConnectionResult.SERVICE_MISSING) because that is what a
  * device with no GMS installed truthfully reports; the GMS-backed service calls
  * degrade and apps take their non-GMS path. See the file header for why the old
@@ -73,7 +73,7 @@ public class GoogleApiAvailabilityLight {
 
     // THE VERDICT LIVES IN ONE PLACE: com.macapk.loader.PlayServices.
     //
-    // Do not re-derive it here or anywhere else. Mac.apk previously answered the
+    // Do not re-derive it here or anywhere else. Apk on Mac previously answered the
     // Play-Services question in four contradictory ways at once (see the
     // PlayServices class header for the list), and which contradiction an app
     // heard came down to whether MACAPK_GMS_CHILD_FIRST routed the question to

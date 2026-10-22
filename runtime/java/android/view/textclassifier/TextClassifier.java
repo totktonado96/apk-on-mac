@@ -18,7 +18,7 @@
 // bodies we already had become interface defaults verbatim, and every caller
 // that used to hold a `new TextClassifier()` now holds NO_OP, which AOSP
 // documents as returning default/empty results for every request -- exactly
-// Mac.apk's situation (no on-device model).
+// Apk on Mac's situation (no on-device model).
 package android.view.textclassifier;
 
 /** Interface for providing text classification related features. */

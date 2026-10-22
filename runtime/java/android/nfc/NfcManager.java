@@ -1,7 +1,7 @@
 // android.nfc.NfcManager
 //
 // AOSP's high-level NFC service. Apps fetch it via getSystemService(NFC_SERVICE)
-// then call getDefaultAdapter(). Mac.apk has no NFC hardware, so the adapter is
+// then call getDefaultAdapter(). Apk on Mac has no NFC hardware, so the adapter is
 // null (AOSP itself returns null on devices without NFC); the service object is
 // non-null so the cast and the null-check chain
 // (`getDefaultAdapter() == null -> "NFC unsupported"`) work as on a no-NFC

@@ -11,7 +11,7 @@
 // ---------------------------------------------------------------------------
 // On a real device this class binds to the OEM's camera-extensions service; the
 // answer is empty for any device without one, which includes the great majority
-// of Android devices. Mac.apk has no camera at all, so it is empty for the
+// of Android devices. Apk on Mac has no camera at all, so it is empty for the
 // stronger reason. getSupportedExtensions() returning an empty list is the
 // single answer everything else follows from -- an app that respects it never
 // calls the size/latency queries, and an app that ignores it gets the same

@@ -2,7 +2,7 @@
 // Source: frameworks/base
 // core/java/android/view/translation/TranslationManager.java (android16-release).
 //
-// Mac.apk performs NO on-device translation and does not pretend otherwise:
+// Apk on Mac performs NO on-device translation and does not pretend otherwise:
 // getOnDeviceTranslationCapabilities() reports an EMPTY set, which is what a
 // device with no translation service installed reports, and every downstream
 // decision an app makes follows correctly from that. createOnDeviceTranslator

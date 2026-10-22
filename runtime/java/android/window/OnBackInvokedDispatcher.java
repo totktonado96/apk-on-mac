@@ -65,18 +65,18 @@ public interface OnBackInvokedDispatcher {
     void unregisterOnBackInvokedCallback(OnBackInvokedCallback callback);
 
     /** AOSP default: registers a callback at system priority. No system
-     *  back-animation owner exists in Mac.apk, so this stays a no-op,
+     *  back-animation owner exists in Apk on Mac, so this stays a no-op,
      *  matching AOSP's own empty default body. */
     default void registerSystemOnBackInvokedCallback(OnBackInvokedCallback callback) {}
 
-    /** Mac.apk-internal, NOT part of the AOSP interface: invokes the
+    /** Apk on Mac-internal, NOT part of the AOSP interface: invokes the
      *  highest-priority, most-recently-registered callback and returns true, or
      *  returns false if none is registered so the caller can fall back to the
      *  legacy onBackPressed()/finish() path. Defaulted so the type stays
      *  implementable by anything AOSP-shaped. */
     default boolean dispatchOnBackInvoked() { return false; }
 
-    /** The concrete dispatcher every Mac.apk caller should obtain through
+    /** The concrete dispatcher every Apk on Mac caller should obtain through
      *  {@link #macapkNew()} rather than by construction -- that indirection is
      *  precisely what lets this type keep AOSP's interface kind. */
     final class MacApkImpl implements OnBackInvokedDispatcher {

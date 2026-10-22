@@ -4,12 +4,12 @@ package android.window;
  *  (android16-release): a `public final class` value type with equals and
  *  toString over all five fields.
  *
- *  Who creates one in Mac.apk: WindowOnBackInvokedDispatcher.macapkOnBackKey,
+ *  Who creates one in Apk on Mac: WindowOnBackInvokedDispatcher.macapkOnBackKey,
  *  mirroring ViewRootImpl.doOnBackKeyEvent -- a key-driven BACK hands the top
  *  OnBackAnimationCallback `new BackEvent(0, 0, 0f, EDGE_LEFT)` on the first
  *  DOWN (API 34/35), `EDGE_NONE` from API 36 (predictiveBackSwipeEdgeNoneApi).
  *  No progress events are synthesized: AOSP sends them only for a gesture, and
- *  Mac.apk has no back gesture.
+ *  Apk on Mac has no back gesture.
  *
  *  2026-09-26: made final and given equals/toString, as AOSP declares them.
  *  AOSP does NOT override hashCode (identity hash despite a value equals); that

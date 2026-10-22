@@ -4,7 +4,7 @@
 // from GoogleApiAvailabilityLight.verifyGooglePlayServicesIsAvailable(...) (and
 // GoogleApiAvailability.ensurePlayServicesAvailable(...)) when Google Play
 // Services is missing and cannot be made available. On a device with no GMS at
-// all -- which is what Mac.apk is -- "not available, nothing to repair" is the
+// all -- which is what Apk on Mac is -- "not available, nothing to repair" is the
 // honest terminal, so this (NotAvailable), not GooglePlayServicesRepairable, is
 // the type thrown. Apps wrap those calls in try/catch for exactly this class; if
 // the class were absent the throw would surface as NoClassDefFoundError instead.

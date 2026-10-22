@@ -1,5 +1,5 @@
 // StatusBarDriver -- paints an Android-style system status bar on the
-// Mac.apk canvas. The bar lives at the top of the surface (the
+// Apk on Mac canvas. The bar lives at the top of the surface (the
 // rootView is inset down by `heightPx(root)` so the app's own content
 // lays out below it), shows the macOS host's wall-clock time on the
 // left and battery percentage on the right, and matches the activity's
@@ -43,7 +43,7 @@ public final class StatusBarDriver {
     private static final String ENV_MACAPK_STATUSBAR_BLEND = System.getenv("MACAPK_STATUSBAR_BLEND");
     private static final String ENV_MACAPK_TRACE_BARCOLOR = System.getenv("MACAPK_TRACE_BARCOLOR");
 
-    private static final String TAG = "Mac.apk.StatusBar";
+    private static final String TAG = "Apk on Mac.StatusBar";
 
     private StatusBarDriver() {}
 
@@ -51,7 +51,7 @@ public final class StatusBarDriver {
     // THE SYSTEM BARS ARE OFF BY DEFAULT (v1.0.1627).
     //
     // Owner, 2026-09-22: "remove the status bar + bottom nav bar -- it makes
-    // it feel like an emulator." A Mac.apk app is a macOS app in a macOS
+    // it feel like an emulator." A Apk on Mac app is a macOS app in a macOS
     // window; a painted Android clock/wifi/battery strip and a row of
     // back/home/recents glyphs are chrome for a phone, and on a Mac they
     // announce "this is an emulator" while costing 24dp + 48dp of the app's
@@ -861,7 +861,7 @@ public final class StatusBarDriver {
         int c = macapkCalculateBarColor(flags, translucentFlag, MACAPK_SEMI_TRANSPARENT_BAR,
                                         declared, appearance, lightFlag, scrimTransparent);
         if (ENV_MACAPK_TRACE_BARCOLOR != null) {
-            android.util.Log.i("Mac.apk.BarColor", (statusBar ? "status" : "nav")
+            android.util.Log.i("Apk on Mac.BarColor", (statusBar ? "status" : "nav")
                 + " flags=0x" + Integer.toHexString(flags)
                 + " declared=0x" + Integer.toHexString(declared)
                 + " scrimT=" + scrimTransparent
@@ -1111,7 +1111,7 @@ public final class StatusBarDriver {
         // box over the top-left 80dp of every app).
         // v1.0.867 REPOINTS this at the real thing: the BACK glyph in the
         // 3-button nav bar. The name and TouchDispatcher's arm/disarm tap logic
-        // are unchanged -- only the rect it describes moved from a Mac.apk
+        // are unchanged -- only the rect it describes moved from a Apk on Mac
         // invention in the status bar to an actual painted button, so a tap
         // there now lands on something the user can see.
         return navButtonHitRect(root, surfaceW, surfaceH, 0);
@@ -1239,7 +1239,7 @@ public final class StatusBarDriver {
         int padPx = Math.round(16f * density); // 16dp from each side
 
         // v1.0.865 (owner call): the "< Back" button that used to be painted
-        // here is GONE. It was a Mac.apk invention -- its own comment said so:
+        // here is GONE. It was a Apk on Mac invention -- its own comment said so:
         // "AOSP has no status-bar back, but macOS users need a discoverable
         // system back, so we add one here." With the bottom nav strip now
         // reserved AOSP-faithfully again, BACK is delivered the way real

@@ -2,7 +2,7 @@ package com.google.firebase.storage;
 
 // com.google.firebase.storage.StorageException -- the exception a failed Cloud
 // Storage Task carries (task.getException() returns this). Apps catch it and
-// branch on getErrorCode(). On Mac.apk there is no Storage backend (de-Googled
+// branch on getErrorCode(). On Apk on Mac there is no Storage backend (de-Googled
 // device), so every network operation fails with ERROR_UNKNOWN / a clean
 // negative -- we never fabricate a successful download or upload.
 //
@@ -45,7 +45,7 @@ public class StorageException extends com.google.firebase.FirebaseException {
     public Throwable getCause() { return super.getCause(); }
 
     // Factory used by the SDK to translate an HTTP status + Throwable into a
-    // typed StorageException. On Mac.apk we have no HTTP layer, so callers that
+    // typed StorageException. On Apk on Mac we have no HTTP layer, so callers that
     // need a failure use this to produce a faithful ERROR_UNKNOWN instance.
     public static StorageException fromErrorStatus(
             com.google.android.gms.common.api.Status status) {

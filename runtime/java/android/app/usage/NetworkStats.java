@@ -1,5 +1,5 @@
 package android.app.usage;
-/** A queryable set of network-usage buckets. Mac.apk collects no network stats,
+/** A queryable set of network-usage buckets. Apk on Mac collects no network stats,
  *  so there are no buckets. API 23. */
 public final class NetworkStats implements AutoCloseable {
     NetworkStats() {}

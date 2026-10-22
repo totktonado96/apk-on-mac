@@ -4,7 +4,7 @@
 // (libGDX uses it for the desktop GL thread on Android 4.1+, every
 // modern compose/animation library uses it).
 //
-// Mac.apk's vsync is the Cocoa display tick (cocoa_bridge.mm drawInMTKView,
+// Apk on Mac's vsync is the Cocoa display tick (cocoa_bridge.mm drawInMTKView,
 // the accumulator block that also fires the NDK AChoreographer). Three paths:
 //
 //  * MAIN-loop Choreographer (MACAPK_REAL_LOOPER): callbacks queue in
@@ -75,7 +75,7 @@ public final class Choreographer {
      *  getter on an mInCallback flag so a caller that stashes the
      *  reference reads stale data (or throws) instead of silently
      *  observing a LATER frame's values once the object gets reused.
-     *  Mac.apk allocates a fresh, immutable FrameData per dispatch
+     *  Apk on Mac allocates a fresh, immutable FrameData per dispatch
      *  instead of pooling -- there is no cross-frame reuse to guard
      *  against -- but keeps the same externally observable contract:
      *  every getter throws IllegalStateException once onVsync has
@@ -101,7 +101,7 @@ public final class Choreographer {
         }
         public long getFrameTimeNanos() { checkInCallback(); return mFrameTimeNanos; }
         public FrameTimeline[] getFrameTimelines() { checkInCallback(); return mFrameTimelines; }
-        /** Mac.apk has no real compositor offering multiple candidate
+        /** Apk on Mac has no real compositor offering multiple candidate
          *  present times (see FrameTimeline below), so the single
          *  synthesized entry is always its own "preferred" one. */
         public FrameTimeline getPreferredFrameTimeline() { checkInCallback(); return mFrameTimelines[0]; }
@@ -109,7 +109,7 @@ public final class Choreographer {
 
     /** API 34: one candidate vsync's timing data. Real AOSP can offer
      *  several (SurfaceFlinger's predicted frame timeline), each with a
-     *  real vsyncId; Mac.apk has no such multi-candidate compositor
+     *  real vsyncId; Apk on Mac has no such multi-candidate compositor
      *  pipeline, so FrameData always carries exactly one honest
      *  FrameTimeline built from the same rebasedNanos() value
      *  postFrameCallback already uses, rather than fabricating extra
@@ -378,7 +378,7 @@ public final class Choreographer {
 
     // AOSP derives the non-main-vsync Handler tick from the real display:
     // mFrameIntervalNanos = (long) (1e9 / getRefreshRate()), read from
-    // DisplayManagerGlobal's DisplayInfo. Mac.apk has no DisplayManagerGlobal;
+    // DisplayManagerGlobal's DisplayInfo. Apk on Mac has no DisplayManagerGlobal;
     // android.view.Display (same package) is the single authoritative source
     // for the advertised refresh rate, so derive from it here instead of a
     // second, independently-hardcoded literal that could silently drift from
@@ -417,7 +417,7 @@ public final class Choreographer {
      *  call from any thread that has a Looper; we do the same. */
     public static Choreographer getInstance() {
         Choreographer c = sThreadInstance.get();
-        if (THREADDIAG) android.util.Log.i("Mac.apk.Choreo",
+        if (THREADDIAG) android.util.Log.i("Apk on Mac.Choreo",
             "getInstance thread=" + Thread.currentThread().getName()
             + " mLooper==mainLooper=" + (c.mLooper == android.os.Looper.getMainLooper())
             + " mainVsyncDriven=" + c.isMainVsyncDriven()
@@ -472,7 +472,7 @@ public final class Choreographer {
         }
     }
 
-    /** Schedule cb to run on the next frame. Mac.apk doesn't have a
+    /** Schedule cb to run on the next frame. Apk on Mac doesn't have a
      *  separate vsync source for callbacks; we approximate by running
      *  the callback as a Handler.postDelayed(16ms). Apps that use
      *  Choreographer for animation timing get ~60 Hz cadence. */
@@ -482,7 +482,7 @@ public final class Choreographer {
 
     public void postFrameCallbackDelayed(FrameCallback callback, long delayMillis) {
         if (callback == null) return;
-        if (THREADDIAG) android.util.Log.i("Mac.apk.Choreo",
+        if (THREADDIAG) android.util.Log.i("Apk on Mac.Choreo",
             "postFrameCallback thread=" + Thread.currentThread().getName()
             + " mainVsyncDriven=" + isMainVsyncDriven()
             + " mLooper==main=" + (mLooper == android.os.Looper.getMainLooper())
@@ -519,7 +519,7 @@ public final class Choreographer {
                     if (FRAME_TRACE) traceThreadFrame();
                     if (TIMEDIAG) {
                         long _lw = sLastWhen; sLastWhen = when;
-                        android.util.Log.i("Mac.apk.Choreo",
+                        android.util.Log.i("Apk on Mac.Choreo",
                             "doFrame fire #" + sChoreoFire.incrementAndGet()
                             + " when=" + when + " dWhenMs="
                             + ((when - _lw) / 1_000_000L)
@@ -529,7 +529,7 @@ public final class Choreographer {
                         mLastFrameTimeNanos = when;
                         callback.doFrame(when);
                     } catch (Throwable t) {
-                        android.util.Log.e("Mac.apk.Choreo", "doFrame threw: " + t, t);
+                        android.util.Log.e("Apk on Mac.Choreo", "doFrame threw: " + t, t);
                     }
                 }
             };
@@ -571,7 +571,7 @@ public final class Choreographer {
                         mLastFrameTimeNanos = when;
                         callback.onVsync(data);
                     } catch (Throwable t) {
-                        android.util.Log.e("Mac.apk.Choreo", "onVsync threw: " + t, t);
+                        android.util.Log.e("Apk on Mac.Choreo", "onVsync threw: " + t, t);
                     } finally {
                         data.invalidate();
                     }
@@ -637,7 +637,7 @@ public final class Choreographer {
 
     /** The time the frame in progress started, in the System.nanoTime()
      *  timebase (AOSP getFrameTimeNanos: mLastFrameTimeNanos while callbacks
-     *  run). AOSP THROWS outside a callback; Mac.apk has always answered "now"
+     *  run). AOSP THROWS outside a callback; Apk on Mac has always answered "now"
      *  there instead, and still does -- on the frame clock, so under
      *  MACAPK_CHOREO_NANOTIME_BASE=0 this is exactly the old rebasedNanos(). */
     public long getFrameTime() { return getFrameTimeNanos() / 1_000_000L; }
@@ -688,7 +688,7 @@ public final class Choreographer {
         // AOSP doFrame order: INPUT(0) -> ANIMATION(1) -> INSETS_ANIMATION(2)
         // -> [TRAVERSAL(3) = canvas] -> COMMIT(4).
         due.sort((a, b) -> Integer.compare(a.type, b.type));
-        if (TIMEDIAG) android.util.Log.i("Mac.apk.Choreo",
+        if (TIMEDIAG) android.util.Log.i("Apk on Mac.Choreo",
             "doMainFrame fire #" + sChoreoFire.incrementAndGet() + " ran=" + due.size()
             + " nanos=" + nanos);
         mCallbacksRunning = true;
@@ -708,7 +708,7 @@ public final class Choreographer {
                         a.runnable.run();
                     }
                 } catch (Throwable t) {
-                    android.util.Log.e("Mac.apk.Choreo", "doMainFrame callback threw: " + t, t);
+                    android.util.Log.e("Apk on Mac.Choreo", "doMainFrame callback threw: " + t, t);
                 }
             }
         } finally {
@@ -721,7 +721,7 @@ public final class Choreographer {
     // A transcription of AOSP's postCallbackDelayedInternal / scheduleFrameLocked
     // / FrameDisplayEventReceiver / doFrame / doCallbacks (frameworks/base
     // core/java/android/view/Choreographer.java, main), minus what has no
-    // Mac.apk counterpart (FrameInfo, buffer-stuffing recovery, FPS divisor,
+    // Apk on Mac counterpart (FrameInfo, buffer-stuffing recovery, FPS divisor,
     // tracing). Only ever reached when mVsyncThread.
 
     /** The record's action as AOSP stores it (Runnable / FrameCallback /
@@ -818,7 +818,7 @@ public final class Choreographer {
             android.os.SystemClock.uptimeMillis() - (now - timestampNanos) / 1_000_000L);
     }
 
-    /** AOSP doFrame, in the parts Mac.apk has: drop a frame nobody scheduled,
+    /** AOSP doFrame, in the parts Apk on Mac has: drop a frame nobody scheduled,
      *  resync a vsync delivered more than one interval late to the last vsync
      *  boundary before now (so frameTimeNanos is never more than one frame
      *  stale), refuse a frame time that runs backwards, then run the phases in
@@ -850,13 +850,13 @@ public final class Choreographer {
         if (FRAME_TRACE) traceThreadFrame();
         if (TIMEDIAG) {
             long lw = sLastWhen; sLastWhen = frameTimeNanos;
-            android.util.Log.i("Mac.apk.Choreo", "doFrame(vsync) #" + n
+            android.util.Log.i("Apk on Mac.Choreo", "doFrame(vsync) #" + n
                 + " thread=" + Thread.currentThread().getName()
                 + " frameTimeNanos=" + frameTimeNanos
                 + " dMs=" + ((frameTimeNanos - lw) / 1_000_000L)
                 + " ageUs=" + ((System.nanoTime() - timestampNanos) / 1_000L));
         } else if (n == 1) {
-            android.util.Log.i("Mac.apk.Choreo", "first vsync-driven doFrame on thread="
+            android.util.Log.i("Apk on Mac.Choreo", "first vsync-driven doFrame on thread="
                 + Thread.currentThread().getName()
                 + " (MACAPK_CHOREO_VSYNC_THREADS=1, nanoTimeBase=" + NANOTIME_BASE + ")");
         }
@@ -906,7 +906,7 @@ public final class Choreographer {
                         a.runnable.run();
                     }
                 } catch (Throwable t) {
-                    android.util.Log.e("Mac.apk.Choreo", "doFrame callback threw: " + t, t);
+                    android.util.Log.e("Apk on Mac.Choreo", "doFrame callback threw: " + t, t);
                 }
             }
         } finally {

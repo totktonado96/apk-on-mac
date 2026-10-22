@@ -4,7 +4,7 @@
 // returns the substring that's allowed to be inserted, or null to
 // accept as-is".
 //
-// Mac.apk hosts no real EditText input pipeline (text input is a stub
+// Apk on Mac hosts no real EditText input pipeline (text input is a stub
 // for cocos2d-x's "tap once, enter a name" prompt that's never used in
 // the games we target), so this file exists purely to satisfy
 // ClassLoader lookups during onCreate when an app builds a filter

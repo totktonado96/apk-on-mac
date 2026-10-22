@@ -1,8 +1,8 @@
-// android.app.ServiceRegistry -- Mac.apk's in-process Service host.
+// android.app.ServiceRegistry -- Apk on Mac's in-process Service host.
 //
 // Real Android starts a Service in the ActivityManagerService: it
 // instantiates the component, calls attach()+onCreate(), then dispatches
-// onStartCommand for each Context.startService. Mac.apk is single
+// onStartCommand for each Context.startService. Apk on Mac is single
 // process with no AMS, so this small registry plays that role: it keeps
 // one instance per ComponentName, runs the create-once lifecycle, and
 // forwards onStartCommand / stops. It is the backing for
@@ -288,7 +288,7 @@ public final class ServiceRegistry {
     /** Start (or re-deliver to) the Service named by the Intent.
      *  Returns the ComponentName of the started service, or null if no
      *  component could be resolved -- exactly AOSP's startService
-     *  contract. `foreground` controls the API-26 distinction; Mac.apk
+     *  contract. `foreground` controls the API-26 distinction; Apk on Mac
      *  treats both identically (no background-execution limits here). */
     public static ComponentName start(Context ctx, Intent intent, boolean foreground) {
         String cls = classNameOf(intent);
@@ -379,7 +379,7 @@ public final class ServiceRegistry {
     }
 
     /** Bind path: ensure the Service exists + onCreate ran, then return
-     *  its onBind result. Mac.apk has no binder transport, so the caller
+     *  its onBind result. Apk on Mac has no binder transport, so the caller
      *  (Context.bindService) still reports the bind as unsupported; this
      *  exists so a future real bind can reuse the instance map. */
     public static android.os.IBinder bind(Context ctx, Intent intent) {
@@ -558,7 +558,7 @@ public final class ServiceRegistry {
      *  ⚠ TWO probes, not one, and the order matters. The single question
      *  "does getServiceInfo throw?" cannot separate UNDECLARED from
      *  DECLARED-AND-DISABLED -- both are NameNotFoundException -- and
-     *  conflating them would break every service Mac.apk starts that the
+     *  conflating them would break every service Apk on Mac starts that the
      *  manifest never mentioned. So:
      *    1. getServiceInfo(cn, MATCH_DISABLED_COMPONENTS) -- throws only when
      *       the component is genuinely UNDECLARED. Return false: keep the

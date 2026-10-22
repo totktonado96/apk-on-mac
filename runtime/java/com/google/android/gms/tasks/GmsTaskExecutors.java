@@ -7,7 +7,7 @@ import java.util.concurrent.ThreadFactory;
 
 // Default dispatch executor for our stateful gms.tasks implementation
 // (TaskImpl). Real play-services-tasks fires a no-executor listener on the
-// process MAIN thread (its main Looper). On Mac.apk the Unity app's main
+// process MAIN thread (its main Looper). On Apk on Mac the Unity app's main
 // thread runs ANGLE's native render/poll loop, and whether Android main-Looper
 // Handler posts actually drain there is build/runtime dependent (tracked as
 // planner-unknown U3). A listener that never runs is exactly the failure class

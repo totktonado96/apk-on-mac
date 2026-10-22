@@ -2,7 +2,7 @@
 // derivation of DisplayMetrics + Configuration from it, and the commit that
 // applies a new size the way a device applies a display change.
 //
-// WHY THIS EXISTS (v1.0.1637). The window a Mac.apk app draws into IS its
+// WHY THIS EXISTS (v1.0.1637). The window a Apk on Mac app draws into IS its
 // display (the window paints its own system bars), and a user can resize it.
 // Before this, nothing wrote size or orientation after boot: Boot built
 // DisplayMetrics + Configuration once from the native canvas globals, Display
@@ -44,7 +44,7 @@ import android.content.res.Resources;
 import android.util.DisplayMetrics;
 
 public final class DisplayConfig {
-    private static final String TAG = "Mac.apk.DisplayConfig";
+    private static final String TAG = "Apk on Mac.DisplayConfig";
 
     private DisplayConfig() {}
 
@@ -146,7 +146,7 @@ public final class DisplayConfig {
                     if (w < h) m.heightPixels = (int) ((w * ratio) + 0.5f);
                     else       m.widthPixels  = (int) ((h * ratio) + 0.5f);
                     if (log) {
-                        NativeLog.i("Mac.apk.Boot", "pre-O max aspect " + maxAspect
+                        NativeLog.i("Apk on Mac.Boot", "pre-O max aspect " + maxAspect
                             + ": window " + w + "x" + h + " -> "
                             + m.widthPixels + "x" + m.heightPixels);
                     }
@@ -455,7 +455,7 @@ public final class DisplayConfig {
             // activity it relaunches, so no callback; the window still learns.
             NativeLog.i(TAG, "config change 0x" + Integer.toHexString(changes)
                 + " not declared by " + a.getClass().getName() + " (declared 0x"
-                + Integer.toHexString(handled) + "); AOSP relaunches it, Mac.apk keeps "
+                + Integer.toHexString(handled) + "); AOSP relaunches it, Apk on Mac keeps "
                 + "the instance (MACAPK_RESIZE_RELAUNCH=1 to relaunch)");
             a.macapkSetCurrentConfig(next);
             a.macapkDeliverConfigToWindow(next, false);

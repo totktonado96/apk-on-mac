@@ -273,7 +273,7 @@ public class TypedArray implements AutoCloseable {
                 s.setAccessible(true);
             } catch (Throwable t) {
                 d = null; s = null;
-                System.err.println("[Mac.apk.TypedArray] framework-slot identity OFF:"
+                System.err.println("[Apk on Mac.TypedArray] framework-slot identity OFF:"
                     + " Resources.StyleMergedAttributeSet has no direct/style fields ("
                     + t + ")");
             }
@@ -310,7 +310,7 @@ public class TypedArray implements AutoCloseable {
                 // sentinel, and setValueAt runs the visible legacy path.
                 if (!macapkFwSlotLegacyWarned) {
                     macapkFwSlotLegacyWarned = true;
-                    System.err.println("[Mac.apk.TypedArray] framework-slot identity:"
+                    System.err.println("[Apk on Mac.TypedArray] framework-slot identity:"
                         + " could not read StyleMergedAttributeSet layers (" + t
                         + "); legacy any-namespace lookup for this read");
                 }
@@ -1004,7 +1004,7 @@ public class TypedArray implements AutoCloseable {
             try {
                 Class<?> log = Class.forName("com.macapk.loader.NativeLog");
                 log.getMethod("i", String.class, String.class)
-                   .invoke(null, "Mac.apk.TypedArray", sb.toString());
+                   .invoke(null, "Apk on Mac.TypedArray", sb.toString());
             } catch (Throwable ignored) {}
         }
         return count;
@@ -1123,7 +1123,7 @@ public class TypedArray implements AutoCloseable {
         return raw != null
             && macapkNullDataOf(index, raw) != android.util.TypedValue.DATA_NULL_UNDEFINED;
     }
-    /** Mac.apk-internal, NOT an AOSP query: true when `index` holds an
+    /** Apk on Mac-internal, NOT an AOSP query: true when `index` holds an
      *  explicit @null / @empty (literal, or a `?attr` whose theme leaf is
      *  one), i.e. the attribute WAS declared and its value is AOSP's TYPE_NULL
      *  record. hasValue is false for it, as on a device, so a caller that
@@ -2010,7 +2010,7 @@ public class TypedArray implements AutoCloseable {
         // This is the validation the v1.0.894 blanket attempt lacked.
         if (raw.startsWith("@") || raw.startsWith("?")) return null;
         if (System.getenv("MACAPK_TRACE_THEMEPROBE") != null) {
-            android.util.Log.i("Mac.apk.ThemeProbe",
+            android.util.Log.i("Apk on Mac.ThemeProbe",
                 "themeOnly getString attr=" + name + " -> " + raw);
         }
         return raw;
@@ -2254,7 +2254,7 @@ public class TypedArray implements AutoCloseable {
         android.util.TypedValue v = macapkPeekRecord(index);
         return v.type == android.util.TypedValue.TYPE_NULL ? null : v;
     }
-    /** Mac.apk-internal, never null: peekValue's record with "no value"
+    /** Apk on Mac-internal, never null: peekValue's record with "no value"
      *  expressed as TYPE_NULL. Its data carries what the device's internal
      *  record holds, so it cannot contradict hasValueOrEmpty:
      *  DATA_NULL_EMPTY for @empty (aapt2 MakeEmpty), DATA_NULL_UNDEFINED (0)

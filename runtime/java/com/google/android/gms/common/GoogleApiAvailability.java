@@ -1,6 +1,6 @@
-// Mac.apk GMS-availability shim (app-agnostic). See GoogleApiAvailabilityLight
+// Apk on Mac GMS-availability shim (app-agnostic). See GoogleApiAvailabilityLight
 // for the full rationale: on macOS there is no Play Services system app, so the
-// APK's own real GoogleApiAvailability returns SERVICE_MISSING; Mac.apk reports
+// APK's own real GoogleApiAvailability returns SERVICE_MISSING; Apk on Mac reports
 // what a real Android device reports (GMS available) and degrades the underlying
 // service-backed operations gracefully. This is the full half of the API
 // (com.google.android.gms.common.GoogleApiAvailability); it extends the light

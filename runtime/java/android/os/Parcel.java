@@ -47,7 +47,7 @@ public final class Parcel {
      *      Parcel parcel = Parcel.obtain(); parcel.markForBinder(binder); return parcel;
      *  markForBinder records whether the target binder is a PROXY, which AOSP
      *  uses to pick the stability/version rules for the transaction. Every
-     *  binder in Mac.apk is local (there is no transport), so there is nothing
+     *  binder in Apk on Mac is local (there is no transport), so there is nothing
      *  to mark -- but the factory must still exist and still hand back a
      *  usable Parcel, which is the whole of its observable contract. */
     public static Parcel obtain(IBinder binder) { return obtain(); }
@@ -61,7 +61,7 @@ public final class Parcel {
         size = 0;
     }
 
-    // AOSP Parcel exception protocol (AIDL/Binder stubs). Mac.apk marshals
+    // AOSP Parcel exception protocol (AIDL/Binder stubs). Apk on Mac marshals
     // only its own in-process Parcelables (no real Binder), so there is never
     // a remote exception to surface: writeNoException/writeException are no-ops
     // and readException returns normally. Generated AIDL proxy/stub code calls
@@ -246,7 +246,7 @@ public final class Parcel {
         return arr;
     }
 
-    // There is no binder transaction in-process, but an IBinder in Mac.apk is
+    // There is no binder transaction in-process, but an IBinder in Apk on Mac is
     // still a live Java object, so it rides the object-ref side table below.
     // The old no-op pair silently dropped every AIDL callback/listener handed
     // across a Parcel, which is the one thing writeStrongBinder exists to do.
@@ -355,7 +355,7 @@ public final class Parcel {
             // method, so touching it would make this class unusable outside the
             // runtime (the debug/parcel_verify.sh gate runs on a bare JDK). The
             // runtime mirrors its stderr into the launcher log either way.
-            System.err.println("[W] Mac.apk.Parcel: " + name + ".writeToParcel wrote no bytes; "
+            System.err.println("[W] Apk on Mac.Parcel: " + name + ".writeToParcel wrote no bytes; "
                 + "keeping the live object instead of marshalling it. Give the class a real "
                 + "writeToParcel/CREATOR pair to remove this fallback.");
         }
@@ -1881,7 +1881,7 @@ public final class Parcel {
         ensure(newCapacity);
     }
 
-    // AOSP scans the parcel's object table for BINDER_TYPE_FD. Mac.apk has no
+    // AOSP scans the parcel's object table for BINDER_TYPE_FD. Apk on Mac has no
     // binder transport and writeFileDescriptor is a no-op, so a parcel here can
     // never carry a marshalled fd and the honest answer is always false.
     public final boolean hasFileDescriptors() { return false; }
@@ -1911,7 +1911,7 @@ public final class Parcel {
     // AOSP :735 -- `addFlags(FLAG_PROPAGATE_ALLOW_BLOCKING)`: "whether the
     // object should propagate allow-blocking to the binder objects read from
     // this parcel". allow-blocking marks a binder proxy as safe to call from a
-    // thread with StrictMode's no-blocking policy. Mac.apk's binders are all
+    // thread with StrictMode's no-blocking policy. Apk on Mac's binders are all
     // local (Binder.transact dispatches synchronously in-process), so nothing
     // consults the flag -- but AOSP has no getter either, so the flag is
     // write-only there as well, and setting it is genuinely all the method

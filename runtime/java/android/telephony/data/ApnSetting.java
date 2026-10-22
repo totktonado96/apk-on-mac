@@ -11,7 +11,7 @@ import java.util.Objects;
 /**
  * One APN (access point name) profile.
  *
- * Mac.apk has no SIM and no APN database, so nothing here is ever populated by
+ * Apk on Mac has no SIM and no APN database, so nothing here is ever populated by
  * the framework -- PreciseDataConnectionState.getApnSetting() is null. The
  * value type + Builder are faithful so an app that constructs one links.
  *

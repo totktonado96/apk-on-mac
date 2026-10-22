@@ -1,7 +1,7 @@
 // android.media.session.PlaybackState -- the current playback state of a
 // MediaSession (state, position, speed, actions, queue id). AOSP frameworks/base
 // media/java/android/media/session/PlaybackState.java. Immutable, built via
-// Builder; a pure data holder, fully serviceable on Mac.apk.
+// Builder; a pure data holder, fully serviceable on Apk on Mac.
 package android.media.session;
 
 public final class PlaybackState implements android.os.Parcelable {

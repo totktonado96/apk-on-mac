@@ -5,7 +5,7 @@ package com.google.android.play.core.assetpacks;
 // Play Core this extends com.google.android.play.core.listener
 // .StateUpdateListener<AssetPackState>; the only method callers use is
 // onStateUpdate(AssetPackState). Unity registers one via the wrapper's
-// registerDownloadStatusListener. On Mac.apk packs are install-time
+// registerDownloadStatusListener. On Apk on Mac packs are install-time
 // (already COMPLETED), so AssetPackManagerImpl fires onStateUpdate once
 // with COMPLETED right after registration (and on each fetch/getPackStates),
 // matching real Play Core's behaviour of notifying the current state.

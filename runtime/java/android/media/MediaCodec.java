@@ -82,7 +82,7 @@ public final class MediaCodec {
         public abstract void onOutputFormatChanged(MediaCodec codec, MediaFormat format);
 
         /** API 34. Fired instead of onError when the failure was a DECRYPT
-         *  failure. Never here: Mac.apk implements no DRM (see MediaDrm), so no
+         *  failure. Never here: Apk on Mac implements no DRM (see MediaDrm), so no
          *  sample is ever decrypted and none can fail to be. AOSP's default
          *  body forwards to onError, and this one does the same, so an app that
          *  only overrode onError still hears about it. */
@@ -127,7 +127,7 @@ public final class MediaCodec {
         public String getDiagnosticInfo() { return getMessage(); }
     }
     // AOSP MediaCodec.CryptoInfo -- per-sample encryption metadata used by
-    // queueSecureInputBuffer and MediaExtractor.getSampleCryptoInfo. Mac.apk
+    // queueSecureInputBuffer and MediaExtractor.getSampleCryptoInfo. Apk on Mac
     // never produces encrypted samples, but the type must resolve.
     public static final class CryptoInfo {
         public int numSubSamples;
@@ -258,7 +258,7 @@ public final class MediaCodec {
      *  escapes its constructor while this throw takes its graceful path.
      *
      *  macOS itself reports 16 encode formats including AAC, so this is a
-     *  Mac.apk gap, not a host gap -- the honest interim answer, not the
+     *  Apk on Mac gap, not a host gap -- the honest interim answer, not the
      *  terminal one. Rung 1 is AudioConverter + VTCompressionSession; see
      *  docs/media-audio-camera-parity-audit_2026-08-30.md. */
     public static MediaCodec createEncoderByType(String type) throws java.io.IOException {
@@ -1516,7 +1516,7 @@ public final class MediaCodec {
         throw new IllegalStateException("MediaCodec is not a configured encoder");
     }
 
-    /** API 31, tunneled playback only. Mac.apk has no tunneled path
+    /** API 31, tunneled playback only. Apk on Mac has no tunneled path
      *  (AudioDeviceInfo.getEncapsulationModes() reports none), so the listener
      *  is retained and never fires. */
     public void setOnFirstTunnelFrameReadyListener(android.os.Handler handler,
@@ -1600,7 +1600,7 @@ public final class MediaCodec {
     }
 
     /** API 34, block model + DRM. Unreachable twice over: no block model, and
-     *  Mac.apk implements no DRM at all (see MediaDrm). */
+     *  Apk on Mac implements no DRM at all (see MediaDrm). */
     public void queueSecureInputBuffers(int index, java.util.ArrayDeque<BufferInfo> bufferInfos,
             java.util.ArrayDeque<CryptoInfo> cryptoInfos) {
         throw new IllegalStateException("The codec is not configured for block model");

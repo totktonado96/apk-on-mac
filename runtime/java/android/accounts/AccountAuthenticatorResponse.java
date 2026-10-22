@@ -10,7 +10,7 @@ import android.os.Parcelable;
  * AccountManager.
  *
  * AOSP wraps an IAccountAuthenticatorResponse Binder living in the
- * AccountManagerService. Mac.apk has no such service, so there is no peer to
+ * AccountManagerService. Apk on Mac has no such service, so there is no peer to
  * deliver to and the three callbacks are genuinely inert -- an authenticator
  * that calls onResult() is talking to a framework component we do not run.
  * That is an absence, not a fabrication: pretending the result was accepted

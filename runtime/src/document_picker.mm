@@ -150,7 +150,7 @@ static NSMutableArray<NSString*>* jstrs(JNIEnv* env, jobjectArray a) {
     if (!why) return YES;
     std::fprintf(stderr, "[I] documents: tree pick refused (%s)\n", why.UTF8String);
     if (outError) {
-        *outError = [NSError errorWithDomain:@"org.macapk.documents" code:1 userInfo:@{
+        *outError = [NSError errorWithDomain:@"io.github.totktonado96.apkonmac.documents" code:1 userInfo:@{
             NSLocalizedDescriptionKey : @"Can’t use this folder",
             NSLocalizedRecoverySuggestionErrorKey : @"To protect your privacy, choose another folder",
         }];

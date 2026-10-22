@@ -1,7 +1,7 @@
 // android.net.wifi.WifiNetworkSpecifier
 //
 // A NetworkSpecifier that requests a peer-to-peer connection to a specific
-// Wi-Fi network (the API 29+ "connect to this AP" flow). Mac.apk has no Wi-Fi
+// Wi-Fi network (the API 29+ "connect to this AP" flow). Apk on Mac has no Wi-Fi
 // stack, so a request carrying one can never be satisfied, but apps build it
 // via the Builder and attach it to a NetworkRequest, so the type + Builder must
 // resolve. Mirrors AOSP android.net.wifi.WifiNetworkSpecifier public API.

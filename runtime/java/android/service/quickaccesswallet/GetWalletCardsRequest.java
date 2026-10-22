@@ -9,7 +9,7 @@ import android.os.Parcelable;
  *
  * PACKAGE NOTE -- applies to android.service.quickaccesswallet. A
  * QuickAccessWalletService is bound by System UI's power-button wallet, which
- * Mac.apk does not have: nothing binds the service, no card request arrives,
+ * Apk on Mac does not have: nothing binds the service, no card request arrives,
  * and sendWalletServiceEvent has no listener. The request/response objects are
  * ordinary value types a wallet app builds in its own tests, and those are
  * faithful. Nothing here touches a payment credential; a WalletCard carries an

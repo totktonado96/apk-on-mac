@@ -237,7 +237,7 @@ public final class GcmRegisterClient {
     }
 
     static void log(String m) {
-        try { com.macapk.loader.NativeLog.i("Mac.apk.GMS", "gcm: " + m); }
+        try { com.macapk.loader.NativeLog.i("Apk on Mac.GMS", "gcm: " + m); }
         catch (Throwable t) { System.err.println("[gcm] " + m); }
     }
 }

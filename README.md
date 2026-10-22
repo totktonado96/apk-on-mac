@@ -84,8 +84,8 @@ APKs you trust, from sources you trust.
 
 [GNU AGPL v3.0](LICENSE).
 
-- Based on [Mac.apk](https://github.com/kksimp/Mac.apk), © Kaleb Simpson / Voltare
-  and contributors. Not affiliated with or endorsed by that project.
+- Based on [Mac.apk](https://github.com/kksimp/Mac.apk), © Kaleb Simpson / Voltare and
+  contributors. Not affiliated with or endorsed by that project.
 - Changes in Apk on Mac are © their authors and are released under the same
   license.
 

@@ -1,4 +1,4 @@
-// android.content.IntentSender -- handle to a remote Intent. Mac.apk
+// android.content.IntentSender -- handle to a remote Intent. Apk on Mac
 // has no IPC; the type exists so apps that declare `throws
 // SendIntentException` (e.g. for Play Games sign-in flows) compile
 // and resolve at runtime.
@@ -36,7 +36,7 @@ public class IntentSender implements Parcelable {
 
     /** AOSP core/java/android/content/IntentSender.java:206 -- the
      *  requiredPermission overload. On a device the permission is enforced by
-     *  the ActivityManager against the RECEIVER of the broadcast; Mac.apk
+     *  the ActivityManager against the RECEIVER of the broadcast; Apk on Mac
      *  dispatches in-process to the app's own receivers, which by definition
      *  hold every permission the app declares, so no receiver can be filtered
      *  out by it. Delegating is therefore the same delivery set, not a
@@ -77,7 +77,7 @@ public class IntentSender implements Parcelable {
         }
     }
 
-    /** Mac.apk: the PendingIntent behind this sender, or null for a target-less
+    /** Apk on Mac: the PendingIntent behind this sender, or null for a target-less
      *  one. AOSP's counterpart is the @hide getTarget() (the IIntentSender that
      *  Activity.startIntentSenderForResultInner hands to
      *  startActivityIntentSender). */
@@ -104,7 +104,7 @@ public class IntentSender implements Parcelable {
      *  Derived from getCreatorUid() above rather than answered independently,
      *  so the two can never disagree -- note that means a PendingIntent whose
      *  creator uid is unknown (0 or -1) yields null here, which is AOSP's own
-     *  rule and not a Mac.apk shortcut. */
+     *  rule and not a Apk on Mac shortcut. */
     public android.os.UserHandle getCreatorUserHandle() {
         int uid = getCreatorUid();
         return uid > 0 ? new android.os.UserHandle(android.os.UserHandle.getUserId(uid)) : null;

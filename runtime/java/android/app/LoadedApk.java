@@ -1,7 +1,7 @@
 // android.app.LoadedApk -- the per-package state AOSP's ActivityThread binds
 // an application from. Hidden API (not in the public SDK).
 //
-// Mac.apk implements the CONSTRUCTION subset only: the call chain
+// Apk on Mac implements the CONSTRUCTION subset only: the call chain
 //   ActivityThread.handleBindApplication
 //     -> LoadedApk.makeApplicationInner(boolean, Instrumentation)
 //       -> LoadedApk.makeApplicationInner(boolean, Instrumentation, boolean)
@@ -27,8 +27,8 @@
 //   - initializeJavaContextClassLoader (AOSP :1438). Boot.java already sets the
 //     thread context classloader during bring-up; doing it here would double-set.
 //   - rewriteRValues over getAssignedPackageIdentifiers (AOSP :1443-1451).
-//     ResourceIndex owns R remapping in Mac.apk.
-//   - ContextImpl.createAppContext (AOSP :1454). Mac.apk has no ContextImpl; the
+//     ResourceIndex owns R remapping in Apk on Mac.
+//   - ContextImpl.createAppContext (AOSP :1454). Apk on Mac has no ContextImpl; the
 //     app's base Context is Application.AppBaseContext, built inside the
 //     Application constructor, and Boot's macapkInit*/macapkSet* wiring must
 //     interpose before attach. See the null-Context deviation at step 4 below.
@@ -48,7 +48,7 @@ import android.content.Context;
 
 public final class LoadedApk {
 
-    private static final String TAG = "Mac.apk.LoadedApk";
+    private static final String TAG = "Apk on Mac.LoadedApk";
 
     final ClassLoader mClassLoader;
     final String mPackageName;
@@ -83,7 +83,7 @@ public final class LoadedApk {
      *  above android.app.AppComponentFactory's.
      *
      *  NOTE this makes the app's declared factory class load, and its <clinit>
-     *  run, one step earlier than anything in Mac.apk runs it today. That is
+     *  run, one step earlier than anything in Apk on Mac runs it today. That is
      *  AOSP-correct but it IS new behaviour on this path. */
     private AppComponentFactory createAppFactory(String factoryClassName, ClassLoader cl) {
         if (factoryClassName != null && !factoryClassName.isEmpty() && cl != null) {
@@ -151,7 +151,7 @@ public final class LoadedApk {
             appClass = "android.app.Application";
         }
 
-        // 3. TOLERANCE PRE-CHECK. Mac.apk logs and continues where AOSP would
+        // 3. TOLERANCE PRE-CHECK. Apk on Mac logs and continues where AOSP would
         //    kill the process, and this preserves the two fallbacks the loader
         //    has always applied (class missing / class is not an Application)
         //    with their existing wording. loadClass does NOT run <clinit>, so
@@ -182,7 +182,7 @@ public final class LoadedApk {
             //
             //    THE ONE DELIBERATE DEVIATION FROM AOSP ON THIS LINE: AOSP
             //    passes a ContextImpl built by createAppContext and lets
-            //    newApplication attach it. Mac.apk passes null. Forced, not
+            //    newApplication attach it. Apk on Mac passes null. Forced, not
             //    preferred: our base Context is Application.AppBaseContext,
             //    constructed inside the Application constructor, and Boot's
             //    macapkInit*/macapkSet* wiring (package name, dirs, assets,

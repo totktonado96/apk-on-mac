@@ -101,7 +101,7 @@ public class BitmapDrawable extends Drawable {
     // ---- target density ---------------------------------------------
     // AOSP scales the drawable's intrinsic size from the BITMAP's density to
     // the density of the display it will be rendered at
-    // (Bitmap.getScaledWidth(mTargetDensity)). Mac.apk's display bucket is the
+    // (Bitmap.getScaledWidth(mTargetDensity)). Apk on Mac's display bucket is the
     // device density (DisplayMetrics.DENSITY_DEVICE_STABLE) and Bitmap's own
     // default source density is the same bucket, so an unconfigured BitmapDrawable
     // scales by exactly 1.0 -- the same answer a device whose display matches
@@ -160,7 +160,7 @@ public class BitmapDrawable extends Drawable {
         }
 
         // Callers that never called setBounds leave an empty rect on that axis.
-        // Painting at the bitmap's own size there is long-standing Mac.apk
+        // Painting at the bitmap's own size there is long-standing Apk on Mac
         // behaviour that several in-tree blit paths depend on; AOSP would draw
         // nothing, which would be a silent regression for them.
         final android.graphics.Rect bounds = getBounds();

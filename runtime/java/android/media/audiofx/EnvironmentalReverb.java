@@ -1,6 +1,6 @@
 // android.media.audiofx.EnvironmentalReverb -- parametric reverb. AOSP
 // frameworks/base media/java/android/media/audiofx/EnvironmentalReverb.java.
-// Inert on Mac.apk: parameters stored + read back, audio unchanged.
+// Inert on Apk on Mac: parameters stored + read back, audio unchanged.
 package android.media.audiofx;
 
 public class EnvironmentalReverb extends AudioEffect {

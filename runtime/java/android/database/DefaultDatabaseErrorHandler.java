@@ -2,7 +2,7 @@
 // SQLiteOpenHelper installs when an app does not supply its own. On
 // AOSP it deletes (or, for an attached db, detaches) a database file
 // that SQLite reported as corrupt so the next open can recreate it.
-// Mac.apk mirrors that: close the handle and unlink the backing file
+// Apk on Mac mirrors that: close the handle and unlink the backing file
 // (best-effort) so a subsequent open starts clean. In-memory databases
 // have no file to delete and are left alone.
 // Source: frameworks/base/core/java/android/database/DefaultDatabaseErrorHandler.java

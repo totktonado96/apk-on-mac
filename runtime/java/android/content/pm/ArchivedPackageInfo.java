@@ -16,7 +16,7 @@ package android.content.pm;
  *  -- they carry the manifest attribute's raw value, where null means "the
  *  manifest did not say".
  *
- *  Mac.apk does not implement app archiving, so the framework never constructs
+ *  Apk on Mac does not implement app archiving, so the framework never constructs
  *  one of these; see PackageManager.getArchivedPackage. The class ships so the
  *  method descriptor resolves. */
 public final class ArchivedPackageInfo {

@@ -21,7 +21,7 @@ public class AtomicFile {
         mBaseName = baseName;
         mBackupName = new File(baseName.getPath() + ".bak");
     }
-    // API-30 ctor carrying a metrics tag; Mac.apk has no metrics, so ignore it.
+    // API-30 ctor carrying a metrics tag; Apk on Mac has no metrics, so ignore it.
     public AtomicFile(File baseName, String commitTag) { this(baseName); }
 
     public File getBaseFile() { return mBaseName; }

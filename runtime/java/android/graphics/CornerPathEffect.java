@@ -1,4 +1,4 @@
-// Mac.apk -- android.graphics.CornerPathEffect.
+// Apk on Mac -- android.graphics.CornerPathEffect.
 //
 // Mirrors AOSP's public API surface: a PathEffect that transforms
 // sharp angles between line segments into rounded corners of the
@@ -29,7 +29,7 @@ public class CornerPathEffect extends PathEffect {
         mRadius = radius;
     }
 
-    /** Mac.apk accessor: the corner radius this effect was built with. */
+    /** Apk on Mac accessor: the corner radius this effect was built with. */
     public float macapkRadius() {
         return mRadius;
     }

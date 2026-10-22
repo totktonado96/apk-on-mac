@@ -1,4 +1,4 @@
-// Mac.apk -- android.graphics.Picture
+// Apk on Mac -- android.graphics.Picture
 //
 // AOSP display-list recorder. On real Android, Picture records the
 // drawing commands issued to the Canvas returned by beginRecording()

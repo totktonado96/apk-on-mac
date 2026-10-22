@@ -2,19 +2,19 @@
 # rebuild_and_run.sh -- THE owner's one command. After it finishes, nothing
 # stale can be running anywhere on this machine.
 #
-#   1. Kills any running Mac.apk processes.
-#   2. Wipes runtime/build, runtime/translator/build, build/Mac.apk.app and
+#   1. Kills any running Apk on Mac processes.
+#   2. Wipes runtime/build, runtime/translator/build, build/Apk on Mac.app and
 #      rebuilds everything from source.
 #   3. PROMOTES the fresh bundle to the ONE canonical installed app
-#      (default /Applications/Mac.apk.app, override MACAPK_CANONICAL_APP),
+#      (default /Applications/Apk on Mac.app, override MACAPK_CANONICAL_APP),
 #      atomically: stage a copy next to the target, swap by rename, restore
 #      the old bundle if the swap fails. Never copies over a live bundle in
 #      place (macOS caches code signatures by inode; an in-place overwrite of
 #      executed signed code can crash with "Code Signature Invalid" until
 #      reboot -- see the staging note in runtime/scripts/build.sh).
-#   4. Removes the repo's build/Mac.apk.app after a successful promote and
-#      prunes stale LaunchServices registrations, so exactly ONE Mac.apk is
-#      resolvable (lsregister -dump showed THREE org.macapk.launcher
+#   4. Removes the repo's build/Apk on Mac.app after a successful promote and
+#      prunes stale LaunchServices registrations, so exactly ONE Apk on Mac is
+#      resolvable (lsregister -dump showed THREE io.github.totktonado96.apkonmac.launcher
 #      registrations on this machine, two pointing at deleted paths).
 #   5. STAGES the shared runtime -- the copy every installed app actually
 #      EXECUTES -- from the bundle just promoted. See the block at the site
@@ -44,7 +44,7 @@
 #
 # INSTALLS ARE GUARDED (2026-10-07, scripts/install_guard.sh). In a clone of the
 # primary checkout this script builds WITHOUT promoting unless --promote is
-# given, and does not kill running Mac.apk processes (other sessions' runs).
+# given, and does not kill running Apk on Mac processes (other sessions' runs).
 # Every promote holds the machine-wide install lock, and is REFUSED -- before
 # anything is killed or wiped -- when this tree lacks commits that are already
 # installed (an older clone, or one missing another session's test install).
@@ -60,8 +60,8 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
-CANONICAL="${MACAPK_CANONICAL_APP:-/Applications/Mac.apk.app}"
-SRC_APP="$PROJECT_DIR/build/Mac.apk.app"
+CANONICAL="${MACAPK_CANONICAL_APP:-/Applications/Apk on Mac.app}"
+SRC_APP="$PROJECT_DIR/build/Apk on Mac.app"
 LSREGISTER="/System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister"
 
 FRESH_CACHES=0
@@ -113,9 +113,9 @@ fi
 if [ "$IS_PRIMARY" -eq 0 ] && [ "$NO_PROMOTE" -eq 1 ]; then
     # A clone that is not installing has no business killing the apps other
     # sessions (or the owner) are running from the installed runtime.
-    echo "==> Clone build, not promoting: leaving running Mac.apk processes alone."
+    echo "==> Clone build, not promoting: leaving running Apk on Mac processes alone."
 else
-echo "==> Killing any running Mac.apk processes..."
+echo "==> Killing any running Apk on Mac processes..."
 # Kill the GUI app (any copy: repo, canonical, stray) and any orphan runtime
 # children. `|| true` so the script does not fail when nothing is running.
 pkill -x MacApk         2>/dev/null || true
@@ -128,7 +128,7 @@ pkill -x macapk-runtime 2>/dev/null || true
 # the OLD runtime through it. Match those by what their executable link points
 # at. MACAPK_STAGED_RUNTIME_DIR exists only so the installguard gate can aim
 # this at a scratch runtime instead of the machine's.
-STAGED_RT="${MACAPK_STAGED_RUNTIME_DIR:-$HOME/Library/Application Support/Mac.apk/runtime}"
+STAGED_RT="${MACAPK_STAGED_RUNTIME_DIR:-$HOME/Library/Application Support/Apk on Mac/runtime}"
 for pid in $(pgrep -f -- '--android-root' 2>/dev/null || true); do
     exe="$(ps -o comm= -p "$pid" 2>/dev/null || true)"
     case "$exe" in */Contents/MacOS/.*) ;; *) continue ;; esac
@@ -274,7 +274,7 @@ else
     # LaunchServices pruning, and the per-app stub restage. It used to be
     # inline here, which meant scripts/build_launcher.sh (the script that
     # builds the three Swift execution surfaces) had no promote path at all
-    # and left /Applications/Mac.apk.app serving the previous GUI, install
+    # and left /Applications/Apk on Mac.app serving the previous GUI, install
     # helper and app-stub template with no signal anywhere. Extracted
     # 2026-08-19 so both callers run ONE implementation; the trap-only-cleans-
     # $STAGING ordering in there is subtle enough that a second copy would
@@ -309,8 +309,8 @@ else
 
     # ---- Stage the SHARED RUNTIME (the copy installed apps execute) -------
     #
-    # An installed app executes ~/Library/Application Support/Mac.apk/runtime,
-    # NOT anything in this repo and NOT the copy inside Mac.apk.app, so a
+    # An installed app executes ~/Library/Application Support/Apk on Mac/runtime,
+    # NOT anything in this repo and NOT the copy inside Apk on Mac.app, so a
     # promote that skips this leaves every installed app on the previous
     # build. Whoever promotes, stages.
     # ONE implementation, shared with scripts/build_launcher.sh --promote.

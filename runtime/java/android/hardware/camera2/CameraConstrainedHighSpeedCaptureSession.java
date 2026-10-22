@@ -5,7 +5,7 @@
 // receive one, they never construct one, and they call the single method it
 // adds over CameraCaptureSession to batch a high-speed request list.
 //
-// Mac.apk never creates a session at all, so no instance exists -- but the type
+// Apk on Mac never creates a session at all, so no instance exists -- but the type
 // must resolve, because an app that CASTS a CameraCaptureSession to this in its
 // StateCallback fails to link the containing method otherwise, even on the
 // branch it never takes.

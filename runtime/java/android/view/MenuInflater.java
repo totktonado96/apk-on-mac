@@ -27,7 +27,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.InputStream;
 
 public class MenuInflater {
-    private static final String TAG = "Mac.apk.MenuInflater";
+    private static final String TAG = "Apk on Mac.MenuInflater";
     private static final String ANDROID_NS = "http://schemas.android.com/apk/res/android";
 
     private final Context context;

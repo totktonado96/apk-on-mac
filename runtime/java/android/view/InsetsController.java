@@ -6,7 +6,7 @@
 // class). The code below is carried over verbatim, so nothing about the
 // observable behaviour changed with the split.
 //
-// Mac.apk renders inside an NSWindow with no real Android system bars, but
+// Apk on Mac renders inside an NSWindow with no real Android system bars, but
 // edge-to-edge / immersive apps DRIVE this object and then READ it back
 // (getSystemBarsAppearance for light-vs-dark icon decisions, requested-visibility
 // state for layout). A pure no-op made those reads return stale 0s and dropped

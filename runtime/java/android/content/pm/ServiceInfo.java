@@ -4,7 +4,7 @@ package android.content.pm;
 // inheritance is LOAD-BEARING (not cosmetic): consumers read the service's
 // <meta-data> via `getfield android/content/pm/PackageItemInfo.metaData` on a
 // ServiceInfo instance (Firebase ComponentDiscovery enumerates registrars this
-// way). Mac.apk runs the guest JVM with -Xverify:none, so a getfield of an
+// way). Apk on Mac runs the guest JVM with -Xverify:none, so a getfield of an
 // inherited field on a receiver whose class does NOT actually extend the
 // field's declaring class is not rejected -- it reads a WRONG offset and
 // returns a garbage (non-null) reference, which then faults inside the JVM's

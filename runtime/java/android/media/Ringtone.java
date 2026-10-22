@@ -1,7 +1,7 @@
 // android.media.Ringtone -- plays a single ringtone/notification/alarm sound.
 // AOSP frameworks/base media/java/android/media/Ringtone.java.
 //
-// Mac.apk backs playback with MediaPlayer when the ringtone Uri resolves to a
+// Apk on Mac backs playback with MediaPlayer when the ringtone Uri resolves to a
 // decodable file; otherwise play()/stop() are no-ops. The state surface
 // (isPlaying, set/getAudioAttributes, getTitle) is faithful so settings/alarm
 // UIs that preview a ringtone run without crashing.

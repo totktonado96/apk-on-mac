@@ -2,7 +2,7 @@
 // a file into the MediaStore. AOSP frameworks/base
 // media/java/android/media/MediaScannerConnection.java.
 //
-// Mac.apk has no MediaStore/MediaScanner service. The faithful no-op contract:
+// Apk on Mac has no MediaStore/MediaScanner service. The faithful no-op contract:
 // connect()/disconnect() succeed, scanFile() immediately reports the file as
 // scanned with a null content Uri (no provider), and the static scanFile(...)
 // helper invokes the caller's listener once per path so gallery/save flows

@@ -1,4 +1,4 @@
-// Mac.apk v1.0.256 -- real android.os.StatFs backed by macOS filesystem stats.
+// Apk on Mac v1.0.256 -- real android.os.StatFs backed by macOS filesystem stats.
 //
 // Firebase Crashlytics' static initializer
 // `Firebase.Crashlytics.Crashlytics.PlatformAccessor..cctor` does

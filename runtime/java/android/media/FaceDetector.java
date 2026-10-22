@@ -1,5 +1,5 @@
 package android.media;
-/** Legacy face detection (API 1). Mac.apk has no detector, so it finds none. */
+/** Legacy face detection (API 1). Apk on Mac has no detector, so it finds none. */
 public class FaceDetector {
     public FaceDetector(int width, int height, int maxFaces) {}
     public int findFaces(android.graphics.Bitmap bitmap, Face[] faces) { return 0; }

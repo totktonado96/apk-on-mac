@@ -13,7 +13,7 @@
 //     FragmentLayoutInflaterFactory.
 //   * That factory handles `FragmentContainerView.class.getName()` (via the
 //     internal 3-arg ctor) and the `"fragment"` tag (instantiate + addFragment).
-// Mac.apk never ran any of that: (a) our LayoutInflater did not consult ANY
+// Apk on Mac never ran any of that: (a) our LayoutInflater did not consult ANY
 // factory, and (b) even if we delegated to the app's own factory it would fail,
 // because that factory reads android:name via obtainStyledAttributes(R.styleable
 // .Fragment / FragmentContainerView) and our obtainStyledAttributes cannot map
@@ -61,7 +61,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 
 public final class FragmentInflaterFactory implements LayoutInflater.Factory2 {
-    private static final String TAG = "Mac.apk.FragmentInflaterFactory";
+    private static final String TAG = "Apk on Mac.FragmentInflaterFactory";
 
     /** Stateless singleton -- it resolves the host FragmentManager from the
      *  currently-running Activity (ActivityHost.peek()) at call time, so one

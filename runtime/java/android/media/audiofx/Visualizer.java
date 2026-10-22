@@ -1,7 +1,7 @@
 // android.media.audiofx.Visualizer -- pulls waveform/FFT data from the output of
 // an audio session. AOSP frameworks/base media/java/android/media/audiofx/Visualizer.java.
 //
-// Mac.apk's mixer has no per-session tap, so the visualizer returns silence:
+// Apk on Mac's mixer has no per-session tap, so the visualizer returns silence:
 // getWaveForm fills the mid-level (0x80) PCM-unsigned silence value, getFft
 // fills zeros. A visualizer-driven UI runs its capture loop and draws a flat
 // line rather than crashing -- honest for a host with no audio tap. The data-

@@ -2,7 +2,7 @@ package com.google.android.gms.fitness.data;
 
 // com.google.android.gms.fitness.data.DataType -- identifies a kind of fitness
 // data (steps, heart rate, etc.). Apps reference the public TYPE_* constants when
-// building FitnessOptions / read requests. Mac.apk has no Fitness backend so no
+// building FitnessOptions / read requests. Apk on Mac has no Fitness backend so no
 // data is ever read, but the constants and type must link. Each constant is a
 // distinct DataType instance carrying its canonical name string.
 // Ref: developers.google.com/android/reference/.../fitness/data/DataType

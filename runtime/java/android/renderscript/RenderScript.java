@@ -14,7 +14,7 @@ import java.util.HashMap;
  * then deprecated the whole API at API 31; current AOSP services the intrinsics
  * from the CPU reference implementation in frameworks/rs/cpu_ref.
  *
- * Mac.apk implements that same CPU reference behaviour in Java, over real
+ * Apk on Mac implements that same CPU reference behaviour in Java, over real
  * Allocation bytes. So:
  *
  *   - The DATA MODEL is real: Element, Type and Allocation carry actual bytes
@@ -47,7 +47,7 @@ public class RenderScript {
     public static final int CREATE_FLAG_WAIT_FOR_ATTACH = 0x0008;
 
     /**
-     * Size of a native pointer in the RenderScript driver. Mac.apk is
+     * Size of a native pointer in the RenderScript driver. Apk on Mac is
      * 64-bit-only (Apple Silicon), so this is 8, and the opaque RS_* Element
      * types are 32 bytes rather than 4. Element's constructor keys off it.
      */
@@ -87,7 +87,7 @@ public class RenderScript {
     /**
      * Base class for an app's runtime error handler. AOSP fills the fields and
      * calls run() from the message thread when the driver reports an error.
-     * Nothing in Mac.apk reports asynchronous driver errors (failures are
+     * Nothing in Apk on Mac reports asynchronous driver errors (failures are
      * thrown synchronously instead), so an installed handler is simply never
      * invoked, which is the same as a healthy device run.
      */
@@ -101,7 +101,7 @@ public class RenderScript {
 
     /**
      * Base class for an app's script-to-Java message handler. Only ScriptC
-     * kernels can call rsSendToClient, and Mac.apk cannot execute those, so
+     * kernels can call rsSendToClient, and Apk on Mac cannot execute those, so
      * this is likewise never invoked.
      */
     public static class RSMessageHandler implements Runnable {
@@ -171,7 +171,7 @@ public class RenderScript {
     }
 
     /**
-     * Creates a context separate from the per-process one. Mac.apk gives every
+     * Creates a context separate from the per-process one. Apk on Mac gives every
      * caller its own object anyway, so this is the same as create().
      */
     public static RenderScript createMultiContext(Context ctx, ContextType ct,
@@ -213,12 +213,12 @@ public class RenderScript {
         return 0;
     }
 
-    /** Releases the process-wide context. Mac.apk has no process context. */
+    /** Releases the process-wide context. Apk on Mac has no process context. */
     public static void releaseAllContexts() {
     }
 
     /**
-     * Worker-thread priority. Mac.apk runs the intrinsics synchronously on the
+     * Worker-thread priority. Apk on Mac runs the intrinsics synchronously on the
      * calling thread (there is no driver worker pool to reprioritise), so this
      * records the request and does nothing else. Validation still runs, because
      * a call on a dead context must throw either way.
@@ -245,7 +245,7 @@ public class RenderScript {
 
     /**
      * Sends a message to a running script. Only a ScriptC kernel can receive
-     * one (via rsSendToClient's counterpart), and Mac.apk cannot execute those,
+     * one (via rsSendToClient's counterpart), and Apk on Mac cannot execute those,
      * so there is nothing on the other end. Validation still applies; the
      * message is dropped exactly as it would be on a device with no script
      * listening.
@@ -255,7 +255,7 @@ public class RenderScript {
     }
 
     /**
-     * Dumps the context's object graph to the log on a device. Mac.apk keeps no
+     * Dumps the context's object graph to the log on a device. Apk on Mac keeps no
      * driver-side object table to dump, so this validates and returns rather
      * than inventing output.
      */
@@ -264,7 +264,7 @@ public class RenderScript {
     }
 
     /**
-     * Waits for pending asynchronous work. Every Mac.apk intrinsic runs
+     * Waits for pending asynchronous work. Every Apk on Mac intrinsic runs
      * synchronously on the calling thread, so by the time finish() is reachable
      * there is nothing outstanding. This is a real "already finished", not a
      * skipped wait.

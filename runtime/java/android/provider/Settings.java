@@ -2,7 +2,7 @@
 // store. Apps mainly call Secure.getString(Secure.ANDROID_ID) for a
 // stable per-install identifier, read the animation scales, or
 // round-trip their own keys. Real Android keeps these in a SQLite DB
-// behind the Settings ContentProvider; Mac.apk backs them with a real
+// behind the Settings ContentProvider; Apk on Mac backs them with a real
 // in-process store (SettingsStore) that persists to the android-root
 // data tree, so putInt/putFloat/putString round-trip and survive runs.
 package android.provider;
@@ -16,7 +16,7 @@ public final class Settings {
 
     /**
      * Settings "panels" -- the slide-up mini-settings surfaces. Pure Intent
-     * action constants; Mac.apk ships no Settings app, so an app that fires one
+     * action constants; Apk on Mac ships no Settings app, so an app that fires one
      * finds no activity to handle it, exactly as on a device whose Settings app
      * is disabled. Declaring the constant is not a claim that a panel exists.
      *
@@ -33,7 +33,7 @@ public final class Settings {
 
     // ---- ACTION_* activity intents (raw github aosp-mirror Settings.java).
     // Apps launch these via startActivity(new Intent(ACTION_*)) to deep-link
-    // into the system Settings UI. Mac.apk has no system Settings activity,
+    // into the system Settings UI. Apk on Mac has no system Settings activity,
     // but the constant strings must exist so the intent-construction code
     // compiles/runs (the launch is a no-op when nothing handles the action).
     public static final String ACTION_SETTINGS = "android.settings.SETTINGS";
@@ -205,7 +205,7 @@ public final class Settings {
      *  context.getOpPackageName(), false) ||
      *  context.checkSelfPermission(SYSTEM_APPLICATION_OVERLAY) ==
      *  PERMISSION_GRANTED} -- i.e. it ultimately bottoms out in a
-     *  checkSelfPermission-style grant check. Mac.apk has no AppOps model to
+     *  checkSelfPermission-style grant check. Apk on Mac has no AppOps model to
      *  answer the first disjunct (the finer per-permission user toggle
      *  isCallingPackageAllowedToDrawOverlays reads), so this mirrors the
      *  second: Context.checkSelfPermission already answers every self-
@@ -229,7 +229,7 @@ public final class Settings {
         //
         // So answer the FIRST disjunct instead, which is what a device with the
         // permission granted answers. It is honest here for a reason that is
-        // not a shortcut: WindowManager.addView really does work -- Mac.apk
+        // not a shortcut: WindowManager.addView really does work -- Apk on Mac
         // composites every overlay itself through WindowOverlayStack -- so an
         // app told "yes" can genuinely draw one. Returning false would deny a
         // capability we actually provide.
@@ -389,7 +389,7 @@ public final class Settings {
 
         /**
          * AOSP asks LocationManagerService whether the provider is enabled.
-         * Mac.apk's android.location.LocationManager already answers that
+         * Apk on Mac's android.location.LocationManager already answers that
          * question honestly (only an app-added test provider is ever enabled),
          * so this delegates there rather than reading the settings string --
          * which is what AOSP does too, and which keeps the two answers from

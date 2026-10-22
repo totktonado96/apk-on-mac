@@ -1,5 +1,5 @@
 package android.system;
-/** uname(2) result. Mac.apk reports a Darwin/Android-flavored identity. */
+/** uname(2) result. Apk on Mac reports a Darwin/Android-flavored identity. */
 public final class StructUtsname {
     public final String sysname;
     public final String nodename;

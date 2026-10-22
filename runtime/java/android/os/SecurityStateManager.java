@@ -4,7 +4,7 @@
 // AOSP ref: frameworks/base/core/java/android/os/SecurityStateManager.java
 // (android16-release). AOSP fills the Bundle from ro.build.version.security_patch
 // (system SPL), the vendor SPL property, the running kernel version, and one
-// entry per security-relevant package. Mac.apk answers the two it genuinely
+// entry per security-relevant package. Apk on Mac answers the two it genuinely
 // knows -- the system SPL is exactly what Build.VERSION.SECURITY_PATCH already
 // reports, and the kernel version is the real host kernel via `uname -r`
 // (host-first: no invented string) -- and OMITS the vendor SPL, because there

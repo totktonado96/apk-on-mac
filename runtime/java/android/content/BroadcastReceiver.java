@@ -58,7 +58,7 @@ public abstract class BroadcastReceiver {
         boolean mAbortBroadcast;
         boolean mFinished;
 
-        /** Mac.apk entry point (AOSP's constructor takes the binder token and
+        /** Apk on Mac entry point (AOSP's constructor takes the binder token and
          *  flags a single-process runtime has nothing to put in). */
         public PendingResult(int resultCode, String resultData, Bundle resultExtras,
                              int type, boolean ordered, boolean sticky,
@@ -257,7 +257,7 @@ public abstract class BroadcastReceiver {
     /** AOSP :473 -- "provide a binder to an already-bound service", used by a
      *  receiver that wants to talk to a service ONLY if it is already running.
      *  AOSP asks the ActivityManager, which returns null when the service is
-     *  not currently bound. Mac.apk's ServiceRegistry has no
+     *  not currently bound. Apk on Mac's ServiceRegistry has no
      *  "already-bound-only" query, and BINDING here would be the wrong answer:
      *  peekService must not start or bind anything, and a caller uses null to
      *  mean "not running, skip". Null is therefore the correct result, and it

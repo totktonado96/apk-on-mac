@@ -1,7 +1,7 @@
 // android.text.style.TtsSpan -- accessibility (TalkBack) metadata span.
 // It carries a "type" + a PersistableBundle of arguments describing how a
 // run of text should be spoken (e.g. wrap an entered digit so "7 x 3" is
-// read as "7 times 3"). Mac.apk does no TTS, so this is a pure data
+// read as "7 times 3"). Apk on Mac does no TTS, so this is a pure data
 // carrier: it just needs to construct via its many Builders and be a
 // valid setSpan() object. It is NOT a CharacterStyle, so TextView's
 // render path ignores it -- matching AOSP, where TtsSpan affects only

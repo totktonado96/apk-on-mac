@@ -11,7 +11,7 @@
 //     public abstract void onDisconnect(MidiReceiver);
 //   }
 // AOSP's connect/disconnect are thin wrappers that null-check and delegate to
-// onConnect/onDisconnect; we mirror that exactly. Mac.apk drives no MIDI, so the
+// onConnect/onDisconnect; we mirror that exactly. Apk on Mac drives no MIDI, so the
 // concrete port's callbacks are no-ops.
 package android.media.midi;
 

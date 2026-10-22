@@ -1,6 +1,6 @@
 package android.media.midi;
 import android.os.Handler;
-/** MIDI device access (API 23). Mac.apk exposes no MIDI devices, so the list is
+/** MIDI device access (API 23). Apk on Mac exposes no MIDI devices, so the list is
  *  empty and callbacks never fire. Was a loose-Object stub; now typed. */
 public final class MidiManager {
     public static final int TRANSPORT_MIDI_BYTE_STREAM = 1;

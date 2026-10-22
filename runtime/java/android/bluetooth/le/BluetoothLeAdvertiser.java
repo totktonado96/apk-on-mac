@@ -2,7 +2,7 @@
 // advertisements (this device acting as a peripheral).
 //
 // NOTHING CAN BE BROADCAST, and the callbacks say so rather than going quiet.
-// Mac.apk exposes no Bluetooth bridge, so BluetoothAdapter.getDefaultAdapter()
+// Apk on Mac exposes no Bluetooth bridge, so BluetoothAdapter.getDefaultAdapter()
 // returns null (AOSP's answer for a context with no Bluetooth) and
 // getBluetoothLeAdvertiser() returns null with it -- which means an app cannot
 // reach this class through supported code at all. The constructor is

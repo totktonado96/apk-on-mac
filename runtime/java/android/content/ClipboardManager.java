@@ -13,7 +13,7 @@
 // clipboard.
 //
 // ---- THE HOST BRIDGE (MACAPK_CLIPBOARD_HOST, default ON) -------------------
-// Mac.apk runs one guest app per process, so there is no Binder service to
+// Apk on Mac runs one guest app per process, so there is no Binder service to
 // talk to -- but the host still has exactly one real system clipboard, the
 // macOS general pasteboard, and every other app on the machine plays the part
 // of "another Android app". So the SERVICE half of AOSP lives in this file
@@ -420,7 +420,7 @@ public class ClipboardManager extends android.text.ClipboardManager {
         static boolean sOurs;             // this process wrote/cleared at sKnownCount
         static boolean sMaterialized;     // sClip reflects sKnownCount
         static ClipData sClip;            // the service's copy of the primary clip
-        static String sSource;            // package that set it; null = a non-Mac.apk macOS app
+        static String sSource;            // package that set it; null = a non-Apk on Mac macOS app
         static boolean sNotified;         // AOSP Clipboard.mNotifiedUids for our one uid
         static long sAdoptedAtMs;         // when an outside clip was first seen (its timestamp)
         static final ArrayList<ClipboardManager> sListening = new ArrayList<>();
@@ -514,7 +514,7 @@ public class ClipboardManager extends android.text.ClipboardManager {
             sAdoptedAtMs = System.currentTimeMillis();
         }
 
-        /** Another macOS app (or another Mac.apk app) changed the pasteboard:
+        /** Another macOS app (or another Apk on Mac app) changed the pasteboard:
          *  the service's primary clip is replaced and, as
          *  setPrimaryClipInternalNoClassifyLocked does, listeners hear of it. */
         static void adoptExternalLocked(long count, List<ClipboardManager> pending) {
@@ -587,7 +587,7 @@ public class ClipboardManager extends android.text.ClipboardManager {
                 // would not be pasteable in those apps. So text/plain stays
                 // PRIMARY (index 0, the emulator's type) and text/html is
                 // offered beside it for an app that wants the markup.
-                // A clip another Mac.apk guest wrote keeps text/html alone: the
+                // A clip another Apk on Mac guest wrote keeps text/html alone: the
                 // only public factory for a text+HTML item is newHtmlText, and
                 // that is the type a reader on a device sees for it.
                 mimes = (text != null && !fromMacApk)
@@ -871,7 +871,7 @@ public class ClipboardManager extends android.text.ClipboardManager {
         static final int TYPE_HTML      = 2;   // public.html
         static final int TYPE_URL       = 4;   // public.url / public.file-url
         static final int TYPE_CONCEALED = 8;   // org.nspasteboard.ConcealedType
-        static final int TYPE_MACAPK    = 16;  // written by a Mac.apk guest
+        static final int TYPE_MACAPK    = 16;  // written by a Apk on Mac guest
 
         /** NSPasteboard.changeCount, or -1 with no pasteboard. Metadata only. */
         static native long nativeChangeCount();

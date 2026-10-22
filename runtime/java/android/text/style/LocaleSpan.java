@@ -2,7 +2,7 @@
 // locale, which drives locale-aware font selection, hyphenation and
 // text-to-speech pronunciation.
 //
-// Mac.apk renders every run with one system face and has no per-locale font
+// Apk on Mac renders every run with one system face and has no per-locale font
 // fallback, so applying the locale to the paint is currently a no-op; the span
 // still carries and reports its LocaleList faithfully, because that is what
 // accessibility services and TTS read, and because dropping the value would

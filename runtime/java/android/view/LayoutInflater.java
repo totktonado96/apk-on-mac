@@ -43,7 +43,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 
 public class LayoutInflater {
-    private static final String TAG = "Mac.apk.LayoutInflater";
+    private static final String TAG = "Apk on Mac.LayoutInflater";
 
     private final Context context;
 
@@ -3525,7 +3525,7 @@ public class LayoutInflater {
         // all (insetLeft/Right=0dp, unambiguous), so this button's TEXT (glyph)
         // is centered via Button's default CENTER gravity within
         // [paddingLeft, width-paddingRight] -- symmetric 48/48 on AOSP,
-        // lopsided 48/0 on Mac.apk -- landing every digit glyph ~24px right of
+        // lopsided 48/0 on Apk on Mac -- landing every digit glyph ~24px right of
         // where AOSP draws it. The button's own BOUNDS (and therefore its
         // background/circle drawable, which View.draw() sizes to the full
         // view rect regardless of padding) were never wrong; only the
@@ -3684,7 +3684,7 @@ public class LayoutInflater {
                 defStyleAttr = macapkDefStyleAttrFor("EditText");
             }
             if (defStyleAttr == null) {
-                if (trace) android.util.Log.i("Mac.apk.DefStyle", "skip class=" + cn);
+                if (trace) android.util.Log.i("Apk on Mac.DefStyle", "skip class=" + cn);
                 return;
             }
             Object ri = android.content.res.Resources.macapkGetResourceIndex();
@@ -3695,7 +3695,7 @@ public class LayoutInflater {
                 .getMethod("getApplicationThemeName").invoke(ri);
             if (!(appTheme instanceof String)) return;
             Object sr = mResolve.invoke(ri, appTheme, defStyleAttr);
-            if (trace) android.util.Log.i("Mac.apk.DefStyle",
+            if (trace) android.util.Log.i("Apk on Mac.DefStyle",
                 "cn=" + cn + " appTheme=" + appTheme + " " + defStyleAttr + "=" + sr);
             if (!(sr instanceof String)) return;
             String styleName = ((String) sr).trim();
@@ -3798,7 +3798,7 @@ public class LayoutInflater {
                 // -> MaterialButton), not this.
                 if (sitems.containsKey(attr)) continue;   // app's style wins
                 Object v = mResolve.invoke(ri, styleName, attr);
-                if (trace) android.util.Log.i("Mac.apk.DefStyle",
+                if (trace) android.util.Log.i("Apk on Mac.DefStyle",
                     "  " + styleName + "." + attr + " = " + v);
                 if (v instanceof String && !((String) v).isEmpty()) {
                     sitems.put(attr, (String) v);
@@ -3942,7 +3942,7 @@ public class LayoutInflater {
                     org.w3c.dom.Attr own = elem == null ? null : elem.getAttributeNodeNS(
                         "http://schemas.android.com/apk/res/android", "button");
                     if (own != null) {
-                        if (trace) android.util.Log.i("Mac.apk.DefStyle",
+                        if (trace) android.util.Log.i("Apk on Mac.DefStyle",
                             "  button=" + ref + " skipped: the tag declares android:button="
                             + own.getValue());
                         return;
@@ -3983,7 +3983,7 @@ public class LayoutInflater {
                 android.graphics.drawable.Drawable fb =
                         r.macapkFrameworkDrawableByName(synth);
                 if (fb == null) return;
-                if (trace) android.util.Log.i("Mac.apk.DefStyle",
+                if (trace) android.util.Log.i("Apk on Mac.DefStyle",
                     "  button=" + ref + " unresolved (did=" + did + " tintId=" + cid
                     + ") -> synthesized " + synth);
                 cb.setButtonDrawable(fb);
@@ -3998,7 +3998,7 @@ public class LayoutInflater {
             if (tint == null) return;
             android.graphics.drawable.Drawable d = r.getDrawable(did, th);
             if (d == null) return;
-            if (trace) android.util.Log.i("Mac.apk.DefStyle",
+            if (trace) android.util.Log.i("Apk on Mac.DefStyle",
                 "  button=" + ref + " tint=" + tint.getDefaultColor() + " -> " + d);
             cb.setButtonTintList(tint);
             cb.setButtonDrawable(d);
@@ -4091,7 +4091,7 @@ public class LayoutInflater {
             }
             if (d == null) d = r.macapkFrameworkDrawableByName(standIn);
             if (d == null) return;
-            if (trace) android.util.Log.i("Mac.apk.DefStyle",
+            if (trace) android.util.Log.i("Apk on Mac.DefStyle",
                 "  button=@android:drawable/" + name + " -> "
                 + (standIn != null ? "synthesized " + standIn : "platform asset " + d));
             cb.setButtonDrawable(d);
@@ -4146,7 +4146,7 @@ public class LayoutInflater {
             String rawTint = macapkElementAttr(elem, "backgroundTint");
             if (rawTint == null) rawTint = sitems.get("backgroundTint");
             if (System.getenv("MACAPK_TRACE_MTLBTN") != null) {
-                android.util.Log.i("Mac.apk.MtlBtn", "cn=" + cn
+                android.util.Log.i("Apk on Mac.MtlBtn", "cn=" + cn
                     + " elemTint=" + macapkElementAttr(elem, "backgroundTint")
                     + " styleTint=" + sitems.get("backgroundTint")
                     + " raw=" + rawTint

@@ -5,7 +5,7 @@
 // the display refresh rate / metrics -> onCreate aborted -> ShatteredPD
 // (and every libGDX game) never rendered).
 //
-// Mac.apk hosts a single logical display; we hand back the shared
+// Apk on Mac hosts a single logical display; we hand back the shared
 // android.view.Display (already populated with size/refresh-rate/metrics
 // defaults). v1.0.1637: the display DOES change at runtime -- a window resize
 // is a display size change in our model -- so listeners are now kept and told
@@ -108,7 +108,7 @@ public class DisplayManager {
             final Runnable r = () -> {
                 try { l.onDisplayChanged(displayId); }
                 catch (Throwable t) {
-                    com.macapk.loader.NativeLog.w("Mac.apk.DisplayManager",
+                    com.macapk.loader.NativeLog.w("Apk on Mac.DisplayManager",
                         "onDisplayChanged threw in " + l.getClass().getName() + ": " + t);
                 }
             };
@@ -118,7 +118,7 @@ public class DisplayManager {
                     ((java.util.concurrent.Executor) e[1]).execute(r);
                 else r.run();
             } catch (Throwable t) {
-                com.macapk.loader.NativeLog.w("Mac.apk.DisplayManager",
+                com.macapk.loader.NativeLog.w("Apk on Mac.DisplayManager",
                     "display-changed delivery failed: " + t);
             }
         }
@@ -145,7 +145,7 @@ public class DisplayManager {
      * switch before starting playback.
      *
      * AOSP derives this from the display service's refresh-rate switching type
-     * (DisplayManager.java:1134-1146). Mac.apk presents into a single
+     * (DisplayManager.java:1134-1146). Apk on Mac presents into a single
      * CAMetalLayer at the host display's rate and has no refresh-rate switching
      * of any kind, so NEVER is the true answer, not a placeholder: it tells the
      * player not to bother requesting a switch that would not happen.
@@ -216,7 +216,7 @@ public class DisplayManager {
      * service refuses -- no permission for a SECURE or PUBLIC display, out of
      * display slots, MediaProjection consent denied.
      *
-     * Mac.apk composites ONE logical display into one NSWindow. There is no
+     * Apk on Mac composites ONE logical display into one NSWindow. There is no
      * second display pipeline, so there is nothing to rasterize into the
      * caller's Surface. The alternative -- returning a VirtualDisplay object
      * whose Surface never receives a frame -- would be a lie the app cannot
@@ -285,7 +285,7 @@ public class DisplayManager {
      *
      * HDR_CONVERSION_UNSUPPORTED is that answer here, and it is a state real
      * devices report: it is what AOSP returns on any panel whose composer does
-     * not implement HDR output conversion, which is most of them. Mac.apk
+     * not implement HDR output conversion, which is most of them. Apk on Mac
      * composites into one NSWindow through ANGLE/Metal with no HDR conversion
      * stage at all, so claiming PASSTHROUGH (which asserts an HDR stream
      * reaches the panel untouched) or SYSTEM (which asserts something is

@@ -133,7 +133,7 @@ public class LinearLayout extends ViewGroup {
     private boolean mAllowInconsistentMeasurement = false;
 
     /** AOSP View.sUseZeroUnspecifiedMeasureSpec (targetSdk &lt; M), the gate
-     *  behind MeasureSpec.makeSafeMeasureSpec. Mac.apk's MeasureSpec has no
+     *  behind MeasureSpec.makeSafeMeasureSpec. Apk on Mac's MeasureSpec has no
      *  makeSafeMeasureSpec, so the gate is latched here alongside the other
      *  targetSdk compat answers and applied by the local helper below. */
     private static boolean sUseZeroUnspecifiedMeasureSpec = false;
@@ -151,8 +151,8 @@ public class LinearLayout extends ViewGroup {
     public LinearLayout(Context c, android.util.AttributeSet a, int s) { super(c, a, s); macapkInitCompat(c); }
     public LinearLayout(Context c, android.util.AttributeSet a, int s, int r) { super(c, a, s, r); macapkInitCompat(c); }
 
-    /** AOSP runs this inline in the 4-arg constructor; Mac.apk's constructors
-     *  do not chain, so it is factored out. The try/catch is a Mac.apk
+    /** AOSP runs this inline in the 4-arg constructor; Apk on Mac's constructors
+     *  do not chain, so it is factored out. The try/catch is a Apk on Mac
      *  addition, not AOSP laxness: our tree has several Context implementations
      *  (framework-internal ones included) whose getApplicationInfo may be null
      *  or may throw, and a LinearLayout constructor that throws takes down
@@ -1114,7 +1114,7 @@ public class LinearLayout extends ViewGroup {
         // anything resolves to RTL, so they are only as right as View's
         // resolution is. AOSP resolves direction during the attach/layout
         // traversal, so a DETACHED view answers LTR no matter what
-        // setLayoutDirection was told; Mac.apk's View currently resolves
+        // setLayoutDirection was told; Apk on Mac's View currently resolves
         // eagerly, which makes a detached RTL tree behave RTL here where
         // Android would still be LTR.
         int start = 0;

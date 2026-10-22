@@ -6,7 +6,7 @@
 // Mirrors frameworks/base/drm/java/android/drm/ProcessedData.java
 // (android16-release), including the "_NO_USER" account-id default.
 //
-// Nothing in Mac.apk ever produces one -- there is no DRM plug-in to process
+// Nothing in Apk on Mac ever produces one -- there is no DRM plug-in to process
 // anything -- so this type exists so that DrmRights(ProcessedData, String) and
 // DrmInfoStatus.data resolve.
 package android.drm;

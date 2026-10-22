@@ -6,7 +6,7 @@
 // public API, so app / DPC code that builds one (or, far more often, receives
 // one from DevicePolicyManager.generateKeyPair) links against it.
 //
-// ⚠ SCOPE NOTE, and it is the important part of this file: Mac.apk NEVER
+// ⚠ SCOPE NOTE, and it is the important part of this file: Apk on Mac NEVER
 // produces one of these with a real attestation record. Hardware key
 // attestation is a signed statement, rooted in a Google-provisioned device key,
 // that the private key lives in certified secure hardware. macOS's Secure
@@ -40,7 +40,7 @@ public final class AttestedKeyPair {
 
     /** The attestation chain as supplied to the constructor. AOSP returns an
      *  EMPTY list when the key was generated without an attestation challenge,
-     *  and that is the only shape Mac.apk can ever hand back honestly: we have
+     *  and that is the only shape Apk on Mac can ever hand back honestly: we have
      *  no attestation authority, so we never fabricate a chain. */
     public List<Certificate> getAttestationRecord() { return mAttestationRecord; }
 }

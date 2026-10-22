@@ -5,7 +5,7 @@
 // Both constructors are PROTECTED in AOSP and stay protected here: an app
 // subclasses this to mint its own events, it does not construct one directly.
 //
-// Mac.apk never delivers one -- there is no plug-in to raise an event -- so
+// Apk on Mac never delivers one -- there is no plug-in to raise an event -- so
 // these types exist so an app's listener implementation resolves and its
 // event-handling code compiles and links.
 package android.drm;

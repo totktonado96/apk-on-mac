@@ -9,7 +9,7 @@
 // clears it (see frameworks/base ViewRootImpl.requestLayout/invalidate/
 // scheduleTraversals/doTraversal). Idle window -> zero traversals.
 //
-// In Mac.apk the traversal BODY already lives in ViewCanvasDriver (it runs
+// In Apk on Mac the traversal BODY already lives in ViewCanvasDriver (it runs
 // measure->layout->draw->present on the ONE main loop each Metal vsync). What
 // was missing is the GATE: ViewCanvasDriver traversed unconditionally every
 // frame (the ~15 enforce/fixup hacks re-assert geometry every frame on top of
@@ -91,7 +91,7 @@ public final class ViewRootImpl {
     // MACAPK_TRACE_INVALIDATE=1 (diagnostic): WHO keeps the window dirty. Every
     // schedule() is attributed to its framework entry (View.invalidate,
     // Drawable.invalidateSelf ...) and the first APP frame that called it, and every
-    // 5 s the 8 commonest pairs are logged as `[inval-census]` (tag Mac.apk.Inval).
+    // 5 s the 8 commonest pairs are logged as `[inval-census]` (tag Apk on Mac.Inval).
     // An app that redraws every frame on a static screen shows its animators here:
     // Telegram's chat list (2026-10-01) is a SpoilerEffect cell, ActionBar
     // .setTranslationY and MainTabsActivity's blur fade, 36 each per 5 s -- small
@@ -118,7 +118,7 @@ public final class ViewRootImpl {
                 StringBuilder sb = new StringBuilder("[inval-census] 5s:");
                 sCensus.entrySet().stream().sorted((a, b) -> b.getValue()[0] - a.getValue()[0]).limit(8)
                     .forEach(e -> sb.append("\n  ").append(e.getValue()[0]).append("  ").append(e.getKey()));
-                com.macapk.loader.NativeLog.i("Mac.apk.Inval", sb.toString());
+                com.macapk.loader.NativeLog.i("Apk on Mac.Inval", sb.toString());
                 sCensus.clear(); sCensusT0 = now;
             }
         }

@@ -38,7 +38,7 @@ public class CursorWindow extends SQLiteClosable implements Parcelable {
     public boolean setNumColumns(int columnNum) { numColumns = columnNum; return true; }
     public boolean allocRow() { numRows++; return true; }
     public void freeLastRow() { if (numRows > 0) numRows--; }
-    /** Mac.apk helper: set the row count directly (the SQLite path
+    /** Apk on Mac helper: set the row count directly (the SQLite path
      *  knows its count without filling cells). */
     public void macapkSetNumRows(int n) { numRows = n; }
 
@@ -135,7 +135,7 @@ public class CursorWindow extends SQLiteClosable implements Parcelable {
     // AOSP marshals the shared-memory descriptor across Binder. We have
     // no Binder transport (everything is in-process), so the Parcelable
     // surface exists to resolve the type contract; the cell store is
-    // not serialized (cross-process windows do not occur in Mac.apk).
+    // not serialized (cross-process windows do not occur in Apk on Mac).
 
     @Override public int describeContents() { return 0; }
 

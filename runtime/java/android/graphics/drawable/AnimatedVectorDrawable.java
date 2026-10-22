@@ -21,7 +21,7 @@ public class AnimatedVectorDrawable extends Drawable implements Animatable2 {
 
     public AnimatedVectorDrawable() {}
 
-    /** Mac.apk hook: the resource inflater hands us the base vector to paint. */
+    /** Apk on Mac hook: the resource inflater hands us the base vector to paint. */
     public void macapkSetInner(Drawable d) { this.inner = d; }
     public Drawable macapkInner() { return inner; }
 

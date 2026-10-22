@@ -4,7 +4,7 @@
 // does not move and no installed app re-converts).
 //
 // WHY THIS EXISTS. A Mac keeps its camera roll in the Photos library, not in
-// loose files, so an Android gallery on Mac.apk saw an almost empty volume even
+// loose files, so an Android gallery on Apk on Mac saw an almost empty volume even
 // after ~/Pictures was mapped in (docs/shared-storage-real-mac-folders-design_
 // 2026-09-25.md). The library package itself is TCC-protected and its layout is
 // private, so MediaStore never walks it (MediaStoreProvider.HOST_PACKAGE_EXT).

@@ -1,5 +1,5 @@
 // android.media.audiofx.PresetReverb -- preset-based reverb. AOSP frameworks/base
-// media/java/android/media/audiofx/PresetReverb.java. Inert on Mac.apk: preset
+// media/java/android/media/audiofx/PresetReverb.java. Inert on Apk on Mac: preset
 // stored + read back, audio unchanged.
 package android.media.audiofx;
 

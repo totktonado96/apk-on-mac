@@ -509,7 +509,7 @@ public class TextToSpeech {
     }
 
     // Describes an installed engine. AOSP populates these from resolved TTS
-    // services; Mac.apk has none, so getEngines() returns an empty list and this
+    // services; Apk on Mac has none, so getEngines() returns an empty list and this
     // exists only for the return element type to resolve.
     public static class EngineInfo {
         public String name;

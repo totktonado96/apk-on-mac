@@ -12,7 +12,7 @@ import android.os.Parcelable;
  * On real Android the interesting part is the permission dance:
  * requestPermission() asks the IME's process to grant the editor temporary read
  * access to the content URI across a process boundary, and releasePermission()
- * revokes it. Mac.apk runs the IME surface and the app in ONE process with one
+ * revokes it. Apk on Mac runs the IME surface and the app in ONE process with one
  * filesystem view, so there is no cross-process grant to make: the URI is
  * already readable by the only process that exists. Both calls are therefore
  * genuinely no-ops here rather than unimplemented ones, and AOSP explicitly

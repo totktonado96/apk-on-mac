@@ -1,8 +1,8 @@
 // android.widget.ExpandableListView -- a ListView that shows a two-level
-// (group/child) list. Mac.apk doesn't surface a functional expandable list to
+// (group/child) list. Apk on Mac doesn't surface a functional expandable list to
 // any current target; this exists so the CLASS resolves.
 //
-// Why Mac.apk needs it (v1.0.406): Reddit bundles the AppsFlyer SDK, whose
+// Why Apk on Mac needs it (v1.0.406): Reddit bundles the AppsFlyer SDK, whose
 // com.appsflyer.internal.AFf1mSDK references android.widget.ExpandableListView.
 // With the class absent, AFf1mSDK.<clinit> threw ExceptionInInitializerError
 // (caused by NoClassDefFoundError: android/widget/ExpandableListView) on an

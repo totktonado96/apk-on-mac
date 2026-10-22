@@ -1,6 +1,6 @@
 package android.view.inputmethod;
 // android.view.inputmethod.InputMethodInfo: descriptor for one installed IME.
-// Mac.apk has no installable IMEs (text is entered through the host keyboard),
+// Apk on Mac has no installable IMEs (text is entered through the host keyboard),
 // so InputMethodManager.getEnabledInputMethodList returns an empty list; this
 // class exists so that list's element type resolves and so apps that reflect
 // over the type don't hit NoClassDefFoundError.
@@ -28,7 +28,7 @@ public final class InputMethodInfo implements android.os.Parcelable {
     }
 
     /** AOSP InputMethodInfo(Context, ResolveInfo): parses the service's
-     *  &lt;input-method&gt; meta-data out of the package. Mac.apk installs ONE
+     *  &lt;input-method&gt; meta-data out of the package. Apk on Mac installs ONE
      *  app and no IME services, so no ResolveInfo for an input method can be
      *  produced by the PackageManager -- AOSP's own failure mode for a
      *  ResolveInfo whose serviceInfo carries no input-method meta-data is
@@ -52,7 +52,7 @@ public final class InputMethodInfo implements android.os.Parcelable {
     }
 
     // ---- AOSP API-36 surface completion (android.view lane) ------------------
-    // Everything below reads state this descriptor carries. Mac.apk has no
+    // Everything below reads state this descriptor carries. Apk on Mac has no
     // installable IMEs (see the class header), so the framework never builds an
     // instance and every answer is the one AOSP gives for an IME that declared
     // no optional meta-data -- which is the common case even on a device.
@@ -146,7 +146,7 @@ public final class InputMethodInfo implements android.os.Parcelable {
     public CharSequence loadLabel(android.content.pm.PackageManager pm) {
         // AOSP loads the service's own label; a hand-built descriptor carries
         // the one it was given.
-        return label != null ? label : "Mac.apk";
+        return label != null ? label : "Apk on Mac";
     }
     public int getSubtypeCount()     { return 0; }
     @Override public String toString() { return "InputMethodInfo{" + id + "}"; }
@@ -154,7 +154,7 @@ public final class InputMethodInfo implements android.os.Parcelable {
     // AOSP's InputMethodInfo carries a real ServiceInfo + an
     // InputMethodSubtypeArray plus ~10 boolean/int flags
     // (InputMethodInfo.java L149-215/1025-1039); this class tracks only
-    // (id, packageName, serviceName) as plain strings, matching "Mac.apk
+    // (id, packageName, serviceName) as plain strings, matching "Apk on Mac
     // has no installable IMEs" above -- getEnabledInputMethodList() is
     // always empty, so no live instance of this class is ever actually
     // parceled today. Writing our own 3-field subset rather than AOSP's

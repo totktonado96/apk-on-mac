@@ -2,7 +2,7 @@
 //
 // AOSP's system search-dialog/global-search service. Apps fetch it via
 // getSystemService(SEARCH_SERVICE) to launch the search UI or read a target
-// activity's searchable metadata. Mac.apk has no global search transport and no
+// activity's searchable metadata. Apk on Mac has no global search transport and no
 // search dialog, so the UI entry points record the request and the
 // searchable-metadata lookups answer the way a device with no global-search
 // provider installed does -- null / empty rather than an exception, so an app
@@ -108,7 +108,7 @@ public class SearchManager
     public SearchManager(Context context) {}
 
     /** AOSP startSearch(...): shows the system search dialog over the calling
-     *  activity. There is no search dialog on Mac.apk, so nothing is displayed
+     *  activity. There is no search dialog on Apk on Mac, so nothing is displayed
      *  -- the same outcome as
      *  Configuration.UI_MODE_TYPE_TELEVISION, where AOSP documents that this
      *  method is not supported and does nothing. */
@@ -165,7 +165,7 @@ public class SearchManager
 
     /** AOSP getGlobalSearchActivity(): "the name of the global search
      *  activity", which is null on a device where no global-search provider is
-     *  installed. Mac.apk installs one app and no search provider. */
+     *  installed. Apk on Mac installs one app and no search provider. */
     public ComponentName getGlobalSearchActivity() { return null; }
 
     public android.content.Intent getAssistIntent(boolean inclContext) { return null; }

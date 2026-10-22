@@ -1,5 +1,5 @@
 // app_native_stub.cpp -- a no-op dylib that masquerades as the APK's
-// native library. Mac.apk cannot yet load real ARM bionic .so files
+// native library. Apk on Mac cannot yet load real ARM bionic .so files
 // (that's the bionic_translation work that is vendored but not yet
 // linked); for now we make System.loadLibrary("name") succeed by
 // pointing at this stub.

@@ -1,4 +1,4 @@
-// android.media.HostCodecProvider -- NOT an AOSP class. This is Mac.apk's own
+// android.media.HostCodecProvider -- NOT an AOSP class. This is Apk on Mac's own
 // seam for wiring real, host-measured codec capability into MediaCodecList.
 //
 // WHY THIS EXISTS: MediaCodecList.getCodecInfos() used to return an empty
@@ -7,7 +7,7 @@
 // attempting any decode -- see the class comment on MediaCodecList. Fixing
 // that honestly requires knowing, per MIME, whether this HOST can actually
 // open a working decoder for it, and whether that decode is hardware or
-// software. Mac.apk has exactly two things that can answer that for real:
+// software. Apk on Mac has exactly two things that can answer that for real:
 //   - VideoToolbox (VTIsHardwareDecodeSupported per CMVideoCodecType, plus a
 //     live VTDecompressionSession's kVTDecompressionPropertyKey_
 //     UsingHardwareAcceleratedVideoDecoder readback) for video;
@@ -33,7 +33,7 @@
 // MediaCodec.getCodecInfo() can never drift out of sync with each other the
 // way three independently hand-rolled lists could.
 //
-// Never register a ".secure" variant or FEATURE_SecurePlayback: Mac.apk does
+// Never register a ".secure" variant or FEATURE_SecurePlayback: Apk on Mac does
 // not implement DRM (CLAUDE.md, "Explicitly OUT of scope"), so a provider
 // must not claim it does.
 package android.media;

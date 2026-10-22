@@ -1,6 +1,6 @@
 // android.media.MediaMetadata -- immutable metadata for a media item, keyed by
 // METADATA_KEY_* strings. AOSP frameworks/base media/java/android/media/MediaMetadata.java.
-// A pure data holder; fully serviceable on Mac.apk. Backed by a Bundle, built
+// A pure data holder; fully serviceable on Apk on Mac. Backed by a Bundle, built
 // via Builder, Parcelable.
 package android.media;
 

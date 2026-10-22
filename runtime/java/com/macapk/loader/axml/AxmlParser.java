@@ -35,7 +35,7 @@
 // ONE DELIBERATE DIVERGENCE, in getAttributeValue(int) for a TYPED value with no
 // raw string. AOSP answers TypedValue.coerceToString(type, data) ("@17104896",
 // "?16843601", "-1"), because on a device nothing reads that string: TypedArray
-// takes the (type, data) pair straight from the block. Mac.apk's TypedArray and
+// takes the (type, data) pair straight from the block. Apk on Mac's TypedArray and
 // LayoutInflater resolve by TEXT, and every one of them was verified on the
 // decoded-source spelling apktool writes ("@android:dimen/x",
 // "?android:textAppearanceListItemSmall", "match_parent", "16.0dp") -- which is
@@ -291,7 +291,7 @@ public final class AxmlParser implements XmlResourceParser {
         return android.util.TypedValue.coerceToString(t, b.atData[r]);
     }
 
-    /** The raw Res_value of attribute `index`: {dataType, data}. Mac.apk
+    /** The raw Res_value of attribute `index`: {dataType, data}. Apk on Mac
      *  accessor, used by the gate to hold the typed surface to AOSP. */
     public int[] macapkTypedValue(int index) {
         int r = row(index);

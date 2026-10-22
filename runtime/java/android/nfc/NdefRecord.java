@@ -2,7 +2,7 @@
 //
 // One record inside an NDEF message.
 //
-// FULLY REAL, AND IT HAS TO BE. Mac.apk has no NFC radio, but NDEF is a
+// FULLY REAL, AND IT HAS TO BE. Apk on Mac has no NFC radio, but NDEF is a
 // PUBLISHED BYTE FORMAT (NFC Forum "NDEF 1.0", section 3.2) -- parsing and
 // serializing it needs no hardware at all, only the spec. Apps read NDEF
 // bytes from places that have nothing to do with a tag: a saved file, a

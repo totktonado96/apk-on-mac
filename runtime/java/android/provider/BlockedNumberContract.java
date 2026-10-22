@@ -1,7 +1,7 @@
 // android.provider.BlockedNumberContract -- the contract between the
 // system's blocked-number list and applications (call-screening / dialer
 // apps query it to decide whether to silently drop a call or message).
-// Mac.apk hosts no blockednumber provider and no telecom stack behind it,
+// Apk on Mac hosts no blockednumber provider and no telecom stack behind it,
 // so every number is honestly "not blocked" -- the same observable answer
 // a real device gives when the provider exists but the list is empty,
 // which is the common case there too.
@@ -89,7 +89,7 @@ public class BlockedNumberContract {
      *
      * <p>Matches {@code phoneNumber} against
      * {@link BlockedNumbers#COLUMN_ORIGINAL_NUMBER} and its E164 form against
-     * {@link BlockedNumbers#COLUMN_E164_NUMBER}. Mac.apk has no blocked-number
+     * {@link BlockedNumbers#COLUMN_E164_NUMBER}. Apk on Mac has no blocked-number
      * provider registered, so this always returns {@code false} -- the honest
      * answer for a device whose blocklist is empty.
      */
@@ -115,7 +115,7 @@ public class BlockedNumberContract {
                 AUTHORITY_URI, METHOD_UNBLOCK, phoneNumber, null);
         // AOSP reads res.getInt(...) here unguarded, because the blockednumber
         // provider is mandatory on a real device (never absent) so res is never
-        // null there. Mac.apk has no such provider, so unlike AOSP's literal
+        // null there. Apk on Mac has no such provider, so unlike AOSP's literal
         // code this guards against null and returns "0 rows deleted" -- the
         // same honest-absence answer isBlocked()/canCurrentUserBlockNumbers()
         // already give, instead of a crash a real device would never produce.

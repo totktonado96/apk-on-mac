@@ -16,9 +16,9 @@
 //
 // Two divergences:
 //  - NOT `final`, and it keeps the historical no-arg constructor, because
-//    Mac.apk code and app code in the tree already construct it that way.
+//    Apk on Mac code and app code in the tree already construct it that way.
 //  - The AdapterView/Dialog surface is not implemented: it needs the
-//    preference-XML inflater plus a real preference list host, which Mac.apk
+//    preference-XML inflater plus a real preference list host, which Apk on Mac
 //    does not have yet (see PreferenceActivity.addPreferencesFromResource).
 //    getRootAdapter()/getDialog() therefore return null rather than pretending.
 //
@@ -39,7 +39,7 @@ public class PreferenceScreen extends PreferenceGroup
     public PreferenceScreen(Context context, AttributeSet attrs) { super(context, attrs, 0, 0); }
     public PreferenceScreen(Context context) { super(context, null, 0, 0); }
 
-    /** Historical Mac.apk shape; not AOSP (whose only constructor is
+    /** Historical Apk on Mac shape; not AOSP (whose only constructor is
      *  package-private `PreferenceScreen(Context, AttributeSet)`). Kept so
      *  existing `new PreferenceScreen()` call sites keep working. */
     public PreferenceScreen() { super(); }
@@ -53,7 +53,7 @@ public class PreferenceScreen extends PreferenceGroup
     private android.app.Dialog mDialog;
 
     /** AOSP body: the ListAdapter backing the preference ListView, created once.
-     *  This used to return null with a note that "Mac.apk has no preference list
+     *  This used to return null with a note that "Apk on Mac has no preference list
      *  host"; PreferenceGroupAdapter is that host's data source and
      *  PreferenceActivity now builds the ListView, so there is a real adapter. */
     public android.widget.ListAdapter getRootAdapter() {
@@ -76,7 +76,7 @@ public class PreferenceScreen extends PreferenceGroup
 
     /** AOSP body: a nested PreferenceScreen with children and no intent/fragment
      *  opens its children in a dialog. AOSP inflates
-     *  com.android.internal.R.layout.preference_list_fragment for it; Mac.apk has
+     *  com.android.internal.R.layout.preference_list_fragment for it; Apk on Mac has
      *  no internal layouts, so the dialog's content is built programmatically --
      *  a ListView bound through the same bind() path, so the ROWS are identical
      *  to the ones the main screen would show. */

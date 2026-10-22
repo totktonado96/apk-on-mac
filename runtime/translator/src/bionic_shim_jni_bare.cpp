@@ -356,7 +356,7 @@ extern "C" void __macapk_install_jni_bare_ellipsis_bridge(void* vtable_p) {
     //     Firebase Crashlytics (3 apps).
     //   * our own side never touches these slots: native_methods.cpp has 9
     //     `env->Call...` and ZERO `(*env)->Call...`; bionic_shim.cpp has 15 and
-    //     ZERO. So flipping cannot change any Mac.apk-originated call.
+    //     ZERO. So flipping cannot change any Apk on Mac-originated call.
     const char* e = std::getenv("MACAPK_JNI_BARE_BRIDGE");
     if (e && e[0] == '0') {
         std::fprintf(stderr,
@@ -637,7 +637,7 @@ extern "C" size_t __macapk_arm64___fread_chk(void* buf, size_t size,
 // ===========================================================================
 // THE GENERAL PROBLEM
 // -------------------
-// Mac.apk reimplements `android.*` but NOT `java.*` -- java.* comes from the
+// Apk on Mac reimplements `android.*` but NOT `java.*` -- java.* comes from the
 // host OpenJDK 21. Android's java.* is libcore, a FORK of OpenJDK, and libcore
 // has renamed some PRIVATE fields relative to upstream. A public API is a
 // contract; a private field name is not, so nothing forced the two to agree.

@@ -4,7 +4,7 @@
 // ITSELF from its parent, and inserts the inflated view in its place at the
 // same index with the stub's LayoutParams.
 //
-// Why Mac.apk needs this (v1.0.406): Reddit's com.reddit.launch.main.MainActivity
+// Why Apk on Mac needs this (v1.0.406): Reddit's com.reddit.launch.main.MainActivity
 // .onCreate references the android.view.ViewStub CLASS directly (a field type /
 // cast). With the class absent, onCreate threw NoClassDefFoundError: android/
 // view/ViewStub at link/verify time and aborted (ActivityHost caught it and
@@ -188,7 +188,7 @@ public final class ViewStub extends View {
         final ViewParent viewParent = getParent();
 
         if (!(viewParent instanceof ViewGroup)) {
-            // AOSP throws IllegalStateException here. In Mac.apk an app may call
+            // AOSP throws IllegalStateException here. In Apk on Mac an app may call
             // inflate() on a stub that our inflater left detached (or already
             // replaced); throwing aborts the caller's onCreate (observed
             // breaking Reddit's MainActivity setup -> Compose never composed).

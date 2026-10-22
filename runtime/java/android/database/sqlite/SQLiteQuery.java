@@ -30,7 +30,7 @@ public class SQLiteQuery extends SQLiteProgram {
      *  number of rows written. AbstractWindowedCursor-derived cursors
      *  drive their value getters off the window this fills.
      *
-     *  Note: this consumes the forward-only sqlite3_stmt. Mac.apk's
+     *  Note: this consumes the forward-only sqlite3_stmt. Apk on Mac's
      *  default SQLiteCursorImpl reads values directly from the stmt and
      *  does NOT call this, so it is only reached by a cursor that
      *  explicitly fills a window (the AOSP windowed path); such a

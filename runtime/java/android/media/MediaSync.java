@@ -19,7 +19,7 @@ import java.util.Objects;
  * playback head rather than from a made-up clock.
  *
  * The VIDEO half is not: pacing frames onto a Surface needs a compositor-side
- * release-time queue (AOSP's surface `setNextFrameTime`), which Mac.apk has no
+ * release-time queue (AOSP's surface `setNextFrameTime`), which Apk on Mac has no
  * equivalent of. setSurface() is accepted and createInputSurface() hands back
  * the same empty, no-producer Surface the rest of this tree uses for a sink that
  * consumes nothing -- so an app that only wanted audio pacing works, and an app

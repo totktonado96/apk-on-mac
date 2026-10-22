@@ -1,7 +1,7 @@
 // android.provider.CalendarContract -- the calendar-database contract. Apps
 // insert/query calendar events via the CONTENT_URI constants + column
 // interfaces through ContentResolver, exactly as they do for
-// ContactsContract. Mac.apk hosts no calendar provider, so a query/insert
+// ContactsContract. Apk on Mac hosts no calendar provider, so a query/insert
 // against any of these URIs finds no registered authority and our existing
 // ContentResolver honestly returns null (no rows) -- the same "no provider
 // found" degrade ContactsContract/MediaStore already rely on. The constant
@@ -347,7 +347,7 @@ public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/syn
     }
 
     /**
-     * AOSP wraps a Calendars cursor in an EntityIterator. Mac.apk registers no
+     * AOSP wraps a Calendars cursor in an EntityIterator. Apk on Mac registers no
      * calendar provider, so the cursor is always empty; the empty iterator is
      * what AOSP's own implementation yields for one.
      */

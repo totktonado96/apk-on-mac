@@ -2,7 +2,7 @@
 //
 // AOSP's app-usage-statistics service. Apps fetch it via getSystemService(
 // USAGE_STATS_SERVICE) to query per-app usage and the current app-standby
-// bucket. Mac.apk collects no usage stats, so queries return empty and the
+// bucket. Apk on Mac collects no usage stats, so queries return empty and the
 // standby bucket is ACTIVE -- the honest "no usage history, app is active"
 // result. Mirrors
 // frameworks/base/core/java/android/app/usage/UsageStatsManager.java.
@@ -49,7 +49,7 @@ public final class UsageStatsManager {
     // ================================================================
     // AOSP API-36 surface completion.
     // AOSP ref: frameworks/base/core/java/android/app/usage/
-    // UsageStatsManager.java (android16-release). Mac.apk records no usage
+    // UsageStatsManager.java (android16-release). Apk on Mac records no usage
     // history at all, so every query returns AOSP's empty result -- the same
     // answer a device gives an app that has not been granted Usage Access, and
     // a state apps already branch on (see the AppOpsManager note about

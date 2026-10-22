@@ -1,6 +1,6 @@
 // android.hardware.lights.LightState -- an immutable requested color +
 // intensity (or player-id selection) for one Light. Pure data holder; see
-// LightsManager.java for why Mac.apk never actually drives a light with one
+// LightsManager.java for why Apk on Mac never actually drives a light with one
 // of these -- there is no peripheral-light hardware for a LightsRequest to
 // reach.
 //

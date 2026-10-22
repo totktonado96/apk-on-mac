@@ -9,7 +9,7 @@ import java.util.Objects;
 /**
  * A URSP traffic descriptor (DNN and/or OS/App id).
  *
- * Immutable value type; Mac.apk never produces one.
+ * Immutable value type; Apk on Mac never produces one.
  *
  * Source: frameworks/base/telephony/java/android/telephony/data/TrafficDescriptor.java
  */

@@ -1,5 +1,5 @@
 // android.view.displayhash.DisplayHash -- an opaque, system-signed hash of a
-// region of the screen, produced by View.generateDisplayHash. Mac.apk has no
+// region of the screen, produced by View.generateDisplayHash. Apk on Mac has no
 // system service that can attest a frame, so no DisplayHash is ever produced
 // (generateDisplayHash reports DISPLAY_HASH_ERROR_UNKNOWN, exactly as a device
 // whose window manager declines the request does) -- but the type must exist

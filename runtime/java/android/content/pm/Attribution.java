@@ -9,7 +9,7 @@ package android.content.pm;
  *  Mirrors frameworks/base/core/java/android/content/pm/Attribution.java
  *  (android16-release) exactly: two final fields, two getters, Parcelable.
  *
- *  Mac.apk's manifest parser does not read `<attribution>` yet, so
+ *  Apk on Mac's manifest parser does not read `<attribution>` yet, so
  *  PackageInfo.attributions stays null -- the same value AOSP reports for a
  *  package that declares none, which is nearly all of them. The CLASS has to
  *  exist regardless: we present API 36, so a checkcast or an array store of

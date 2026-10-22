@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 /** Base for an app-widget provider (a BroadcastReceiver dispatching widget
- *  lifecycle to onUpdate/onDeleted/etc). Mac.apk has no home screen, so a widget
+ *  lifecycle to onUpdate/onDeleted/etc). Apk on Mac has no home screen, so a widget
  *  is never placed and these never fire, but the app's provider subclass must
  *  compile. Source: frameworks/base/core/java/android/appwidget/AppWidgetProvider.java */
 public class AppWidgetProvider extends BroadcastReceiver {

@@ -9,7 +9,7 @@ import java.util.Map;
 
 // com.google.firebase.FirebaseApp -- no-op shadow for the real
 // FirebaseApp the APK bundles. This class is resolved through
-// Mac.apk's parent-first AppClassLoader; the bundled FirebaseApp in
+// Apk on Mac's parent-first AppClassLoader; the bundled FirebaseApp in
 // the APK's classes.jar is never loaded.
 //
 // Contract guarantees:

@@ -150,7 +150,7 @@ public class AppWidgetProviderInfo implements android.os.Parcelable {
      *
      *  AOSP reaches the resources via
      *  PackageManager.getText(providerInfo.packageName, descriptionRes,
-     *  providerInfo.applicationInfo). Mac.apk hosts exactly ONE application, so
+     *  providerInfo.applicationInfo). Apk on Mac hosts exactly ONE application, so
      *  that package is always the running one and context.getResources() is the
      *  same Resources object -- the lookup is used as the fallback whenever
      *  providerInfo is absent, which is the normal state here. */
@@ -235,7 +235,7 @@ public class AppWidgetProviderInfo implements android.os.Parcelable {
         return providerInfo;
     }
 
-    /** AOSP derives the profile from the provider's uid. Mac.apk has a single
+    /** AOSP derives the profile from the provider's uid. Apk on Mac has a single
      *  user (UserHandle.getUserId always answers USER_SYSTEM), so this is the
      *  system user -- which is the truthful answer, not a placeholder. */
     public final UserHandle getProfile() {

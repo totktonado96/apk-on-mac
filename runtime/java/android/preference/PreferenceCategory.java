@@ -14,7 +14,7 @@
 //   public boolean isEnabled()          // always false: a category is a header, not a row
 //   public boolean shouldDisableDependents()
 // The AOSP class also sets its layout to layout.preference_category in the
-// constructor; Mac.apk has no internal layout resources, so Preference's
+// constructor; Apk on Mac has no internal layout resources, so Preference's
 // programmatic row is used (see Preference.onCreateView).
 package android.preference;
 

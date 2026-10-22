@@ -5,7 +5,7 @@
 // query the selected route, and -- for apps that publish their own Cast-style
 // destinations -- create USER routes of their own.
 //
-// Mac.apk has no external-route DISCOVERY (no Cast, no DLNA, no Bluetooth route
+// Apk on Mac has no external-route DISCOVERY (no Cast, no DLNA, no Bluetooth route
 // provider), so the system contributes exactly one route: the implicit DEFAULT
 // route backed by the host's default audio output. USER routes are a different
 // matter and ARE fully supported here: an app builds those itself out of a
@@ -339,7 +339,7 @@ public class MediaRouter {
 
         /** AOSP: the Display that content on this route should be shown on, or null if
          *  this route does not present on a secondary display. Returning null here is the
-         *  CORRECT answer rather than a stub's convenient lie -- Mac.apk presents one
+         *  CORRECT answer rather than a stub's convenient lie -- Apk on Mac presents one
          *  window on the host's main display and exposes no remote/Presentation route, so
          *  real Android on the same hardware profile also returns null. Callers already
          *  handle null: that is the ordinary phone-with-no-Cast-device case, which is why

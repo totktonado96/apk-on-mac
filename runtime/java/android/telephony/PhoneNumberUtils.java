@@ -1,6 +1,6 @@
 // android.telephony.PhoneNumberUtils -- phone-number string utilities.
 //
-// Mac.apk has no telephony, but almost nothing in this class DEPENDS on
+// Apk on Mac has no telephony, but almost nothing in this class DEPENDS on
 // telephony: these are pure string algorithms, and apps call them for contact
 // matching and display formatting whether or not a radio exists. A stub that
 // returns a plausible-looking wrong answer is worse than a missing method,
@@ -400,7 +400,7 @@ public class PhoneNumberUtils {
      * NOTE this is NOT normalizeNumber: it keeps '+' ANYWHERE (not just
      * leading), keeps '*' '#' WILD WAIT PAUSE, and folds non-ASCII digits
      * (fullwidth, Arabic-Indic) to ASCII via Character.digit. The previous
-     * Mac.apk version aliased normalizeNumber, which silently dropped those.
+     * Apk on Mac version aliased normalizeNumber, which silently dropped those.
      */
     public static String stripSeparators(String phoneNumber) {
         if (phoneNumber == null) {
@@ -426,7 +426,7 @@ public class PhoneNumberUtils {
     /**
      * AOSP's normalize: digits only, plus a LEADING '+'. Letters cause a
      * keypad conversion and a re-run. Note '*' and '#' are dropped, unlike
-     * stripSeparators -- an earlier Mac.apk version kept them, which made
+     * stripSeparators -- an earlier Apk on Mac version kept them, which made
      * normalized numbers compare unequal against real normalized values.
      */
     public static String normalizeNumber(String phoneNumber) {
@@ -451,7 +451,7 @@ public class PhoneNumberUtils {
     }
 
     /**
-     * AOSP matches GLOBAL_PHONE_NUMBER_PATTERN in full. The previous Mac.apk
+     * AOSP matches GLOBAL_PHONE_NUMBER_PATTERN in full. The previous Apk on Mac
      * version returned true for ANY non-empty string, so "hello" was a valid
      * global phone number.
      */
@@ -528,7 +528,7 @@ public class PhoneNumberUtils {
     // API-36 surface added 2026-08-24. Everything below is either a PURE
     // algorithm reproduced from AOSP (BCD/TOA/reversal/NANP formatting) or an
     // explicitly-stated degradation where AOSP delegates to libphonenumber,
-    // which Mac.apk does not vendor. No answer here is invented.
+    // which Apk on Mac does not vendor. No answer here is invented.
     // Source: frameworks/base/telephony/java/android/telephony/PhoneNumberUtils.java
     // ========================================================================
 
@@ -912,7 +912,7 @@ public class PhoneNumberUtils {
     }
 
     /**
-     * AOSP delegates to JapanesePhoneNumberFormatter, a per-prefix table Mac.apk
+     * AOSP delegates to JapanesePhoneNumberFormatter, a per-prefix table Apk on Mac
      * does not ship. Leaving the text unchanged is the same visible-but-harmless
      * degradation as formatNumber() above: the number displays unformatted
      * rather than displaying WRONG grouping.
@@ -923,7 +923,7 @@ public class PhoneNumberUtils {
     // AOSP routes the four methods below through com.google.i18n.phonenumbers,
     // whose per-region metadata (country calling codes, national trunk prefixes,
     // number plans) is what makes "6502530000" + "US" become "+16502530000".
-    // Mac.apk does not vendor that library. Guessing the country code and trunk
+    // Apk on Mac does not vendor that library. Guessing the country code and trunk
     // prefix would produce a plausible but WRONG number, so instead:
     //   - a number already in international ('+') form is normalised exactly,
     //     because that case needs no metadata;
@@ -971,7 +971,7 @@ public class PhoneNumberUtils {
     // The list below is AOSP's OWN platform fallback for a device with no SIM
     // (frameworks/opt/telephony .../EmergencyNumberTracker.java:
     //   ((isSimAbsent()) ? "112,911,000,08,110,118,119,999" : "112,911")),
-    // which is exactly Mac.apk's state. See TelephonyManager.isEmergencyNumber
+    // which is exactly Apk on Mac's state. See TelephonyManager.isEmergencyNumber
     // for the full reasoning; the short version is that answering "112 is not
     // an emergency number" would be both untrue and the dangerous direction.
 
@@ -1004,7 +1004,7 @@ public class PhoneNumberUtils {
 
     /**
      * AOSP resolves tel:/sip: URIs directly and everything else through the
-     * Contacts provider. Mac.apk deliberately registers no Contacts provider,
+     * Contacts provider. Apk on Mac deliberately registers no Contacts provider,
      * so the query path yields nothing and null is returned -- which is also
      * AOSP's answer when the query matches no row.
      */

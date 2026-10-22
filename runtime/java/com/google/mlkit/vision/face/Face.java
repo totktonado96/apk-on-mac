@@ -4,7 +4,7 @@ import android.graphics.Rect;
 import java.util.Collections;
 import java.util.List;
 
-// com.google.mlkit.vision.face.Face -- a single detected face. Mac.apk runs no
+// com.google.mlkit.vision.face.Face -- a single detected face. Apk on Mac runs no
 // face model, so a detect Task fails and apps never receive a Face via the
 // success path; the type exists so success-listener generics and field reads
 // link. Mirrors the published accessors (bounding box, tracking id, euler

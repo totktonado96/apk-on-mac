@@ -16,14 +16,14 @@ import java.util.StringTokenizer;
  *  layout, but still shipped in the platform and still used -- both by
  *  keyboard apps and, importantly for this host, by ordinary apps that embed a
  *  KeyboardView as an in-app keypad (PIN entry, calculators, custom numeric
- *  input). THAT use is fully hostable in Mac.apk, which is why this class is
+ *  input). THAT use is fully hostable in Apk on Mac, which is why this class is
  *  implemented rather than stubbed.
  *
  *  ONE DELIBERATE DEVIATION, and it is a mechanism change, not a behaviour
  *  change: AOSP reads every attribute through
  *  Resources.obtainAttributes(Xml.asAttributeSet(parser),
  *  com.android.internal.R.styleable.Keyboard*). Those styleable index arrays
- *  are platform-internal and Mac.apk ships no com.android.internal.R, so the
+ *  are platform-internal and Apk on Mac ships no com.android.internal.R, so the
  *  attributes are read from the same parser BY NAME in the android namespace
  *  instead. The names and their flag values are AOSP's own
  *  core/res/res/values/attrs.xml declare-styleable Keyboard / Keyboard_Row /

@@ -105,7 +105,7 @@ public abstract class Transition implements Cloneable {
 
     // AOSP Transition.java:2204-2210. True for a scene-change transition, false
     // for the activity-transition (window) case where the framework must not
-    // remove views. Nothing in Mac.apk drives the false case yet, so the getter
+    // remove views. Nothing in Apk on Mac drives the false case yet, so the getter
     // reports AOSP's default.
     private boolean mCanRemoveViews = true;
 
@@ -144,7 +144,7 @@ public abstract class Transition implements Cloneable {
      * android:matchOrder off the attribute set.
      *
      * AOSP resolves those through R.styleable.Transition +
-     * TypedArray.getInt/getString. Mac.apk has no com.android.internal.R, so we
+     * TypedArray.getInt/getString. Apk on Mac has no com.android.internal.R, so we
      * read the SAME four attributes by name out of the android namespace on the
      * AttributeSet, which is the same data the TypedArray would have projected.
      * The observable result -- a transition whose duration/startDelay/
@@ -184,7 +184,7 @@ public abstract class Transition implements Cloneable {
      *
      * aapt2 resolves an enum name to its int in a COMPILED binary XML, so a real
      * APK's resource carries the number and getAttributeIntValue answers it. But
-     * Mac.apk's XML path is apktool-DECODED text (com.macapk.loader.
+     * Apk on Mac's XML path is apktool-DECODED text (com.macapk.loader.
      * DomXmlResourceParser), where the attribute is still the symbolic name and
      * getAttributeIntValue would silently fall back to the default. `names`/
      * `values` carry the mapping straight out of AOSP core/res/res/values/
@@ -779,10 +779,10 @@ public abstract class Transition implements Cloneable {
         StringBuilder sb = new StringBuilder("transition listener ").append(what).append(" threw: ").append(t);
         StackTraceElement[] st = t.getStackTrace();
         for (int i = 0; i < Math.min(8, st.length); i++) sb.append("\n    at ").append(st[i]);
-        com.macapk.loader.NativeLog.w("Mac.apk.Transition", sb.toString());
+        com.macapk.loader.NativeLog.w("Apk on Mac.Transition", sb.toString());
     }
     void macapkTraceT(String what) {
-        if (sTraceTransition) com.macapk.loader.NativeLog.i("Mac.apk.Transition", what + " "
+        if (sTraceTransition) com.macapk.loader.NativeLog.i("Apk on Mac.Transition", what + " "
             + getClass().getName() + "@" + Integer.toHexString(System.identityHashCode(this))
             + " animators=" + mCurrentAnimators.size() + " pending=" + mNumInstances);
     }

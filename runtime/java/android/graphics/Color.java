@@ -155,7 +155,7 @@ public class Color {
      *  -- Wikipedia's Compose wordmark vector (fillColor="#fff") rendered into
      *  an empty transparent icon cache.
      *
-     *  This is a Mac.apk decompile-pipeline compensation, not a claim that
+     *  This is a Apk on Mac decompile-pipeline compensation, not a claim that
      *  Android accepts the form, which is exactly why it is no longer reachable
      *  through the public API an APK can call. */
     public static int macapkParseResourceColor(String s) {
@@ -196,7 +196,7 @@ public class Color {
         throw new IllegalArgumentException("Unknown color");
     }
     // AOSP's exact sColorNameMap (Color.java, static initializer), plus one
-    // Mac.apk-only addition: "transparent" is NOT one of AOSP's 23 names
+    // Apk on Mac-only addition: "transparent" is NOT one of AOSP's 23 names
     // (verified -- real Color.parseColor("transparent") throws on a device
     // too), but this codebase has long accepted it here, so it stays as a
     // harmless superset rather than a newly-introduced crash for whatever
@@ -226,7 +226,7 @@ public class Color {
         sColorNameMap.put("purple", 0xFF800080);
         sColorNameMap.put("silver", 0xFFC0C0C0);
         sColorNameMap.put("teal", 0xFF008080);
-        sColorNameMap.put("transparent", TRANSPARENT);  // Mac.apk-only, see above
+        sColorNameMap.put("transparent", TRANSPARENT);  // Apk on Mac-only, see above
     }
 
     // ------------------------------------------------------------------

@@ -172,10 +172,10 @@ public final class GmsCli {
     }
 
     /**
-     * The one step Mac.apk cannot take for the user.
+     * The one step Apk on Mac cannot take for the user.
      *
      * Signing in means typing a Google password, and that is the user's to type,
-     * into Google's own page, in a browser they control. Mac.apk never sees the
+     * into Google's own page, in a browser they control. Apk on Mac never sees the
      * password and never wants to: what comes back out of the flow is an
      * `oauth_token` cookie, which is all the token exchange needs.
      */
@@ -193,7 +193,7 @@ public final class GmsCli {
         System.out.println("  * It is exchanged ONCE for a long-lived master token and is then");
         System.out.println("    useless; the master token is stored 0600 under");
         System.out.println("    " + GmsStore.dir());
-        System.out.println("  * Mac.apk never sees, stores or transmits your password.");
+        System.out.println("  * Apk on Mac never sees, stores or transmits your password.");
         System.out.println("  * `debug/gms.sh signout` removes the account and every cached token.");
     }
 
@@ -225,7 +225,7 @@ public final class GmsCli {
     private static int signinWindow() {
         if (!NativeSignIn.available()) {
             System.out.println("ERROR\tno window is available in this process"
-                + " -- run this through the Mac.apk runtime"
+                + " -- run this through the Apk on Mac runtime"
                 + " (macapk-runtime --gms signin-window), not a bare JVM");
             return 1;
         }

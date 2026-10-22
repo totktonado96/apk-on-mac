@@ -5,7 +5,7 @@
 // frameworks/base/core/java/android/text/method/CharacterPickerDialog.java.
 //
 // AOSP inflates com.android.internal.R.layout.character_picker into a GridView
-// of buttons. Mac.apk has no com.android.internal resources, so the grid is
+// of buttons. Apk on Mac has no com.android.internal resources, so the grid is
 // built PROGRAMMATICALLY from the same `options` string, with the same one
 // Button per option and the same click wiring -- the observable behaviour
 // (tapping an option replaces/inserts it and dismisses; tapping Cancel just

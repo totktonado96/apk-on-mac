@@ -1,6 +1,6 @@
 // android.media.projection.MediaProjection
 //
-// The granted screen-capture token. Mac.apk never grants capture consent (see
+// The granted screen-capture token. Apk on Mac never grants capture consent (see
 // MediaProjectionManager), so apps rarely hold a real instance, but the type
 // must resolve for fields/casts/returns. Mirrors
 // frameworks/base/media/java/android/media/projection/MediaProjection.java
@@ -65,7 +65,7 @@ public final class MediaProjection {
      * The answer is a permanent false, and it is a fact about the platform
      * rather than a stub. Playback capture on Android works by inserting a
      * loopback AudioMix into AudioFlinger's policy engine and re-routing OTHER
-     * apps' output into it. Mac.apk runs exactly one Android app per process and
+     * apps' output into it. Apk on Mac runs exactly one Android app per process and
      * mixes it straight into CoreAudio; there is no second app whose output
      * could be captured, and no policy engine to insert a mix into. Answering
      * true and then delivering silence would be the worst of the options: the
@@ -95,7 +95,7 @@ public final class MediaProjection {
      *
      * We return null for step 2, deliberately and consistently with
      * android.hardware.display.DisplayManager.createVirtualDisplay, which
-     * already returns null in this tree for the same underlying reason: Mac.apk
+     * already returns null in this tree for the same underlying reason: Apk on Mac
      * composites one logical display into one NSWindow and has no second
      * display pipeline to rasterize into an app-supplied Surface.
      *

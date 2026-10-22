@@ -41,7 +41,7 @@ public abstract class VibrationEffect implements Parcelable {
     private static final int PARCEL_TOKEN_WAVEFORM = 2;
     private static final int PARCEL_TOKEN_EFFECT = 3;
     private static final int PARCEL_TOKEN_COMPOSITION = 4;
-    // Mac.apk-local token for Repeating (below). AOSP has no such token: it
+    // Apk on Mac-local token for Repeating (below). AOSP has no such token: it
     // expresses "repeat this effect forever" as a repeat INDEX inside its
     // segment-based VibrationEffect.Composed, a representation this class does
     // not use (see the file header). The token is only ever read back by the

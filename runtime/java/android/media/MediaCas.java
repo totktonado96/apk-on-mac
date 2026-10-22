@@ -7,7 +7,7 @@ import android.os.Handler;
  * Conditional-access (CAS) plugin interface -- the broadcast-TV analogue of
  * MediaDrm, used to descramble a DVB/ATSC transport stream.
  *
- * Mac.apk has NO CAS plugin of any kind, and would not add one: descrambling a
+ * Apk on Mac has NO CAS plugin of any kind, and would not add one: descrambling a
  * protected broadcast is the same category of thing this project explicitly
  * keeps out of scope (CLAUDE.md, "Explicitly OUT of scope"). AOSP's own contract
  * for a CA system the device cannot service is

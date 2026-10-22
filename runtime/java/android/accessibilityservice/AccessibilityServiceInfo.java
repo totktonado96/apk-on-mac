@@ -11,7 +11,7 @@ import android.os.Parcelable;
  *
  * Apps read these from AccessibilityManager.getInstalledAccessibilityServiceList()
  * / getEnabledAccessibilityServiceList() to decide whether a screen reader is
- * present. Mac.apk has no accessibility services installed, so those lists are
+ * present. Apk on Mac has no accessibility services installed, so those lists are
  * empty and no instance is normally produced -- but the CLASS must exist,
  * because the code that iterates the (empty) list still references the type and
  * fails to link without it. That is why 28 of 37 corpus apps reference it.
@@ -145,7 +145,7 @@ public class AccessibilityServiceInfo implements Parcelable {
     public void setMotionEventSources(int sources) { mMotionEventSources = sources; }
 
     /** API 31. The tile a service offers for the quick-settings panel, or null.
-     *  Mac.apk parses no accessibility-service metadata, so it is null -- the
+     *  Apk on Mac parses no accessibility-service metadata, so it is null -- the
      *  same value AOSP reports for a service that declares no tile. */
     public String getTileServiceName() { return mTileServiceName; }
 

@@ -5,7 +5,7 @@ import java.util.List;
 
 // com.google.firebase.storage.ListResult -- the result of StorageReference.list
 // / listAll. Real Storage returns the prefixes (subdirectories) and items
-// (files) found under a path, plus a page token. On Mac.apk there is no backend,
+// (files) found under a path, plus a page token. On Apk on Mac there is no backend,
 // so a list query resolves to an EMPTY result (no items, no prefixes, no page
 // token) -- an honest empty rather than fabricated entries.
 //

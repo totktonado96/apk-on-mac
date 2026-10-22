@@ -23,7 +23,7 @@ import java.util.function.IntConsumer;
 /**
  * Base class for an accessibility service.
  *
- * WHAT MAC.APK CAN AND CANNOT DO HERE. Mac.apk runs exactly ONE app, and an
+ * WHAT MAC.APK CAN AND CANNOT DO HERE. Apk on Mac runs exactly ONE app, and an
  * accessibility service is by definition a service the SYSTEM binds so it can
  * observe OTHER apps. There is no system here to bind it and no other app to
  * observe, so a guest that declares one is never started: onAccessibilityEvent
@@ -277,7 +277,7 @@ public abstract class AccessibilityService extends android.app.Service {
 
     // ---- gesture injection --------------------------------------------------
     /**
-     * AOSP dispatches the gesture and later calls the callback. Mac.apk cannot
+     * AOSP dispatches the gesture and later calls the callback. Apk on Mac cannot
      * inject on behalf of a service, and AOSP itself returns false (without
      * ever calling the callback) when the gesture could not be dispatched, so
      * a service's failure path runs rather than a callback that never arrives.
@@ -377,7 +377,7 @@ public abstract class AccessibilityService extends android.app.Service {
 
     // ---- screenshots --------------------------------------------------------
     /**
-     * AOSP grabs the display and hands back a HardwareBuffer. Mac.apk will not
+     * AOSP grabs the display and hands back a HardwareBuffer. Apk on Mac will not
      * hand a guest a screenshot of the host display, and there is no bound
      * service to grant the capability to, so we report the failure AOSP reports
      * when the service lacks it: ERROR_TAKE_SCREENSHOT_NO_ACCESSIBILITY_ACCESS.
@@ -445,7 +445,7 @@ public abstract class AccessibilityService extends android.app.Service {
     }
 
     /**
-     * Magnification is a system-wide effect; Mac.apk hosts one app window and
+     * Magnification is a system-wide effect; Apk on Mac hosts one app window and
      * does not magnify it on a guest's say-so. Every mutator therefore returns
      * false -- the same answer AOSP gives when the service is not connected or
      * lacks CAPABILITY_CAN_CONTROL_MAGNIFICATION -- rather than reporting a
@@ -526,7 +526,7 @@ public abstract class AccessibilityService extends android.app.Service {
     }
 
     /**
-     * API 30 screenshot payload. Only the platform constructs one, and Mac.apk
+     * API 30 screenshot payload. Only the platform constructs one, and Apk on Mac
      * never succeeds at a screenshot, so no instance is produced -- but the type
      * is named in TakeScreenshotCallback.onSuccess and must resolve.
      */
@@ -557,7 +557,7 @@ public abstract class AccessibilityService extends android.app.Service {
 
     /**
      * Controls whether the soft keyboard is shown while a service is active.
-     * Mac.apk shows no soft keyboard at all (the host has a hardware keyboard),
+     * Apk on Mac shows no soft keyboard at all (the host has a hardware keyboard),
      * so SHOW_MODE_AUTO is the standing answer and setShowMode declines --
      * AOSP also returns false when the service is not connected.
      */

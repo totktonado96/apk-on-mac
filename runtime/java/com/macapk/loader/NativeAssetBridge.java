@@ -1,10 +1,10 @@
 // NativeAssetBridge -- glue between the translated dylib's
-// AAssetManager_* calls and Mac.apk's Java AssetManager.
+// AAssetManager_* calls and Apk on Mac's Java AssetManager.
 //
 // Cocos2d-x (and most other native game engines) read sprite atlases,
 // shaders, audio, and config from the APK via the NDK's AAssetManager
 // API. On real Android the system passes the activity's AssetManager
-// across the JNI boundary; on Mac.apk the translated dylib calls the
+// across the JNI boundary; on Apk on Mac the translated dylib calls the
 // shim's AAssetManager_open(...), which calls back here via
 // JNI::FindClass + CallStaticObjectMethod, which delegates to the
 // Application's AssetManager (already wired to read APK ZIP entries).
@@ -23,7 +23,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 public final class NativeAssetBridge {
-    private static final String TAG = "Mac.apk.AssetBridge";
+    private static final String TAG = "Apk on Mac.AssetBridge";
 
     private NativeAssetBridge() {}
 

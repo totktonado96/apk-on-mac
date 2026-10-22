@@ -6,7 +6,7 @@ import java.util.Set;
 
 // android.speech.tts.Voice -- a characteristics-and-capabilities descriptor for
 // one synthesis voice (API 21+). AOSP frameworks/base
-// core/java/android/speech/tts/Voice.java. Mac.apk installs no voices, so
+// core/java/android/speech/tts/Voice.java. Apk on Mac installs no voices, so
 // TextToSpeech.getVoices() is always empty and this exists only for the element
 // type to resolve. Parcelable + the quality/latency constants mirror AOSP.
 public class Voice implements android.os.Parcelable {

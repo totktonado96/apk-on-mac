@@ -4,7 +4,7 @@
 // exchange library, shipped by AOSP as a mainline module (which is why it does
 // not even appear in the android16 signature file this tree is diffed against).
 // It is a large subsystem -- session/child params, SA proposals, identities,
-// callbacks -- and Mac.apk cannot use ANY of it, because there is no tunnel
+// callbacks -- and Apk on Mac cannot use ANY of it, because there is no tunnel
 // interface to attach the resulting SAs to (see android.net.VpnManager).
 //
 // THIS FILE EXISTS FOR LINKING ONLY. android.net.Ikev2VpnProfile names

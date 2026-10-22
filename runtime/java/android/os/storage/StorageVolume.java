@@ -1,6 +1,6 @@
 // android.os.storage.StorageVolume -- one shared/external storage device.
 //
-// Mac.apk models exactly ONE volume: the primary, emulated, non-removable
+// Apk on Mac models exactly ONE volume: the primary, emulated, non-removable
 // one whose directory is Environment.getExternalStorageDirectory()
 // (<android_root>/sdcard, the same place bionic_shim.cpp remaps a native
 // /sdcard/... open to). StorageManager holds a single shared instance of it
@@ -32,7 +32,7 @@ public final class StorageVolume implements android.os.Parcelable {
     public android.content.Intent createAccessIntent(String directoryName) { return new android.content.Intent(); }
     public android.content.Intent createOpenDocumentTreeIntent() { return new android.content.Intent(); }
 
-    /** AOSP :312 -- "the user that owns this volume", @NonNull. Mac.apk is
+    /** AOSP :312 -- "the user that owns this volume", @NonNull. Apk on Mac is
      *  single-user, so the one volume belongs to UserHandle.SYSTEM (user 0),
      *  which is what UserManager.getUserHandle() answers as well. */
     public android.os.UserHandle getOwner() { return android.os.UserHandle.SYSTEM; }
@@ -52,7 +52,7 @@ public final class StorageVolume implements android.os.Parcelable {
     }
 
     // AOSP :158 flattens 13 fields, of which 8 are @hide and do not exist on
-    // this class. Mac.apk models exactly ONE volume (StorageManager's shared
+    // this class. Apk on Mac models exactly ONE volume (StorageManager's shared
     // PRIMARY_VOLUME) whose every property is a constant, so there is no
     // per-instance state to carry: the parcel is empty and CREATOR rebuilds an
     // equivalent volume. That is only safe because it is true here -- if this

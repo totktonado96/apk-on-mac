@@ -1,6 +1,6 @@
 package android.view;
 /** Constants for the sound effects a View plays on click / focus navigation
- *  (a bare stub existed since v1.0.92). Mac.apk has no UI sound bank, but the
+ *  (a bare stub existed since v1.0.92). Apk on Mac has no UI sound bank, but the
  *  constants + the direction mapper must resolve for focus-traversal code.
  *  Source: frameworks/base/core/java/android/view/SoundEffectConstants.java */
 public class SoundEffectConstants {

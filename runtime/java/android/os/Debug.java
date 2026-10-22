@@ -1,5 +1,5 @@
 // android.os.Debug -- diagnostic / memory-info / debugger APIs.
-// Mac.apk impl: we don't have a real debugger pipeline, so most
+// Apk on Mac impl: we don't have a real debugger pipeline, so most
 // methods return safe defaults. Apps that call these are typically
 // doing dev-mode self-instrumentation.
 package android.os;
@@ -140,7 +140,7 @@ public class Debug {
 
     /** AOSP :2555 -- looks the service up in ServiceManager and, when it is
      *  not registered, logs "Can't find service to dump" and returns false.
-     *  Mac.apk registers no system services in a binder ServiceManager (there
+     *  Apk on Mac registers no system services in a binder ServiceManager (there
      *  is no binder), so every name takes that branch. */
     public static boolean dumpService(String name, java.io.FileDescriptor fd, String[] args) {
         return false;
@@ -161,7 +161,7 @@ public class Debug {
             throw new IllegalArgumentException("Argument library cannot contain '='");
         }
         throw new java.io.IOException(
-                "JVMTI agent attach is not supported by the Mac.apk runtime");
+                "JVMTI agent attach is not supported by the Apk on Mac runtime");
     }
 
     /** AOSP :1992 -- native; `android_os_Debug_getRssPid` sums memtrack
@@ -225,7 +225,7 @@ public class Debug {
         // fields plus otherStats are @hide, so they do not exist on this
         // class; writing them would mean inventing values. The format below is
         // the nine PUBLIC fields in AOSP's own relative order. That is safe
-        // here and only here: Mac.apk has no binder and no second process, so
+        // here and only here: Apk on Mac has no binder and no second process, so
         // a Parcel is never read by anything but this same class in this same
         // VM -- the contract that must hold is writeToParcel <-> CREATOR
         // agreement, which debug/parcel_roundtrip.sh gates.

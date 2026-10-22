@@ -4,7 +4,7 @@
 // postDelayed(r, X) runs r on the Looper "at uptimeMillis()+X". Same
 // contract for sendMessage / sendMessageDelayed.
 //
-// Mac.apk runs a single shared GLOBAL_QUEUE drained per frame by
+// Apk on Mac runs a single shared GLOBAL_QUEUE drained per frame by
 // ViewCanvasDriver / SurfaceView / ActivityHost (the main thread).
 // Until v1.0.103, postDelayed silently DROPPED the delay and posted
 // immediately. That broke any caller that relied on AOSP-correct
@@ -195,7 +195,7 @@ public class Handler {
      *  the historical per-frame GLOBAL_QUEUE path.
      *
      *  AOSP has exactly one answer here -- `mQueue = looper.mQueue` -- and every
-     *  post/send/remove/has routes through it. Mac.apk had THREE parallel
+     *  post/send/remove/has routes through it. Apk on Mac had THREE parallel
      *  destinations instead, and the two non-queue ones could not answer the
      *  introspection half of the API at all:
      *

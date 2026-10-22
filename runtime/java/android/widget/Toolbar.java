@@ -63,7 +63,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Toolbar extends ViewGroup {
-    private static final String TAG = "Mac.apk.Toolbar";
+    private static final String TAG = "Apk on Mac.Toolbar";
 
     /** The labelled bisect gate for the whole port (Toolbar + ActionMenuView). */
     static final boolean MACAPK_PLATFORM_TOOLBAR =

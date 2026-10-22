@@ -96,7 +96,7 @@ public abstract class PackageManager {
     //
     // ⚠ A FEATURE_* constant being DECLARED says nothing about whether we HAVE
     // the feature. hasSystemFeature() is the only answer to that, and it is
-    // unchanged: it reports what Mac.apk actually provides. Declaring the name
+    // unchanged: it reports what Apk on Mac actually provides. Declaring the name
     // is the opposite of claiming the capability -- it lets an app ASK by the
     // right string and get our honest no.
     //
@@ -297,7 +297,7 @@ public abstract class PackageManager {
 
     public abstract PackageInfo getPackageInfo(String packageName, int flags) throws NameNotFoundException;
     public abstract ApplicationInfo getApplicationInfo(String packageName, int flags) throws NameNotFoundException;
-    // AOSP API-26: the running app is never an instant app on Mac.apk (it is
+    // AOSP API-26: the running app is never an instant app on Apk on Mac (it is
     // installed normally), so both forms return false. (Google Calculator +
     // others gate behavior on this.)
     public boolean isInstantApp() { return false; }
@@ -316,11 +316,11 @@ public abstract class PackageManager {
     // routes to the same server call as the int form. Reproducing the throw here
     // would reproduce a code path no app ever observes on real Android, so we
     // reproduce the OBSERVABLE behavior instead: unwrap getValue() and delegate
-    // to the int form, which every Mac.apk PackageManager already implements.
+    // to the int form, which every Apk on Mac PackageManager already implements.
     //
     // Narrowing long -> int drops bits 32-63. The only AOSP flag up there is
     // GET_ATTRIBUTIONS (0x80000000, which is already outside the positive int
-    // range and is not interpreted anywhere in Mac.apk), so no request bit we
+    // range and is not interpreted anywhere in Apk on Mac), so no request bit we
     // act on is lost. Revisit this cast if a high flag ever becomes meaningful.
     public PackageInfo getPackageInfo(String packageName, PackageInfoFlags flags)
             throws NameNotFoundException {
@@ -378,7 +378,7 @@ public abstract class PackageManager {
      *  ACTION_MAIN launcher (CATEGORY_INFO, then CATEGORY_LAUNCHER) activity into
      *  a launch Intent, or return null when the package has no launchable
      *  activity. F-Droid's AppDetails header calls this to decide whether to show
-     *  an "Open" button. Mac.apk runs one APK at a time, so a *browsed* package
+     *  an "Open" button. Apk on Mac runs one APK at a time, so a *browsed* package
      *  is not installed and resolves to nothing -> null, which is the AOSP-correct
      *  "not installed" signal (F-Droid then offers Install instead of Open).
      *  Concrete (mirrors frameworks/base ApplicationPackageManager). */
@@ -417,7 +417,7 @@ public abstract class PackageManager {
 
     /** AOSP PackageManager.canonicalToCurrentPackageNames / currentToCanonical:
      *  translate between a package's canonical (original) name and its current
-     *  (possibly renamed) name. No package on Mac.apk is renamed, so the mapping
+     *  (possibly renamed) name. No package on Apk on Mac is renamed, so the mapping
      *  is the identity -- return the input array (matching AOSP's behavior for
      *  packages with no <original-package> rename). F-Droid's installed-app /
      *  AppDetails path passes app package names through this. */
@@ -425,7 +425,7 @@ public abstract class PackageManager {
     public String[] currentToCanonicalPackageNames(String[] names) { return names; }
 
     /** AOSP PackageManager.getPermissionInfo / getPermissionGroupInfo: look up a
-     *  permission (group)'s metadata. Mac.apk has no platform permission database,
+     *  permission (group)'s metadata. Apk on Mac has no platform permission database,
      *  so we throw NameNotFoundException -- the AOSP-correct "unknown permission"
      *  signal. F-Droid's AppSecurityPermissions.extractPerms wraps these calls in
      *  a NameNotFoundException catch and simply skips the unknown entry, so the
@@ -460,7 +460,7 @@ public abstract class PackageManager {
      *  every PackageInfo the user has installed. F-Droid's UpdatesAdapter
      *  walks this on a Rx scheduler thread to compute "x of y updates
      *  available"; without a real list it throws NoSuchMethodError and the
-     *  background scheduler dies. Mac.apk only knows about the running
+     *  background scheduler dies. Apk on Mac only knows about the running
      *  app, so we return a single-element list with the calling app's
      *  PackageInfo (best-effort; the caller treats it as "nothing to update").
      *  AOSP signature: `List<PackageInfo> getInstalledPackages(int flags)`. */
@@ -485,7 +485,7 @@ public abstract class PackageManager {
     /** AOSP getInstalledApplications(int flags): the ApplicationInfo-returning
      *  sibling of getInstalledPackages. Marked @NonNull upstream, so it never
      *  returns null -- an empty list is the correct degenerate answer. Same
-     *  single-app-device honesty as getInstalledPackages above: Mac.apk hosts
+     *  single-app-device honesty as getInstalledPackages above: Apk on Mac hosts
      *  exactly one APK, so the installed set is that one app. */
     public List<android.content.pm.ApplicationInfo> getInstalledApplications(int flags) {
         java.util.ArrayList<android.content.pm.ApplicationInfo> out = new java.util.ArrayList<>();
@@ -524,7 +524,7 @@ public abstract class PackageManager {
     }
 
     /** AOSP PackageManager.getNameForUid: the package name owning a uid (or null).
-     *  Mac.apk is a single app in one uid, so return the running app's package
+     *  Apk on Mac is a single app in one uid, so return the running app's package
      *  name. GMS measurement (zzfj.zzie) calls this during init; missing it ->
      *  NoSuchMethodError on the FA worker thread. */
     public String getNameForUid(int uid) {
@@ -534,7 +534,7 @@ public abstract class PackageManager {
 
     /** AOSP PackageManager.getPackagesForUid(int): every package name assigned
      *  the given uid -- normally one element, more only under android:sharedUserId
-     *  -- or null when no package is known for that uid. Mac.apk hosts exactly one
+     *  -- or null when no package is known for that uid. Apk on Mac hosts exactly one
      *  app at exactly one uid (Process.FIRST_APPLICATION_UID, mirrored by
      *  ApplicationInfo.uid), so the honest answer is a single-element array for
      *  that uid and null for anything else. Returning the running package for an
@@ -566,7 +566,7 @@ public abstract class PackageManager {
      *  The permissive shape kept here (the activity exists, applicationInfo
      *  matches the calling app, theme is zero = use the default, name is the
      *  component's class) is deliberate: AOSP throws NameNotFoundException for
-     *  an unknown component, but on Mac.apk ActivityHost can be asked to start
+     *  an unknown component, but on Apk on Mac ActivityHost can be asked to start
      *  a class the manifest never listed, and several framework paths look up
      *  such components. */
     // ⚠ v1.0.938: DECLARES the AOSP checked exception. AOSP's signature is
@@ -634,7 +634,7 @@ public abstract class PackageManager {
      *
      *  Deliberately NOT restricted to the running package: inspecting a foreign,
      *  non-installed archive is this method's entire purpose, so the PM_SELF_ONLY
-     *  stance that getPackageInfo takes does not apply here. Mac.apk already owns
+     *  stance that getPackageInfo takes does not apply here. Apk on Mac already owns
      *  the exact parse primitive (com.macapk.loader.Manifest.parse reads the
      *  BINARY AndroidManifest.xml straight out of any APK's zip), so this is a
      *  real parse of the real file, not a stub. */
@@ -745,7 +745,7 @@ public abstract class PackageManager {
         return info;
     }
 
-    /** Mac.apk seam: {Signature[] signers, Integer schemeVersion} for the APK
+    /** Apk on Mac seam: {Signature[] signers, Integer schemeVersion} for the APK
      *  (or split bundle) at {@code path}, or null when it cannot be read.
      *  MacApkPackageManager overrides it with its signing-block / v1 reader;
      *  the base answer is "unknown". */
@@ -783,7 +783,7 @@ public abstract class PackageManager {
      *      public @Nullable ArchivedPackageInfo getArchivedPackage(@NonNull String packageName)
      *
      *  APP ARCHIVING is Android 15's "uninstall the APK, keep the launcher icon
-     *  and user data so one tap restores it" feature. Mac.apk does not implement
+     *  and user data so one tap restores it" feature. Apk on Mac does not implement
      *  it: there is no macOS analogue, nothing in this runtime ever archives a
      *  package, and `installed_apps.json` has no archived state. So NO package
      *  on this device is archived, and null is the HONEST answer for every
@@ -820,7 +820,7 @@ public abstract class PackageManager {
      *
      *  RESOURCE REFERENCES ARE DROPPED, on purpose. On a device the reference is
      *  resolved against the ARCHIVE's own resource table before parseMetaData
-     *  sees it. Mac.apk's Resources/ResourceIndex is bound to the one RUNNING
+     *  sees it. Apk on Mac's Resources/ResourceIndex is bound to the one RUNNING
      *  app, so resolving an archive's `@0x7f...` id through it would silently
      *  return a value from a different APK -- a wrong answer is worse than an
      *  absent key, and AOSP itself omits the key for values it cannot type
@@ -863,7 +863,7 @@ public abstract class PackageManager {
     /** Mirrors AOSP PackageManager.getServiceInfo(ComponentName, int).
      *  Used by Firebase ComponentDiscovery and any other SDK that
      *  registers modules via manifest <service> + <meta-data>. Real
-     *  Android calls into PackageManagerService; on Mac.apk we look
+     *  Android calls into PackageManagerService; on Apk on Mac we look
      *  up the Manifest.ServiceEntry the loader parsed at boot. If
      *  the component isn't a known service, throw NameNotFoundException
      *  -- callers like Firebase catch that and fall back to "no
@@ -886,7 +886,7 @@ public abstract class PackageManager {
      *  int flags): return the ProviderInfo of the provider that serves the
      *  given authority, or null if none. androidx.core.content.FileProvider
      *  and other library providers call this during attachInfo/onCreate.
-     *  Default returns null ("no such provider"); the Mac.apk concrete
+     *  Default returns null ("no such provider"); the Apk on Mac concrete
      *  PackageManager overrides it to resolve against the parsed manifest. A
      *  concrete (non-abstract) default avoids NoSuchMethodError for any caller
      *  while subclasses that lack a manifest still compile. */
@@ -967,7 +967,7 @@ public abstract class PackageManager {
      *  null" answer -- the exception IS the not-installed signal, and it is a
      *  checked exception every caller already handles.
      *
-     *  Mac.apk hosts exactly one APK per process, so the only package whose
+     *  Apk on Mac hosts exactly one APK per process, so the only package whose
      *  resources exist is the running one; for it we hand back the SAME Resources
      *  instance the loader built (not a fresh one), which is what a device
      *  returns for the self case and what any subsequent identity comparison
@@ -1011,7 +1011,7 @@ public abstract class PackageManager {
      *  certificate rotation." Returns true only on an exact match.
      *
      *  Real work, not a stub: we ask ourselves for the package's PackageInfo (the
-     *  Mac.apk PackageManager reads the APK's actual signing certificate off disk)
+     *  Apk on Mac PackageManager reads the APK's actual signing certificate off disk)
      *  and run AOSP's own comparison. Mirrors SigningDetails.hasCertificateInternal
      *  / hasSha256CertificateInternal: the current-signer match requires EXACTLY
      *  one signature (rotation is unsupported for multiply-signed packages), and
@@ -1053,7 +1053,7 @@ public abstract class PackageManager {
 
     /** AOSP uid-keyed overload: "analogous to using getPackagesForUid followed by
      *  getPackageInfo with GET_SIGNING_CERTIFICATES". For a shared uid AOSP picks
-     *  the newest-signed package; Mac.apk's uid never holds more than one package,
+     *  the newest-signed package; Apk on Mac's uid never holds more than one package,
      *  so the first (only) entry is that package. Unknown uid -> no packages ->
      *  false. */
     public boolean hasSigningCertificate(int uid, byte[] certificate, int type) {
@@ -1090,7 +1090,7 @@ public abstract class PackageManager {
      *  dereference the result directly (ImageView.setImageDrawable, a
      *  RemoteViews build, a notification's large icon).
      *
-     *  Mac.apk has no framework resource table, so there is no
+     *  Apk on Mac has no framework resource table, so there is no
      *  com.android.internal.R.drawable.sym_def_app_icon to load; the honest
      *  substitute is a fully TRANSPARENT ColorDrawable. That keeps the AOSP
      *  non-null contract (the reason these exist) without inventing artwork:
@@ -1107,7 +1107,7 @@ public abstract class PackageManager {
     }
     public android.graphics.drawable.Drawable getApplicationIcon(ApplicationInfo info) {
         if (info != null) {
-            // Another installed Mac.apk app: its resources live in its own
+            // Another installed Apk on Mac app: its resources live in its own
             // bundle, not in this process (see macapkRegistryAppIcon).
             android.graphics.drawable.Drawable other = macapkRegistryAppIcon(info.packageName);
             if (other != null) return other;
@@ -1118,7 +1118,7 @@ public abstract class PackageManager {
         }
         return getDefaultActivityIcon();
     }
-    /** Mac.apk hook: the launcher icon of ANOTHER installed Mac.apk app, or null
+    /** Apk on Mac hook: the launcher icon of ANOTHER installed Apk on Mac app, or null
      *  (the base class knows no other apps). On a device getApplicationIcon reads
      *  the target's own APK resources (ApplicationPackageManager.getDrawable over
      *  getResourcesForApplication); here each app is a separate process and only
@@ -1155,7 +1155,7 @@ public abstract class PackageManager {
      *  upstream, but a device always has some, and callers scan the array
      *  rather than null-checking each entry.
      *
-     *  The honest answer for Mac.apk is the set our framework actually
+     *  The honest answer for Apk on Mac is the set our framework actually
      *  provides, NOT a copy of some AVD's list: naming a library we do not have
      *  would make an app take a code path that then fails to find the class,
      *  which is the same "claimed capability with nothing behind it" mistake
@@ -1199,7 +1199,7 @@ public abstract class PackageManager {
 
     /** AOSP PackageManager.getPackageUid(String, int): the uid assigned to the
      *  named package, or NameNotFoundException when it is not installed.
-     *  Mac.apk hosts one app at one uid, and ApplicationInfo.uid is where that
+     *  Apk on Mac hosts one app at one uid, and ApplicationInfo.uid is where that
      *  uid is recorded, so reading it back keeps the two answers from drifting
      *  (getPackagesForUid above already resolves the self uid the same way). */
     public int getPackageUid(String packageName, int flags) throws NameNotFoundException {
@@ -1243,7 +1243,7 @@ public abstract class PackageManager {
     // AOSP surface completed in v1.1.0 (android.content.pm API-gap lane).
     //
     // Ground rule for every method below, from the project's no-shortcuts rule:
-    // where Mac.apk can compute the real answer, it computes it; where it
+    // where Apk on Mac can compute the real answer, it computes it; where it
     // genuinely cannot, it gives the answer AOSP gives on a device that lacks
     // the underlying facility, and says which one and why. Nothing here returns
     // a comfortable value in place of a capability we do not have.
@@ -1267,7 +1267,7 @@ public abstract class PackageManager {
     //     getPreferredActivities are NOT gutted upstream -- they call through
     //     to PackageManagerService (:3140, :3181, :3200). They are no-ops HERE
     //     for a different reason: a preferred activity only ever matters when
-    //     more than one component can handle an intent, and Mac.apk resolves
+    //     more than one component can handle an intent, and Apk on Mac resolves
     //     against exactly one app's manifest, so the preference could never
     //     change a resolution. Storing one would be state nothing reads.
     //     getPreferredActivities correspondingly reports 0 and leaves both
@@ -1311,7 +1311,7 @@ public abstract class PackageManager {
     // AOSP lets an app add permissions AT RUNTIME, but only inside a
     // <permission-tree> the app itself declares, and PackageManagerService
     // enforces that with a SecurityException ("Calling uid ... is not allowed to
-    // add to permission tree"). Mac.apk models no permission trees at all --
+    // add to permission tree"). Apk on Mac models no permission trees at all --
     // com.macapk.loader.Manifest parses <permission> and <permission-group> but
     // not <permission-tree> -- so NO name can be inside one, and the
     // SecurityException is the answer a device gives for the same call.
@@ -1351,7 +1351,7 @@ public abstract class PackageManager {
      *  allowed special privileges when working with each other."
      *
      *  This is a REAL comparison, not a constant: both packages' signatures come
-     *  from getPackageInfo(GET_SIGNATURES), which on Mac.apk reads the APK's
+     *  from getPackageInfo(GET_SIGNATURES), which on Apk on Mac reads the APK's
      *  actual signing certificate off disk (MacApkPackageManager
      *  .readApkSignatures). The result codes follow AOSP's own ladder --
      *  unknown package, neither signed, one signed, no match, match -- so a
@@ -1409,7 +1409,7 @@ public abstract class PackageManager {
 
     // ---- instant apps -------------------------------------------------------
     //
-    // isInstantApp() already answers false unconditionally: an app on Mac.apk is
+    // isInstantApp() already answers false unconditionally: an app on Apk on Mac is
     // installed normally, never delivered as an instant app. The cookie API is
     // the instant-app-only side-channel for carrying a little state across an
     // instant-to-installed upgrade, and AOSP's own behaviour for a NORMAL app is
@@ -1430,7 +1430,7 @@ public abstract class PackageManager {
      *  updateInstantAppCookie below throw IllegalArgumentException for ANY
      *  non-empty cookie, since its guard is `cookie.length > this`. That is a
      *  crash a device does not produce, manufactured by a number we invented.
-     *  Mac.apk has no Settings.Global row for it either, so the documented
+     *  Apk on Mac has no Settings.Global row for it either, so the documented
      *  default IS our answer. */
     public int getInstantAppCookieMaxBytes() { return 16384; }
 
@@ -1449,7 +1449,7 @@ public abstract class PackageManager {
      *  PackageManagerService, which STORES IT ONLY FOR AN INSTANT APP and
      *  silently drops it otherwise -- and ApplicationPackageManager ignores the
      *  boolean it gets back, so a normal app cannot tell. The running app on
-     *  Mac.apk is never an instant app (isInstantApp() is false), so dropping
+     *  Apk on Mac is never an instant app (isInstantApp() is false), so dropping
      *  is the same observable behaviour, and getInstantAppCookie() correspondingly
      *  keeps reporting the empty array. */
     public void updateInstantAppCookie(byte[] cookie) {
@@ -1470,7 +1470,7 @@ public abstract class PackageManager {
     //
     // Both methods below are callable ONLY by the package VERIFIER -- the app
     // holding PACKAGE_VERIFICATION_AGENT, which the system names in its config.
-    // Mac.apk designates no verifier, so no caller is one, and AOSP's behaviour
+    // Apk on Mac designates no verifier, so no caller is one, and AOSP's behaviour
     // for a non-verifier is to ignore the call (PackageManagerService checks the
     // calling uid against the verifier's and returns without acting). Deprecated
     // upstream since API 34.
@@ -1555,7 +1555,7 @@ public abstract class PackageManager {
      *  the icon API ever returning null.
      *
      *  getDefaultActivityIcon() above returns a fully transparent ColorDrawable
-     *  (Mac.apk has no framework resource table, so there is no
+     *  (Apk on Mac has no framework resource table, so there is no
      *  sym_def_app_icon to load). This recognises exactly that object, so the
      *  two answers are consistent by construction: anything getApplicationIcon
      *  fell back to is reported as the default, and a real app icon is not.
@@ -1569,7 +1569,7 @@ public abstract class PackageManager {
     // ---- multi-user badging -------------------------------------------------
     //
     // On a device the badge is the work-profile briefcase overlaid on an icon,
-    // or the " (work)" suffix on a label. Mac.apk has one user and no managed
+    // or the " (work)" suffix on a label. Apk on Mac has one user and no managed
     // profile (see android.content.pm.CrossProfileApps), so there is no badge to
     // apply -- and AOSP returns the INPUT UNCHANGED in exactly that case
     // (ApplicationPackageManager.getUserBadgedIcon: "if the user is not badged,
@@ -1596,7 +1596,7 @@ public abstract class PackageManager {
     /** AOSP PackageManager.getAllPermissionGroups(int): every
      *  &lt;permission-group&gt; declared by any installed package.
      *
-     *  Mac.apk's manifest parser DOES read &lt;permission-group&gt;
+     *  Apk on Mac's manifest parser DOES read &lt;permission-group&gt;
      *  (com.macapk.loader.Manifest.PermissionGroupEntry), but PackageInfo has no
      *  field carrying them, so there is no route from here to the parsed list --
      *  the concrete PackageManager would have to expose one. Until it does this
@@ -1625,7 +1625,7 @@ public abstract class PackageManager {
      *  A named group that matches nothing we know about is the
      *  NameNotFoundException AOSP throws -- consistent with getPermissionInfo /
      *  getPermissionGroupInfo, which report the same "unknown" for a platform
-     *  permission, because Mac.apk carries no platform permission database. */
+     *  permission, because Apk on Mac carries no platform permission database. */
     public List<PermissionInfo> queryPermissionsByGroup(String group, int flags)
             throws NameNotFoundException {
         PermissionInfo[] declared = selfDeclaredPermissions();
@@ -1663,7 +1663,7 @@ public abstract class PackageManager {
      *  a device-policy admin has revoked the permission and blocked the app from
      *  asking again.
      *
-     *  Mac.apk has no DevicePolicyManager admin -- there is no provisioning
+     *  Apk on Mac has no DevicePolicyManager admin -- there is no provisioning
      *  path, and no code anywhere sets a permission policy -- so nothing is
      *  policy-revoked. False is what an unmanaged device answers, which is most
      *  devices. */
@@ -1678,7 +1678,7 @@ public abstract class PackageManager {
      *
      *  AOSP resolves it from the PermissionController package's resources, and
      *  its documented fallback when that cannot be read is the EMPTY STRING --
-     *  which is also the base class's own body. Mac.apk ships no
+     *  which is also the base class's own body. Apk on Mac ships no
      *  PermissionController, so the empty string is both the honest answer and
      *  AOSP's. @NonNull. */
     public CharSequence getBackgroundPermissionOptionLabel() { return ""; }
@@ -1688,7 +1688,7 @@ public abstract class PackageManager {
      *  PLATFORM permission belongs to, or null when the permission is not a
      *  platform one.
      *
-     *  Mac.apk has no platform permission database -- getPermissionInfo and
+     *  Apk on Mac has no platform permission database -- getPermissionInfo and
      *  getPermissionGroupInfo already say so by throwing NameNotFoundException
      *  -- so no name is a platform permission here and null is the consistent
      *  answer. Fabricating AOSP's permission-to-group table would make THIS
@@ -1733,7 +1733,7 @@ public abstract class PackageManager {
     //
     // A RESTRICTED permission (SMS, call log, background location) is one the
     // platform hard-restricts unless the installer, the system config or an
-    // upgrade path allowlists it. Mac.apk implements no restriction: every
+    // upgrade path allowlists it. Apk on Mac implements no restriction: every
     // permission the manifest declares is granted at install time
     // (MacApkPackageManager.checkPermission), so there is no allowlist for a
     // permission to be on or off. AOSP's own answers for a package with no
@@ -1765,7 +1765,7 @@ public abstract class PackageManager {
 
     /** AOSP PackageManager.isAutoRevokeWhitelisted(String) (API 30): whether the
      *  package is exempt from having its permissions auto-revoked after months
-     *  of disuse. Mac.apk runs no auto-revoke job, so no package needs an
+     *  of disuse. Apk on Mac runs no auto-revoke job, so no package needs an
      *  exemption and none has one -- which is also the state of a freshly
      *  installed app on a device. The no-arg overload already answers the same
      *  for the calling package. */
@@ -1806,7 +1806,7 @@ public abstract class PackageManager {
      *  of the given permissions."
      *
      *  A real query, not an empty list: it walks getInstalledPackages -- which
-     *  on Mac.apk is the one hosted app -- and keeps a package only when
+     *  on Apk on Mac is the one hosted app -- and keeps a package only when
      *  checkPermission grants it EVERY requested permission, which is AOSP's
      *  own rule ("holding ANY of" in the summary, but PackageManagerService
      *  requires all of the named permissions to be granted). The GET_PERMISSIONS
@@ -1883,7 +1883,7 @@ public abstract class PackageManager {
      *  VISIBILITY rules introduced in Android 11. "@throws NameNotFoundException
      *  if either a given package can not be found on the system."
      *
-     *  Mac.apk hosts one package. It can always see itself -- AOSP's rules
+     *  Apk on Mac hosts one package. It can always see itself -- AOSP's rules
      *  always let a package query itself -- and every other name is not
      *  installed, which is the exception branch. So this is a real answer
      *  derived from the same installed-set every other method uses, not a
@@ -1913,7 +1913,7 @@ public abstract class PackageManager {
      *  "Returns the package names of the packages that have changed since the
      *  given sequence number, or null if there are no changes."
      *
-     *  Mac.apk's package set is fixed for the life of the process: one app,
+     *  Apk on Mac's package set is fixed for the life of the process: one app,
      *  installed before we start, never added, removed or updated underneath
      *  the running app. So nothing can have changed since ANY sequence number,
      *  and null -- AOSP's documented "no changes" -- is the correct answer for
@@ -1921,19 +1921,19 @@ public abstract class PackageManager {
     public ChangedPackages getChangedPackages(int sequenceNumber) { return null; }
 
     /** AOSP PackageManager.isSafeMode(): whether the device booted into SAFE
-     *  MODE, where third-party apps are disabled. Mac.apk has no safe mode --
+     *  MODE, where third-party apps are disabled. Apk on Mac has no safe mode --
      *  there is no boot flag, no path that disables the hosted app -- so false
      *  is the permanent and honest answer, and it is what a normally booted
      *  device reports. */
     public boolean isSafeMode() { return false; }
 
     /** AOSP PackageManager.isDeviceUpgrading() (API 29): true only during the
-     *  first boot after an OTA, so an app can defer heavy work. Mac.apk performs
+     *  first boot after an OTA, so an app can defer heavy work. Apk on Mac performs
      *  no OS upgrade, so the device is never upgrading. */
     public boolean isDeviceUpgrading() { return false; }
 
     /** AOSP PackageManager.isPackageSuspended(): whether the CALLING package is
-     *  suspended by a device admin or a supervisor. Nothing on Mac.apk can
+     *  suspended by a device admin or a supervisor. Nothing on Apk on Mac can
      *  suspend a package -- there is no DevicePolicyManager admin and no
      *  suspension API -- so the running app is never suspended. */
     public boolean isPackageSuspended() { return false; }
@@ -1965,7 +1965,7 @@ public abstract class PackageManager {
 
     /** AOSP PackageManager.isPackageStopped(String) (API 35): whether the
      *  package is in the STOPPED state -- force-stopped, or never launched since
-     *  install, so it receives no broadcasts. The one package Mac.apk hosts is
+     *  install, so it receives no broadcasts. The one package Apk on Mac hosts is
      *  the one currently RUNNING, which by definition is not stopped; anything
      *  else is not installed and throws. */
     public boolean isPackageStopped(String packageName) throws NameNotFoundException {
@@ -2008,7 +2008,7 @@ public abstract class PackageManager {
      *  to. "@throws SecurityException when the caller is not the active
      *  installer for the given package."
      *
-     *  Mac.apk records no installer of record -- getInstallerPackageName returns
+     *  Apk on Mac records no installer of record -- getInstallerPackageName returns
      *  null for every package (side-loaded, exactly as AOSP reports for an adb
      *  install) -- so no caller is the active installer and the SecurityException
      *  is the answer a device gives for the same call. The check is written out
@@ -2056,7 +2056,7 @@ public abstract class PackageManager {
     //
     // A MAINLINE MODULE is a platform component Google updates out of band
     // (media, wifi, permission controller, ...). They exist only on a device
-    // whose system image ships them, and Mac.apk has no system image at all:
+    // whose system image ships them, and Apk on Mac has no system image at all:
     // our android.* surface is compiled into the runtime, not delivered as
     // updatable packages. So the module set is genuinely empty -- the same
     // answer AOSP gives on a device with no ModuleInfoProvider.
@@ -2170,7 +2170,7 @@ public abstract class PackageManager {
 
     // ---- app archiving (API 35) ------------------------------------------------
     //
-    // See getArchivedPackage above for the full reasoning: Mac.apk implements no
+    // See getArchivedPackage above for the full reasoning: Apk on Mac implements no
     // archiving, so nothing is archived and nothing is archivable. Both answers
     // below are what a device reports for a package whose installer does not
     // support unarchival, and they agree with PackageInstaller.requestArchive,
@@ -2187,7 +2187,7 @@ public abstract class PackageManager {
      *  update ownership of a package. "@throws SecurityException if you are not
      *  the current update owner of the given package."
      *
-     *  Mac.apk grants update ownership to nobody -- InstallSourceInfo
+     *  Apk on Mac grants update ownership to nobody -- InstallSourceInfo
      *  .getUpdateOwnerPackageName() is always null, and SessionParams
      *  .setRequestUpdateOwnership is recorded but never honoured -- so no caller
      *  is the owner. AOSP's IllegalArgumentException branch ("if the given
@@ -2214,7 +2214,7 @@ public abstract class PackageManager {
      *  API 36, reproducing the throw would hand every caller the failure a
      *  device never produces, so this is implemented for real.
      *
-     *  Mac.apk already owns every piece: com.macapk.loader.BinaryXmlParser reads
+     *  Apk on Mac already owns every piece: com.macapk.loader.BinaryXmlParser reads
      *  the BINARY AndroidManifest.xml straight out of the zip (it exists because
      *  apktool's text decode loses aapt's attribute TYPES), and
      *  com.macapk.loader.DomXmlResourceParser is an XmlResourceParser over a
@@ -2359,7 +2359,7 @@ public abstract class PackageManager {
      *
      *  ⚠ STATIC on AOSP, and static here -- it takes a PATH, not a package.
      *
-     *  Mac.apk has exactly one APK signature VERIFIER, and it is private to
+     *  Apk on Mac has exactly one APK signature VERIFIER, and it is private to
      *  com.macapk.loader.MacApkPackageManager (readApkSignatures, which walks
      *  the APK Signing Block v3.1/v3/v2 and then v1/JAR). Writing a second one
      *  here would give this tree two verifiers that can disagree about the same
@@ -2468,7 +2468,7 @@ public abstract class PackageManager {
     }
 
     /** AOSP PackageManager.getProperty (API 31): reads a manifest &lt;property&gt;
-     *  declaration. Mac.apk does not model manifest properties, so the honest
+     *  declaration. Apk on Mac does not model manifest properties, so the honest
      *  answer is "not declared" -- NameNotFoundException, which apps catch to
      *  fall back to their default (the same as a real manifest without it). */
     public Property getProperty(String propertyName, String packageName)
@@ -2589,7 +2589,7 @@ public abstract class PackageManager {
 
     /** AOSP queryIntentActivityOptions (API 1): activities matching a set of
      *  specific intents plus a general intent, for a launcher-style chooser.
-     *  Mac.apk resolves only the app's own declared activities, so this reports
+     *  Apk on Mac resolves only the app's own declared activities, so this reports
      *  none for the cross-app option query. */
     public java.util.List<ResolveInfo> queryIntentActivityOptions(
             android.content.ComponentName caller, android.content.Intent[] specifics,
@@ -2598,7 +2598,7 @@ public abstract class PackageManager {
     }
 
 
-    /** AOSP getInstallSourceInfo (API 30): who installed the package. Mac.apk
+    /** AOSP getInstallSourceInfo (API 30): who installed the package. Apk on Mac
      *  side-loads, so there is no installer chain. */
     public android.content.pm.InstallSourceInfo getInstallSourceInfo(String packageName)
             throws NameNotFoundException {
@@ -2606,7 +2606,7 @@ public abstract class PackageManager {
     }
 
     /** AOSP requestChecksums (API 31): compute checksums for a package's apk.
-     *  Mac.apk has no installed-package checksum service; report none. */
+     *  Apk on Mac has no installed-package checksum service; report none. */
     public void requestChecksums(String packageName, boolean includeSplits, int required,
             java.util.List<java.security.cert.Certificate> trustedInstallers,
             OnChecksumsReadyListener onChecksumsReadyListener) {

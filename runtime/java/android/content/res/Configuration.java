@@ -457,7 +457,7 @@ public final class Configuration implements Comparable<Configuration>, android.o
     /** AOSP DisplayContent.computeScreenConfiguration (android14 :2444-2512):
      *  KEYBOARD_QWERTY when any NON-virtual input device is
      *  KEYBOARD_TYPE_ALPHABETIC, and then HARDKEYBOARDHIDDEN_NO (adjustConfigurationLw
-     *  hides it only for NOKEYS or a closed lid). Mac.apk registers exactly one
+     *  hides it only for NOKEYS or a closed lid). Apk on Mac registers exactly one
      *  such device, the host keyboard (InputManager.MACAPK_HOST_KEYBOARD), so the
      *  answer is that gate; =0 keeps the pre-2026-10-01 NOKEYS / YES. Read as a
      *  constant rather than by walking the device registry because that walk
@@ -1109,7 +1109,7 @@ public final class Configuration implements Comparable<Configuration>, android.o
         };
 
     /** AOSP Configuration.needNewResources: whether a config delta requires new
-     *  Resources. Mac.apk reloads on any handled change, so report false for the
+     *  Resources. Apk on Mac reloads on any handled change, so report false for the
      *  fast path unless something unhandled changed. */
     public static boolean needNewResources(int configChanges, int interestingChanges) {
         return (configChanges & (interestingChanges | 0x20000000)) != 0;
@@ -1139,7 +1139,7 @@ public final class Configuration implements Comparable<Configuration>, android.o
     }
 
     /** AOSP :2311 -- the user's grammatical-gender preference, mapping the
-     *  internal UNDEFINED sentinel to the public NOT_SPECIFIED. Mac.apk has no
+     *  internal UNDEFINED sentinel to the public NOT_SPECIFIED. Apk on Mac has no
      *  UI to set one, so it stays NOT_SPECIFIED -- which is exactly what a
      *  device reports until the user picks a gender. */
     public int getGrammaticalGender() {

@@ -11,7 +11,7 @@ import android.os.PersistableBundle;
  * RestrictionsManager.ACTION_REQUEST_PERMISSION -- a restricted user asking an
  * admin for permission to do something.
  *
- * Mac.apk has no managed-profile or device-admin subsystem, so the broadcast is
+ * Apk on Mac has no managed-profile or device-admin subsystem, so the broadcast is
  * never sent and onRequestPermission never fires. The class still has to exist
  * and its onReceive has to DECODE the intent correctly, because an app can
  * construct the intent itself and hand it to the receiver directly (that is how

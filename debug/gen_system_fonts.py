@@ -3,7 +3,7 @@
 # device ASystemFontIterator dump (debug/pairip_devhook/refs/dev_fontlist_api34_*.txt).
 #
 # WHY: pairip 52.3's anti-tamper VM enumerates the system fonts via the NDK AFont API and folds
-# path+weight+italic+axes per font (docs/pairip-523-crack-state cont.301/302). Mac.apk has no native
+# path+weight+italic+axes per font (docs/pairip-523-crack-state cont.301/302). Apk on Mac has no native
 # AFont impl, so its fold is empty and the VM diverges at pass 16645. This emits the AOSP-API-34 font
 # TABLE (a platform-stable surface, like AOSP source) that bionic_shim.cpp's __macapk_arm64_AFont_*
 # return, so our ASystemFontIterator output matches a real device's. Regenerate if the oracle image

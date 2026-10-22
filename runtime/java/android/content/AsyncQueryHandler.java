@@ -2,7 +2,7 @@
 // update/delete off the caller's thread and posts the result back to it.
 //
 // This is now the REAL AOSP design, not a synchronous shortcut. The previous
-// Mac.apk version ran each operation inline on the calling thread, which had
+// Apk on Mac version ran each operation inline on the calling thread, which had
 // two consequences worth stating because they are exactly the failure mode the
 // no-shortcuts rule exists to catch:
 //   1. cancelOperation() could not mean anything -- nothing was ever queued,

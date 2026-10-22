@@ -5,7 +5,7 @@ package android.service.persistentdata;
  * survives a factory reset and carries Factory Reset Protection (FRP) state.
  *
  * Reached through Context.getSystemService(PersistentDataBlockManager.class).
- * Mac.apk has no such partition and enforces no FRP, so protection is not
+ * Apk on Mac has no such partition and enforces no FRP, so protection is not
  * active. That is a truthful answer, not a bypass: FRP is a lock a DEVICE
  * applies to itself after a reset, and there is nothing here for it to lock.
  *

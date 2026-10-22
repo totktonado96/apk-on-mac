@@ -11,7 +11,7 @@ import android.view.textservice.TextInfo;
  * Base for a spell-checker service. An app (a keyboard, a dictionary, a
  * language pack) subclasses it and returns a Session from createSession().
  *
- * Mac.apk binds no spell checker: TextServicesManager has no service to route
+ * Apk on Mac binds no spell checker: TextServicesManager has no service to route
  * to, so the platform never calls createSession() and a guest's checker is
  * never driven. What must work is the CLASS -- the subclass has to load, and
  * Session's two default methods have to behave, because a checker's own tests

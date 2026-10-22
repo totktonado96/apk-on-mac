@@ -5,7 +5,7 @@ package com.google.android.play.core.assetpacks;
 // (AutoValue base); we mirror the public accessor surface exactly so
 // Unity's PlayAssetDeliveryUnityWrapper status-query handler (which calls
 // name()/status()/errorCode()) and the C# PlayAssetDelivery runtime read
-// the expected values. On Mac.apk every pack is install-time (already in
+// the expected values. On Apk on Mac every pack is install-time (already in
 // the APK assets, extracted to the data dir), so it is always COMPLETED
 // with NO_ERROR and fully "downloaded".
 public abstract class AssetPackState {

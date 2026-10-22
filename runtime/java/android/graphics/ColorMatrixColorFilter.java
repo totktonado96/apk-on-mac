@@ -56,7 +56,7 @@ public class ColorMatrixColorFilter extends ColorFilter {
         }
     }
 
-    /** Mac.apk accessor: the live 20-float array our software Canvas applies. */
+    /** Apk on Mac accessor: the live 20-float array our software Canvas applies. */
     public float[] macapkArray() {
         return mMatrix;
     }

@@ -10,7 +10,7 @@ import android.text.TextUtils;
  * API 34 custom action an app adds to the system share sheet via
  * Intent.EXTRA_CHOOSER_CUSTOM_ACTIONS.
  *
- * An immutable value object in AOSP too. Mac.apk shows no share sheet, so an
+ * An immutable value object in AOSP too. Apk on Mac shows no share sheet, so an
  * action put in the intent is never rendered -- but the object itself is real,
  * the builder validates its arguments exactly as AOSP does (all three are
  * @NonNull and AOSP requires them), and it parcels, so an app that builds

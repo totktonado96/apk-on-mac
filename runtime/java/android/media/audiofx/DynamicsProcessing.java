@@ -5,7 +5,7 @@ package android.media.audiofx;
  * compressor -> post-EQ -> limiter) an equalizer app configures per channel.
  * API 28.
  *
- * Like every other class in this package, the ENGINE is absent: Mac.apk's mixer
+ * Like every other class in this package, the ENGINE is absent: Apk on Mac's mixer
  * has no per-session effect insertion path (see AudioEffect's class comment), so
  * no audio is actually processed. What IS fully implemented is the
  * CONFIGURATION MODEL -- and that matters more here than in the simpler effects,

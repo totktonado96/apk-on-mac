@@ -5,7 +5,7 @@
 // AOSP API-11+.
 //
 // AOSP ref: frameworks/base/core/java/android/app/LoaderManager.java
-// (abstract) + LoaderManagerImpl. Mac.apk drives loaders synchronously:
+// (abstract) + LoaderManagerImpl. Apk on Mac drives loaders synchronously:
 // initLoader/restartLoader create the Loader via the callbacks, start it,
 // and -- because our Loaders are typically CursorLoaders that load on
 // the calling thread -- deliver onLoadFinished immediately. This makes a

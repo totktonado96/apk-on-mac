@@ -57,7 +57,7 @@ public final class ViewCanvasDriver implements MetalSurfaceCallbacks {
     private static final String ENV_MACAPK_TRACE_RV = System.getenv("MACAPK_TRACE_RV");
 
     private static boolean sLoggedVisFrameCheck;
-    private static final String TAG = "Mac.apk.ViewCanvasDriver";
+    private static final String TAG = "Apk on Mac.ViewCanvasDriver";
     private static boolean sClearTraced;   // MACAPK_TRACE_FULLFILL one-shot, see the [clear] line
 
     private final View rootView;
@@ -306,7 +306,7 @@ public final class ViewCanvasDriver implements MetalSurfaceCallbacks {
     // complete, so M6 forces a FULL traversal (measure, layout, draw, present)
     // every M6_HEARTBEAT_FRAMES vsyncs of an idle window, bounding how long a
     // mutation that never called invalidate() can stay off screen (~0.5 s).
-    // It is a Mac.apk safety net, not an AOSP behaviour. At the 3360x1796
+    // It is a Apk on Mac safety net, not an AOSP behaviour. At the 3360x1796
     // window one costs 12-30 ms of loop-thread time on OpenCalculator (the
     // frame-kind trace's "heartbeat" row), twice a second, for as long as the
     // app sits idle -- and a tap that lands on it waits for it.
@@ -1964,7 +1964,7 @@ public final class ViewCanvasDriver implements MetalSurfaceCallbacks {
             long now = android.graphics.Canvas.sGlobalDrawOps;
             long delta = now - sPrevGlobalDrawOps;
             sPrevGlobalDrawOps = now;
-            NativeLog.i("Mac.apk.DrawDelta", "frame#" + n + " draw-ops=" + delta
+            NativeLog.i("Apk on Mac.DrawDelta", "frame#" + n + " draw-ops=" + delta
                 + " text=" + android.graphics.Canvas.sGlobalText
                 + " bitmap=" + android.graphics.Canvas.sGlobalBitmap
                 + " path=" + android.graphics.Canvas.sGlobalPath
@@ -3967,7 +3967,7 @@ public final class ViewCanvasDriver implements MetalSurfaceCallbacks {
                 if (cw > 0 && ch2 > 0
                         && c.getMeasuredWidth() > 0 && c.getMeasuredHeight() > 0) continue;
                 if (sFabRescueLogged.add(name)) {
-                    android.util.Log.i("Mac.apk.ViewCanvasDriver",
+                    android.util.Log.i("Apk on Mac.ViewCanvasDriver",
                         "FAB rescue fired for " + name + " (bounds " + cw + "x" + ch2
                         + ", measured " + c.getMeasuredWidth() + "x" + c.getMeasuredHeight()
                         + ") -- if this is never seen across the fleet, this pass is"

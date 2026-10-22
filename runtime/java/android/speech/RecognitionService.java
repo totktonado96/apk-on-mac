@@ -3,7 +3,7 @@
 // frameworks/base/core/java/android/speech/RecognitionService.java
 //
 // The direction matters for what "implemented" means here. This class is not
-// something Mac.apk calls; it is something a guest app EXTENDS. What the app
+// something Apk on Mac calls; it is something a guest app EXTENDS. What the app
 // needs is: the class to exist, the abstract methods to have AOSP's exact
 // signatures (so its @Override compiles and its subclass links), the
 // SERVICE_INTERFACE / SERVICE_META_DATA constants, and a Callback whose
@@ -11,7 +11,7 @@
 //
 // The one thing that genuinely cannot work is the BINDER side: AOSP's onBind
 // returns an IRecognitionService.Stub that the system server talks to, and
-// Mac.apk has no system server to bind from. AOSP's own onBind returns the
+// Apk on Mac has no system server to bind from. AOSP's own onBind returns the
 // stub unconditionally, so returning our (null-binder) default is the honest
 // analogue -- nothing in this process will ever bind to it, and an app that
 // declares such a service in its manifest still installs, still constructs,

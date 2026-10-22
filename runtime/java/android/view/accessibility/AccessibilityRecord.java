@@ -1,7 +1,7 @@
 // android.view.accessibility.AccessibilityRecord -- the property carrier that
 // AccessibilityEvent extends (source view, text, scroll/item indices, flags). Was
 // a bare stub, so AccessibilityEvent.setSource()/getText()/setScrollX() etc.
-// (inherited from here in AOSP) NoSuchMethodError'd. Mac.apk does not bridge to
+// (inherited from here in AOSP) NoSuchMethodError'd. Apk on Mac does not bridge to
 // NSAccessibility, so these are a faithful property bag the dispatch path fills
 // and drops. Mirrors
 // frameworks/base/core/java/android/view/accessibility/AccessibilityRecord.java
@@ -184,7 +184,7 @@ public class AccessibilityRecord {
     }
 
     /** AOSP AccessibilityRecord.getDisplayId(): the display the source view is
-     *  on. Mac.apk presents ONE display, so every source is on
+     *  on. Apk on Mac presents ONE display, so every source is on
      *  Display.DEFAULT_DISPLAY -- read from the source's own display when there
      *  is one, exactly as AOSP does, so the two can never disagree. */
     public int getDisplayId() {

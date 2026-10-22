@@ -1,4 +1,4 @@
-// Mac.apk v1.0.92 -- auto-generated stub, extended below with AOSP's real
+// Apk on Mac v1.0.92 -- auto-generated stub, extended below with AOSP's real
 // no-op defaults (thunderbird bring-up).
 // Class referenced by F-Droid's classes.jar but not previously
 // implemented. Empty body so JVM-side bytecode verification of

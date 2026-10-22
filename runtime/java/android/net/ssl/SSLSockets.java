@@ -38,7 +38,7 @@
 //
 // THE FIX, and why it is shaped this way. AOSP's semantic is "is this socket the
 // PLATFORM's own TLS socket, so the platform extras apply" (on a device the
-// platform factory yields Conscrypt, hence true). The faithful Mac.apk analogue
+// platform factory yields Conscrypt, hence true). The faithful Apk on Mac analogue
 // is "was this socket produced by the platform's TLS stack", i.e. loaded by the
 // boot/platform classloader -- true for SunJSSE, false for an app-bundled
 // org.conscrypt.* socket, which correctly leaves those to ConscryptSocketAdapter.
@@ -82,7 +82,7 @@ public class SSLSockets {
         return platform;
     }
 
-    /** Enables the TLS session-ticket extension. No-op on Mac.apk. */
+    /** Enables the TLS session-ticket extension. No-op on Apk on Mac. */
     public static void setUseSessionTickets(SSLSocket socket, boolean useSessionTickets) {}
 
     /** AOSP exportKeyingMaterial(socket, label, context, length): RFC 5705

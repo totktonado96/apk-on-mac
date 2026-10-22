@@ -2,7 +2,7 @@
 // supports. Source: frameworks/base
 // core/java/android/view/textservice/SpellCheckerSubtype.java (android16-release).
 //
-// Mac.apk ships no spell-checker service (see TextServicesManager), so the
+// Apk on Mac ships no spell-checker service (see TextServicesManager), so the
 // framework never produces one -- but this is a plain immutable value object on
 // AOSP too and an app can construct one.
 package android.view.textservice;

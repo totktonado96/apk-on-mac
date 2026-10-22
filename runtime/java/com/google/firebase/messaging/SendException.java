@@ -1,6 +1,6 @@
 // com.google.firebase.messaging.SendException -- the exception type passed to
 // FirebaseMessagingService.onSendError(msgId, exception) when an upstream
-// (device-to-server) send fails. On Mac.apk no upstream send ever happens (no
+// (device-to-server) send fails. On Apk on Mac no upstream send ever happens (no
 // FCM channel), so this is constructed only when handleIntent decodes a
 // "send_error" intent. Shipped so consumer code that catches/inspects it
 // compiles and so the error-code constants resolve.

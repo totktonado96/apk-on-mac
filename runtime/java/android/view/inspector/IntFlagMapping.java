@@ -3,7 +3,7 @@
 // the layout inspector shows. Source: frameworks/base
 // core/java/android/view/inspector/IntFlagMapping.java (android16-release).
 //
-// Mac.apk runs no layout inspector, so nothing consumes a mapping -- but this is
+// Apk on Mac runs no layout inspector, so nothing consumes a mapping -- but this is
 // pure arithmetic with no platform dependency, so it is implemented for real
 // rather than stubbed: a generated companion that builds one and reads it back
 // gets device-identical answers.

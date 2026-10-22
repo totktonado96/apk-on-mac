@@ -3,7 +3,7 @@
 //   AOSP: frameworks/base/core/java/android/app/ForegroundServiceTypeException.java
 //         (android14-release), mirrored member for member.
 // See ServiceStartNotAllowedException.java for why this family exists here even
-// though Mac.apk has no foreground-service-type policy to enforce.
+// though Apk on Mac has no foreground-service-type policy to enforce.
 package android.app;
 
 public abstract class ForegroundServiceTypeException extends ServiceStartNotAllowedException {

@@ -1,6 +1,6 @@
 // android.widget.PopupMenu -- API 11+ contextual popup menu, anchored
 // to a View. F-Droid's main UI uses PopupMenu in a few places (overflow
-// menu on app rows, etc.). Mac.apk has no popup-menu UI primitive yet;
+// menu on app rows, etc.). Apk on Mac has no popup-menu UI primitive yet;
 // this stub exists so MainActivity.onCreate can construct PopupMenu
 // references without NoClassDefFoundError on first access. show/dismiss
 // are no-ops -- the menu never appears, but the activity init reaches

@@ -9,7 +9,7 @@ package android.renderscript;
  * setVar/getVar keep an actual slot table, so a value pushed in comes back out.
  * The KERNEL LAUNCH side (the protected forEach / invoke / reduce overloads) is
  * the part that needs a bitcode engine, since a ScriptC kernel only exists as
- * LLVM bitcode compiled from .rs source. Mac.apk has no such engine, so those
+ * LLVM bitcode compiled from .rs source. Apk on Mac has no such engine, so those
  * throw RSDriverException rather than returning quietly and leaving the output
  * Allocation untouched: an unprocessed buffer is indistinguishable from a
  * processed one to the caller, and the resulting corruption surfaces far away
@@ -161,7 +161,7 @@ public class Script extends BaseObj {
 
     private static String noKernelEngine(String what) {
         return "Script." + what + " runs an app-authored .rs kernel, which exists only as LLVM"
-                + " bitcode compiled by slang. Mac.apk has no bitcode engine, so the kernel"
+                + " bitcode compiled by slang. Apk on Mac has no bitcode engine, so the kernel"
                 + " cannot be executed. The built-in ScriptIntrinsic classes ARE implemented"
                 + " and run on the CPU.";
     }

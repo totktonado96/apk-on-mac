@@ -3,7 +3,7 @@
 //
 // On real Android this wraps the IContentProvider Binder transport so a
 // caller can issue several CRUD calls against one provider without
-// re-resolving the authority each time. Mac.apk runs the provider in the
+// re-resolving the authority each time. Apk on Mac runs the provider in the
 // same JVM, so this simply forwards to the live ContentProvider object
 // the registry resolved. Every method mirrors the matching
 // ContentResolver/ContentProvider signature so apps that hold a client
@@ -247,7 +247,7 @@ public class ContentProviderClient implements AutoCloseable {
     }
 
     /** AOSP returns the wrapped ContentProvider when the client is local
-     *  (same process). Mac.apk is always local, so expose it -- some
+     *  (same process). Apk on Mac is always local, so expose it -- some
      *  framework code (DocumentsProvider helpers) unwraps a local client. */
     public ContentProvider getLocalContentProvider() { return mProvider; }
 

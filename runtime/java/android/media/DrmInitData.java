@@ -1,5 +1,5 @@
 package android.media;
-/** Container for scheme-specific DRM initialization data. Mac.apk plays no DRM
+/** Container for scheme-specific DRM initialization data. Apk on Mac plays no DRM
  *  content, so instances are only referenced, not populated. */
 public abstract class DrmInitData {
     public abstract SchemeInitData get(java.util.UUID schemeUuid);

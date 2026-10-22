@@ -172,7 +172,7 @@ static inline char* macapk_envp(const char* name) {
 // default ON; set to 0 to restore the old host-environment behaviour).
 //
 // MEASURED 2026-09-11: the pairip VM walks `environ` element by element, copying each
-// char* into its own buffer. What it was reading on Mac.apk:
+// char* into its own buffer. What it was reading on Apk on Mac:
 //
 //     [0]  "SHELL=/bin/zsh"
 //     [5]  "TMPDIR=/var/folders/xx/xxxxxxxx/T/"
@@ -404,7 +404,7 @@ static bool macapk_guest_env_mutable_on();   // defined with the mutable-environ
 // (BEFORE this dylib is dlopen'd) when the APK ships libpairipcore.so. A normal
 // app never sets it, so these surfaces -- which rewrite shared JVM / syscall
 // state and corrupt a non-pairip app (measured: FAKE_JNIENV reroutes HotSpot's
-// shared JNINativeInterface so slot 31 GetObjectClass, called by Mac.apk's own
+// shared JNINativeInterface so slot 31 GetObjectClass, called by Apk on Mac's own
 // DEX converter, faults SIGBUS/BUS_ADRALN:
 // docs/pairip-fake-jnienv-shared-vtable-corruption_2026-10-16.md) -- stay OFF for
 // it even when the env flag is present. That is the non-regression fix: the
@@ -2570,7 +2570,7 @@ static bool macapk_pg_fault(ucontext_t* uc, siginfo_t* si, uintptr_t pc);
 // MACAPK_PAIRIP_CRASHDUMP (DIAGNOSTIC, default OFF): when a fault's PC is inside
 // libpairipcore -- i.e. the integrity VM detonated (+0x440c4 FNV-walk SIGBUS, or a
 // prologue poison) -- dump the ENTIRE materialized program buffer g_wp_tbase (357663 B)
-// to /tmp/mac_vmcode_crash.bin plus the crash context. This captures Mac.apk's buffer at
+// to /tmp/mac_vmcode_crash.bin plus the crash context. This captures Apk on Mac's buffer at
 // the exact moment it dies so a byte-by-byte diff vs a device/software-CPU dump
 // (debug/pairip_vmdiff.py) pinpoints the garbled slot (e.g. a hash_data_len materialized
 // to -1/0xFFFF that makes the FNV walk 4GB). The disp=0 layout-fragile crash is otherwise
@@ -4238,7 +4238,7 @@ static void macapk_fpe_front(int sig, siginfo_t* info, void* uc) {
 // identity should be an honest Apple one -- implementer 0x61 -- is an open owner
 // question; change it HERE and both surfaces follow.)
 // cont.82 (2026-10-11, OWNER: "make everything faithful. If we can report Apple and it accepts it I'm all for
-// it."): report the HONEST Apple identity. Mac.apk runs ON Apple Silicon, and the faithful reference for an
+// it."): report the HONEST Apple identity. Apk on Mac runs ON Apple Silicon, and the faithful reference for an
 // Android environment on this Mac -- the emulator -- reports implementer 0x61 (Apple), midr 0x610F0000 (host
 // passthrough). So claiming ARM 0x410FD0C0 was a less-honest surface; 0x610F0000 is the truthful one. Drives
 // BOTH /proc/cpuinfo and the MIDR_EL1 register read. (It does NOT move the pairip genuine-VM wall -- cont.80 --
@@ -4289,7 +4289,7 @@ extern "C" int __macapk_arm64_pthread_cond_broadcast(int32_t* c);  // defined be
 // -> it dispatches ONLY when the binary flag T+0xb8 is set, and that flag is set by the poster's
 // notify_one but RESET on wake; if the woken worker loses the drain `try_lock T+0x118` (or reads the
 // SPSC queue transiently-empty in the split-lock window) it re-parks with flag=0 and the item strands
-// FOREVER. Mac.apk-only/~50% because our Bionic-shim mutex over libSystem is slower+unfair, widening the
+// FOREVER. Apk on Mac-only/~50% because our Bionic-shim mutex over libSystem is slower+unfair, widening the
 // window so notify_one is wasted. Capping the cond-wait can't fix it (the loop re-checks the flag). The
 // fix LEVEL-TRIGGERS: capture each WorkerPool object T at its park site, then a watchdog periodically
 // sets flag T+0xb8=1 (release) + broadcasts the cv T+0x60, so an idle worker re-runs dispatch and
@@ -5548,7 +5548,7 @@ static inline bool macapk_input_priority_active() {
 // "any perturbation changes timing".
 //
 // THE FIX. When __macapk_arm64_swappy_present_tick goes live -- the "[swappy] SwappyCommon pacing
-// active" moment -- Mac.apk has ITSELF become the guest's frame pacer, and the guest is in a
+// active" moment -- Apk on Mac has ITSELF become the guest's frame pacer, and the guest is in a
 // Swappy-paced loop where UnityMain blocks on mWaitingMutex every frame. Our 50ms unlock tax is
 // then fighting our own pacing bridge: two of our mechanisms working against each other. So latch
 // the boot window CLOSED at that moment. Post-latch the steady-state v618 streak-gate stays armed,
@@ -5797,7 +5797,7 @@ static bool macapk_xsubmit_trace_check(ucontext_t* uc, uintptr_t pc) {
 // prologue (`sub sp,sp,#imm` or `stp x29,x30,[sp,#-imm]!`). Used to CONFIRM that the MCPE 54% stall is
 // the GS-issue readiness gate: forcing the ServicesManager/user-session predicate `mc+0xc19f284` to
 // return 1 should make the gate `0xbcb3958` pass -> GS request built+issued -> (emulator parity: 404)
-// -> menu. REMOVAL CONDITION: delete once the real cause (why [SM+0x250]->isValid is false on Mac.apk,
+// -> menu. REMOVAL CONDITION: delete once the real cause (why [SM+0x250]->isValid is false on Apk on Mac,
 // i.e. the user-session/IUserManager never initializes) is fixed in the framework. Gated default-OFF.
 static uintptr_t g_forceret_addr = 0;
 static int64_t   g_forceret_val  = 1;
@@ -5834,7 +5834,7 @@ static bool macapk_forceret_check(ucontext_t* uc, uintptr_t pc) {
 // DIAGNOSTIC (CLAUDE.md narrow exception). THE 54% root (Fable aab2 v653): the GS-request handler
 // GatheringManager::accessHandler `mc+0xbcb34a4` is a deferred listener subscribed onto the user-session
 // `[SM+0x250]`; it fires only when the user-session emits its terminal sign-in-state signal, which never
-// happens on Mac.apk -> GS request never built -> MAIN's sign-in wait never readies. This diagnostic
+// happens on Apk on Mac -> GS request never built -> MAIN's sign-in wait never readies. This diagnostic
 // reproduces the emulator's terminal-signed-out fire: (1) capture the GatheringManager `gm` at
 // `isReady 0xbcb390c` (x0=gm, polled on a stall); (2) force the internal gate `0xbcb3958`->1 (via the
 // force-ret trap, set by the installer); (3) from a host thread, invoke `0xbcb34a4(gm, servicesManager)`
@@ -5891,7 +5891,7 @@ static void* macapk_gsh_watchdog(void*) {
 // ---- XTaskQueueCreate dispatch-mode override (MACAPK_XTQ_SERIALIZE) -----------------------------
 // THE race-fix candidate (Xal + XTaskQueue source review, v654): MCPE creates its XTaskQueues as
 // (Manual, Manual) and pumps the completion port only via the per-frame driver mc+0xad773ac (Android:
-// MAIN's game loop). On Mac.apk MAIN blocks in the sign-in wait -> the game loop stops -> the completion
+// MAIN's game loop). On Apk on Mac MAIN blocks in the sign-in wait -> the game loop stops -> the completion
 // port is pumped unreliably (a worker races it or nobody pumps) -> the Xal Future continuation
 // (SetSucceededDoNotContinueYet -> InvokeContinuation) strands/mis-threads -> SISU never completes ->
 // 54% stall (~40% cross = whether the port gets pumped after the completion posts). FIX: intercept
@@ -5973,7 +5973,7 @@ extern "C" void __macapk_install_force_gs_handler(void* isready_vaddr, void* han
 // `mc+0x13203b18 ldr x20,[[TG+0x18]+0x60]`), and the TaskGroup pointer is spilled at
 // `[sp+0x18]` (from `mc+0x13203a88 stp x20,x21,[sp,#0x18]`, before the overwrite). This
 // step is LOG-ONLY (records + prints the (pumpPthread,pumpTG) pairs so we can identify
-// the GS pump on Mac.apk before wiring the deliver-trap PC-redirect). The trapped insn is
+// the GS pump on Apk on Mac before wiring the deliver-trap PC-redirect). The trapped insn is
 // `mov w8, wzr` (0x2a1f03e8); we emulate w8=0 and advance. Positive-ID'd on that exact
 // encoding so it can only arm the real owner branch (inert on any other binary/offset).
 static uintptr_t g_pump_capture_addr = 0;
@@ -6020,7 +6020,7 @@ static bool macapk_pump_capture_check(ucontext_t* uc, uintptr_t pc) {
 // DIAGNOSTIC for the MCPE 54% stall: trace the GS access-coroutine step
 // (v1.26.40.27 6c199c `mc+0xbcb9c38` = state->vtable[+0x20]; entry insn
 // `sub w8, w1, #0x1f4` = 0x5107d028). Logs each hit's thread + w1(HTTP status) + x0(state).
-// Emulator (cross): both 404 round-trips run on MINECRAFT MAIN. This confirms on Mac.apk
+// Emulator (cross): both 404 round-trips run on MINECRAFT MAIN. This confirms on Apk on Mac
 // WHICH thread(s) run it + how far the coroutine gets before orphaning. Positive-ID'd on
 // the exact `sub w8,w1,#0x1f4` encoding so it can only arm the real step entry.
 static uintptr_t g_coro_step_addr = 0;
@@ -6064,7 +6064,7 @@ static bool macapk_coro_step_check(ucontext_t* uc, uintptr_t pc) {
 // one port" driver (v1.26.40.27 6c199c `mc+0xad773ac`; entry `sub sp,sp,#0x50` = 0xd10143ff):
 // reads queue=[this+0x8], port=[this+0x10], calls XTaskQueueDispatch(queue,port,0). On the
 // emulator a WorkerPool worker (Thread-9) runs it for port 0 (Work) AND port 1 (Completion) ->
-// the completion is drained -> deliver fires -> cross. This trace shows on a Mac.apk STALL
+// the completion is drained -> deliver fires -> cross. This trace shows on a Apk on Mac STALL
 // whether the driver runs at all and for WHICH ports: if it never runs for port 1, the
 // Completion port is never dispatched (the strand). Positive-ID'd on `sub sp,sp,#0x50`.
 static uintptr_t g_dispatch_addr = 0;
@@ -6118,7 +6118,7 @@ static bool macapk_dispatch_check(ucontext_t* uc, uintptr_t pc) {
 }
 
 // ---- completion-port pump (MACAPK_COMPLETION_PUMP) — THE MCPE 54%-STALL FIX ----------
-// Root cause (v648, live-proven on Mac.apk): MCPE drains its XTaskQueue COMPLETION port via a
+// Root cause (v648, live-proven on Apk on Mac): MCPE drains its XTaskQueue COMPLETION port via a
 // per-frame std::function<void(float,ulong)> callback (the "dispatch driver" mc+0xad773ac)
 // that MINECRAFT MAIN's game loop posts each frame; a WorkerPool worker runs it and calls
 // XTaskQueueDispatch(queue, Completion, 0). During sign-in MAIN enters a BLOCKING waitAndDrain
@@ -6401,7 +6401,7 @@ static void macapk_completion_pump_note(uintptr_t pc, uint64_t thiz) {
 }
 
 // ---- XTaskQueueSubmitCallback capture (part of MACAPK_COMPLETION_PUMP) --------------
-// The per-frame driver on Mac.apk stops before dispatching the HTTP completion queue, so
+// The per-frame driver on Apk on Mac stops before dispatching the HTTP completion queue, so
 // capture the queue the completion is SUBMITTED to instead: libHttpClient XTaskQueueSubmitCallback
 // (0x30b48, entry `mov x4,x3`=0xaa0303e4; x0=queue, x1=port). port==1 (Completion) -> the HTTP
 // completion queue. Also derives XTaskQueueDispatch = this-lib+0x306b8 = submit_pc - 0x490, so the
@@ -6499,7 +6499,7 @@ static bool macapk_forwarder_check(ucontext_t* uc, uintptr_t pc) {
 // owner, claimed by MAIN on the first drain) and aborts otherwise. On the emulator MAIN drains P
 // each frame via its game loop (`0xa622f00 -> 0x132375e0 -> 0x132353fc(P) -> drain-loop 0x13235554
 // -> run-one 0x132356fc -> functor 0xa25d1b4 -> deliver 0xbcbabc8`), so the GS task runs, sets the
-// GS AsyncResult `[result]==2`, signals `[result+0x4]`, and sign-in completes. On a Mac.apk STALL,
+// GS AsyncResult `[result]==2`, signals `[result+0x4]`, and sign-in completes. On a Apk on Mac STALL,
 // MAIN instead blocks in the sign-in `waitAndDrain 0x11ee7440`, whose inner wait `0x132361c8` is a
 // PURE cond_wait that drains NOTHING (Fable-settled), so once MAIN parks nothing ever drains P ->
 // the GS task strands -> deliver never runs -> `[result]` never becomes 2 -> MAIN waits forever.
@@ -6584,7 +6584,7 @@ static void macapk_host_drain_P() {
 // blocks in the sign-in wait because MULTIPLE worker threads (Thread-9/11/14, Rendering Pool) drain pool P
 // CONCURRENTLY with MAIN (chain worker-loop 0x1325cf60 -> drain 0x1323557c -> WorkerPool::run 0x132358e4 ->
 // GS functor 0xa25d1b4 -> deliver 0xbcbabc8), so the GS deliver task runs the instant it is submitted. On
-// Mac.apk those SAME workers sit PARKED (0x1325cff0). This host thread reproduces the emulator's concurrent
+// Apk on Mac those SAME workers sit PARKED (0x1325cff0). This host thread reproduces the emulator's concurrent
 // pool-P drain: it drains g_md_pool via the cooperative drain-loop 0x13235554 (same chain the emulator's
 // workers run), but ONLY while MAIN is actively in the sign-in wait (g_md_inject advancing = the XACONLY
 // redirect is firing) -- so it never runs during asset load (the phase where an off-MAIN general-pool drain
@@ -6644,7 +6644,7 @@ static void macapk_signin_drain_maybe_start() {
 // The mechanism note below is still accurate about WHAT the code does; only the verdict was wrong.
 // See docs/refuted-approaches.md and docs/mcpe-cross-rate-collapse-and-wake-family-refuted_2026-09-01.md.
 // Emulator auth-window debuggerd (2026-07-20): the emulator's WorkerPool workers ACTIVELY drain the XAL
-// auth tasks (Thread-8 @ mc 0x1326533c) while Mac.apk's SAME workers sit PARKED at mc 0x1325cff0 -- so the
+// auth tasks (Thread-8 @ mc 0x1326533c) while Apk on Mac's SAME workers sit PARKED at mc 0x1325cff0 -- so the
 // auth-coroutine tasks exist in the pool but nothing runs them -> the XAL sign-in-state emit never fires ->
 // stall. The park is `cv.wait([P+0x60]); flag=ldarb[P+0xb8]; if(!(flag&1)) re-wait` (SAME shape WP_DRAIN_MS
 // wakes at the other worker loop). The auth pool is captured in g_bg_pools at the bgpark site 0x1325cfe4
@@ -7013,7 +7013,7 @@ static bool macapk_maindrain_cap_check(ucontext_t* uc, uintptr_t pc) {
     }
     g_md_capture_hits.fetch_add(1);
     // AFFINITY ENFORCEMENT (MACAPK_MAIN_DRAIN_AFFINE): P is MAIN-affine; the emulator has MAIN as
-    // the SOLE consumer. On Mac.apk a WORKER also drains P here (the assert only logs), running the
+    // the SOLE consumer. On Apk on Mac a WORKER also drains P here (the assert only logs), running the
     // completion driver + callbacks off-MAIN -> the coroutine never issues GS. Turn a foreign caller
     // away: return "no work" (w0=0) WITHOUT draining, leaving P's tasks for MAIN (which drains via
     // the wait-loop inject). Cheap: fires per-drain, not per-task.
@@ -7222,7 +7222,7 @@ wd_transparent:
 
 // ---- P affinity enforcement (MACAPK_MAIN_DRAIN_AFFINE) ----------------------------------------
 // The GS sign-in pool P is documented MAIN-affine (`0x132353fc` asserts `pthread_self()==[P+0x50]`)
-// but the assert only LOGS. So on Mac.apk (MAIN blocked in the sign-in wait) WORKER threads drain P
+// but the assert only LOGS. So on Apk on Mac (MAIN blocked in the sign-in wait) WORKER threads drain P
 // via `WorkerPool::run 0x132356fc` (NOT affinity-gated) and run the per-frame completion driver
 // `mc+0xad773ac` + the precursor completion callbacks ON A WORKER (tid != MAIN) -> the auth coroutine
 // advance mis-behaves and never issues the GS request (LIVE: inject/MAIN tid != dispatch/driver tid).
@@ -10178,9 +10178,9 @@ static bool macapk_guest_tp_check(ucontext_t* uc, uintptr_t pc) {
     // --- pairip hub dispatch-key trajectory (MACAPK_PAIRIP_HUBTRAJ=<limit>, default OFF) ----
     // At the 52.3 VM hub (file-off 0x3f318, word 0x2a0a03e8 = `mov w8,w10`), log the dispatch
     // key w10 (+ w9) per hub pass to /tmp/pairip_hubtraj.bin (<II> little-endian), for the
-    // re-host-vs-Mac.apk trajectory diff: the FIRST divergent w10 names the opcode where the
+    // re-host-vs-Apk on Mac trajectory diff: the FIRST divergent w10 names the opcode where the
     // two genuine-VM runs' environments diverge (address/scratch/timing-immune, unlike the
-    // buffer-value diff). Non-detonating: emulate `mov w8,w10` and step past (Mac.apk does not
+    // buffer-value diff). Non-detonating: emulate `mov w8,w10` and step past (Apk on Mac does not
     // anti-tamper its own run). Co-arm with MACAPK_TRACE_GUEST_LIB=pairipcore +
     // MACAPK_TRACE_GUEST_OFFS=3f318. docs/pairip-523-genuine-vm-frontier_2026-10-09.md. 2026-10-09.
     {
@@ -10190,7 +10190,7 @@ static bool macapk_guest_tp_check(ucontext_t* uc, uintptr_t pc) {
         if ((s_ht || s_fw9 || s_zacc) && tp->orig == 0x2a0a03e8u) {
             auto& X = uc->uc_mcontext->__ss.__x;
             // FORCE_W9: the hub loads w9 from [sp+0x558] (uninitialised stack) and does
-            // `mov w28,w9` right after; on Mac.apk's REUSED stack that slot is garbage
+            // `mov w28,w9` right after; on Apk on Mac's REUSED stack that slot is garbage
             // (0x753619d4) where a fresh Android thread / the re-host read 0. Overwrite w9
             // here (before the post-hub `mov w28,w9`) to test whether the garbage w28 is
             // causal to the 0x50eac mis-index. 2026-10-09.
@@ -10807,22 +10807,22 @@ static bool macapk_guest_tp_check(ucontext_t* uc, uintptr_t pc) {
     // on-device LD_PRELOAD hook (debug/pairip_devhook/hook.c). Gated on the exact
     // ldrsh word so it can never misfire on a generic tracepoint.
     // MACAPK_PAIRIP_ZERO_X67 (DIAGNOSTIC, default OFF): at protections_main entry (0x32a10,
-    // `and w8,w1,#0xffff` = 0x12003c28), x6/x7 differ Mac.apk-vs-device-faithful-re-host (re-host
-    // 0/0; Mac.apk 0xffffffffbfc007ff / 0xfffff0003ffff800 -- a hidden non-buffer input, likely an
+    // `and w8,w1,#0xffff` = 0x12003c28), x6/x7 differ Apk on Mac-vs-device-faithful-re-host (re-host
+    // 0/0; Apk on Mac 0xffffffffbfc007ff / 0xfffff0003ffff800 -- a hidden non-buffer input, likely an
     // MRS/CPU value the re-host stubs to 0). Zero them and continue (emulate the `and`, stay armed)
     // to test whether they are CAUSAL to the disp=0 poison routing. 2026-09-13.
     // MACAPK_PAIRIP_ZERO_CTX=<lo>[:<hi>] (DIAGNOSTIC): at protections_main entry (0x32a10), zero the ctx
     // region [x0+lo .. x0+hi] (default 0x180:0x800). The re-host/device stack is fresh (zero) there;
-    // Mac.apk's is a REUSED stack full of garbage. If protections_main reads uninitialized ctx that is 0
-    // on a fresh Android stack but garbage on Mac.apk, zeroing it should stop the poison routing. Emulate
+    // Apk on Mac's is a REUSED stack full of garbage. If protections_main reads uninitialized ctx that is 0
+    // on a fresh Android stack but garbage on Apk on Mac, zeroing it should stop the poison routing. Emulate
     // `and w8,w1,#0xffff` and stay armed (all calls). 2026-09-13.
     // MACAPK_PAIRIP_FORCE_W8=<val> (DIAGNOSTIC): at the VM CFG-setup `and w8,w1,#0xffff`
     // (0x3e508 in 52.3, word 0x12003c28), OVERRIDE the selector w8 (=w1&0xffff) to <val> and
-    // step past. The trajectory diff (frontier cont.35-36) traced Mac.apk's rec-237 w10
-    // divergence back to this selector: the clean re-host computes w8=4 here, Mac.apk computes
-    // w8>=0x4c, which builds a different next-key jump table and sends Mac.apk to the 0x50eac
+    // step past. The trajectory diff (frontier cont.35-36) traced Apk on Mac's rec-237 w10
+    // divergence back to this selector: the clean re-host computes w8=4 here, Apk on Mac computes
+    // w8>=0x4c, which builds a different next-key jump table and sends Apk on Mac to the 0x50eac
     // tamper path. FORCE_W8=4 tests whether making the selector match the clean path lets
-    // Mac.apk pass. ALSO logs Mac.apk's REAL w8 (=w1&0xffff) so its actual value is visible.
+    // Apk on Mac pass. ALSO logs Apk on Mac's REAL w8 (=w1&0xffff) so its actual value is visible.
     // 2026-10-10.
     {
         static const char* s_fw8 = std::getenv("MACAPK_PAIRIP_FORCE_W8");
@@ -14436,7 +14436,7 @@ extern "C" long __macapk_arm64_syscall(long, long, long, long, long, long, long)
 // bionic_shim_forkwatch.cpp: an app's forks die with the app (AOSP killProcessGroup).
 extern "C" void __macapk_forkwatch_before_fork(void);
 extern "C" void __macapk_forkwatch_register(pid_t child);
-static constexpr uint16_t kSvcBrkTag  = 0x4D41;   // "MA" (Mac.apk), in the safe range
+static constexpr uint16_t kSvcBrkTag  = 0x4D41;   // "MA" (Apk on Mac), in the safe range
 static constexpr uint32_t kSvcBrkInsn = 0xD4200000u | ((uint32_t)kSvcBrkTag << 5);
 static struct sigaction g_old_trap_sa{};
 
@@ -19028,7 +19028,7 @@ uint32_t CallStaticBooleanMethodV(uint32_t env_h, uint32_t cls_h,
 // less methods.
 //
 // Object-returning methods need their jobject result wrapped in a
-// Mac.apk guest handle so the caller can pass it back into other
+// Apk on Mac guest handle so the caller can pass it back into other
 // JNI calls (GetStringUTFChars in particular -- that's how cocos2d-x
 // extracts the path bytes from the jstring returned here).
 uint32_t CallStaticObjectMethod(uint32_t env_h, uint32_t cls_h,
@@ -20351,7 +20351,7 @@ uint32_t VmDetachCurrentThread(uint32_t vm_h, uint32_t, uint32_t, uint32_t) {
 uint32_t VmDestroyJavaVM(uint32_t /*vm_h*/, uint32_t, uint32_t, uint32_t) {
     // No-op: cocos2d-x rarely calls this, and even when it does we
     // don't actually want to tear down the JVM (the JVM is shared
-    // with Mac.apk's own boot loader).
+    // with Apk on Mac's own boot loader).
     return JNI_OK;
 }
 uint32_t VmAttachAsDaemon(uint32_t vm_h, uint32_t env_out_addr,
@@ -22149,7 +22149,7 @@ uint32_t __macapk_shim___google_potentially_blocking_region_end(
 // it through the resolve+invoke_safe path, exactly like every other
 // guest-callback shim in this file.
 //
-// dso_handle is ignored, same reasoning as __cxa_atexit above (Mac.apk
+// dso_handle is ignored, same reasoning as __cxa_atexit above (Apk on Mac
 // never dlcloses).
 namespace {
 struct MacApkArm32ThreadDtor { uint32_t func_vaddr; uint32_t arg_vaddr; };
@@ -22600,7 +22600,7 @@ uint32_t __macapk_shim_time(uint32_t out_addr, uint32_t, uint32_t, uint32_t) {
 // dt=0 every frame, CCScheduler::update advances nothing,
 // CCActionManager never ticks, transitions never finish, button-press
 // animations never play, and the game looks frozen even though input
-// reaches native code. Mac.apk-wide fix.
+// reaches native code. Apk on Mac-wide fix.
 //
 // ---- MACAPK_GUEST_CLOCK_NANOTIME (default ON, 2026-09-28): ONE monotonic clock ----
 // Android has exactly one monotonic clock, and every public surface reads it:
@@ -25449,7 +25449,7 @@ extern "C" int __macapk_arm64_inotify_rm_watch(int /*fd*/, int /*wd*/) {
 //
 // libil2cpp (Crossy's Unity/Mono runtime, compiled for Android) imports the
 // socket family (socket/connect/bind/getaddrinfo/get/setsockopt/...) as UND
-// symbols, so Mac.apk's loader routes them through __macapk_arm64_*. il2cpp
+// symbols, so Apk on Mac's loader routes them through __macapk_arm64_*. il2cpp
 // passes LINUX numeric constants verbatim, and several differ from macOS -- so
 // without translation EVERY socket() fails and the Mono PAL spins forever:
 // Crossy's BootController never reaches LoadGameScene (the menu) because its
@@ -27325,7 +27325,7 @@ extern "C" uintptr_t __macapk_pairip_fake_libart(uintptr_t* out_size) {
 // anti-tamper VM enumerates the system fonts via ASystemFontIterator/AFont and
 // FOLDS each font's path+weight+italic+variation-axes (pass 16645; see
 // docs/pairip-523-crack-state cont.301/302). A real device returns the AOSP system
-// font set (366 objects on API-34); Mac.apk had NO native impl, so the iterator
+// font set (366 objects on API-34); Apk on Mac had NO native impl, so the iterator
 // returned empty and the VM's font fold diverged. These shims return the faithful
 // AOSP-API-34 table (pairip_system_fonts.h, generated by debug/gen_system_fonts.py
 // from a device ASystemFontIterator capture) -- a platform-stable surface, like
@@ -28283,7 +28283,7 @@ static inline bool macapk_arm64_mutex_ensure_valid(int32_t* m) {
 // v1.0.585 diag: per-thread guest ENTRY (the pthread_create start address) so the OSWAIT
 // trace can attribute each park/wake to a thread ROLE by its start (e.g. cohtml Gameface
 // Layout worker file vaddr 0x11b579fc vs a NetherNet reader vs a pool worker), since
-// Mac.apk guest threads are unnamed. Set only when the trampoline is installed (gated on
+// Apk on Mac guest threads are unnamed. Set only when the trampoline is installed (gated on
 // the trace env in __macapk_arm64_pthread_create), so production is untouched.
 static thread_local uintptr_t t_pthread_entry = 0;
 // v1.0.645: guest-vs-host thread tag for the foreign-wake defer (Android
@@ -28315,7 +28315,7 @@ static thread_local size_t t_stack_jvm_reserve = 0;
 // "Attempt to attach a thread with a too-small stack": min_stack =
 // GetStackOverflowProtectedSize() + RoundUp(reserved(arm64 8K) + 4K, page)).
 //
-// On Mac.apk the attach goes to HotSpot, which takes far more, and takes it
+// On Apk on Mac the attach goes to HotSpot, which takes far more, and takes it
 // from the bottom of the SAME pthread stack:
 //   * guard: red + yellow + reserved, mprotect'ed PROT_NONE by
 //     create_stack_guard_pages() (jdk21u prims/jni.cpp:3796);
@@ -30025,7 +30025,7 @@ extern "C" int __macapk_arm64_pthread_cond_wait(int32_t* c, int32_t* m) {
     // __macapk_arm64_swappy_present_tick). Unity's "Optimized Frame Pacing"
     // (Swappy) render-pacing wait has the source-stable layout {mutex;
     // cond@mutex+0x28; presented-counter@mutex+0x58} and blocks UnityMain in
-    // `while (*counter < target) cond_wait(mutex+0x28, mutex)`. On Mac.apk the
+    // `while (*counter < target) cond_wait(mutex+0x28, mutex)`. On Apk on Mac the
     // present happens on the MAIN thread (not the render thread's SwappyGL_swap),
     // so *counter never advances -- but the Choreographer still broadcasts the
     // cond every vsync, so UnityMain is WOKEN each frame, re-checks the frozen
@@ -30126,7 +30126,7 @@ extern "C" int __macapk_arm64_pthread_cond_wait(int32_t* c, int32_t* m) {
             }
         }
         // The Swappy render-pacing wait RE-ENTERS its mutex constantly (the
-        // `while (*counter < target) cond_wait` loop runs every vsync; on Mac.apk
+        // `while (*counter < target) cond_wait` loop runs every vsync; on Apk on Mac
         // the present-counter advances too slowly to ever catch the target, so it
         // never exits). Detect it by RE-ENTRY COUNT on a fixed mutex -- NOT a
         // frozen counter (the counter does crawl forward, 3,4,5,...). A small
@@ -30366,7 +30366,7 @@ static int macapk_arm64_cond_timedwait_clock(int32_t* c, int32_t* m,
         // asleep for the FULL timeout while the online-signaling connect-starter task
         // sits QUEUED in the same pool -> the websocket is never issued (RealWebSocket
         // never loads). The Linux emulator delivers this notify and crosses 6/6; on
-        // macOS the os_sync/ulock wake is lost ~65% (the exact Mac.apk-specific gate,
+        // macOS the os_sync/ulock wake is lost ~65% (the exact Apk on Mac-specific gate,
         // proven by a 7-vs-7-worker differential: same pool size, but 4 free workers
         // stay parked here instead of running the queued connect-starter). Clamp any
         // timed wait longer than the cap to the cap and return a POSIX-legal SPURIOUS 0
@@ -31556,7 +31556,7 @@ extern "C" void __macapk_arm64_pthread_exit(void* retval) {
 // is passed straight through and the answer is correct for cases 2 and 3.
 extern "C" int __macapk_arm64_tgkill(int tgid, int tid, int sig) {
     // A guest native crash handler re-raises a fatal signal via tgkill(self,self,
-    // SIG) to die "with the right context" -- and on Mac.apk that terminates the
+    // SIG) to die "with the right context" -- and on Apk on Mac that terminates the
     // process with no other trace. Log a backtrace naming WHO (this is the
     // Instagram Application-init "silent native exit" candidate; v1.0.1617).
     if (macapk_sig_is_fatal(sig)) macapk_log_native_exit("tgkill", sig);
@@ -32193,7 +32193,7 @@ extern "C" void* __macapk_arm64_signal(int sig, void* handler) {
         if (refusals.fetch_add(1) < 16) {
             std::fprintf(stderr,
                 "[app-sig] refused app signal(sig=%d) install "
-                "(runtime-owned fatal signal; Mac.apk handlers retained)\n", sig);
+                "(runtime-owned fatal signal; Apk on Mac handlers retained)\n", sig);
             std::fflush(stderr);
         }
         return reinterpret_cast<void*>(SIG_DFL);
@@ -32329,7 +32329,7 @@ extern "C" int __macapk_arm64_sigaction(int sig,
         if (refusals.fetch_add(1) < 16) {
             std::fprintf(stderr,
                 "[app-sig] refused app sigaction(sig=%d) install "
-                "(runtime-owned fatal signal; Mac.apk handlers retained)\n",
+                "(runtime-owned fatal signal; Apk on Mac handlers retained)\n",
                 sig);
         }
         return 0;
@@ -33702,7 +33702,7 @@ static std::map<std::string, std::string>& macapk_prop_table() {
     // MACAPK_PAIRIP_DEV_PROPS=<getprop-dump> (DIAGNOSTIC, default OFF, cont.254/255): pairip's harvest
     // FUN_0002c5b4 reads ~38 ro.build.*/ro.product.* props (via __system_property_read_callback, which
     // reads THIS table directly -- NOT _get) and folds them into the program buffer; our synthetic
-    // identity (brand "Mac.apk", ro.hardware "apple_silicon", sdk 36, fingerprint "Mac.apk/macapk/...")
+    // identity (brand "Apk on Mac", ro.hardware "apple_silicon", sdk 36, fingerprint "Apk on Mac/macapk/...")
     // is unlike ANY real Android device, a candidate carrier for the buffer[0x2b5] divergence (record ~0).
     // Loading the captured device getprop (format "[key]: [value]") HERE, before the synthetic seeding,
     // makes it authoritative: the later synthetic ro.* puts are refused (read-only, already set), so every
@@ -34208,7 +34208,7 @@ extern "C" int __macapk_arm64_sigaltstack(const void* ss_in, void* oss_out) {
 // the host's own pthread teardown. That covers every thread that can run guest
 // code, including ones the JVM or libdispatch created, which a hook inside
 // macapk_thread_trampoline would miss. dso_handle is ignored for the same
-// reason the __cxa_atexit shim ignores it: Mac.apk never dlcloses.
+// reason the __cxa_atexit shim ignores it: Apk on Mac never dlcloses.
 //
 // The callbacks are genuine native arm64 function pointers (Stage-6 guest code
 // IS native arm64), so they are called directly; no indirect-call dispatcher is
@@ -34368,7 +34368,7 @@ extern "C" void __macapk_arm64___assert2(const char* file, int line,
 // instead of falling through to broken AudioTrack autodetection.
 // Generic across every FMOD-using APK; not gated on package name.
 
-// REAL AAudio output: route the guest's AAudio stream to Mac.apk's
+// REAL AAudio output: route the guest's AAudio stream to Apk on Mac's
 // CoreAudio engine (audio_backend.mm in the runtime executable, reached via
 // dlsym(RTLD_DEFAULT)). This is the OUTPUT path FMOD (Unity built-in audio),
 // Oboe (OpenAL Soft / most NDK games) and AAudio-native apps use on Android.
@@ -35095,7 +35095,7 @@ static const AAudioEntry kAAudioStubsFpdc[] = {
 // The full interface-graph implementation: slCreateEngine + the
 // SLObjectItf / SLEngineItf / SLPlayItf / SLAndroidSimpleBufferQueueItf /
 // SLVolumeItf vtables + the SL_IID_* data symbols. The guest's BufferQueue
-// PCM is pushed to Mac.apk's CoreAudio engine (same `macapk_audio_*`
+// PCM is pushed to Apk on Mac's CoreAudio engine (same `macapk_audio_*`
 // entry points the AAudio path uses). This is what Oboe / OpenAL Soft / most
 // older NDK games use (OpenGD: OpenAL Soft -> Oboe -> OpenSL ES).
 //
@@ -38901,7 +38901,7 @@ extern "C" unsigned __macapk_arm64_eglInitialize(void* dpy, int32_t* major, int3
     static Fn real = reinterpret_cast<Fn>(dlsym(RTLD_DEFAULT, "eglInitialize"));
     unsigned r = real ? real(dpy, major, minor) : 0;
     if (r) __macapk_egl_display_ref(dpy);
-    // EGL_ANDROID_blob_cache is PER-DISPLAY, and Mac.apk creates two displays:
+    // EGL_ANDROID_blob_cache is PER-DISPLAY, and Apk on Mac creates two displays:
     // the framework one (GLSurfaceView -> cocoa_bridge -> AngleInit, which
     // installs its own cache) and this one, for apps driving EGL natively.
     // The AGDK/GameActivity engines -- RenderDragon/MCPE, Unity -- only ever
@@ -38934,7 +38934,7 @@ extern "C" unsigned __macapk_arm64_eglChooseConfig(void* dpy, const int32_t* att
     // ZERO configs satisfying it, so eglChooseConfig returns num_config=0 and
     // the engine aborts (bgfx BgfxCallbacks::fatal -> std::terminate deep in
     // MinecraftGame::init -- the "black screen after graphics-context-gained").
-    // Recordability is meaningless on Mac.apk: the engine renders into a
+    // Recordability is meaningless on Apk on Mac: the engine renders into a
     // CAMetalLayer we present directly; there is no MediaCodec path. Rewriting
     // the attribute's value to EGL_DONT_CARE (-1) makes ANGLE stop filtering on
     // it and return the real ES2/ES3 configs the engine can render with. Copy
@@ -39470,7 +39470,7 @@ static const std::string& macapk_arm64_synth_path(
     // for the rest of its life. One host access(2) per remap, invisible to the guest.
     if (cached.empty() || ::access(cached.c_str(), F_OK) != 0) {
         // PID-QUALIFIED for the same reason as macapk_arm64_live_path: $TMPDIR
-        // is per-USER on macOS, so two concurrently running Mac.apk apps
+        // is per-USER on macOS, so two concurrently running Apk on Mac apps
         // shared (and clobbered) one another's synthesized /proc files.
         std::string p = macapk_procfs_prefix() + basename;
         FILE* f = std::fopen(p.c_str(), "w");
@@ -40136,7 +40136,7 @@ extern "C" const char* __macapk_vma_name_lookup(uint64_t addr, uint64_t len) {
 // PID-QUALIFIED, deliberately: macOS $TMPDIR is per-USER, not per-process
 // (measured: two concurrent processes both report
 // /var/folders/.../T/). Every /proc synth in this file used to write to a
-// bare "$TMPDIR/macapk_<name>", so two Mac.apk apps running at once
+// bare "$TMPDIR/macapk_<name>", so two Apk on Mac apps running at once
 // overwrote each other's /proc/self/maps.
 static const std::string& macapk_proc_dir_base() {
     static const std::string* base = new std::string(macapk_procfs_prefix() + "proc");
@@ -40193,7 +40193,7 @@ static void macapk_clear_dir(const std::string& p, bool remove_self) {
 //   - an entry named with another pid is stale iff that pid is dead (kill(pid, 0)
 //     fails with ESRCH). EPERM or success means a live process: keep. A live
 //     process that merely RECYCLED a dead runtime's pid is deliberately kept too;
-//     its entries go once it dies, and a Mac.apk runtime that inherits a pid
+//     its entries go once it dies, and a Apk on Mac runtime that inherits a pid
 //     purges its own leftovers through the own-pid rule.
 static bool macapk_procfs_is_stale(long pid, const struct stat& st) {
     if (pid == (long)getpid()) {
@@ -40787,7 +40787,7 @@ static const std::string& macapk_arm64_live_path(const char* basename,
     if (path.empty()) {
         // PID-QUALIFIED: macOS $TMPDIR is per-USER, not per-process (measured:
         // two concurrent processes both report /var/folders/.../T/). Without
-        // the pid, two Mac.apk apps running at once overwrite each other's
+        // the pid, two Apk on Mac apps running at once overwrite each other's
         // /proc/self/{statm,status,stat,meminfo} -- each one reading the
         // other's memory figures as its own.
         path = macapk_procfs_prefix() + basename;
@@ -41273,7 +41273,7 @@ static const std::string& macapk_arm64_mounts_path() {
 // we already generate, so the two files cannot disagree with each other.
 //
 // PID-QUALIFIED for the same reason every other synthesised /proc file is: macOS
-// $TMPDIR is per-USER, so two Mac.apk apps running at once would otherwise share one
+// $TMPDIR is per-USER, so two Apk on Mac apps running at once would otherwise share one
 // directory and describe each other's address space.
 static const std::string& macapk_arm64_maps_path();
 static const std::string& macapk_arm64_map_files_dir() {
@@ -41441,7 +41441,7 @@ static const std::string& macapk_arm64_maps_path() {
     std::lock_guard<std::mutex> g(*m);
     if (path->empty()) {
         // PID-QUALIFIED (v1.0.1000): $TMPDIR is per-USER on macOS, so before
-        // this two concurrently running Mac.apk apps wrote and read ONE
+        // this two concurrently running Apk on Mac apps wrote and read ONE
         // /proc/self/maps file -- each app parsing the other's address space.
         *path = macapk_procfs_prefix() + "self_maps";
     }
@@ -41725,7 +41725,7 @@ static void macapk_ensure_install_dir(const std::string& host_root) {
 //
 // Two roots, kept separate on purpose even though they coincide today:
 //   ext root          what /sdcard names. <root>/sdcard until stage S3 moves
-//                     shared storage to one Mac.apk-wide folder, S
+//                     shared storage to one Apk on Mac-wide folder, S
 //                     (__macapk_set_shared_storage_root below).
 //   app-private root  what /sdcard/Android/{data,obb,media} names. Always
 //                     <root>/sdcard/Android: each app's own external dirs stay in
@@ -41945,7 +41945,7 @@ static bool macapk_host_storage_path(const std::string& s, std::string* out) {
 // special-access grant store (the limit is stated below). The store is
 // macapk-installhelper's record of the
 // user's answer to "Allow <app> to access all files?"
-// (~/Library/Application Support/Mac.apk/appops/app-ops.json, plus the helper's
+// (~/Library/Application Support/Apk on Mac/appops/app-ops.json, plus the helper's
 // signing key beside it). It is a plain host path, outside every Android
 // prefix, so before this every remap branch passed it through untouched
 // (`return s;` at the tail) and a guest .so could fopen(..., "w") its own grant.
@@ -41963,12 +41963,12 @@ static bool macapk_host_storage_path(const std::string& s, std::string* out) {
 // location that does not exist under a root-owned read-only directory: open,
 // stat, access, unlink, rename and opendir answer ENOENT and a mkdir EACCES, so
 // to the guest the directory simply is not there. The dirfd-relative forms
-// (openat(fd_of_Mac.apk_dir, "appops/app-ops.json")) get the same test through
+// (openat(fd_of_Apk on Mac_dir, "appops/app-ops.json")) get the same test through
 // F_GETPATH in macapk_store_blocked_at, which macapk_at_path runs for every
 // *at shim.
 //
-// ONLY that directory, deliberately not the whole Mac.apk support dir: the
-// staged shared runtime lives there too (.../Mac.apk/runtime -- libjvm, this
+// ONLY that directory, deliberately not the whole Apk on Mac support dir: the
+// staged shared runtime lives there too (.../Apk on Mac/runtime -- libjvm, this
 // shim, the translated libraries' loader), and guests legitimately open files
 // named by /proc/self/maps and dladdr (pairip does exactly that), so denying the
 // parent would break them. The directory holds nothing a guest needs.
@@ -42040,7 +42040,7 @@ static const std::vector<std::string>& macapk_store_block_dirs() {
         // user.home, as SpecialAccessStore reads it: the passwd entry. $HOME
         // too when it differs -- ADDED, never instead (see the header).
         std::vector<std::string> literal;
-        static const char kRel[] = "/Library/Application Support/Mac.apk/appops";
+        static const char kRel[] = "/Library/Application Support/Apk on Mac/appops";
         if (const struct passwd* pw = ::getpwuid(::getuid())) {
             if (pw->pw_dir && *pw->pw_dir) literal.push_back(std::string(pw->pw_dir) + kRel);
         }
@@ -42544,7 +42544,7 @@ static std::string macapk_arm64_remap_path_unguarded(const char* p) {
         }
     }
     // Android's system fonts (/system/etc/fonts.xml + /system/fonts/<file>), served
-    // from the AOSP fonts Mac.apk already bundles (runtime/fonts). A native text
+    // from the AOSP fonts Apk on Mac already bundles (runtime/fonts). A native text
     // stack reads them by path; see macapk_system_fonts_remap.
     {
         std::string fp;
@@ -42729,7 +42729,7 @@ static std::string macapk_arm64_remap_path_unguarded(const char* p) {
     // cores. macOS has no /sys, so without a synth file every read returns NULL and
     // the topology probe gets no capacities. Return plausible UNIFORM values: the
     // read succeeds (the parser does not choke on NULL) and uniform capacity means
-    // there is no big/little affinity to honor -- correct, since Mac.apk's
+    // there is no big/little affinity to honor -- correct, since Apk on Mac's
     // sched_setaffinity is a no-op anyway. Gated on the /sys path; engine-agnostic,
     // no per-APK code.
     if (s.rfind("/sys/devices/system/cpu/cpu", 0) == 0) {
@@ -42861,7 +42861,7 @@ static std::string macapk_arm64_remap_path_unguarded(const char* p) {
         // v1.0.168: il2cpp picks a WRITABLE scratch dir to install/extract
         // its managed resources (a "unity.ver" stamp + per-assembly
         // "Resources/<asm>.dll-resources.dat") and computes it as
-        // "<base>/il2cpp". On Mac.apk <base> resolves empty, so the path
+        // "<base>/il2cpp". On Apk on Mac <base> resolves empty, so the path
         // arrives as the bare absolute "/il2cpp" -- which doesn't exist, so
         // its native statfs()-based free-space pre-check returns 0 and Unity
         // pops a synchronous "Not enough storage space to install required
@@ -42898,7 +42898,7 @@ static std::string macapk_arm64_remap_path_unguarded(const char* p) {
         // Addressables) leaves the engine's StreamingAssets base EMPTY, so
         // RuntimePath = "/aa" and the catalog/bundle URLs arrive as
         // file:///aa/settings.json -> open("/aa/settings.json"), i.e. the bare
-        // absolute "/aa/<rest>". Mac.apk extracts the Addressables tree to
+        // absolute "/aa/<rest>". Apk on Mac extracts the Addressables tree to
         // <data_dir>/aa (settings.json + catalog.json + Android/<bundles>), so
         // map "/aa[/...]" there. App-agnostic: "aa" is Addressables' fixed
         // runtime folder name, not app identity; "/aa" as an absolute path is
@@ -43177,7 +43177,7 @@ std::atomic<int> g_du3d_fd{-1};
 //   O_NOFOLLOW    0x20000          0x8000
 //   O_DIRECT      0x4000           0x10000
 //   O_LARGEFILE   0x8000           0x20000
-// Mac.apk only runs arm/arm64 guests, so the table uses the arm column. With
+// Apk on Mac only runs arm/arm64 guests, so the table uses the arm column. With
 // the asm-generic column, an O_DIRECT open became macOS O_DIRECTORY (ENOTDIR on
 // a regular file), O_LARGEFILE (32-bit LFS code) became O_NOFOLLOW
 // (ELOOP through a symlink), and real O_DIRECTORY/O_NOFOLLOW were dropped.
@@ -44906,7 +44906,7 @@ extern "C" int __macapk_arm64_sysinfo(void* info) {
     // on a healthy box MCPE's footprint is a stable ~1.3 GB with the true 8 GB
     // reported; (b) a native engine sizes its DeviceMemoryTier from this value, and
     // reporting only 3 GB makes MCPE's RenderDragon pick a LOW tier whose render
-    // path draws BLACK on Mac.apk (confirmed by an A/B: 3 GB -> black, true 8 GB ->
+    // path draws BLACK on Apk on Mac (confirmed by an A/B: 3 GB -> black, true 8 GB ->
     // 119k-colour menu, same ~1.3 GB footprint). So capping breaks rendering for no
     // memory win. The MACAPK_GUEST_TOTALRAM=<bytes> override is kept for future
     // per-device tuning, but the DEFAULT is now uncapped (report the true host).
@@ -45925,7 +45925,7 @@ static inline int macapk_linux_rc(int rc) {
 // allocator, because the guest frees it with free() -> __macapk_arm64_free (the
 // vasprintf precedent). NULL path is EINVAL, as Bionic's realpath says.
 // The answer is the HOST spelling (<root>/sdcard/..., not /storage/emulated/0/...):
-// Mac.apk presents paths in host form (design section 1); the reverse map for
+// Apk on Mac presents paths in host form (design section 1); the reverse map for
 // realpath/getcwd output belongs to the storage view (stage S2).
 extern "C" char* __macapk_arm64_realpath(const char* path, char* resolved) {
     if (!macapk_path_shims_on()) {   // MACAPK_PATH_SHIMS=0: the pre-shim binding
@@ -48097,7 +48097,7 @@ extern "C" ssize_t __macapk_arm64_process_vm_writev(
 // ============================================================================
 // IN-LAYER Linux ptrace/clone/wait4 emulation (2026-09-06, MACAPK_PTRACE_EMU).
 //
-// Mac.apk IS the guest's Linux kernel, so a guest that self-supervises via
+// Apk on Mac IS the guest's Linux kernel, so a guest that self-supervises via
 // clone(flags=0) + ptrace (pairip's anti-debug shape) is answered HERE, not
 // bridged to macOS: the signed-build probe in debug/antidebug_probe/ proved
 // macOS NEUTERS a cross-process task port (-308 MIG_SERVER_DIED even for READ),
@@ -54290,7 +54290,7 @@ uint32_t __macapk_shim_glUniformMatrix4fv(uint32_t loc, uint32_t count,
     // diagonals come out as tiny floats (~1e-9). Any sane sprite
     // engine produces diagonals in [0.0001, 1.0] for a 100..16384px
     // surface. Substitute a fresh ortho for our last-good viewport
-    // size when we see the bug. Mac.apk-wide: works for any cocos2d-x
+    // size when we see the bug. Apk on Mac-wide: works for any cocos2d-x
     // / AndEngine / libgdx renderer that uses standard ortho. NDC
     // coords [-1, 1] mapped to screen pixels [0, W] x [0, H].
     if (count >= 1 && mat) {
@@ -54359,7 +54359,7 @@ uint32_t __macapk_shim_glUniformMatrix4fv(uint32_t loc, uint32_t count,
 // passed to glViewport. The shim falls back to these when a subsequent
 // call comes through with garbage values (lifter miscompile of the
 // cocos2d-x CCEGLView::setFrameSize -> projection-matrix chain leaks
-// JNI handle table addresses into the dimension fields). Mac.apk-wide:
+// JNI handle table addresses into the dimension fields). Apk on Mac-wide:
 // any Android game whose lifted GL state machine corrupts dimensions
 // gets coerced back to the actual surface size.
 // (Non-static so glUniformMatrix4fv earlier in the file can read them
@@ -55782,7 +55782,7 @@ extern "C" __attribute__((noinline)) void macapk_wp_hook(void* p) {
     __asm__ __volatile__("" : : "r"(p) : "memory");  // keep p live, prevent elision
 }
 // MACAPK_PAIRIP_RESTORE (DIAGNOSTIC, default OFF): the disp=0 "no working binary" crash is a
-// PROLOGUE POISON-WRITE -- Mac.apk's layout-dependent tamper check false-positives and pokes a
+// PROLOGUE POISON-WRITE -- Apk on Mac's layout-dependent tamper check false-positives and pokes a
 // negative pointer-difference (high32=0xffffffff) into an insn_info's hashDataLen at these buffer
 // offsets, where the genuine device + the raw asset both keep the materialized value (proven 3-way
 // with debug/pairip_vmdiff.py: buf[0x14d25] dev/asset=0x71070de01869bb42 vs mac 0xffffffff00000000).
@@ -56479,7 +56479,7 @@ extern "C" void __macapk_arm64_libcocos2dcpp_free(void* p) {
 // in the 32-64 GiB range (we observed MALLOC_SMALL at 0x827000000 in a
 // running Crossy Road runtime, well above the 16 GiB ceiling).
 //
-// The symptom on Mac.apk is libunity:JNI_OnLoad → 0x8ae2b0 (first
+// The symptom on Apk on Mac is libunity:JNI_OnLoad → 0x8ae2b0 (first
 // RegisterNatives helper) → 0xcd7b6c lazy-init → 0xcd6ffc (object ctor)
 // → vtable[+0x20] (allocator Allocate()) returns NULL → caller crashes
 // zeroing fields at NULL+0x50.
@@ -57940,7 +57940,7 @@ static inline bool macapk_jit_serialize_on() {
 
 // Host executable-segment ranges, built once from the dyld image list. The
 // guest shares this single address space with our runtime binary, the bionic
-// shim, libjvm, ANGLE and the system dylibs -- a Mac.apk artifact, since on a
+// shim, libjvm, ANGLE and the system dylibs -- a Apk on Mac artifact, since on a
 // real device the guest process is alone. So a guest mprotect that lands on one
 // of OUR code pages and strips PROT_EXEC bricks the process: the very next call
 // into that page is an instruction-fetch abort. Measured on Instagram: after
@@ -58130,7 +58130,7 @@ extern "C" int __macapk_arm64_mprotect(void* addr, size_t len, int prot) {
 // accepts.) Non-arena / non-Unity ranges pass through unchanged.
 // v1.0.1579 -- Bionic/Android functions the Facebook SoLoader-family native libs
 // (Instagram/Threads/Messenger: libsuperpack-jni, libbreakpad, libfbunwindstack,
-// libsuperattic, ...) import and Mac.apk did not provide. Each was a hard
+// libsuperattic, ...) import and Apk on Mac did not provide. Each was a hard
 // "unresolved external" abort the moment it was called.
 //
 // android_dlopen_ext: Bionic's extended dlopen. The android_dlextinfo (custom
@@ -58182,7 +58182,7 @@ extern "C" size_t __macapk_arm64_ASharedMemory_getSize(int fd) {
     return 0;
 }
 // AHardwareBuffer_* : Android's GraphicBuffer interop (NDK AHardwareBuffer). There
-// is no macOS equivalent, and Mac.apk renders through ANGLE/Metal, not through a
+// is no macOS equivalent, and Apk on Mac renders through ANGLE/Metal, not through a
 // guest GraphicBuffer. These libs (libscrollmerged etc.) import the API but the
 // paths that need a REAL hardware buffer are optional accelerations that fall back
 // when allocation is unavailable. So: acquire/release are ref-count no-ops,
@@ -58901,7 +58901,7 @@ void __macapk_install_segv_recovery() { install_segv_recovery(); }
 // via `env->NewGlobalRef(classloader_jobject)`. Later it does
 // `env->CallObjectMethod(cached_classloader, loadClass_methodID,
 // jstring_classname)` for every class lookup. We have observed
-// Mac.apk's AppClassLoader.loadClass override fires for DOT-form
+// Apk on Mac's AppClassLoader.loadClass override fires for DOT-form
 // names but never for SLASH-form names that JniHelper uses --
 // suggesting the cached `jobject` is NOT pointing at our
 // AppClassLoader.
@@ -59956,7 +59956,7 @@ jboolean (*g_real_unity_nativeRender)(JNIEnv*, jobject) = nullptr;
 // which after each real call ran our own DirectorManager::Update phases 0/1/2
 // and a "coroutine" player-loop node (arm64_native.cpp
 // __macapk_arm64_unity_director_tick / _coroutine_pump), on the premise that
-// "Mac.apk's streamlined nativeRender loop omits" those nodes. That premise is
+// "Apk on Mac's streamlined nativeRender loop omits" those nodes. That premise is
 // REFUTED by measurement on the same binaries: frida on real-Android Crossy
 // (changelog v1.0.251) reads the same RunOneFrame / UpdatePreloading = 0 per
 // frame that we read, so it was never a divergence; and the player-loop census
@@ -60023,7 +60023,7 @@ jboolean macapk_unity_nativeRender_wrap(JNIEnv* env, jobject thiz) {
     // this ran them a SECOND time per frame. Kept for MACAPK_REGISTERNATIVES_VERBATIM=0
     // only; see __macapk_registernatives_verbatim. Original text follows.
     // ENGINE FIX (v1.0.233, default-on, gated on libunity): drive the
-    // per-frame DirectorManager update that Mac.apk's streamlined nativeRender
+    // per-frame DirectorManager update that Apk on Mac's streamlined nativeRender
     // loop omits. The native Director player-loop nodes (Update.DirectorUpdate
     // + PreLateUpdate.Director*) are the only thing that evaluates an active
     // PlayableGraph/Timeline each frame -- without them, any Unity Timeline
@@ -60052,7 +60052,7 @@ jboolean macapk_unity_nativeRender_wrap(JNIEnv* env, jobject thiz) {
             tick = reinterpret_cast<void(*)(double)>(
                 dlsym(RTLD_DEFAULT, "__macapk_arm64_unity_director_tick"));
             // Player-loop node census (D0, MACAPK_PLOOP_CENSUS) -- maps which
-            // Update nodes the engine drives vs. which Mac.apk must drive, and
+            // Update nodes the engine drives vs. which Apk on Mac must drive, and
             // arms the engine-seen latch for the F1 double-execution guard.
             census = reinterpret_cast<void(*)(double)>(
                 dlsym(RTLD_DEFAULT, "__macapk_arm64_unity_ploop_census"));
@@ -60523,7 +60523,7 @@ static jclass macapk_findclass_app_fallback(JNIEnv* env, const char* name) {
 // lookup/resolve/define ONLY; initialization lives in EnsureInitialized, which
 // the GetMethodID / Get*FieldID family calls. JNI's own spec does not require
 // FindClass to initialize. That one-line HotSpot divergence is a real, measured
-// Mac.apk fidelity bug: on Instagram it makes an fbjni class's <clinit> run
+// Apk on Mac fidelity bug: on Instagram it makes an fbjni class's <clinit> run
 // INSIDE JNI_OnLoad, re-enter SoLoader on the same thread, and let SoLoader mark
 // a merged library "loaded and JNI-invoked" while ~14 native registrations are
 // still pending -- so another thread takes SoLoader's fast path and calls an
@@ -61795,7 +61795,7 @@ jvmtiEnv* g_nmb_jvmti = nullptr;
 // is still polling it, so the pump drives op4 (state 2->4) and the completion's QResume op1
 // sees state>=3 and SKIPS -> the coroutine is orphaned, the next round-trip is never issued,
 // and boot freezes at 54% (confirmed on the correct binary v1.26.40.27 via the emulator
-// log-diff: the emulator PROCESSES the HTTP responses and proceeds; Mac.apk does not).
+// log-diff: the emulator PROCESSES the HTTP responses and proceeds; Apk on Mac does not).
 // Deferring the condvar WAKE was refuted (the stealer busy-POLLS readiness, no wake to delay).
 // This defers the READINESS-SET itself: sleep G us at the host completion's entry so the pump
 // parks (state 1) BEFORE readiness flips -> op1 sees 1 -> submits the next round-trip -> cross.
@@ -61826,7 +61826,7 @@ static std::atomic<int> g_on_req_completed_hits{0};
 static void JNICALL macapk_wrap_OnRequestCompleted(JNIEnv* env, jobject thiz,
                                                    jlong call, jobject response) {
     // DIAGNOSTIC: log that the host-JVM OkHttp completion callback fired (the HTTP round-trip
-    // actually completed). If this fires on a Mac.apk 54% stall but the native `deliver`
+    // actually completed). If this fires on a Apk on Mac 54% stall but the native `deliver`
     // (0xbcbabc8) does NOT, the completion is lost between OnRequestCompleted and the WorkerPool
     // dispatch (a lost wakeup / stranded XAsyncComplete post), NOT in the HTTP layer.
     int h = g_on_req_completed_hits.fetch_add(1);
@@ -61853,7 +61853,7 @@ bool macapk_addr_in_guest_dylib(const void* addr) {
 }
 
 // True when this run is executing the Stage-6 arm64 path (>=1 guest ELF mapped)
-// rather than the ARM32 lifter path. Mac.apk extracts ONE ABI per app, so the
+// rather than the ARM32 lifter path. Apk on Mac extracts ONE ABI per app, so the
 // two are mutually exclusive per run. Cached after the first non-zero answer:
 // images are loaded during boot and never unloaded, and the first native bind
 // can precede the first dlopen, so a zero result must stay re-checkable.
@@ -62244,7 +62244,7 @@ static void macapk_install_fake_art_jnienv(JNIEnv* env, JNINativeInterface_* vta
 // resolves dl_iterate_phdr's function POINTER to its owning module and requires that
 // module to be libdl.so -- a "which module owns this function" guard against Frida
 // et al. relocating it: callback name-hash @libpairipcore+0x6ebd4, addr->module
-// resolver @+0x19db0, abort @+0x19a9c. On Mac.apk resolve_external hands the guest
+// resolver @+0x19db0, abort @+0x19a9c. On Apk on Mac resolve_external hands the guest
 // __macapk_arm64_dl_iterate_phdr, whose address is a real macOS dylib address OUTSIDE
 // any module either surface reports -> owner-check fails -> +0x440c4.
 //
@@ -65012,7 +65012,7 @@ extern "C" uint32_t __macapk_shim_eglTerminate(
 // NDK games read the device configuration to pick asset variants and set up
 // input. Real Android backs this with the AssetManager's ResTable_config; we
 // have no Android resource table, so AConfiguration_fromAssetManager fills a
-// faithful phone-class configuration derived from the live Mac.apk canvas
+// faithful phone-class configuration derived from the live Apk on Mac canvas
 // (orientation from the window aspect, dp sizes from the canvas points). This
 // is the honest "what device is this" answer, not a zero stub -- callers that
 // branch on orientation / density / sdkVersion get correct values.
@@ -65285,7 +65285,7 @@ void macapk_choreo_register_on(void* inst, void* fn, void* data, bool is64) {
 // libunity+0x8b8b44). On Android a vsync source writes a 24-byte event to the
 // pipe each refresh; the looper-owner thread polls it, the callback read()s the
 // 24 bytes, then calls handler(buffer) where buffer[0] is the display context.
-// On Mac.apk the NDK fd lands on a looper nobody polls (the owner runs the
+// On Apk on Mac the NDK fd lands on a looper nobody polls (the owner runs the
 // Java Looper.loop(), which does not service NDK fds) AND nothing writes the
 // pipe -> no frames. FIRST TEST of whether driving the handler advances Unity:
 // synthesize the 24-byte event (buffer[0] = the display singleton, derivable
@@ -65396,7 +65396,7 @@ void macapk_feed_vsync_all(int64_t ft) {
 
 // ~60Hz vsync source + servicer. Real Android's display hardware writes a vsync
 // event into Unity's pipe each refresh and the looper-owner thread polls it;
-// Mac.apk has no Android display AND the looper-owner thread (the display-init
+// Apk on Mac has no Android display AND the looper-owner thread (the display-init
 // thread) doesn't run a poll loop, so a dedicated thread both FEEDS the pipe
 // (writes the 24-byte event) and POLLS the orphan looper (reads it + runs the
 // frame handler). buf[0]=registrar gives the handler correct affinity so the
@@ -66040,7 +66040,7 @@ extern "C" uint32_t __macapk_shim_ALooper_removeFd(
 // On real Android a thread's Java Looper and NDK ALooper are the SAME native
 // Looper: Looper.loop() -> MessageQueue.next() -> nativePollOnce() ->
 // Looper::pollOnce() waits over a wake-fd + the ALooper_addFd fds and runs fd
-// callbacks ON THE POLLING THREAD. Mac.apk split them (Java Looper = a
+// callbacks ON THE POLLING THREAD. Apk on Mac split them (Java Looper = a
 // BlockingQueue; NDK ALooper = MacApkLooper) so the thread that owns Unity's
 // native vsync fd never polled it. These entrypoints (called from Java via
 // com.macapk.loader.NativeLooper) re-unify them: a per-thread Java
@@ -66143,7 +66143,7 @@ extern "C" void __macapk_looper_native_poll(void* looperPtr, int timeoutMs) {
 
 // Called from the "main"/owner thread's Java Looper.loop() (via
 // NativeLooper.runMainPoll). Unity registers its display/gfx pipe fd on the
-// JNI_OnLoad/activity thread's native looper, but that thread runs Mac.apk's
+// JNI_OnLoad/activity thread's native looper, but that thread runs Apk on Mac's
 // NO-OP MAIN Java loop, so the fd is never serviced AND nativeRender's posted
 // gfx work (queued on that looper) deadlocks waiting for a result. If this
 // thread's native looper HAS registered fds (i.e. it's the Unity display-looper
@@ -66324,7 +66324,7 @@ extern "C" void __macapk_arm64_choreographer_fire(int64_t /*frameTimeNanos_raw*/
 // choreographer handler (Subway libunity 0x71a488 / store 0x71a4d0; Crossy
 // 0x898c7c), driven by the Java Choreographer on "UnityChoreographer". This
 // bridge is therefore a SECOND writer, and it is not installed by default --
-// see macapk_swappy_bridge_enabled. The original text continues:] On Mac.apk the present
+// see macapk_swappy_bridge_enabled. The original text continues:] On Apk on Mac the present
 // happens on the MAIN thread (MTKView -> AngleEndFrame -> eglSwapBuffers), not
 // from the render thread's SwappyGL_swap, so COUNTER never advances and
 // UnityMain blocks forever in the pacing wait -> the boot logo renders, then
@@ -66501,7 +66501,7 @@ extern "C" void __macapk_arm64_swappy_present_tick() {
         // (Subway libunity 0x7177e0 reader + 0x6f0324 caller; M[+0x68] =
         // previous tick's timestamp, M[+0x70] = ns->GetTimeSinceStartup-epoch
         // offset, both written ONLY by Swappy's own choreographer handler at
-        // 0x717864, which never runs on Mac.apk -- we bridge the counter +
+        // 0x717864, which never runs on Apk on Mac -- we bridge the counter +
         // condvar instead). [⚠ CORRECTED 2026-09-27: 0x717864 is the ONE-SHOT
         // ENABLE (it logs "Choreographer available: Enabling VSYNC timing" and
         // writes curTs = prevTs = System.nanoTime() and the offset ONCE). The

@@ -10,7 +10,7 @@
 // accessor is a round trip to ActivityClient, which asks the ActivityManager
 // about the caller recorded on the ActivityRecord.
 //
-// Mac.apk hosts exactly one app in one process: every activity here is started
+// Apk on Mac hosts exactly one app in one process: every activity here is started
 // by that app itself or by our own loader, never by a second uid. So the honest
 // answers are the ones a device gives when the caller IS the launched app --
 // the app's own uid and package -- rather than AOSP's "identity withheld" pair

@@ -29,7 +29,7 @@ import java.nio.ByteBuffer;
  *                reads an Allocation with no separate plane pointers.
  *
  * A device driver rounds each chroma row's stride up to a 16-byte boundary for
- * YV12; Mac.apk packs the planes tightly instead, because our Allocation is
+ * YV12; Apk on Mac packs the planes tightly instead, because our Allocation is
  * filled by the app's own copyFrom(byte[]) and camera NV21 buffers are tightly
  * packed. For a YV12 source whose width is not a multiple of 32 this will
  * differ from a device. Flagged rather than hidden.

@@ -8,7 +8,7 @@
 // onSendError, while a separate "com.google.firebase.messaging.NEW_TOKEN"
 // intent drives onNewToken.
 //
-// Mac.apk is a de-Googled device: there is no FCM channel, so NONE of these
+// Apk on Mac is a de-Googled device: there is no FCM channel, so NONE of these
 // callbacks are ever auto-invoked (no push will arrive). The class exists so
 // push-consumer apps that SUBCLASS it compile against our shadow and boot
 // without NoClassDefFoundError. handleIntent() is still implemented faithfully
@@ -63,7 +63,7 @@ public class FirebaseMessagingService extends Service {
     public void onSendError(String msgId, Exception exception) {}
 
     // Called when a new registration token is generated. Never fires on
-    // Mac.apk (no FCM registration), but apps override it to upload the token.
+    // Apk on Mac (no FCM registration), but apps override it to upload the token.
     public void onNewToken(String token) {}
 
     // ---- Intent dispatch (the SDK's EnhancedIntentService entry point) ----
@@ -129,7 +129,7 @@ public class FirebaseMessagingService extends Service {
         return originalIntent;
     }
 
-    // Bound by the GMS component in the real SDK; on Mac.apk nothing binds it.
+    // Bound by the GMS component in the real SDK; on Apk on Mac nothing binds it.
     // Service.onBind is abstract, so we must provide a concrete impl. Returning
     // null is the documented "do not allow binding" behavior for a Service that
     // is started rather than bound.
@@ -140,7 +140,7 @@ public class FirebaseMessagingService extends Service {
     @Override public int onStartCommand(Intent intent, int flags, int startId) {
         // The SDK routes the start intent through handleIntent on a worker.
         // We are single-process with no background executor here; dispatch
-        // synchronously. No push ever arrives on Mac.apk, so this only fires
+        // synchronously. No push ever arrives on Apk on Mac, so this only fires
         // if an app self-starts the service with a crafted intent.
         if (intent != null) {
             handleIntent(getStartCommandIntent(intent));

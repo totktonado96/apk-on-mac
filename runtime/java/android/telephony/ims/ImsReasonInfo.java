@@ -6,7 +6,7 @@ import android.os.Parcelable;
 /**
  * Why an IMS call or registration ended.
  *
- * Mac.apk has no IMS stack, so one of these is never delivered. The type is a
+ * Apk on Mac has no IMS stack, so one of these is never delivered. The type is a
  * faithful immutable value holder plus AOSP's cause-code vocabulary.
  *
  * Source: frameworks/base/telephony/java/android/telephony/ims/ImsReasonInfo.java

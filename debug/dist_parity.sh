@@ -12,8 +12,8 @@
 #
 # Usage: debug/dist_parity.sh [dev-app] [dist-app]
 set -uo pipefail
-DEV="${1:-/Applications/Mac.apk.app}"
-DIST="${2:-build/dist/Mac.apk.app}"
+DEV="${1:-/Applications/Apk on Mac.app}"
+DIST="${2:-build/dist/Apk on Mac.app}"
 rc=0
 say() { printf '%s\n' "$*"; }
 [ -d "$DEV" ]  || { say "SKIP: no dev bundle at $DEV"; exit 0; }

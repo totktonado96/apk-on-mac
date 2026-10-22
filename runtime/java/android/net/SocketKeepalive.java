@@ -1,6 +1,6 @@
 // android.net.SocketKeepalive
 //
-// Offloads TCP/UDP keepalive to the (absent) network hardware. Mac.apk has no
+// Offloads TCP/UDP keepalive to the (absent) network hardware. Apk on Mac has no
 // keepalive offload, so start() reports ERROR_HARDWARE_UNSUPPORTED to the
 // callback and stop() is a no-op -- the honest "unsupported" result. The type +
 // nested Callback + ERROR_* constants must resolve. Mirrors AOSP

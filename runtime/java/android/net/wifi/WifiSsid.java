@@ -1,6 +1,6 @@
 // android.net.wifi.WifiSsid
 //
-// An 802.11 SSID as raw bytes (may be non-UTF-8). Pure value type. Mac.apk has
+// An 802.11 SSID as raw bytes (may be non-UTF-8). Pure value type. Apk on Mac has
 // no Wi-Fi scan, but apps reference WifiSsid from WifiInfo/ScanResult, so the
 // type + fromBytes/getBytes must resolve. Mirrors AOSP android.net.wifi.WifiSsid
 // public API.

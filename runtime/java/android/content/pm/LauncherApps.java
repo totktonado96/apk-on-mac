@@ -4,7 +4,7 @@
 // shortcuts and install sessions across user profiles. Apps fetch it via
 // Context.getSystemService(LAUNCHER_APPS_SERVICE).
 //
-// ⚠ THE HONEST DEVICE MODEL, which every answer below follows: Mac.apk hosts
+// ⚠ THE HONEST DEVICE MODEL, which every answer below follows: Apk on Mac hosts
 // ONE app, in ONE profile, and is not a launcher. So:
 //   * the activity / shortcut / config-activity lists are EMPTY -- the same
 //     answer a real launcher gets for a package that declares none, and the
@@ -129,7 +129,7 @@ public class LauncherApps {
     /** AOSP LauncherApps.PinItemRequest (API 26): the request a launcher
      *  receives when an app calls requestPinShortcut / requestPinAppWidget.
      *
-     *  Mac.apk never delivers one (ShortcutManager.isRequestPinShortcutSupported
+     *  Apk on Mac never delivers one (ShortcutManager.isRequestPinShortcutSupported
      *  is false, so nothing ever creates a request), and getPinItemRequest()
      *  below returns null for every Intent -- AOSP's documented answer for an
      *  Intent that does not carry one. The class exists so a launcher-shaped
@@ -163,7 +163,7 @@ public class LauncherApps {
         public android.os.Bundle getExtras() { return mExtras; }
 
         /** AOSP: "whether this request is still valid" -- false once it has
-         *  been accepted or the requesting app is gone. Nothing in Mac.apk
+         *  been accepted or the requesting app is gone. Nothing in Apk on Mac
          *  keeps a request alive, so a constructed one is inert. */
         public boolean isValid() { return false; }
 
@@ -200,7 +200,7 @@ public class LauncherApps {
      *  cloud overlay on an archived app's icon and the confirmation dialog
      *  shown when the user taps one.
      *
-     *  Mac.apk archives nothing (PackageManager.getArchivedPackage is always
+     *  Apk on Mac archives nothing (PackageManager.getArchivedPackage is always
      *  null), so setArchiveCompatibility below has nothing to configure. The
      *  setters record their values so an object round-trips truthfully rather
      *  than reporting whatever the caller did not set. */
@@ -234,7 +234,7 @@ public class LauncherApps {
      *  queryIntentActivities of MAIN + LAUNCHER, setPackage(packageName) (null =
      *  every package), for any caller whose own profile it is (canAccessProfile
      *  is true for targetUserId == callingUserId): no launcher role is needed.
-     *  So the answer is our PackageManager's, which lists other installed Mac.apk
+     *  So the answer is our PackageManager's, which lists other installed Apk on Mac
      *  apps the caller can see (MACAPK_XAPP_IMPLICIT). Another user: null, as
      *  the service answers when canAccessProfile fails.
      *  MACAPK_LAUNCHERAPPS_QUERY=0 restores the old empty list. */
@@ -302,7 +302,7 @@ public class LauncherApps {
     }
 
     /** AOSP: "Returns the list of profiles for which the calling app can use
-     *  LauncherApps." Mac.apk has exactly one, the system user. */
+     *  LauncherApps." Apk on Mac has exactly one, the system user. */
     public java.util.List<UserHandle> getProfiles() {
         java.util.List<UserHandle> l = new java.util.ArrayList<>();
         l.add(UserHandle.SYSTEM);
@@ -321,14 +321,14 @@ public class LauncherApps {
     }
 
     /** AOSP API-35: the packages pre-installed on the system image for a
-     *  profile. Mac.apk installs nothing on a system image -- there is no
+     *  profile. Apk on Mac installs nothing on a system image -- there is no
      *  system partition -- so the honest answer is empty. @NonNull. */
     public java.util.List<String> getPreInstalledSystemPackages(UserHandle user) {
         return new java.util.ArrayList<>();
     }
 
     /** AOSP API-35: an IntentSender to open the app market for a profile, "or
-     *  null if the user is not a profile or there is no market." Mac.apk has no
+     *  null if the user is not a profile or there is no market." Apk on Mac has no
      *  app-market app registered. */
     public android.content.IntentSender getAppMarketActivityIntent(String packageName,
             UserHandle user) {
@@ -382,7 +382,7 @@ public class LauncherApps {
     }
 
     /** AOSP API-24: the launcher extras attached when a package was suspended.
-     *  No package is ever suspended on Mac.apk, and AOSP returns null for a
+     *  No package is ever suspended on Apk on Mac, and AOSP returns null for a
      *  package that is not suspended. */
     public android.os.Bundle getSuspendedPackageLauncherExtras(String packageName,
             UserHandle user) {
@@ -392,7 +392,7 @@ public class LauncherApps {
     // ---- shortcuts ---------------------------------------------------------
 
     /** AOSP: "Returns true if the caller can access the shortcut information",
-     *  i.e. is the default launcher. Mac.apk has no launcher role. */
+     *  i.e. is the default launcher. Apk on Mac has no launcher role. */
     public boolean hasShortcutHostPermission() { return false; }
 
     /** AOSP: "Returns ShortcutInfos that match query. ... @throws
@@ -448,7 +448,7 @@ public class LauncherApps {
 
     /** AOSP API-26: the PinItemRequest carried by an
      *  ACTION_CONFIRM_PIN_SHORTCUT / _APPWIDGET Intent, "or null if the intent
-     *  does not contain one". Mac.apk never sends such an Intent
+     *  does not contain one". Apk on Mac never sends such an Intent
      *  (ShortcutManager.isRequestPinShortcutSupported() is false), so no Intent
      *  a launcher could hand us carries one. */
     public PinItemRequest getPinItemRequest(android.content.Intent intent) { return null; }
@@ -456,7 +456,7 @@ public class LauncherApps {
     // ---- install sessions --------------------------------------------------
 
     /** AOSP API-29: "Return list of all known install sessions ... regardless
-     *  of the installer." Mac.apk's PackageInstaller sessions are real, and the
+     *  of the installer." Apk on Mac's PackageInstaller sessions are real, and the
      *  installing app can already see them through
      *  PackageInstaller.getAllSessions(); this is the launcher-facing view of
      *  the same registry, so it answers from the same source rather than
@@ -484,7 +484,7 @@ public class LauncherApps {
         if (pm != null) pm.getPackageInstaller().unregisterSessionCallback(callback);
     }
 
-    /** AOSP API-29: open the system's session-details UI. Mac.apk has no
+    /** AOSP API-29: open the system's session-details UI. Apk on Mac has no
      *  system installer UI to open (the install confirmation happens natively
      *  inside the macOS install helper -- see PackageInstaller's header), so
      *  there is nothing to start and this is a no-op, which is also what AOSP
@@ -505,7 +505,7 @@ public class LauncherApps {
      *  setPackage(component's package), and requires the component to be one of
      *  that query's rows, else SecurityException("Attempt to launch activity
      *  without category Intent.CATEGORY_LAUNCHER ..."). The start then goes
-     *  through the ordinary start path (another installed Mac.apk app: the
+     *  through the ordinary start path (another installed Apk on Mac app: the
      *  cross-app hand-off). MACAPK_LAUNCHERAPPS_QUERY=0 restores the old throw. */
     public void startMainActivity(android.content.ComponentName component, UserHandle user,
             android.graphics.Rect sourceBounds, android.os.Bundle opts) {
@@ -555,7 +555,7 @@ public class LauncherApps {
 
     // ---- callbacks ---------------------------------------------------------
 
-    /** AOSP: register for package/shortcut change callbacks. Mac.apk's package
+    /** AOSP: register for package/shortcut change callbacks. Apk on Mac's package
      *  set is fixed for the life of the process -- one app, installed before we
      *  start, never added, removed, suspended or updated underneath the running
      *  app -- so no event can ever fire and registration has nothing to attach
@@ -564,7 +564,7 @@ public class LauncherApps {
     public void registerCallback(Callback callback, android.os.Handler handler) {}
     public void unregisterCallback(Callback callback) {}
 
-    /** AOSP API-35: a launcher's archive-compatibility opt-outs. Mac.apk
+    /** AOSP API-35: a launcher's archive-compatibility opt-outs. Apk on Mac
      *  archives nothing, so there is no icon overlay and no unarchival dialog
      *  for the caller to turn off. */
     public void setArchiveCompatibility(ArchiveCompatibilityParams params) {}

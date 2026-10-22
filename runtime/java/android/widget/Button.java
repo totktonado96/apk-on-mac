@@ -71,7 +71,7 @@ public class Button extends TextView {
                     if (viaCtx != null) viaCtx = viaCtx.trim();
                     boolean differ = (viaCtx == null) ? (viaGlobal != null)
                                                       : !viaCtx.equals(viaGlobal);
-                    com.macapk.loader.NativeLog.i("Mac.apk.Button",
+                    com.macapk.loader.NativeLog.i("Apk on Mac.Button",
                         "buttonStyle viaContext=" + viaCtx + " viaGlobal=" + viaGlobal
                         + " ctx=" + c.getClass().getName()
                         + (differ ? "   <== DIVERGES" : ""));

@@ -1,5 +1,5 @@
 // android.text.Spanned -- read-only CharSequence with attached span
-// markers (style, click handlers, etc.). Mac.apk never builds a real
+// markers (style, click handlers, etc.). Apk on Mac never builds a real
 // span pipeline so the interface is satisfied by treating any input as
 // a plain CharSequence with no spans. See frameworks/base/core/java/
 // android/text/Spanned.java for the AOSP definition.

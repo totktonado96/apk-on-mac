@@ -1,4 +1,4 @@
-// android.window.ManifestBackFlags -- Mac.apk-internal (package-private, NOT
+// android.window.ManifestBackFlags -- Apk on Mac-internal (package-private, NOT
 // AOSP surface): the two manifest facts WindowOnBackInvokedDispatcher.Checker
 // needs, read from the app's BINARY AndroidManifest.xml.
 //
@@ -15,7 +15,7 @@
 //     services/.../ParsedActivityUtils `if (sa.hasValue(...))`), so "absent" and
 //     "false" stay distinguishable (ActivityInfo.hasOnBackInvokedCallbackEnabled).
 //
-// WHY A READER HERE instead of those fields. Mac.apk's package parser
+// WHY A READER HERE instead of those fields. Apk on Mac's package parser
 // (com.macapk.loader.Manifest -> MacApkPackageManager / Application) does not
 // read either attribute, so both bits are 0 for every app, which would make the
 // Checker answer "legacy" for all of them. The parser files belong to other

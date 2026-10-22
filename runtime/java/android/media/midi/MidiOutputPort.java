@@ -1,6 +1,6 @@
 package android.media.midi;
 import java.io.Closeable;
-/** A device's MIDI output port. Mac.apk drives no MIDI, so connect is a no-op.
+/** A device's MIDI output port. Apk on Mac drives no MIDI, so connect is a no-op.
  *  AOSP: `public final class MidiOutputPort extends MidiSender implements
  *  Closeable` -- connect/disconnect are INHERITED from MidiSender (which
  *  null-checks and forwards to onConnect/onDisconnect), so declaring them here

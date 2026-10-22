@@ -1,4 +1,4 @@
-// audio_input.mm -- real macOS microphone capture for Mac.apk.
+// audio_input.mm -- real macOS microphone capture for Apk on Mac.
 //
 // The INPUT counterpart of audio_backend.mm. Until now android.media.AudioRecord
 // reported STATE_INITIALIZED and then handed the app a zero-filled buffer, so a

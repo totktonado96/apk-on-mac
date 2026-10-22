@@ -1,12 +1,12 @@
 // android.view.FrameMetrics -- per-frame timing data (API 24+) delivered to a
 // Window.OnFrameMetricsAvailableListener. Apps use it for jank/perf telemetry.
 //
-// Why Mac.apk needs it (v1.0.406): Reddit's IntroductionActivity (welcome/login
+// Why Apk on Mac needs it (v1.0.406): Reddit's IntroductionActivity (welcome/login
 // screen) wires a Window.OnFrameMetricsAvailableListener in onCreate (its
 // RedditAppPerformanceAnalytics). The listener's callback is typed
 // (Window, FrameMetrics, int), so this class must exist or the listener
 // interface fails to load (NoClassDefFoundError) and onCreate aborts before the
-// Compose login UI sets up. Mac.apk doesn't produce real frame timings, so the
+// Compose login UI sets up. Apk on Mac doesn't produce real frame timings, so the
 // listener is never invoked; this class exists for type resolution and returns
 // zeros if anything ever reads it.
 package android.view;

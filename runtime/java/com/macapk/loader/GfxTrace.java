@@ -63,7 +63,7 @@ public final class GfxTrace {
         if (warned.add(key)) {
             java.io.StringWriter sw = new java.io.StringWriter();
             t.printStackTrace(new java.io.PrintWriter(sw));
-            NativeLog.i("Mac.apk.GfxTrace", "draw-node CAUGHT " + site + ": " + t + "\n" + sw);
+            NativeLog.i("Apk on Mac.GfxTrace", "draw-node CAUGHT " + site + ": " + t + "\n" + sw);
         }
     }
 
@@ -71,7 +71,7 @@ public final class GfxTrace {
         m.computeIfAbsent(sig, k -> new AtomicLong()).incrementAndGet();
     }
 
-    // v1.0.436: loud-catch. The dominant Mac.apk bug class is a missing framework
+    // v1.0.436: loud-catch. The dominant Apk on Mac bug class is a missing framework
     // method/field/class that throws inside a callback our framework wraps in
     // `catch (Throwable ignored) {}` (pre-draw, global-layout, attach, inflate,
     // lifecycle dispatch, posted work) -- SILENT, so no log line and the
@@ -87,7 +87,7 @@ public final class GfxTrace {
         if (warned.add(key)) {
             java.io.StringWriter sw = new java.io.StringWriter();
             t.printStackTrace(new java.io.PrintWriter(sw));
-            NativeLog.i("Mac.apk.LoudCatch", "SWALLOWED @ " + site + ": " + t + "\n" + sw);
+            NativeLog.i("Apk on Mac.LoudCatch", "SWALLOWED @ " + site + ": " + t + "\n" + sw);
         }
     }
 
@@ -108,7 +108,7 @@ public final class GfxTrace {
             sb.append("-- REAL draw API invoked (").append(REAL.size()).append(") --\n");
             dumpMap(sb, REAL);
         }
-        NativeLog.i("Mac.apk.GfxTrace", sb.toString());
+        NativeLog.i("Apk on Mac.GfxTrace", sb.toString());
     }
 
     private static void dumpMap(StringBuilder sb, ConcurrentHashMap<String, AtomicLong> m) {

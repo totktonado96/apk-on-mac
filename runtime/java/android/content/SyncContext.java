@@ -4,7 +4,7 @@
 // AOSP ref: frameworks/base/core/java/android/content/SyncContext.java
 // (android16-release). AOSP's constructor takes the @hide ISyncContext binder
 // and every method forwards over it; the two PUBLIC methods are the two below.
-// Mac.apk runs no SyncManager -- ContentResolver.requestSync() has no service
+// Apk on Mac runs no SyncManager -- ContentResolver.requestSync() has no service
 // to hand a request to -- so nothing ever constructs one of these and there is
 // no binder to forward to. The type exists because an app's SyncAdapter
 // subclass NAMES it in its own method signatures, which is a link-time

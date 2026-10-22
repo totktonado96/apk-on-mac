@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
 # scripts/install_guard.sh -- the ONE gate in front of everything that writes the
-# machine's INSTALLED Mac.apk: the canonical app (/Applications/Mac.apk.app, or
+# machine's INSTALLED Apk on Mac: the canonical app (/Applications/Apk on Mac.app, or
 # MACAPK_CANONICAL_APP), the shared staged runtime every installed app executes
-# (~/Library/Application Support/Mac.apk/runtime), and the per-app stubs.
+# (~/Library/Application Support/Apk on Mac/runtime), and the per-app stubs.
 #
 # WHY (2026-10-07). Several sessions build in their own clones of this repo at
 # once. At 02:41 UTC one of them ran runtime/scripts/build.sh in a clone sitting
 # at v1.0.1733; build.sh's payload sync mirrored that clone's jars, runtime and
-# bionic shim into /Applications/Mac.apk.app, and the next app launch staged
+# bionic shim into /Applications/Apk on Mac.app, and the next app launch staged
 # them as the shared runtime. That silently undid v1.0.1735 and v1.0.1736 on the
 # owner's machine until main was re-promoted 24 minutes later. Nothing refused,
 # nothing said who had installed what, and the only guard was the coordinator
@@ -48,7 +48,7 @@
 # State (override for tests):
 #   MACAPK_INSTALL_LOCKDIR    default /tmp/macapk-install.lock (same mkdir pattern as
 #                             debug/applock.sh; a dead holder's lock is reaped)
-#   MACAPK_INSTALL_STATE_DIR  default ~/Library/Application Support/Mac.apk-dev
+#   MACAPK_INSTALL_STATE_DIR  default ~/Library/Application Support/Apk on Mac-dev
 #                             (installed*.env, install-history.log, primary-checkout)
 #
 # This lock is NOT debug/applock.sh's machine lock and does not replace it: that one
@@ -56,8 +56,8 @@
 # ONE checkout; this one serialises writes to what the whole machine executes.
 
 IG_LOCKDIR="${MACAPK_INSTALL_LOCKDIR:-/tmp/macapk-install.lock}"
-IG_STATE="${MACAPK_INSTALL_STATE_DIR:-$HOME/Library/Application Support/Mac.apk-dev}"
-IG_DEFAULT_CANONICAL="/Applications/Mac.apk.app"
+IG_STATE="${MACAPK_INSTALL_STATE_DIR:-$HOME/Library/Application Support/Apk on Mac-dev}"
+IG_DEFAULT_CANONICAL="/Applications/Apk on Mac.app"
 IG_LOCK_OWNED=0
 
 ig_say() { echo "[install-guard] $*" >&2; }

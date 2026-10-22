@@ -1,7 +1,7 @@
 // android.appwidget.AppWidgetHostView -- the FrameLayout a HOST (a launcher,
 // or an app previewing its own widget) puts a widget's RemoteViews into.
 //
-// Mac.apk runs ONE app, so there is no home screen and no cross-app widget
+// Apk on Mac runs ONE app, so there is no home screen and no cross-app widget
 // hosting: a launcher APK running here can never display ANOTHER app's widget,
 // because the other app is not running. What CAN work, and does work here, is
 // the same-process case -- an app inflating its OWN RemoteViews into a host

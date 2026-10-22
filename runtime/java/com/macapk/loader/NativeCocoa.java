@@ -129,7 +129,7 @@ public final class NativeCocoa {
     // v1.0.690: open a URL/URI on the macOS host (NSWorkspace). The
     // resolution target for an implicit ACTION_VIEW/SENDTO/DIAL intent.
     public static native boolean openHostUrl(String url);
-    /** Open `url` in the Mac.apk sign-in window (applink_window.mm); a
+    /** Open `url` in the Apk on Mac sign-in window (applink_window.mm); a
      *  navigation to `returnPrefix` (scheme://host/path of the app's verified
      *  redirect) is cancelled and queued for HostUrlIntake like a GURL. */
     public static native boolean openAppLinkWindow(String url, String returnPrefix);

@@ -10,7 +10,7 @@
 // change underneath it on a device too -- so it is reproduced here rather than
 // "improved" into a list.
 //
-// Mac.apk records no usage events (see UsageStatsManager's class comment), so
+// Apk on Mac records no usage events (see UsageStatsManager's class comment), so
 // every UsageEvents the runtime hands out is empty and hasNextEvent() is false
 // immediately -- which is what an app with no Usage Access permission also sees.
 package android.app.usage;

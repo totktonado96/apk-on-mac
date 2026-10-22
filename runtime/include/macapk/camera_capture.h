@@ -1,4 +1,4 @@
-// camera_capture.h -- native macOS camera capture for Mac.apk.
+// camera_capture.h -- native macOS camera capture for Apk on Mac.
 //
 // This is the layer BELOW android.hardware.camera2: a plain C surface over an
 // AVFoundation AVCaptureSession, implemented in runtime/src/camera_capture.mm.

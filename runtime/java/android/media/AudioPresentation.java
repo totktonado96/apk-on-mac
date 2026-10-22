@@ -17,7 +17,7 @@ import java.util.Objects;
  * app both reads it and (via the Builder) constructs it, so the whole class is
  * ordinary data modelling with nothing host-specific in it.
  *
- * Mac.apk has no next-gen-audio (AC-4 / MPEG-H) extractor, so
+ * Apk on Mac has no next-gen-audio (AC-4 / MPEG-H) extractor, so
  * MediaExtractor.getAudioPresentations() honestly reports none; that is a
  * separate question from whether this type works, and it does.
  *

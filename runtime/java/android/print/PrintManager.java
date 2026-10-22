@@ -13,7 +13,7 @@
 // and that file is a real, openable PDF at the end.
 //
 // What is NOT here: a print-preview UI, and any binding to an
-// android.printservice.PrintService (nothing in Mac.apk can host one, and
+// android.printservice.PrintService (nothing in Apk on Mac can host one, and
 // isPrintServiceEnabled therefore honestly answers false). Because there is no
 // UI, the delivery destination is chosen by environment rather than by the
 // user, and this is the ONE place where we depart from AOSP's flow:
@@ -96,7 +96,7 @@ public final class PrintManager {
      * Starts a print job for the given adapter.
      *
      * Deviation from AOSP, deliberate: AOSP throws IllegalStateException unless
-     * the context is an Activity. Mac.apk's getSystemService is reached through
+     * the context is an Activity. Apk on Mac's getSystemService is reached through
      * ContextWrapper, which forwards to the BASE context, so the PrintManager an
      * Activity hands out is constructed with the base context and would fail
      * that check for every app. That is our context plumbing differing from
@@ -180,7 +180,7 @@ public final class PrintManager {
     }
 
     /**
-     * Mac.apk cannot host an android.printservice.PrintService -- there is no
+     * Apk on Mac cannot host an android.printservice.PrintService -- there is no
      * system print spooler to bind one to -- so no print service is enabled.
      * This is the honest answer, not a placeholder: an app that gates a feature
      * on it correctly takes its "no service" branch.

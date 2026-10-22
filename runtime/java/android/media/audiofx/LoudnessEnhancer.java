@@ -1,6 +1,6 @@
 // android.media.audiofx.LoudnessEnhancer -- automatic gain/loudness boost. AOSP
 // frameworks/base media/java/android/media/audiofx/LoudnessEnhancer.java. Inert
-// on Mac.apk: target gain stored + read back, audio unchanged.
+// on Apk on Mac: target gain stored + read back, audio unchanged.
 package android.media.audiofx;
 
 public class LoudnessEnhancer extends AudioEffect {

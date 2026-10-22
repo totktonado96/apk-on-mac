@@ -1,7 +1,7 @@
 // android.hardware.usb.UsbAccessory
 //
 // Describes a USB accessory (USB accessory mode: the Android device is the USB
-// device and the accessory is the host). Mac.apk exposes no host USB to the
+// device and the accessory is the host). Apk on Mac exposes no host USB to the
 // guest, so UsbManager.getAccessoryList() has no accessory to report -- but the
 // TYPE must exist and be Parcelable, because an app compiled against the SDK
 // emits call sites whose FULL descriptors name it:
@@ -15,7 +15,7 @@
 // frameworks/base/core/java/android/hardware/usb/UsbAccessory.java.
 //
 // Deliberate deviation: AOSP keeps the serial behind an IUsbSerialReader binder
-// (so reading it is permission-gated) and parcels that binder. Mac.apk has no
+// (so reading it is permission-gated) and parcels that binder. Apk on Mac has no
 // binder IPC -- everything is one process -- so the serial is held and parceled
 // as the String that the app-visible getSerial() contract returns. Every
 // observable behavior (the getters, equals/hashCode/toString, a Parcel round

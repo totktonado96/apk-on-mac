@@ -4,7 +4,7 @@
 // night-mode controls. Apps commonly grab it from
 // Context.getSystemService(UI_MODE_SERVICE) inside onStart/onResume.
 //
-// Mac.apk only runs on macOS desktops, so we return MODE_TYPE_NORMAL
+// Apk on Mac only runs on macOS desktops, so we return MODE_TYPE_NORMAL
 // (the "phone-or-tablet" default) for every query and quietly ignore
 // the setters. This keeps Activity lifecycles that probe ui-mode from
 // crashing without pretending to be a car/TV/watch (which would change
@@ -85,7 +85,7 @@ public class UiModeManager {
     public void disableCarMode(int flags) { /* no-op */ }
 
     /** AOSP getContrast (API 34): the user's contrast preference in [0,1].
-     *  Mac.apk follows the standard (0.0) contrast. */
+     *  Apk on Mac follows the standard (0.0) contrast. */
     public float getContrast() { return 0.0f; }
 
     /** Notified when the user's contrast preference changes. API 34. */
@@ -93,7 +93,7 @@ public class UiModeManager {
         void onContrastChanged(float contrast);
     }
 
-    /** AOSP addContrastChangeListener (API 34). Mac.apk has no live contrast
+    /** AOSP addContrastChangeListener (API 34). Apk on Mac has no live contrast
      *  setting, so the listener registers but never fires. */
     public void addContrastChangeListener(java.util.concurrent.Executor executor,
             ContrastChangeListener listener) { }
@@ -123,7 +123,7 @@ public class UiModeManager {
     // ---- MODE_NIGHT_CUSTOM schedule ----
     // AOSP stores the two times in the ui-mode service and falls back to
     // LocalTime.MIDNIGHT when no service is reachable (UiModeManager.java
-    // :1173-1189). Mac.apk has no ui-mode service, but the pair is a plain
+    // :1173-1189). Apk on Mac has no ui-mode service, but the pair is a plain
     // user setting an app both writes and reads back -- AppCompat's custom
     // dark-theme schedule does exactly that -- so keep the values here rather
     // than answering MIDNIGHT to a caller that just set 22:00. AOSP's

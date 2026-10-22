@@ -7,7 +7,7 @@ import java.util.concurrent.atomic.AtomicLong;
  * context.
  *
  * On a device every BaseObj wraps a native handle, and equals()/hashCode() are
- * defined over that handle. Mac.apk has no native RenderScript driver, so each
+ * defined over that handle. Apk on Mac has no native RenderScript driver, so each
  * object gets a synthetic monotonically-increasing id instead. That reproduces
  * the observable contract exactly, because native handles are unique per live
  * object too: two separately created Elements with identical layout are NOT

@@ -3,7 +3,7 @@
 // which of its suggestions were used. Source: frameworks/base
 // core/java/android/view/textclassifier/TextClassifierEvent.java (android16-release).
 //
-// Mac.apk has no on-device model (TextClassifier.NO_OP), so the event is
+// Apk on Mac has no on-device model (TextClassifier.NO_OP), so the event is
 // accepted and dropped -- which is exactly what AOSP's NO_OP does with it. The
 // type hierarchy must exist because onTextClassifierEvent names it and because
 // widgets CONSTRUCT one before calling.

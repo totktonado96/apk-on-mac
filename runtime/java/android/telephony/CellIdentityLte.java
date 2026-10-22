@@ -11,7 +11,7 @@ import java.util.Objects;
 import java.util.Set;
 
 /**
- * LTE cell identity. Never populated on Mac.apk (no modem), so every field is
+ * LTE cell identity. Never populated on Apk on Mac (no modem), so every field is
  * AOSP's UNAVAILABLE / null / empty.
  * Same additional-PLMN parcel deviation as CellIdentityGsm (see that file).
  *

@@ -231,7 +231,7 @@ public class MediaPlayer implements AudioRouting, VolumeAutomation {
         if (handle != 0) com.macapk.loader.NativeAudio.nativeMpSetLooping(handle, looping);
     }
     public boolean isLooping() { return looping; }
-    // AOSP API-21 audio routing config. Mac.apk has one audio output, so
+    // AOSP API-21 audio routing config. Apk on Mac has one audio output, so
     // the attributes don't change routing -- but the method must exist:
     // libGDX/watabou's Music.play() calls setAudioAttributes(...) and the
     // missing method threw NoSuchMethodError mid-WelcomeScene.create
@@ -375,7 +375,7 @@ public class MediaPlayer implements AudioRouting, VolumeAutomation {
     public interface OnInfoListener      { boolean onInfo(MediaPlayer mp, int what, int extra); }
 
     // ----- additive: the remaining AOSP MediaPlayer surface. Video has no
-    // decode/Surface backend (Mac.apk's MediaPlayer is audio-only), so the
+    // decode/Surface backend (Apk on Mac's MediaPlayer is audio-only), so the
     // video methods report a 0x0 frame and accept a display without rendering;
     // the contract apps rely on (no NoSuchMethodError, listeners settable) holds.
 
@@ -486,7 +486,7 @@ public class MediaPlayer implements AudioRouting, VolumeAutomation {
     // class carries neither field -- getTrackType() always returns
     // MEDIA_TRACK_TYPE_UNKNOWN and getFormat() always returns a fresh empty
     // MediaFormat(), regardless of how the instance came to exist, because
-    // Mac.apk does not track per-track media format metadata. As with
+    // Apk on Mac does not track per-track media format metadata. As with
     // ApplicationStartInfo, there is no per-instance state a write/read
     // pair could lose, so an honest round trip writes nothing.
     public static class TrackInfo implements android.os.Parcelable {
@@ -769,7 +769,7 @@ public class MediaPlayer implements AudioRouting, VolumeAutomation {
 
     // ---- DRM ---------------------------------------------------------------
     //
-    // ⚠ Mac.apk does NOT implement DRM. That is an explicit project boundary
+    // ⚠ Apk on Mac does NOT implement DRM. That is an explicit project boundary
     // (CLAUDE.md, "Explicitly OUT of scope": no DRM circumvention, no defeating
     // licensing or copy protection). The API surface below exists so an app that
     // CHECKS for DRM support links and gets a truthful "no" -- which is exactly

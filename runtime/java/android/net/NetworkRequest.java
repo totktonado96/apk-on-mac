@@ -3,7 +3,7 @@
 // nested Builder and hand it to ConnectivityManager.registerNetworkCallback /
 // requestNetwork.
 //
-// Why this matters for Mac.apk (v1.0.406): Chromium Cronet's
+// Why this matters for Apk on Mac (v1.0.406): Chromium Cronet's
 // NetworkChangeNotifierAutoDetect.<init> (Reddit's HTTP stack) does
 //   new NetworkRequest.Builder()
 //       .addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
@@ -21,7 +21,7 @@
 // NetworkRequest.Builder (addCapability/removeCapability/addTransportType/
 // removeTransportType/build). We keep the capability/transport bitmasks so
 // hasCapability/hasTransport can answer truthfully if anything inspects the
-// built request; nothing in Mac.apk routes on it (we model one always-on WIFI
+// built request; nothing in Apk on Mac routes on it (we model one always-on WIFI
 // network), but storing it is AOSP-faithful and cheap.
 package android.net;
 
@@ -83,7 +83,7 @@ public class NetworkRequest {
      *  capabilities would satisfy THIS request -- i.e. `other` has every
      *  capability and transport this request demands. Connectivity-aware
      *  libraries call this to test a candidate network against a saved
-     *  request. Mac.apk's single network advertises the healthy WIFI set, so
+     *  request. Apk on Mac's single network advertises the healthy WIFI set, so
      *  this answers honestly against the request's bitmasks. */
     public boolean canBeSatisfiedBy(NetworkCapabilities other) {
         if (other == null) return false;
@@ -141,7 +141,7 @@ public class NetworkRequest {
 
         /** AOSP setNetworkSpecifier(NetworkSpecifier): attach a transport
          *  specifier (e.g. a WifiNetworkSpecifier) to the request. We store it
-         *  so getNetworkSpecifier round-trips; Mac.apk routes on the single
+         *  so getNetworkSpecifier round-trips; Apk on Mac routes on the single
          *  host network regardless. */
         public Builder setNetworkSpecifier(NetworkSpecifier specifier) {
             this.networkSpecifier = specifier;

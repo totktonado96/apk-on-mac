@@ -14,7 +14,7 @@ import java.util.List;
  * Tells the platform when to offer to SAVE what the user typed, and what kind
  * of data it is.
  *
- * Pure value object with a builder. Mac.apk shows no save dialog, so the
+ * Pure value object with a builder. Apk on Mac shows no save dialog, so the
  * prompt never appears -- but the builder's validation is what a password
  * manager's own tests exercise, and AOSP's rules (a type is required, required
  * ids must be non-empty, a custom description and a plain description are

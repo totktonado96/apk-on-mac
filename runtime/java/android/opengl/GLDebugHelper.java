@@ -1,7 +1,7 @@
 package android.opengl;
 import java.io.Writer;
 import javax.microedition.khronos.opengles.GL;
-/** Wraps a GL pipe with error-checking / logging for debugging. Mac.apk routes
+/** Wraps a GL pipe with error-checking / logging for debugging. Apk on Mac routes
  *  GL through ANGLE, whose own validation covers this, so wrap() returns the
  *  pipe unchanged. API 4.
  *  Source: frameworks/base/opengl/java/android/opengl/GLDebugHelper.java */

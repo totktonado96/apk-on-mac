@@ -151,7 +151,7 @@ final class IntrinsicSupport {
      * blur and Porter-Duff blend operate on premultiplied colour without ever
      * saying so.
      *
-     * Mac.apk's Bitmap is non-premultiplied end to end (see the note in
+     * Apk on Mac's Bitmap is non-premultiplied end to end (see the note in
      * android.graphics.Bitmap), so an Allocation built from one holds straight
      * colour. Running the same formulas on straight colour is visibly wrong:
      * a blur bleeds the colour of fully transparent pixels into their opaque

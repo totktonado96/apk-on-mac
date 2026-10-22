@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # relink_bundle_deps.sh <contents_dir> <project_dir>
 #
-# Makes the runtime binaries inside a built Mac.apk.app bundle independent
+# Makes the runtime binaries inside a built Apk on Mac.app bundle independent
 # of Homebrew, so the bundle still runs on a clean Mac with none of it
 # installed (no /opt/homebrew at all) and still runs after being copied
 # somewhere else (no absolute build-machine paths baked in). Companion to

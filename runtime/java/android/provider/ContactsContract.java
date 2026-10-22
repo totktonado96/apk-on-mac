@@ -1,6 +1,6 @@
 // android.provider.ContactsContract -- the contacts-database contract.
 // Apps query contacts via the CONTENT_URI constants + column-name
-// interfaces through ContentResolver. Mac.apk hosts no contacts
+// interfaces through ContentResolver. Apk on Mac hosts no contacts
 // provider, so queries return null (no rows) -- honest "no contacts" --
 // but the URI/column/MIME constant surface must be complete so apps
 // compile and degrade gracefully. Constant names + string values mirror
@@ -403,7 +403,7 @@ public final class ContactsContract {
 
         /**
          * AOSP wraps the cursor in an EntityIterator that groups Data rows by
-         * raw contact. Mac.apk has no android.content.EntityIterator
+         * raw contact. Apk on Mac has no android.content.EntityIterator
          * implementation of that shape, and the cursor is always null here, so
          * this reports the empty iterator AOSP itself returns for an empty
          * cursor. See the class comment: no provider is registered.
@@ -434,7 +434,7 @@ public final class ContactsContract {
         /**
          * Which account new contacts go to.
          *
-         * Mac.apk registers no contacts provider AND no accounts, so the
+         * Apk on Mac registers no contacts provider AND no accounts, so the
          * default account is NOT SET -- AOSP's own state for a device where the
          * user has never chosen one, and the state its callers already branch
          * on.
@@ -567,7 +567,7 @@ public final class ContactsContract {
         // Pure contract classes: MIME types, DATA-column aliases and type
         // enums. The three EXTRA_ADDRESS_BOOK_INDEX* keys are shared by every
         // one of them, exactly as in AOSP. The getTypeLabel families return
-        // AOSP's own English strings because Mac.apk does not ship the
+        // AOSP's own English strings because Apk on Mac does not ship the
         // platform string table -- see CommonDataKinds.Phone.getTypeLabel for
         // the full reasoning and the getTypeLabelResource caveat.
         // Source: frameworks/base/core/java/android/provider/ContactsContract.java
@@ -866,7 +866,7 @@ public final class ContactsContract {
 
             /**
              * ⚠ AOSP returns a com.android.internal.R.string.* resource ID.
-             * Mac.apk does not ship the platform's own string table, so there
+             * Apk on Mac does not ship the platform's own string table, so there
              * is no id to return and 0 ("no resource") is the honest answer.
              * getTypeLabel below therefore does NOT route through Resources; it
              * returns the label directly, so the method an app actually calls
@@ -917,7 +917,7 @@ public final class ContactsContract {
 
             /**
              * ⚠ AOSP returns a com.android.internal.R.string.* resource ID.
-             * Mac.apk does not ship the platform's own string table, so there
+             * Apk on Mac does not ship the platform's own string table, so there
              * is no id to return and 0 ("no resource") is the honest answer.
              * getTypeLabel below therefore does NOT route through Resources; it
              * returns the label directly, so the method an app actually calls
@@ -980,7 +980,7 @@ public final class ContactsContract {
 
             /**
              * ⚠ AOSP returns a com.android.internal.R.string.* resource ID.
-             * Mac.apk does not ship the platform's own string table, so there
+             * Apk on Mac does not ship the platform's own string table, so there
              * is no id to return and 0 ("no resource") is the honest answer.
              * getTypeLabel below therefore does NOT route through Resources; it
              * returns the label directly, so the method an app actually calls
@@ -1102,7 +1102,7 @@ public final class ContactsContract {
 
         /**
          * AOSP asks the contacts provider which account new contacts go to.
-         * Mac.apk registers no contacts provider AND no accounts (see
+         * Apk on Mac registers no contacts provider AND no accounts (see
          * android.accounts.AccountManager), so there is no default account and
          * null -- AOSP's documented @Nullable "device-local storage" answer --
          * is correct rather than a placeholder.
@@ -1129,7 +1129,7 @@ public final class ContactsContract {
                 Uri.withAppendedPath(CONTENT_URI, "raw_contacts");
         /**
          * ⚠ This is a LONG in AOSP -- the lowest contact id the profile can use
-         * (Long.MAX_VALUE - Integer.MAX_VALUE) -- NOT a column name. Mac.apk
+         * (Long.MAX_VALUE - Integer.MAX_VALUE) -- NOT a column name. Apk on Mac
          * previously declared it as the String "min_id"; debug/apidiff.py
          * compares fields by NAME only, so the wrong type was invisible to it,
          * and isProfileId() could not have worked against a String.
@@ -1165,7 +1165,7 @@ public final class ContactsContract {
      *     ActivityNotFoundException is faithful, not a shortcut, and there is
      *     no callback or return value anyone is waiting on.
      *   * Composing the real Intent means that if a contacts app IS installed
-     *     under Mac.apk, this works for free.
+     *     under Apk on Mac, this works for free.
      *
      * Source: ContactsContract.QuickContact (AOSP ContactsContract.java:8572).
      */
@@ -1230,7 +1230,7 @@ public final class ContactsContract {
                 android.content.Context context, android.view.View target, Uri lookupUri,
                 int mode, String[] excludeMimes) {
             // AOSP scales the view's on-screen bounds by the compatibility
-            // application scale; Mac.apk runs every app at scale 1.0, so the
+            // application scale; Apk on Mac runs every app at scale 1.0, so the
             // raw screen coordinates are already the right rectangle.
             final int[] pos = new int[2];
             target.getLocationOnScreen(pos);
@@ -1300,7 +1300,7 @@ public final class ContactsContract {
 
     /**
      * AOSP wraps the cursor in an EntityIterator that groups Data rows under a
-     * raw contact. Mac.apk registers no contacts provider, so the cursor handed
+     * raw contact. Apk on Mac registers no contacts provider, so the cursor handed
      * to newEntityIterator is always null or empty; this returns the same empty,
      * closeable iterator AOSP's own implementation yields for an empty cursor,
      * and closes the cursor exactly once as AOSP does.
@@ -1395,7 +1395,7 @@ public static final Uri CONTENT_URI = Uri.withAppendedPath(AUTHORITY_URI, "statu
 public static final Uri PROFILE_CONTENT_URI = Uri.withAppendedPath(Profile.CONTENT_URI, "status_updates");
 
         /**
-         * ⚠ AOSP returns a com.android.internal.R.drawable.* id. Mac.apk does
+         * ⚠ AOSP returns a com.android.internal.R.drawable.* id. Apk on Mac does
          * not ship the platform drawable table, so there is no id to return and
          * 0 ("no resource") is the honest answer -- the same choice made for
          * CommonDataKinds.Phone.getTypeLabelResource.

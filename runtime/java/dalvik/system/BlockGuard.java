@@ -1,5 +1,5 @@
 package dalvik.system;
-/** Detects disallowed blocking calls (disk/network) on a thread. Mac.apk uses a
+/** Detects disallowed blocking calls (disk/network) on a thread. Apk on Mac uses a
  *  permissive policy (nothing is penalized). */
 public final class BlockGuard {
     public interface Policy {

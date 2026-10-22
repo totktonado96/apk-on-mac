@@ -1,7 +1,7 @@
 // android.media.MediaRecorder -- records audio/video to a file. AOSP
 // frameworks/base media/java/android/media/MediaRecorder.java.
 //
-// ⚠ CORRECTED: the header used to say "Mac.apk has no capture/encode backend"
+// ⚠ CORRECTED: the header used to say "Apk on Mac has no capture/encode backend"
 // and that getMaxAmplitude "returns 0". The CAPTURE half of that is no longer
 // true -- runtime/src/audio_input.mm gives this host a real microphone, and
 // android.media.AudioRecord already reads from it. This class now uses it:
@@ -399,7 +399,7 @@ public class MediaRecorder implements AudioRecordingMonitor, AudioRouting, Micro
     // ---- privacy-sensitive capture (API 30) ------------------------------
 
     /** AOSP throws IllegalStateException when called after prepare(). The flag
-     *  prevents a CONCURRENT capture from sharing the input; Mac.apk runs one
+     *  prevents a CONCURRENT capture from sharing the input; Apk on Mac runs one
      *  app per process, so there is no concurrent capture and the guarantee
      *  holds trivially -- the value is still recorded so the getter agrees. */
     public void setPrivacySensitive(boolean privacySensitive) {

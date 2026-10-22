@@ -1,6 +1,6 @@
 // android.app.KeyguardManager -- AOSP system service for screen-lock
 // state. Apps query isKeyguardLocked / requestDismissKeyguard during
-// sensitive operations. Mac.apk has no screen lock; everything is
+// sensitive operations. Apk on Mac has no screen lock; everything is
 // "unlocked" / "device secured". Stubbed.
 package android.app;
 
@@ -44,7 +44,7 @@ public class KeyguardManager {
     // Referenced (per debug/preflight.py, 2026-07-31) by 5 corpus apps --
     // aegis, fossify-gallery, signal, telegram, thunderbird -- all via
     // androidx.biometric's CryptoObjectUtils device-credential fallback.
-    // isDeviceSecure() above is hardcoded false (Mac.apk has no screen
+    // isDeviceSecure() above is hardcoded false (Apk on Mac has no screen
     // lock), so the first line always returns null today -- but the
     // Intent-building branch mirrors AOSP verbatim so this method
     // self-corrects if isDeviceSecure() is ever wired to something real,
@@ -53,7 +53,7 @@ public class KeyguardManager {
     //
     // getSettingsPackageForIntent(Intent) is AOSP's PackageManager lookup:
     // queryIntentActivities(MATCH_SYSTEM_ONLY), falling back to the literal
-    // "com.android.settings" when nothing resolves. Mac.apk has no system
+    // "com.android.settings" when nothing resolves. Apk on Mac has no system
     // Settings app registered under this action, so that query would
     // always come back empty -- using the guaranteed fallback value
     // directly is behaviorally identical and skips a PackageManager
@@ -86,7 +86,7 @@ public class KeyguardManager {
     // ================================================================
     // AOSP API-36 surface completion.
     // AOSP ref: frameworks/base/core/java/android/app/KeyguardManager.java
-    // (android16-release). Mac.apk has no screen lock (isKeyguardLocked and
+    // (android16-release). Apk on Mac has no screen lock (isKeyguardLocked and
     // isDeviceLocked above are constant false), so the listeners register and
     // never fire -- which is exactly what happens on a device whose lock state
     // never changes.

@@ -4,7 +4,7 @@ package android.media;
 // media/java/android/media/AudioRecordingConfiguration.java. Parcelable to
 // match AOSP.
 //
-// Mac.apk DOES have a microphone source now (runtime/src/audio_input.mm backs
+// Apk on Mac DOES have a microphone source now (runtime/src/audio_input.mm backs
 // android.media.AudioRecord with the Mac's real input device), so the old
 // "there is no mic, this only exists for the return type to resolve" note here
 // no longer holds. What is still missing is the REGISTRY: nothing tracks live

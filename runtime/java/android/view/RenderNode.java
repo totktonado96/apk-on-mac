@@ -205,7 +205,7 @@ public class RenderNode {
     // ViewRootImpl pair). Wiring these would be a View.java-level change,
     // out of scope for this class.
 
-    /** Legacy display-list recording (pre-RecordingCanvas). Mac.apk draws
+    /** Legacy display-list recording (pre-RecordingCanvas). Apk on Mac draws
      *  immediately, so a recording canvas is a plain no-op Canvas. */
     public android.view.DisplayListCanvas start(int width, int height) { return new android.view.DisplayListCanvas(); }
     public void end(android.view.DisplayListCanvas canvas) { }

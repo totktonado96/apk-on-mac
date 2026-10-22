@@ -267,7 +267,7 @@ public final class PlayLicenseClient {
     }
 
     private static void log(String m) {
-        try { com.macapk.loader.NativeLog.i("Mac.apk.GMS", "licence: " + m); }
+        try { com.macapk.loader.NativeLog.i("Apk on Mac.GMS", "licence: " + m); }
         catch (Throwable t) { System.err.println("[licence] " + m); }
     }
 

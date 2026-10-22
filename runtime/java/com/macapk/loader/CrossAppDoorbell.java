@@ -8,7 +8,7 @@
 // an optimisation (warm delivery without waiting for an activation), never the
 // transport: every path that can lose the ring has a backstop.
 //
-// Path: ~/Library/Application Support/Mac.apk/run/door-<first 16 hex of
+// Path: ~/Library/Application Support/Apk on Mac/run/door-<first 16 hex of
 // SHA-256(canonical bundle path)>.sock. Both sides compute it from the bundle
 // path. AF_UNIX paths are limited to 103 bytes incl. NUL on Darwin (104-byte
 // sun_path); past 102 characters the doorbell is skipped and the backstops carry
@@ -27,14 +27,14 @@ import java.nio.file.attribute.PosixFilePermissions;
 import java.security.MessageDigest;
 
 final class CrossAppDoorbell {
-    private static final String TAG = "Mac.apk.XAPP";
+    private static final String TAG = "Apk on Mac.XAPP";
     static final int MAX_PATH = 102;
 
     private CrossAppDoorbell() {}
 
     static File runDir() {
         return new File(System.getProperty("user.home"),
-                "Library/Application Support/Mac.apk/run");
+                "Library/Application Support/Apk on Mac/run");
     }
 
     /** The doorbell path for a bundle, or null when it would not fit. */

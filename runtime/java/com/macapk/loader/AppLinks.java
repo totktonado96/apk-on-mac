@@ -26,7 +26,7 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Android App Links on Mac.apk: the verification a device's domain verifier
+ * Android App Links on Apk on Mac: the verification a device's domain verifier
  * runs, and the part of a device browser that hands a verified link to its app.
  *
  * VERIFICATION is AOSP's (DomainVerificationService + the verifier agent): for
@@ -46,7 +46,7 @@ import java.util.concurrent.TimeUnit;
  * browser hands that navigation to the app instead of loading it. Safari knows
  * nothing about Android App Links, so it loads the address as a web page (the
  * Epic Games Store's 404). So an open whose `redirect_uri` is one of the app's
- * verified links goes to a Mac.apk sign-in window (applink_window.mm) that
+ * verified links goes to a Apk on Mac sign-in window (applink_window.mm) that
  * behaves like that browser: the navigation to the redirect is cancelled and
  * delivered to the app through the same queue as a URL LaunchServices handed
  * us (HostUrlIntake). Every other open still goes to the Mac's browser.
@@ -58,7 +58,7 @@ import java.util.concurrent.TimeUnit;
 public final class AppLinks {
     private AppLinks() {}
 
-    private static final String TAG = "Mac.apk.AppLinks";
+    private static final String TAG = "Apk on Mac.AppLinks";
     static final boolean ON = !"0".equals(System.getenv("MACAPK_APP_LINKS"));
     static final String RELATION = "delegate_permission/common.handle_all_urls";
     private static final int TIMEOUT_MS = 8000;
@@ -384,7 +384,7 @@ public final class AppLinks {
             NativeLog.w(TAG, "[applinks] sign-in window unavailable: " + t);
             return false;
         }
-        NativeLog.i(TAG, "[applinks] sign-in opened in the Mac.apk window; returns to "
+        NativeLog.i(TAG, "[applinks] sign-in opened in the Apk on Mac window; returns to "
                 + prefix + (isWebScheme(prefix) ? " (a verified App Link of " : " (a link scheme of ")
                 + sPkg + ") = " + ok);
         return ok;

@@ -1,4 +1,4 @@
-// android.view.KeyEvent -- Mac.apk's reimplementation of the AOSP class.
+// android.view.KeyEvent -- Apk on Mac's reimplementation of the AOSP class.
 //
 // Mirrors frameworks/base/core/java/android/view/KeyEvent.java (android-11.0.0_r48,
 // API 30 -- the level our emulator golden was recorded at). Two things make this
@@ -452,7 +452,7 @@ public class KeyEvent extends InputEvent implements Parcelable {
     // here and stamps it with macapkSetSource below.
     private int source = InputDevice.SOURCE_UNKNOWN;
     // AOSP: non-null only for the deprecated ACTION_MULTIPLE character-
-    // sequence event flavor. Mac.apk never constructs one.
+    // sequence event flavor. Apk on Mac never constructs one.
     private String characters = null;
 
     /** AOSP KeyEvent.java:1365-1371. Sets ONLY action, keyCode, repeatCount=0
@@ -556,16 +556,16 @@ public class KeyEvent extends InputEvent implements Parcelable {
         this.unicodeChar = origEvent.unicodeChar;
     }
 
-    /** Mac.apk: stamp the literal Unicode character the host keyboard
+    /** Apk on Mac: stamp the literal Unicode character the host keyboard
      *  produced so getUnicodeChar() returns it verbatim (the guest text
      *  layer -- Unity InputField, EditText/InputConnection -- reads this
      *  to insert typed text). This is what a real device's InputReader
      *  achieves by loading the physical keyboard's own .kcm; we already know
      *  the composed character from the NSEvent, so we carry it directly. */
     public void macapkSetUnicodeChar(int c) { this.unicodeChar = c; }
-    /** Mac.apk: stamp a raw scan code onto an injected event (host key bridge). */
+    /** Apk on Mac: stamp a raw scan code onto an injected event (host key bridge). */
     public void macapkSetScanCode(int sc) { this.scanCode = sc; }
-    /** Mac.apk: stamp the true InputDevice.SOURCE_* onto an injected event.
+    /** Apk on Mac: stamp the true InputDevice.SOURCE_* onto an injected event.
      *  Needed because AOSP's constructors leave the source at SOURCE_UNKNOWN
      *  and it is the InputReader -- our injector -- that knows the real one.
      *  Without this an engine's isFromSource(SOURCE_KEYBOARD) check fails on
@@ -667,7 +667,7 @@ public class KeyEvent extends InputEvent implements Parcelable {
     }
     public int getUnicodeChar() { return getUnicodeChar(metaState); }
     /** AOSP KeyEvent.java:2734-2736 delegates straight to the device's key
-     *  character map. The short-circuit above it is Mac.apk's only addition:
+     *  character map. The short-circuit above it is Apk on Mac's only addition:
      *  when the host NSEvent already told us the composed character (option-
      *  modified keys, dead-key sequences, a non-US layout) that literal beats
      *  any table lookup, because it IS what this keyboard produced. */
@@ -1031,7 +1031,7 @@ public class KeyEvent extends InputEvent implements Parcelable {
         return getKeyCharacterMap().getMatch(code, chars, metaState);
     }
     /** @deprecated AOSP: no longer used by the input system; historically the
-     *  string payload of a deprecated ACTION_MULTIPLE event. Mac.apk never
+     *  string payload of a deprecated ACTION_MULTIPLE event. Apk on Mac never
      *  constructs one, so this is always null, matching AOSP's own doc
      *  ("In all other cases it is null"). */
     @Deprecated
@@ -1074,7 +1074,7 @@ public class KeyEvent extends InputEvent implements Parcelable {
     /** AOSP KeyEvent.isTracking (API 5): whether FLAG_TRACKING is set. Note
      *  that FLAG_TRACKING (0x200) is set by the SYSTEM in response to
      *  startTracking(), which sets the distinct FLAG_START_TRACKING -- so this
-     *  stays false for the events Mac.apk injects, as it does on AOSP for an
+     *  stays false for the events Apk on Mac injects, as it does on AOSP for an
      *  event the framework has not re-dispatched. */
     public final boolean isTracking() { return (flags & FLAG_TRACKING) != 0; }
     /** AOSP KeyEvent.java:2565-2567. */
@@ -1111,7 +1111,7 @@ public class KeyEvent extends InputEvent implements Parcelable {
     // its constructor default, never as garbage, since the writer omits the
     // slot too):
     //   mId       -- AOSP's per-event id for input tracing.
-    //   mDisplayId-- multi-display routing; Mac.apk is single-display.
+    //   mDisplayId-- multi-display routing; Apk on Mac is single-display.
     //   mHmac     -- the input-verification MAC, produced by the system's
     //                InputDispatcher. There is no InputDispatcher here to
     //                produce or check one.

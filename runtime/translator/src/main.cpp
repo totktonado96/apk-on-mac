@@ -2398,7 +2398,7 @@ int run_pipeline(const std::string& in_path,
         std::fprintf(stderr,
             "[translator] arm32rc: IR discarded (not written to disk); "
             "use --keep-ir to materialise %s\n", ll_path.c_str());
-    module_ir << "; Mac.apk translator output for " << img.soname << "\n";
+    module_ir << "; Apk on Mac translator output for " << img.soname << "\n";
     module_ir << "target triple = \"arm64-apple-darwin\"\n";
     module_ir << "target datalayout = \"e-m:o-i64:64-i128:128-n32:64-S128\"\n";
     // `nobuiltin` is load-bearing: a lifted body whose ARM symbol name

@@ -5,7 +5,7 @@ import java.util.concurrent.Executor;
 
 /**
  * AOSP-faithful android.graphics.HardwareRenderer (API 29). Drives a RenderNode
- * tree onto a Surface using a hardware-accelerated context. Mac.apk has no
+ * tree onto a Surface using a hardware-accelerated context. Apk on Mac has no
  * standalone HW renderer (our View redraw goes through ViewCanvasDriver +
  * software RenderNode replay), so this is a faithful no-op surface: properties
  * round-trip and FrameRenderRequest.syncAndDraw() returns SYNC_OK. Mirrors

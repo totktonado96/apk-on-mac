@@ -8,7 +8,7 @@ import android.os.Bundle;
 // ContentProvider stub modelled after AOSP's
 // frameworks/base/core/java/android/content/ContentProvider.java.
 //
-// The reason this class has any non-stub behavior on Mac.apk is the
+// The reason this class has any non-stub behavior on Apk on Mac is the
 // auto-init pattern: SDKs like FirebaseInitProvider, CrashlyticsInit
 // Provider, MobileAdsInitProvider, AndroidX-Startup, and WorkManager
 // declare a <provider> in AndroidManifest.xml and use its onCreate as
@@ -106,7 +106,7 @@ public abstract class ContentProvider implements ContentInterface, ComponentCall
         //     setAuthorities(info.authority);
         // Cached here so the getters below answer without re-reading mInfo,
         // which is what AOSP does and what a subclass overriding attachInfo
-        // and calling super expects. mSingleUser is not modelled -- Mac.apk is
+        // and calling super expects. mSingleUser is not modelled -- Apk on Mac is
         // single-user, so the bit is stored on the ProviderInfo and simply
         // never consulted.
         if (info != null) {
@@ -161,13 +161,13 @@ public abstract class ContentProvider implements ContentInterface, ComponentCall
     // enforceFilePermission (:794-808: 'w' in the mode = write, else read), getType
     // falls back to getTypeAnonymous without read access (android14 :285-...),
     // applyBatch checks every operation (:478-508), and call() checks nothing (a
-    // DocumentsProvider checks inside callUnchecked). Mac.apk's ContentResolver and
+    // DocumentsProvider checks inside callUnchecked). Apk on Mac's ContentResolver and
     // ContentProviderClient ARE that transport, so they call the macapkEnforce*
     // methods below before dispatching.
     //
     // The caller is always this app. For the app's OWN provider AOSP answers
     // GRANTED at once (UserHandle.isSameApp(uid, mMyUid), :943 / :1027), so nothing
-    // changes for it. It matters for a provider Mac.apk hosts on behalf of ANOTHER
+    // changes for it. It matters for a provider Apk on Mac hosts on behalf of ANOTHER
     // package -- HostDocumentsProvider, standing in for com.android.externalstorage
     // -- which is recognised by its ProviderInfo.packageName (the uid dimension this
     // one-process runtime collapses to). There the app holds none of the provider's
@@ -555,7 +555,7 @@ public abstract class ContentProvider implements ContentInterface, ComponentCall
     }
 
     /** AOSP ContentProvider.getCallingPackage: there is no IPC caller in
-     *  Mac.apk (the app calls its own providers in-process), so the
+     *  Apk on Mac (the app calls its own providers in-process), so the
      *  calling package is always the app itself. Returns null here when
      *  no context is attached, matching AOSP's "no active call" return. */
     public final String getCallingPackage() {
@@ -564,7 +564,7 @@ public abstract class ContentProvider implements ContentInterface, ComponentCall
 
     // ---- Calling-identity surface (AOSP :1180-:1294). On a device this is
     // per-thread state the transport installs before dispatching an incoming
-    // IPC. Mac.apk has no IPC: the app calls its own providers in-process, so
+    // IPC. Apk on Mac has no IPC: the app calls its own providers in-process, so
     // the "caller" is always the app itself and the identity is its own
     // AttributionSource. That is modelled honestly with the same THREAD-LOCAL
     // shape AOSP uses, so clearCallingIdentity()/restoreCallingIdentity() nest
@@ -718,7 +718,7 @@ public abstract class ContentProvider implements ContentInterface, ComponentCall
     }
 
     /** AOSP ContentProvider.checkUriPermission (ContentProvider.java:1614-1616)
-     *  returns PackageManager.PERMISSION_DENIED verbatim. Mac.apk runs one app
+     *  returns PackageManager.PERMISSION_DENIED verbatim. Apk on Mac runs one app
      *  in one process with no cross-app URI grants, so DENIED is also the
      *  behaviourally correct answer here, not just the AOSP-faithful one.
      *  Part of ContentInterface. */

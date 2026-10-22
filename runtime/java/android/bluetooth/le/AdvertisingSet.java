@@ -3,7 +3,7 @@
 //
 // NO PUBLIC CONSTRUCTOR on AOSP either: the only way to obtain one is through
 // AdvertisingSetCallback.onAdvertisingSetStarted, which the stack calls after a
-// set actually starts. Mac.apk never starts one -- BluetoothLeAdvertiser
+// set actually starts. Apk on Mac never starts one -- BluetoothLeAdvertiser
 // reports ADVERTISE_FAILED_FEATURE_UNSUPPORTED instead -- so no AdvertisingSet
 // is ever handed out and every method below is unreachable.
 //

@@ -16,7 +16,7 @@ public class PackageItemInfo {
     public int    showUserIcon;
     /** AOSP API-35 PackageItemInfo.isArchived: "whether the package is
      *  currently in an archived state" (frameworks/base
-     *  core/java/android/content/pm/PackageItemInfo.java:186). Mac.apk never
+     *  core/java/android/content/pm/PackageItemInfo.java:186). Apk on Mac never
      *  archives a package -- see PackageManager.getArchivedPackage -- so this
      *  stays false for everything we generate, which is the honest answer and
      *  the same one a device gives for any normally-installed package. The
@@ -76,7 +76,7 @@ public class PackageItemInfo {
     // This tree's Parcel has only writeString (the UTF-16 form, faithful to
     // Parcel.cpp writeString16), and the two differ only in on-the-wire byte
     // encoding, never in the String value observed by a reader. Nothing in
-    // Mac.apk hands a parcel to a real binder, so the encoding is unobservable
+    // Apk on Mac hands a parcel to a real binder, so the encoding is unobservable
     // and writeString is the correct substitute throughout this package.
 
     /** AOSP PackageItemInfo.java:433-443. */
@@ -176,7 +176,7 @@ public class PackageItemInfo {
     }
 
     // AOSP PackageItemInfo.loadUnbadgedIcon: same as loadIcon minus the
-    // work-profile badge overlay, which Mac.apk has no concept of.
+    // work-profile badge overlay, which Apk on Mac has no concept of.
     public android.graphics.drawable.Drawable loadUnbadgedIcon(
             android.content.pm.PackageManager pm) {
         return loadIcon(pm);
@@ -197,7 +197,7 @@ public class PackageItemInfo {
     //         return null;
     //     }
     //
-    // This used to be a hardcoded `return null` on the premise that Mac.apk had
+    // This used to be a hardcoded `return null` on the premise that Apk on Mac had
     // no per-resource XML parser. That premise is stale, and the cost of leaving
     // it was not "one app degrades gracefully" -- it is that androidx
     // FileProvider cannot initialise on ANY app. FileProvider.parsePathStrategy

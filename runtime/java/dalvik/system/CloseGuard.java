@@ -1,6 +1,6 @@
 package dalvik.system;
 /** Resource-leak sentinel. AOSP uses it to warn when a closeable is GC'd still
- *  open; Mac.apk has no such reporter, so it is inert but the API resolves. */
+ *  open; Apk on Mac has no such reporter, so it is inert but the API resolves. */
 public final class CloseGuard {
     private static volatile boolean ENABLED = false;
     private CloseGuard() {}

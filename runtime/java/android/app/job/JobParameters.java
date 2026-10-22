@@ -120,14 +120,14 @@ public class JobParameters implements android.os.Parcelable {
 
     public boolean isExpeditedJob() { return job != null && job.isExpedited(); }
 
-    /** AOSP isUserInitiatedJob (API 34). Mac.apk never promotes a job to
+    /** AOSP isUserInitiatedJob (API 34). Apk on Mac never promotes a job to
      *  user-initiated (there is no Task Manager affordance that could then
      *  demote it), so this is false -- the same answer a real device gives
      *  for a job that did not request it. */
     public boolean isUserInitiatedJob() {
         // The job's OWN request is now recorded on JobInfo (API 34
         // setUserInitiated), so report what the app asked for rather than a
-        // constant false. Mac.apk still never treats such a job differently --
+        // constant false. Apk on Mac still never treats such a job differently --
         // there is no Task Manager affordance and no quota to exempt it from --
         // but an app checking "was I started as user-initiated" gets its own
         // answer back instead of a contradiction.
@@ -135,7 +135,7 @@ public class JobParameters implements android.os.Parcelable {
     }
 
     /** AOSP getJobNamespace (API 34): the namespace the job was scheduled
-     *  in, or null for the default namespace. Mac.apk keeps one global job
+     *  in, or null for the default namespace. Apk on Mac keeps one global job
      *  space (JobScheduler.forNamespace returns this), so: null. */
     public String getJobNamespace() { return null; }
 
@@ -227,7 +227,7 @@ public class JobParameters implements android.os.Parcelable {
 
     // ---- AOSP API-36 surface completion: Parcelable ----
     // AOSP's JobParameters crosses the Binder from the JobScheduler service to
-    // the app's JobService. Mac.apk's scheduler is in-process
+    // the app's JobService. Apk on Mac's scheduler is in-process
     // (MacApkJobScheduler), so nothing here NEEDS the marshalling -- but the
     // Parcelable contract is public API and an app may parcel one itself.
     //

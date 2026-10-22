@@ -12,7 +12,7 @@ import java.util.function.Consumer;
 public interface WindowManager extends ViewManager {
 
     /** AOSP WindowManager.registerTrustedPresentationListener (API 34): report
-     *  when a window meets the given presentation thresholds. Mac.apk composites
+     *  when a window meets the given presentation thresholds. Apk on Mac composites
      *  through one Cocoa window and has no per-window trusted-presentation signal
      *  from the host, so we cannot honestly say a window met them -- and this API
      *  exists precisely so an app can gate a SENSITIVE action on the answer.
@@ -154,7 +154,7 @@ public interface WindowManager extends ViewManager {
      *      default boolean isCrossWindowBlurEnabled() { return false; }
      *      default void addCrossWindowBlurEnabledListener(Consumer<Boolean> l) {}
      *      default void removeCrossWindowBlurEnabledListener(Consumer<Boolean> l) {}
-     *  Mac.apk has no compositor blur, so "blur is never enabled" is the
+     *  Apk on Mac has no compositor blur, so "blur is never enabled" is the
      *  honest, AOSP-shaped answer -- it is a real value real devices report
      *  too (a GPU-limited or battery-saver device answers false), not a
      *  stand-in for "not implemented". The one piece of REAL behaviour this
@@ -196,7 +196,7 @@ public interface WindowManager extends ViewManager {
     /** AOSP WindowManager.addProposedRotationListener(Executor, IntConsumer)
      *  (API 33): notifies when the window manager PROPOSES a new rotation for
      *  this context, and (per its javadoc) "the listener will be called
-     *  immediately with the current proposed rotation". Mac.apk's window has one
+     *  immediately with the current proposed rotation". Apk on Mac's window has one
      *  fixed orientation for the life of the process (the launcher picks it
      *  before the runtime starts and there is no sensor to change it), so the
      *  proposal is the current rotation and it never changes -- which is exactly
@@ -219,7 +219,7 @@ public interface WindowManager extends ViewManager {
 
     /** AOSP WindowManager.addScreenRecordingCallback(Executor, Consumer) (API 35):
      *  returns the CURRENT screen-recording state and calls back on change.
-     *  macOS screen recording is a system-level capture Mac.apk is not told
+     *  macOS screen recording is a system-level capture Apk on Mac is not told
      *  about, so the honest answer is NOT_VISIBLE -- the same answer a device
      *  gives when nothing is recording. Returned directly (AOSP returns the
      *  current state from the call, not through the callback). */
@@ -278,7 +278,7 @@ public interface WindowManager extends ViewManager {
          *  is a lint annotation only, not an enforced range) -- mirrored
          *  verbatim, unlike Window.setBackgroundBlurRadius's PhoneWindow
          *  clamp, which is a genuinely different method on a genuinely
-         *  different concrete class. Mac.apk has no compositor blur, so this
+         *  different concrete class. Apk on Mac has no compositor blur, so this
          *  stores the value and reports it back through the getter rather
          *  than rendering it.
          *
@@ -312,7 +312,7 @@ public interface WindowManager extends ViewManager {
         public int privateFlags;
         public static final int PRIVATE_FLAG_FIT_INSETS_CONTROLLED = 1 << 28;
         // Android P+ display-cutout (notch) handling. Apps set this in
-        // onCreate to opt into drawing under the cutout. Mac.apk has
+        // onCreate to opt into drawing under the cutout. Apk on Mac has
         // no notch concept; we accept the field for API compatibility.
         // Constants mirror android.view.WindowManager.LayoutParams.*.
         public static final int LAYOUT_IN_DISPLAY_CUTOUT_MODE_DEFAULT       = 0;
@@ -336,7 +336,7 @@ public interface WindowManager extends ViewManager {
          *  View.SYSTEM_UI_FLAG_* word (and the subtree's union of it). Absent
          *  here, so the pre-API-30 way of asking for immersive / edge-to-edge
          *  through the LayoutParams threw NoSuchFieldError. Stored only; the
-         *  decor-fits signal Mac.apk acts on comes through
+         *  decor-fits signal Apk on Mac acts on comes through
          *  View.setSystemUiVisibility (see Window.macapkSetDecorFits). */
         public int systemUiVisibility;
         public int subtreeSystemUiVisibility;
@@ -580,7 +580,7 @@ public interface WindowManager extends ViewManager {
         /** AOSP LayoutParams.setFrameRateBoostOnTouchEnabled /
          *  getFrameRateBoostOnTouchEnabled (API 35): whether the platform may
          *  raise the refresh rate while the user touches this window. AOSP's
-         *  default is true. Mac.apk presents through CAMetalLayer at the
+         *  default is true. Apk on Mac presents through CAMetalLayer at the
          *  display's own rate with no per-window boost to enable, so this is a
          *  round-trip -- the same observable behaviour as a fixed-refresh-rate
          *  device, which accepts the request and cannot act on it. */

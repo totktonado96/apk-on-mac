@@ -1,6 +1,6 @@
 // com.google.android.gms.ads.MobileAds
 //
-// GMS Ads reference: the modern AdMob entry point. Mac.apk runs on a
+// GMS Ads reference: the modern AdMob entry point. Apk on Mac runs on a
 // de-Googled device with no reachable ad backend. Per the owner's
 // emulator-grade policy (same as the legacy com.google.ads.* shims):
 // initialize() fires onInitializationComplete so the app's startup flow

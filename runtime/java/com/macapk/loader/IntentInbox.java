@@ -27,7 +27,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public final class IntentInbox {
-    private static final String TAG = "Mac.apk.XAPP";
+    private static final String TAG = "Apk on Mac.XAPP";
 
     /** MACAPK_XAPP_RECEIVE (default ON). =0: no doorbell, no drain, no
      *  activation observer (the native side reads the same variable). */

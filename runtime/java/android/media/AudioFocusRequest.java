@@ -3,7 +3,7 @@ package android.media;
 // object passed to AudioManager.requestAudioFocus(AudioFocusRequest). Mirrors
 // AOSP frameworks/base media/java/android/media/AudioFocusRequest.java: an
 // immutable bag of focus-gain type + attributes + listener + behavior flags,
-// built via Builder. Mac.apk always grants focus and never delivers loss, so
+// built via Builder. Apk on Mac always grants focus and never delivers loss, so
 // the stored fields are only introspection holders.
 public final class AudioFocusRequest {
     private final int mFocusGain;

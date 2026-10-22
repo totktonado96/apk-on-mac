@@ -233,7 +233,7 @@ public class Paint {
         sComposeColorLogs++;
         StringBuilder sb = new StringBuilder("paint." + how + "(0x" + Integer.toHexString(val) + ") from Compose:");
         for (int i = 2; i < Math.min(st.length, 10); i++) sb.append("\n    ").append(st[i]);
-        com.macapk.loader.NativeLog.i("Mac.apk.ComposeColor", sb.toString());
+        com.macapk.loader.NativeLog.i("Apk on Mac.ComposeColor", sb.toString());
     }
     public int  getColor() { return color; }
     public void setColor(int c) { color = c; traceComposeColor("setColor", c); }

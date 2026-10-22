@@ -4,7 +4,7 @@
 // isCleartextTrafficPermitted before an HTTP request) threw
 // NoSuchMethodError.
 //
-// Mac.apk does not enforce a Network Security Config, and the games /
+// Apk on Mac does not enforce a Network Security Config, and the games /
 // apps we host predate the API-28 cleartext-by-default-off change or
 // declare cleartext explicitly. Mirroring the pre-Android-9 platform
 // default (and the permissive behavior our HTTP path already has), we

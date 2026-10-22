@@ -5,7 +5,7 @@
 // subclass is a normal component.
 //
 // onBind() returns NULL. On Android it returns the binder the share sheet uses
-// to call onGetChooserTargets(). Mac.apk has no system share sheet, so nothing
+// to call onGetChooserTargets(). Apk on Mac has no system share sheet, so nothing
 // can bind it, and returning a binder that nothing is connected to would be a
 // success with no backing. Null is also android.app.Service's own default for
 // a service that offers no binding, so callers already handle it. The

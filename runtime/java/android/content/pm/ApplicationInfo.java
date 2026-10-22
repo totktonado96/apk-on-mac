@@ -9,7 +9,7 @@ import android.os.Bundle;
 // field's declaring class as PackageItemInfo because in AOSP ApplicationInfo
 // IS-A PackageItemInfo and metaData is inherited.
 //
-// Mac.apk runs the guest JVM with -Xverify:none, so the verifier does NOT
+// Apk on Mac runs the guest JVM with -Xverify:none, so the verifier does NOT
 // reject `getfield PackageItemInfo.metaData` on a receiver that isn't a
 // PackageItemInfo. If ApplicationInfo does not extend PackageItemInfo, that
 // getfield reads at PackageItemInfo.metaData's offset within an object that
@@ -210,7 +210,7 @@ public class ApplicationInfo extends PackageItemInfo implements android.os.Parce
     static final int PRIVATE_FLAG_EXT_PROFILEABLE             = 1 << 0;
     static final int PRIVATE_FLAG_EXT_ATTRIBUTIONS_ARE_USER_VISIBLE = 1 << 1;
 
-    /** AOSP @hide public fields (ApplicationInfo.java:817, :838). Mac.apk's
+    /** AOSP @hide public fields (ApplicationInfo.java:817, :838). Apk on Mac's
      *  manifest parser does not read the <application> attributes that set most
      *  of these bits, so they stay 0 -- which is the value AOSP reports for an
      *  app that declares none of them, i.e. nearly every app. They are NOT
@@ -227,7 +227,7 @@ public class ApplicationInfo extends PackageItemInfo implements android.os.Parce
      *  the app was BUILT against rather than the one it targets (which is a
      *  different question from targetSdkVersion).
      *
-     *  Mac.apk's manifest parser does not extract them yet, so they read 0 /
+     *  Apk on Mac's manifest parser does not extract them yet, so they read 0 /
      *  null -- the same values AOSP reports for a package whose manifest omits
      *  the attributes (anything built before API 26's aapt). Declaring them is
      *  what matters here: we present API 36, and a JNI GetFieldID or a plain
@@ -316,13 +316,13 @@ public class ApplicationInfo extends PackageItemInfo implements android.os.Parce
 
     /** AOSP ApplicationInfo.isVirtualPreload() (API 26): "whether the app was
      *  installed as a virtual preload" -- a carrier/OEM pre-install that the
-     *  user has not yet materialised. Nothing on Mac.apk is a preload. */
+     *  user has not yet materialised. Nothing on Apk on Mac is a preload. */
     public boolean isVirtualPreload() {
         return (privateFlags & PRIVATE_FLAG_VIRTUAL_PRELOAD) != 0;
     }
 
     /** AOSP ApplicationInfo.isResourceOverlay() (API 29): "whether the app is a
-     *  Runtime Resource Overlay (RRO)". Mac.apk loads exactly one ordinary APK
+     *  Runtime Resource Overlay (RRO)". Apk on Mac loads exactly one ordinary APK
      *  and has no overlay manager, so false for everything we generate -- the
      *  same answer a device gives for any non-RRO package.
      *
@@ -368,7 +368,7 @@ public class ApplicationInfo extends PackageItemInfo implements android.os.Parce
 
     /** AOSP ApplicationInfo.getGwpAsanMode() (API 30). GWP-ASan is a sampling
      *  native heap-bug detector; the mode comes from
-     *  `<application android:gwpAsanMode>`. Mac.apk does not run GWP-ASan and
+     *  `<application android:gwpAsanMode>`. Apk on Mac does not run GWP-ASan and
      *  the attribute is not parsed, so GWP_ASAN_DEFAULT (-1, "let the platform
      *  decide") is both the honest answer and AOSP's own default. */
     public int getGwpAsanMode() { return gwpAsanMode; }
@@ -434,7 +434,7 @@ public class ApplicationInfo extends PackageItemInfo implements android.os.Parce
      *  localized title for the given category value, or null for an invalid
      *  category."
      *
-     *  Upstream reads com.android.internal.R.string.app_category_*. Mac.apk has
+     *  Upstream reads com.android.internal.R.string.app_category_*. Apk on Mac has
      *  no framework resource table, so the strings are inlined VERBATIM from
      *  frameworks/base/core/res/res/values/strings.xml (android16-release) --
      *  the same text the default locale would produce. That is a real answer,

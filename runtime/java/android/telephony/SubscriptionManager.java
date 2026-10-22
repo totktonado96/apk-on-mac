@@ -2,7 +2,7 @@
 //
 // AOSP's SIM-subscription service. Apps fetch it via getSystemService(
 // TELEPHONY_SUBSCRIPTION_SERVICE) to enumerate active SIM subscriptions.
-// Mac.apk has no telephony hardware, so there are NO subscriptions: every list
+// Apk on Mac has no telephony hardware, so there are NO subscriptions: every list
 // is empty, every default id is INVALID_SUBSCRIPTION_ID, and every mutation
 // fails. That is the honest "no SIM" result, and it is the state a dual-SIM-
 // aware app already has to cope with on a Wi-Fi-only device.
@@ -141,7 +141,7 @@ public class SubscriptionManager {
     // subscriptions the calling app has carrier privileges over. AOSP's own
     // body can legally return null here -- its javadoc documents null as
     // "current state is unknown, but if a listener is registered, a future
-    // onSubscriptionsChanged will follow". Mac.apk never fires that listener
+    // onSubscriptionsChanged will follow". Apk on Mac never fires that listener
     // (there is no eSIM stack to raise a change event), so a null here would
     // promise an update that never comes. An empty list is the honest
     // TERMINAL answer instead.

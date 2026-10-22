@@ -6,7 +6,7 @@
 // Mirrors frameworks/base/core/java/android/text/AutoText.java's PUBLIC
 // surface. AOSP's implementation reads a per-locale compressed trie out of
 // res/xml/autotext.xml (com.android.internal.R.xml.autotext), a framework
-// resource Mac.apk does not ship and cannot synthesize -- there is no
+// resource Apk on Mac does not ship and cannot synthesize -- there is no
 // upstream-equivalent word list to route to on macOS either, so this answers
 // "no correction" for every word, which is EXACTLY what a device answers for
 // every locale whose autotext.xml is empty (most of them: AOSP ships a

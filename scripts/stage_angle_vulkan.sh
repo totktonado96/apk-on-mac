@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # stage_angle_vulkan.sh <angle_lib_dir> <dest_dir>
 #
-# Stages the ANGLE Vulkan-backend runtime dylibs next to the Mac.apk runtime
+# Stages the ANGLE Vulkan-backend runtime dylibs next to the Apk on Mac runtime
 # binary and rewrites their install names to @rpath form so dyld resolves them
 # via the runtime's @executable_path rpath. This is the Vulkan complement to the
 # libGLESv2/libEGL staging that runtime/CMakeLists.txt already does for the Metal

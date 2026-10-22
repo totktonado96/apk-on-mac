@@ -67,7 +67,7 @@ import java.util.Set;
  *  is `if (InputRecorder.ON) ...`, so a disabled recorder costs one constant test
  *  and allocates nothing. Two switches:
  *    MACAPK_RECORD_INPUT=<file | dir/>   explicit (=0 forces OFF, even with ENABLED);
- *    ~/Library/Application Support/Mac.apk/recordings/ENABLED  for Dock-launched
+ *    ~/Library/Application Support/Apk on Mac/recordings/ENABLED  for Dock-launched
  *        INSTALLED apps, which have no environment: each launch writes
  *        recordings/<pkg>_<YYYYmmdd-HHMMSS>.inject. Honoured ONLY when the runtime's
  *        android root is an installed bundle's (`<Name>.app/Contents/android`), and
@@ -88,7 +88,7 @@ import java.util.Set;
  *  NOT protected (we cannot tell its buttons from any other). */
 public final class InputRecorder {
     private InputRecorder() {}
-    private static final String TAG = "Mac.apk.InputRec";
+    private static final String TAG = "Apk on Mac.InputRec";
 
     static final int FORMAT = 1;
     static final int KEEP_PER_APP = 20;
@@ -118,7 +118,7 @@ public final class InputRecorder {
 
     static Path recordingsDir() {
         return Paths.get(System.getProperty("user.home"), "Library", "Application Support",
-                         "Mac.apk", "recordings");
+                         "Apk on Mac", "recordings");
     }
 
     private static boolean enabledByFolder() {
@@ -388,7 +388,7 @@ public final class InputRecorder {
                 catch (Throwable t) { sWinW = -1f; sWinH = -1f; }
             }
             sOut.write(header() + "\n"
-                + "# Mac.apk input recording (docs/input-recorder_2026-10-01.md). +<ms> = ms after"
+                + "# Apk on Mac input recording (docs/input-recorder_2026-10-01.md). +<ms> = ms after"
                 + " the app's first activity; ptr/mptr coordinates are Android surface pixels.\n"
                 + "# Replay: debug/drive_app.sh replay <this file>, or MACAPK_EXTERNAL_URLS=0"
                 + " MACAPK_INJECT_FILE=<this file> (replayed once, read-only).\n"

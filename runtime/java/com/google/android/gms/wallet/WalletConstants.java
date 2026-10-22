@@ -1,7 +1,7 @@
 package com.google.android.gms.wallet;
 
 // com.google.android.gms.wallet.WalletConstants -- the Google Pay environment and
-// status constants apps reference when building a PaymentsClient. Mac.apk has no
+// status constants apps reference when building a PaymentsClient. Apk on Mac has no
 // Google Pay backend, but the constants must link. Values match the published SDK.
 // Ref: developers.google.com/android/reference/.../wallet/WalletConstants
 public final class WalletConstants {

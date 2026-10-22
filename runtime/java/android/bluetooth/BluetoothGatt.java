@@ -1,6 +1,6 @@
 // android.bluetooth.BluetoothGatt
 //
-// The GATT client returned by BluetoothDevice.connectGatt. Mac.apk has no
+// The GATT client returned by BluetoothDevice.connectGatt. Apk on Mac has no
 // radio, so the client immediately reports a failed connection to the supplied
 // callback (status=GATT_FAILURE, newState=STATE_DISCONNECTED) and every
 // subsequent operation returns false / empty. This is the honest "could not

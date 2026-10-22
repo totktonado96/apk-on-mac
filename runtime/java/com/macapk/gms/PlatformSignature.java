@@ -1,6 +1,6 @@
-// com.macapk.gms.PlatformSignature -- Mac.apk's own platform signing identity.
+// com.macapk.gms.PlatformSignature -- Apk on Mac's own platform signing identity.
 //
-// WHY THIS EXISTS AT ALL. When the GMS layer is on, Mac.apk reports a
+// WHY THIS EXISTS AT ALL. When the GMS layer is on, Apk on Mac reports a
 // com.android.vending package as installed, because it really does host a
 // Play-Licensing service. Any package a PackageManager reports has a signing
 // certificate, and an app is entitled to ask for it. There are exactly three
@@ -17,11 +17,11 @@
 //      so an app that inspects signatures the ordinary way gets a crash instead
 //      of an answer, and the answer it should get -- "signed by someone who is
 //      not Google" -- is one we are perfectly happy to give.
-//   3. A REAL self-signed certificate that says Mac.apk. This one.
+//   3. A REAL self-signed certificate that says Apk on Mac. This one.
 //
 // So we generate an ordinary RSA-2048 / SHA256withRSA self-signed X.509v3
 // certificate, once, and persist it. It parses, it chains to itself, its subject
-// says CN=Mac.apk Platform, and it will never equal Google's. An app that
+// says CN=Apk on Mac Platform, and it will never equal Google's. An app that
 // byte-compares against Google's embedded cert correctly concludes this is not
 // Google -- which is the honest answer, and the one that keeps us on the right
 // side of the line.
@@ -61,8 +61,8 @@ import java.util.Date;
 
 public final class PlatformSignature {
 
-    private static final String SUBJECT_CN = "Mac.apk Platform";
-    private static final String SUBJECT_O  = "Mac.apk";
+    private static final String SUBJECT_CN = "Apk on Mac Platform";
+    private static final String SUBJECT_O  = "Apk on Mac";
 
     private static final Object LOCK = new Object();
     private static byte[] sCertDer;
@@ -137,7 +137,7 @@ public final class PlatformSignature {
             // Last resort. NOT a certificate and deliberately not shaped like
             // one: a parser must fail cleanly rather than half-succeed, and the
             // string says exactly what happened if it ever shows up in a dump.
-            return "Mac.apk platform certificate unavailable".getBytes(StandardCharsets.UTF_8);
+            return "Apk on Mac platform certificate unavailable".getBytes(StandardCharsets.UTF_8);
         }
     }
 
@@ -282,7 +282,7 @@ public final class PlatformSignature {
     }
 
     private static void warn(String m) {
-        try { com.macapk.loader.NativeLog.w("Mac.apk.GMS", "PlatformSignature: " + m); }
+        try { com.macapk.loader.NativeLog.w("Apk on Mac.GMS", "PlatformSignature: " + m); }
         catch (Throwable t) { System.err.println("[PlatformSignature] " + m); }
     }
 

@@ -5,7 +5,7 @@
 // Why: AOSP's androidx.preference.PreferenceManager.setDefaultValues
 // uses reflection-driven PreferenceInflater to construct each
 // Preference, then calls onSetInitialValue which persists the
-// default value to SharedPreferences. Mac.apk's
+// default value to SharedPreferences. Apk on Mac's
 // Context.obtainStyledAttributes returns an empty TypedArray, so
 // the Preference's defaultValue is never extracted, never persisted.
 // Apps that read SharedPreferences keys with a null fallback then
@@ -43,7 +43,7 @@ import java.util.Map;
 import java.util.Set;
 
 public final class PreferenceDefaultsScanner {
-    private static final String TAG = "Mac.apk.PrefDefaults";
+    private static final String TAG = "Apk on Mac.PrefDefaults";
     private static final String ANDROID_NS = "http://schemas.android.com/apk/res/android";
 
     // Persisted-value shape a Preference XML tag expects, resolved by
@@ -99,7 +99,7 @@ public final class PreferenceDefaultsScanner {
         // Snapshot the store ONCE so the self-heal check in walk() can see
         // each key's actual runtime type without a getAll() copy per XML
         // node. See isWrongType() for why this matters: a key can be
-        // contains()==true yet hold the WRONG type from an earlier Mac.apk
+        // contains()==true yet hold the WRONG type from an earlier Apk on Mac
         // bug (unresolved @array/ tokens persisted as String -- see
         // resolveReference), and a plain contains() skip would never
         // repair that on a long-lived data dir.
@@ -171,7 +171,7 @@ public final class PreferenceDefaultsScanner {
                 //
                 // Only skip when the key is ALREADY correctly typed.
                 // isWrongType() catches a key poisoned by an older
-                // Mac.apk bug (see resolveReference below) so it gets
+                // Apk on Mac bug (see resolveReference below) so it gets
                 // repaired instead of skipped forever.
                 if (!already || isWrongType(existing, key, tag, app)) {
                     if (writeForTag(ed, key, defaultValue, tag, app)) {
@@ -197,13 +197,13 @@ public final class PreferenceDefaultsScanner {
      *  ordinary idempotent skip would apply forever) but the stored
      *  value's runtime type doesn't match what this Preference tag
      *  needs. A long-lived data dir can carry exactly this state from
-     *  an older Mac.apk bug (an unresolved "@array/…" token persisted
+     *  an older Apk on Mac bug (an unresolved "@array/…" token persisted
      *  as a String -- the F-Droid blank-screen regression: androidx
      *  MultiSelectListPreference.setValues() casts the stored value to
      *  Set<String> and NPEs on mValues.addAll(null) when it isn't one).
      *  Real Android can never reach this state (its own Preference
      *  machinery only ever writes the type it reads back), so this is
-     *  a Mac.apk-specific repair -- but it is keyed purely off the XML
+     *  a Apk on Mac-specific repair -- but it is keyed purely off the XML
      *  tag's class, never a package/app name, so it stays generic. */
     private static boolean isWrongType(Map<String, ?> existing, String key,
                                          String tag, Application app) {

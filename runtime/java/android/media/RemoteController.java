@@ -14,7 +14,7 @@ import java.util.Objects;
  *
  * Registering one requires being an enabled NotificationListenerService or the
  * current lock screen -- AOSP's AudioManager.registerRemoteController() returns
- * FALSE for any other caller. Mac.apk hosts exactly one app and has no
+ * FALSE for any other caller. Apk on Mac hosts exactly one app and has no
  * notification-listener enrolment and no lock screen, so no caller here can ever
  * qualify: registerRemoteController returns false, this object is never fed by
  * the system, and every control method returns false ("the command could not be

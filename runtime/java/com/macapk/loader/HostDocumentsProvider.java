@@ -47,7 +47,7 @@
 //   * FLAG_SUPPORTS_METADATA only for directories: MetadataReader's EXIF types are
 //     not implemented, so getDocumentMetadata answers the directory tree count /
 //     size (:151-197) and null for files, as AOSP does for an unsupported type.
-//   * queryRoots is empty: Mac.apk exposes no browsable volume, only what the
+//   * queryRoots is empty: Apk on Mac exposes no browsable volume, only what the
 //     user picked. No search, no recents (the base class's "not supported").
 //   * No DirectoryCursor file observer and no MediaStore scan after a write.
 //   * Ids with "." / ".." segments are refused even when they stay inside (AOSP
@@ -86,7 +86,7 @@ import java.util.Locale;
 import java.util.concurrent.ConcurrentHashMap;
 
 public final class HostDocumentsProvider extends DocumentsProvider {
-    private static final String TAG = "Mac.apk.Documents";
+    private static final String TAG = "Apk on Mac.Documents";
     /** AOSP ExternalStorageProvider.AUTHORITY. */
     public static final String AUTHORITY = "com.android.externalstorage.documents";
     /** ExternalStorageProvider's package (its AndroidManifest.xml:2). */
@@ -447,7 +447,7 @@ public final class HostDocumentsProvider extends DocumentsProvider {
      *
      * What AOSP blocks, and what that means here:
      *   * the root of the storage volume ("path.isEmpty()") -- the shared-storage
-     *     root Mac.apk gives this app (SharedStorage.externalStorageRoot(), what
+     *     root Apk on Mac gives this app (SharedStorage.externalStorageRoot(), what
      *     /sdcard names), AND the android root that contains it, which is this
      *     app's whole device filesystem (data/data/<pkg> included), AND the host
      *     filesystem root "/": each is "the whole device" in its own frame;

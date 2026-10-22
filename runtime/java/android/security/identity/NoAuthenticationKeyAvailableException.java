@@ -1,6 +1,6 @@
 // android.security.identity.NoAuthenticationKeyAvailableException -- Thrown if no dynamic authentication keys are provisioned, or they are expired or use-exhausted.
 //
-// Part of the Identity Credential API surface. Mac.apk has no secure element
+// Part of the Identity Credential API surface. Apk on Mac has no secure element
 // and therefore no IdentityCredentialStore, so nothing in this package can
 // ever be instantiated here -- but the TYPES must exist and link, because an
 // app that merely CHECKS for identity-credential support references them at

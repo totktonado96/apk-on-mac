@@ -21,7 +21,7 @@
 // =========================================================================
 // WHY THIS IS A PKIX PATH BUILD AND NOT `tm.checkServerTrusted(chain,
 // authType)` (rewritten 2026-08-13; the delegating version was WRONG and
-// broke every certificate-pinning app on Mac.apk)
+// broke every certificate-pinning app on Apk on Mac)
 // =========================================================================
 // Two divergences from Android, both of which broke pinning:
 //
@@ -140,7 +140,7 @@ public class X509TrustManagerExtensions {
      *  KeyUsage rule; see the class header for why (Conscrypt ignores it
      *  too, and OkHttp passes a hardcoded "RSA"). {@code host} is likewise
      *  unused: Android consults it only for per-host network-security-config
-     *  and CertPinManager entries, neither of which Mac.apk has, and
+     *  and CertPinManager entries, neither of which Apk on Mac has, and
      *  hostname VERIFICATION is a separate step the caller already did. */
     public List<X509Certificate> checkServerTrusted(X509Certificate[] chain,
                                                     String authType,
@@ -239,7 +239,7 @@ public class X509TrustManagerExtensions {
      *  the OCSP-stapling / Certificate-Transparency-SCT-aware overload.
      *  frameworks/base/core/java/android/net/http/X509TrustManagerExtensions.java
      *  folds ocspData/tlsSctData into the underlying TrustManagerImpl's
-     *  verification when the conscrypt mainline module supports it. Mac.apk
+     *  verification when the conscrypt mainline module supports it. Apk on Mac
      *  has no independent OCSP/SCT validation, so we ignore ocspData/tlsSctData
      *  and delegate to the 3-arg logic. */
     public List<X509Certificate> checkServerTrusted(X509Certificate[] chain,
@@ -261,7 +261,7 @@ public class X509TrustManagerExtensions {
 
     /** AOSP API-24+: true if the given cert was installed by the
      *  user (vs. shipped in the system truststore). We don't track
-     *  user-installed certs on Mac.apk; always false. */
+     *  user-installed certs on Apk on Mac; always false. */
     public boolean isUserAddedCertificate(X509Certificate cert) {
         return false;
     }

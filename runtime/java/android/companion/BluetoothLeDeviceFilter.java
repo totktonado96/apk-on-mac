@@ -3,7 +3,7 @@
 // advertising-data mask, optionally renaming the matched device for display.
 //
 // Same standing as BluetoothDeviceFilter (read that header): a real
-// Builder-built value type; nothing scans, because Mac.apk exposes no
+// Builder-built value type; nothing scans, because Apk on Mac exposes no
 // Bluetooth bridge and no companion pairing UI.
 //
 // Mirrors

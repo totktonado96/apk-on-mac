@@ -1,4 +1,4 @@
-# Mac.apk translator
+# Apk on Mac translator
 
 Standalone CLI that converts **ARM32 Bionic ELF `.so`** files into **arm64-apple-darwin Mach-O dylibs** that load and run natively on Apple Silicon. No emulation, no virtualization. The output is real ARM64 machine code that the macOS dyld treats like any other dylib, and HotSpot loads via `System.loadLibrary` like any other JNI library.
 
@@ -165,4 +165,4 @@ Cross-compiles `test/test_add.c` to ARM32 ELF via `clang -target armv7-linux-gnu
 
 ## License
 
-Same as the rest of Mac.apk (see top-level `LICENSE` — free for all non-profit use with attribution, paid commercial license available). Capstone is BSD-3-Clause and dynamically linked. Nothing in the current build links or shells out to LLVM/clang. No GPL contagion.
+Same as the rest of Apk on Mac (see top-level `LICENSE` — free for all non-profit use with attribution, paid commercial license available). Capstone is BSD-3-Clause and dynamically linked. Nothing in the current build links or shells out to LLVM/clang. No GPL contagion.

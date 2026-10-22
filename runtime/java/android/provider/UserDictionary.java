@@ -10,7 +10,7 @@ import java.util.Locale;
 /**
  * The user's personal dictionary of words the keyboard should not autocorrect.
  *
- * Mac.apk registers no user-dictionary provider, so an insert reaches nothing
+ * Apk on Mac registers no user-dictionary provider, so an insert reaches nothing
  * and a query returns no rows -- the same as a device where the dictionary has
  * never been written. addWord is CLIENT-SIDE ContentValues construction plus a
  * resolver insert, reproduced exactly, so if a provider is ever registered it

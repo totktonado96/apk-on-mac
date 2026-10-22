@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Objects;
 
 /** Describes a media routing session (which routes a controller is driving).
- *  Mac.apk has one implicit local session -- the system session, whose selected
+ *  Apk on Mac has one implicit local session -- the system session, whose selected
  *  route is the built-in speaker -- so an app that inspects it sees a device
  *  playing locally with nothing to transfer to, which is what a real Android
  *  device with no route providers reports. API 30.
@@ -75,7 +75,7 @@ public final class RoutingSessionInfo implements Parcelable {
     // flag, none of which has a public accessor, so they are not modelled here.
     // Writing our own field order rather than AOSP's exact wire shape, per the
     // absent-fields-not-padded rule -- the Parcel never crosses a process
-    // boundary in Mac.apk, so only round-trip consistency with CREATOR matters.
+    // boundary in Apk on Mac, so only round-trip consistency with CREATOR matters.
     @Override public int describeContents() { return 0; }
 
     @Override public void writeToParcel(Parcel dest, int flags) {
@@ -254,7 +254,7 @@ public final class RoutingSessionInfo implements Parcelable {
 
         /**
          * API 35. Records WHO asked for the transfer, so a later
-         * wasTransferInitiatedBySelf() can compare. Mac.apk has a single user
+         * wasTransferInitiatedBySelf() can compare. Apk on Mac has a single user
          * and a single app per process, so the pair can only ever name this
          * process; the values are accepted and recorded on the builder, and the
          * comparison they exist for is answered directly by

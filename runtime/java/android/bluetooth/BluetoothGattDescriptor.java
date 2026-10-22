@@ -1,7 +1,7 @@
 // android.bluetooth.BluetoothGattDescriptor
 //
 // A GATT descriptor value holder (notably the Client Characteristic
-// Configuration descriptor used to enable notifications). Mac.apk never
+// Configuration descriptor used to enable notifications). Apk on Mac never
 // connects, but apps construct/write these, so the value type + the standard
 // ENABLE/DISABLE notification byte-array constants must resolve. Mirrors
 // frameworks/base/core/java/android/bluetooth/BluetoothGattDescriptor.java.

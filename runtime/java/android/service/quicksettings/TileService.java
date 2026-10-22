@@ -5,7 +5,7 @@ import android.content.Intent;
 import android.os.IBinder;
 
 /**
- * Base for a quick-settings tile service. Apps extend it; Mac.apk has no
+ * Base for a quick-settings tile service. Apps extend it; Apk on Mac has no
  * quick-settings panel, so the tile is never shown and the callbacks never
  * fire, but the type + lifecycle must exist for the subclass to compile.
  *

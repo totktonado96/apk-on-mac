@@ -28,7 +28,7 @@ import java.util.Properties;
 public final class SpaceTap {
     private SpaceTap() {}
 
-    private static final String TAG = "Mac.apk.SpaceTap";
+    private static final String TAG = "Apk on Mac.SpaceTap";
 
     private static final int KEYCODE_SPACE = 62;
 
@@ -104,7 +104,7 @@ public final class SpaceTap {
 
     private static File storeFile() {
         return new File(System.getProperty("user.home")
-            + "/Library/Application Support/Mac.apk/space-tap.properties");
+            + "/Library/Application Support/Apk on Mac/space-tap.properties");
     }
 
     private static Properties store() {
@@ -129,7 +129,7 @@ public final class SpaceTap {
                 if (dir != null) dir.mkdirs();
                 File tmp = new File(f.getPath() + ".tmp");
                 try (FileOutputStream out = new FileOutputStream(tmp)) {
-                    p.store(out, "Mac.apk Space Bar Taps Center: packages with it turned on");
+                    p.store(out, "Apk on Mac Space Bar Taps Center: packages with it turned on");
                 }
                 if (!tmp.renameTo(f)) {
                     f.delete();

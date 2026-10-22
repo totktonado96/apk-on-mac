@@ -14,7 +14,7 @@
 //
 // Cache reuse is keyed on the source APK's mtime + ABI AND on JAVA_ID (the
 // identity of the framework jars + converter that produced the artifacts),
-// so a Mac.apk rebuild that changes those regenerates rather than silently
+// so a Apk on Mac rebuild that changes those regenerates rather than silently
 // reusing output from code that no longer exists.
 //
 // (An earlier revision documented a <kAppsRootRel> target. That constant
@@ -93,7 +93,7 @@ void SettlePendingDexJar(const std::filesystem::path& app_dir,
 // wastes disk we never read (measured over the 22-app fleet: 956MB extracted
 // vs 704MB needed, 26%). Preference order matches AppClassLoader.ABI_ORDER --
 // arm64-v8a (Stage 6, no translation) > armeabi-v7a > armeabi -- and x86 /
-// x86_64 / mips are NEVER selected: nothing in Mac.apk can load them.
+// x86_64 / mips are NEVER selected: nothing in Apk on Mac can load them.
 //
 //   chosen      the abi to extract, or "" when the APK has no usable one
 //               (no native code at all, or x86-only)

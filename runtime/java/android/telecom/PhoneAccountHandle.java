@@ -26,7 +26,7 @@ public final class PhoneAccountHandle implements Parcelable {
     }
 
     /**
-     * AOSP's 3-arg form binds the account to a specific user. Mac.apk is
+     * AOSP's 3-arg form binds the account to a specific user. Apk on Mac is
      * single-user, so callers pass (and read back) the current user; the field
      * is stored rather than dropped because equals()/hashCode() include it and
      * an app that round-trips a handle must get an equal object back.

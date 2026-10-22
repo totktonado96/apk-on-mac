@@ -3,7 +3,7 @@ package android.telephony;
 import android.os.Parcel;
 
 /**
- * A TDSCDMA cell observation. Never produced on Mac.apk (no modem); the type
+ * A TDSCDMA cell observation. Never produced on Apk on Mac (no modem); the type
  * must resolve for code that instanceof-checks getAllCellInfo() results.
  *
  * Source: frameworks/base/telephony/java/android/telephony/CellInfoTdscdma.java

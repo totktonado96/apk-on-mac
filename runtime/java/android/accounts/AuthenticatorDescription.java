@@ -7,7 +7,7 @@ import android.os.Parcelable;
  * Metadata for one account authenticator, as declared by an app's
  * account-authenticator XML.
  *
- * Mac.apk has no AccountManagerService scanning packages for authenticators, so
+ * Apk on Mac has no AccountManagerService scanning packages for authenticators, so
  * AccountManager.getAuthenticatorTypes() reports none -- but the type itself is
  * pure data and is faithful here, including the deliberately narrow
  * equals/hashCode (AOSP keys authenticators by TYPE alone, which is what makes

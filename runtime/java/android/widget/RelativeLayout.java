@@ -43,7 +43,7 @@ public class RelativeLayout extends ViewGroup {
     // no other static initializer of this class can observe them unset.
     private static final String ENV_MACAPK_TRACE_RL = System.getenv("MACAPK_TRACE_RL");
 
-    private static final String TAG = "Mac.apk.RelativeLayout";
+    private static final String TAG = "Apk on Mac.RelativeLayout";
 
     // Rule indices -- match AOSP's public constants exactly so apps
     // and androidx libraries that pass these through reflection /
@@ -1034,7 +1034,7 @@ public class RelativeLayout extends ViewGroup {
                 if (lp != null) lp.resolveLayoutDirection(0);
 
                 if (passes == 1 && "1".equals(ENV_MACAPK_TRACE_RL)) {
-                    com.macapk.loader.NativeLog.i("Mac.apk.RelLayout",
+                    com.macapk.loader.NativeLog.i("Apk on Mac.RelLayout",
                         "child[" + i + "] " + child.getClass().getSimpleName()
                         + " isRLP=" + (lp != null) + " mw=" + child.getMeasuredWidth()
                         + " mh=" + child.getMeasuredHeight()

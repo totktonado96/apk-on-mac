@@ -10,7 +10,7 @@
 // ⚠ EVERY METHOD HERE IS AN HONEST REFUSAL, and each refuses for a reason:
 //
 //  * grantKeyAccess / revokeKeyAccess -- a grant is a cross-UID capability
-//    issued by the keystore daemon. Mac.apk runs ONE app in ONE process; there
+//    issued by the keystore daemon. Apk on Mac runs ONE app in ONE process; there
 //    is no second UID to grant to and no daemon to arbitrate. We report
 //    ERROR_UNIMPLEMENTED (a system error, per AOSP's own classification)
 //    instead of returning a fabricated grant id that would later resolve to
@@ -39,7 +39,7 @@ public final class KeyStoreManager {
     /** Tag for getSupplementaryAttestationInfo: the attestation module hash. */
     public static final int MODULE_HASH = -1879047468;
 
-    /** Mac.apk wiring, not AOSP API -- AOSP's constructor is @hide, so a future
+    /** Apk on Mac wiring, not AOSP API -- AOSP's constructor is @hide, so a future
      *  Context.getSystemService binding needs something to call. */
     public KeyStoreManager() {}
 

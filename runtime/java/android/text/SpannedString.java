@@ -7,7 +7,7 @@
 // (no setSpan/removeSpan). Html.fromHtml and TextUtils return one of
 // these; HCR 1.43 referenced it (NoClassDefFoundError, non-fatal).
 //
-// Mac.apk stores the spans copied from the source CharSequence so the
+// Apk on Mac stores the spans copied from the source CharSequence so the
 // getSpans/getSpanStart/... contract is honored exactly like
 // SpannableString, just without mutation.
 package android.text;

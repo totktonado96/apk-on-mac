@@ -5,7 +5,7 @@
 //
 // docs/host-url-scheme-intake_2026-09-29.md has the contract and the evidence.
 //
-// On a device two things make that hand-off work, and Mac.apk had neither:
+// On a device two things make that hand-off work, and Apk on Mac had neither:
 //
 //  1. REGISTRATION. PackageManager indexes every exported activity's
 //     <intent-filter>, so a browser that meets `myscheme:...` finds the app
@@ -30,7 +30,7 @@
 //     (exported, MATCH_DEFAULT_ONLY -- the browser is another app), and starts
 //     it through the cross-app arrival path (ActivityHost.macapkDeliverCrossApp),
 //     so a singleTop top gets onNewIntent and anything else is pushed, exactly
-//     as for an intent from another Mac.apk app.
+//     as for an intent from another Apk on Mac app.
 //
 // Schemes the HOST performs itself (http/https/mailto/tel/geo -- see
 // ActivityHost.hostActionFor) and Android-internal pseudo-schemes are never
@@ -58,7 +58,7 @@ import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 public final class HostUrlIntake {
-    private static final String TAG = "Mac.apk.URL";
+    private static final String TAG = "Apk on Mac.URL";
 
     /** MACAPK_URL_SCHEMES (default ON). =0: no Info.plist registration, no
      *  Apple Event handler (the native side reads the same variable), no
@@ -276,7 +276,7 @@ public final class HostUrlIntake {
     static Sync syncBundleSchemes(File bundle, String pkg, List<String> schemes, String lsregister) {
         File plist = new File(bundle, "Contents/Info.plist");
         if (!plist.isFile()) return Sync.SKIPPED;
-        // Only a Mac.apk-generated bundle of THIS package is ours to edit.
+        // Only a Apk on Mac-generated bundle of THIS package is ours to edit.
         String owner = plutilRead(plist, "MacapkPackage");
         if (owner == null || !owner.equals(pkg)) return Sync.SKIPPED;
         String want = String.join(" ", schemes);
@@ -372,9 +372,9 @@ public final class HostUrlIntake {
         return plutilRead(new File(appPath, "Contents/Info.plist"), "MacapkPackage") != null;
     }
 
-    /** The first handler of `scheme` that is NOT a Mac.apk bundle -- a native macOS
+    /** The first handler of `scheme` that is NOT a Apk on Mac bundle -- a native macOS
      *  app that already owns it -- or null when every listed handler is ours (or
-     *  there is none). Our own bundle is ours; another Mac.apk app sharing a
+     *  there is none). Our own bundle is ours; another Apk on Mac app sharing a
      *  scheme is the SDK-shared case the doc notes, not a takeover of the host. */
     static String foreignOwner(String scheme, List<String> handlers, java.util.Map<String, Boolean> ours) {
         for (String h : handlers) {
@@ -458,7 +458,7 @@ public final class HostUrlIntake {
     // package other than the receiver is dropped rather than forwarded to that
     // package's bundle.
     //
-    // The fbconnect problem: several Mac.apk apps bundle the Facebook SDK and so
+    // The fbconnect problem: several Apk on Mac apps bundle the Facebook SDK and so
     // claim the same scheme (fbconnect, host cct.<pkg>). LaunchServices binds a
     // scheme to ONE bundle, and which one is LaunchServices' own choice, not a rule to
     // rely on (observed both ways on 2026-09-30: a rival registered afterwards did not
@@ -487,7 +487,7 @@ public final class HostUrlIntake {
     private static volatile File sBundle;
     private static volatile List<String> sClaimed = Collections.emptyList();
 
-    /** The schemes among `claimed` that another Mac.apk bundle also handles and no
+    /** The schemes among `claimed` that another Apk on Mac bundle also handles and no
      *  native macOS application does -- the ones the opener must take so the
      *  redirect comes back to it. Unknown (null) handler lists are skipped. */
     static List<String> redirectSchemesToTake(List<String> claimed, String ownBundle,
@@ -506,7 +506,7 @@ public final class HostUrlIntake {
             }
             if (foreignOwner(s, norm, ours) != null) continue; // a native app owns it: never take it
             for (String h : norm) {
-                if (!h.equals(own)) { out.add(s); break; }     // shared with another Mac.apk app
+                if (!h.equals(own)) { out.add(s); break; }     // shared with another Apk on Mac app
             }
         }
         return out;
@@ -650,7 +650,7 @@ public final class HostUrlIntake {
 
     /** Where a second launch of this bundle leaves the URLs LaunchServices sent
      *  IT rather than us (launcher/AppStubMain.swift LaunchUrlHandoff): a runtime
-     *  started from the Mac.apk window is not this bundle to LaunchServices, so a
+     *  started from the Apk on Mac window is not this bundle to LaunchServices, so a
      *  browser redirect launches the bundle's stub, which finds us running and
      *  hands the URL over instead of dropping it. Relative to the android root. */
     static final String HANDOFF_DIR = ".macapk/host-urls";

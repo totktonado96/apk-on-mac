@@ -23,7 +23,7 @@ import java.security.spec.PKCS8EncodedKeySpec;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 
-// MacApkKeyStoreBackend: the Mac.apk stand-in for Android's keystore
+// MacApkKeyStoreBackend: the Apk on Mac stand-in for Android's keystore
 // service. On a device, AndroidKeyStoreSpi/KeyGeneratorSpi talk to the
 // system keymaster daemon, which persists key blobs under
 // /data/misc/keystore and survives app restarts. macOS has no keymaster,

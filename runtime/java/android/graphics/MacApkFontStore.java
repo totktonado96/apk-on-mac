@@ -6,7 +6,7 @@
 // in createFont0) and registers that copy for deletion by exactly two things
 // (sun/font/SunFontManager.java:2244-2290, isCopy=true): a GC Disposer on the
 // Font2D, which our static font caches mostly pin, and the JDK "FileCloser"
-// SHUTDOWN HOOK. The hook never runs in Mac.apk: the runtime boots HotSpot with
+// SHUTDOWN HOOK. The hook never runs in Apk on Mac: the runtime boots HotSpot with
 // -Xrs (runtime/src/jvm_loader.cpp), so HotSpot refuses HUP/INT/TERM
 // (jvm_posix.cpp JVM_RegisterSignal) and Java never owns SIGTERM, and every
 // real exit is _exit (cocoa_bridge.mm macapk_terminate_now), Runtime.halt
@@ -38,7 +38,7 @@
 //   - a SIGKILL at any instant leaves nothing, a complete file, or a *.part
 //     that the next process purges.
 //
-// WHERE. ~/Library/Caches/MacApk/fonts -- "MacApk", NOT "Mac.apk": no path of
+// WHERE. ~/Library/Caches/MacApk/fonts -- "MacApk", NOT "Apk on Mac": no path of
 // ours may contain the substring ".apk", because guests that locate their APK
 // by splitting a path at the first ".apk" split OURS instead (Among Us,
 // v1.0.1634; see runtime/src/apk_unpacker.cpp "'.apk' MUST NOT APPEAR"). The

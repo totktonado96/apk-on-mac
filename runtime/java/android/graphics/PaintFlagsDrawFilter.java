@@ -7,7 +7,7 @@ package android.graphics;
  * whole render pass without touching each individual Paint, e.g. MapView and custom
  * Views that want crisp or smoothed output regardless of the caller's Paint setup.
  *
- * Mac.apk note: our Canvas is AWT-backed and software-only, so the clear/set masks
+ * Apk on Mac note: our Canvas is AWT-backed and software-only, so the clear/set masks
  * are not honored at raster time. The class exists so bytecode that constructs the
  * filter and installs it via Canvas.setDrawFilter()/getDrawFilter() links, runs, and
  * round-trips the public fields correctly. We mirror AOSP's public API surface

@@ -11,7 +11,7 @@ import java.util.Objects;
 /**
  * One (domain, transport) registration record inside a ServiceState.
  *
- * Mac.apk has no radio, so ServiceState.getNetworkRegistrationInfoList() is
+ * Apk on Mac has no radio, so ServiceState.getNetworkRegistrationInfoList() is
  * empty. Faithful value type.
  *
  * Source: frameworks/base/telephony/java/android/telephony/NetworkRegistrationInfo.java

@@ -3,7 +3,7 @@ package com.google.android.gms.fitness;
 import com.google.android.gms.tasks.Task;
 
 // com.google.android.gms.fitness.HistoryClient -- reads/writes historical fitness
-// data. Mac.apk has no Google Fit store, so every read returns empty / every
+// data. Apk on Mac has no Google Fit store, so every read returns empty / every
 // write fails cleanly (API_NOT_CONNECTED). NEVER fabricates fitness data. The
 // request/response model types are passed as Object to avoid modeling the entire
 // Fit data surface (nothing here produces a populated one). Mirrors the published

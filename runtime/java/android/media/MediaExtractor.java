@@ -204,7 +204,7 @@ public final class MediaExtractor {
 
     /**
      * AOSP: the DRM initialisation data (the PSSH boxes) the container declares,
-     * "or null if none". This extractor never parses a PSSH box -- Mac.apk
+     * "or null if none". This extractor never parses a PSSH box -- Apk on Mac
      * implements no DRM at all (see MediaDrm) -- so null is the truthful answer,
      * and it is the one an unprotected file gives on Android too. An app that
      * gets null takes its clear-content path, which is the only path we can

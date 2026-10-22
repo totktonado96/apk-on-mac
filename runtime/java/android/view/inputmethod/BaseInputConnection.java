@@ -8,7 +8,7 @@ import android.text.Editable;
 // InputConnection that views return from View.onCreateInputConnection. Apps
 // (CandyCrush, SmashHit) reference it at class-init / onCreate; a missing class
 // threw NoClassDefFoundError and aborted onCreate before the game view was
-// built. Mac.apk has no soft-IME (text comes from the host keyboard), so the
+// built. Apk on Mac has no soft-IME (text comes from the host keyboard), so the
 // editing methods are inert -- but the class must load, construct, and present
 // the InputConnection contract. Mirrors AOSP method surface + return defaults.
 public class BaseInputConnection implements InputConnection {  // InputConnection is now an interface (v1.0.422)

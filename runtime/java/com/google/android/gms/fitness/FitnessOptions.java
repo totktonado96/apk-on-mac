@@ -6,7 +6,7 @@ import java.util.List;
 
 // com.google.android.gms.fitness.FitnessOptions -- declares which data types and
 // access levels an app needs; passed to the permission/consent flow and to the
-// Fitness clients. Pure config built via its Builder. Mac.apk grants no Fit
+// Fitness clients. Pure config built via its Builder. Apk on Mac grants no Fit
 // access (no backend), but the type must link for apps that construct it.
 // Mirrors the published ACCESS_* constants and Builder.
 // Ref: developers.google.com/android/reference/.../fitness/FitnessOptions

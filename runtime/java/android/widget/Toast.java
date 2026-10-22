@@ -80,7 +80,7 @@ public class Toast {
 
     public void show() {
         // Mirror to the log either way (useful for headless verification).
-        NativeLog.i("Mac.apk.Toast", String.valueOf(mText));
+        NativeLog.i("Apk on Mac.Toast", String.valueOf(mText));
 
         final ViewGroup decor = currentDecor();
         if (decor == null || mView == null) return;
@@ -98,7 +98,7 @@ public class Toast {
                     decor.requestLayout();
                     decor.invalidate();
                 } catch (Throwable t) {
-                    NativeLog.i("Mac.apk.Toast", "overlay add failed: " + t);
+                    NativeLog.i("Apk on Mac.Toast", "overlay add failed: " + t);
                 }
             }
         };

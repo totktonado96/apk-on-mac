@@ -8,7 +8,7 @@ import java.util.Arrays;
 /**
  * Which bands/channels of one radio-access network a network scan should cover.
  *
- * Immutable value type; no radio needed to construct one. Mac.apk's
+ * Immutable value type; no radio needed to construct one. Apk on Mac's
  * requestNetworkScan reports ERROR_UNSUPPORTED rather than pretending to scan.
  *
  * Source: frameworks/base/telephony/java/android/telephony/RadioAccessSpecifier.java

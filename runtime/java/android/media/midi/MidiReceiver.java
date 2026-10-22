@@ -1,6 +1,6 @@
 package android.media.midi;
 import java.io.IOException;
-/** Receives MIDI data. Mac.apk exposes no MIDI transport, so onSend is never
+/** Receives MIDI data. Apk on Mac exposes no MIDI transport, so onSend is never
  *  driven; subclasses still resolve. */
 public abstract class MidiReceiver {
     private final int mMaxMessageSize;

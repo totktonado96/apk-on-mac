@@ -9,7 +9,7 @@
 // getProxy(Context,String) statics. AOSP itself delegates these to the
 // standard JVM proxy values ("use standard java vm proxy values to find the
 // host, port and exclusion list"), so we read the same System properties --
-// faithful to AOSP's own implementation, not a Mac.apk shortcut.
+// faithful to AOSP's own implementation, not a Apk on Mac shortcut.
 package android.net;
 
 import android.content.Context;

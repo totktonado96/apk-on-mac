@@ -4,7 +4,7 @@
 //
 // AOSP ref: apex/jobscheduler/framework/java/android/app/job/JobService.java
 //
-// The header comment here used to say "Mac.apk doesn't execute background
+// The header comment here used to say "Apk on Mac doesn't execute background
 // jobs (single-app, foreground) ... the WorkManager jobs registered never
 // actually fire". That stopped being true at v1.0.102, when JobScheduler
 // started dispatching for real -- but jobFinished stayed the empty stub the
@@ -19,7 +19,7 @@
 //
 // and the engine posts it to the main-thread handler
 // (JobServiceEngine.java:410-417) rather than acting on the caller's thread,
-// because a Worker calls it from its own executor. Mac.apk does the same:
+// because a Worker calls it from its own executor. Apk on Mac does the same:
 // JobParameters carries the scheduler-side record for this execution, so
 // the call routes back without JobService needing to know the scheduler
 // singleton -- mirroring AOSP's params-carries-the-callback shape.
@@ -37,7 +37,7 @@ import android.app.Service;
 
 public abstract class JobService extends Service {
     /** AOSP: job services must be protected with this permission or the
-     *  system ignores them. Mac.apk has no permission enforcement between
+     *  system ignores them. Apk on Mac has no permission enforcement between
      *  its own scheduler and the app, but apps reference the constant. */
     public static final String PERMISSION_BIND = "android.permission.BIND_JOB_SERVICE";
 
@@ -47,7 +47,7 @@ public abstract class JobService extends Service {
     public static final int JOB_END_NOTIFICATION_POLICY_REMOVE = 1;
 
     /** AOSP: "Like all other component lifecycle callbacks, this method
-     *  executes on your application's main thread." Mac.apk's scheduler
+     *  executes on your application's main thread." Apk on Mac's scheduler
      *  posts every dispatch to the main looper for that reason. Return true
      *  to keep the job alive until jobFinished; false means it is already
      *  done and onStopJob will NOT be invoked. */
@@ -77,13 +77,13 @@ public abstract class JobService extends Service {
     }
 
     /** AOSP onNetworkChanged (API 31): the network satisfying the job's
-     *  constraint changed. Mac.apk models a single always-present transport
+     *  constraint changed. Apk on Mac models a single always-present transport
      *  (ConnectivityManager), so the network a job is given never changes
      *  mid-execution and this is never invoked -- the default AOSP body
      *  only logs a warning, so matching it costs nothing. */
     public void onNetworkChanged(JobParameters params) {}
 
-    /** AOSP data-transfer job reporting (API 34). Mac.apk does not run
+    /** AOSP data-transfer job reporting (API 34). Apk on Mac does not run
      *  JobScheduler's data-transfer accounting, and AOSP's own defaults
      *  return 0 for a job that is not a data-transfer job. */
     public final void updateEstimatedNetworkBytes(JobParameters params,
@@ -93,7 +93,7 @@ public abstract class JobService extends Service {
     /** AOSP updateEstimatedNetworkBytes(JobParameters, JobWorkItem, long, long):
      *  the per-work-item form -- an app that enqueued several JobWorkItems
      *  updates the estimate for ONE of them. Same accounting as the
-     *  whole-job form above, which Mac.apk does not run. */
+     *  whole-job form above, which Apk on Mac does not run. */
     public final void updateEstimatedNetworkBytes(JobParameters params, JobWorkItem jobWorkItem,
             long downloadBytes, long uploadBytes) {}
     /** AOSP updateTransferredNetworkBytes(JobParameters, JobWorkItem, long,

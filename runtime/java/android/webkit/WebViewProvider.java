@@ -1,5 +1,5 @@
 package android.webkit;
-/** The private SPI a WebView delegates to (the backend implementation). Mac.apk
+/** The private SPI a WebView delegates to (the backend implementation). Apk on Mac
  *  backs WebView with a WKWebView bridge rather than this AOSP SPI, so this is a
  *  type-only handle. Source: frameworks/base/core/java/android/webkit/WebViewProvider.java */
 public interface WebViewProvider {

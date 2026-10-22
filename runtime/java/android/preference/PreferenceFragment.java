@@ -18,7 +18,7 @@
 // resolves, and the rows bind into the fragment's own ListView.
 //
 // ONE DIVERGENCE: AOSP inflates com.android.internal.R.layout
-// .preference_list_fragment for its view. Mac.apk has no internal layouts, so
+// .preference_list_fragment for its view. Apk on Mac has no internal layouts, so
 // onCreateView builds the same shape in code -- a ListView carrying the frozen
 // AOSP public id android.R.id.list, which is what app code looks up and what
 // getListView() must find.

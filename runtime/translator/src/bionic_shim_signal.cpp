@@ -419,7 +419,7 @@ extern "C" uint32_t __macapk_shim_dl_unwind_find_exidx(uint32_t pc,
 // ---- What this file does NOT do, and why (read before extending) ---
 // It does NOT deliver a real OS signal into recompiled/lifted ARM32
 // guest code, for two compounding reasons:
-//   1. The six signals Mac.apk's OWN runtime (bionic_shim.cpp's crash-
+//   1. The six signals Apk on Mac's OWN runtime (bionic_shim.cpp's crash-
 //      recovery net) and/or the embedded JVM already own -- SIGSEGV,
 //      SIGBUS, SIGABRT, SIGFPE, SIGILL, SIGTRAP, matching the EXISTING
 //      Stage-6 __macapk_arm64_sigaction refusal list exactly, so the
@@ -524,7 +524,7 @@ int bionic_to_darwin_signum(int b) {
     }
 }
 
-// Signals Mac.apk's own runtime (crash-recovery net) and/or the
+// Signals Apk on Mac's own runtime (crash-recovery net) and/or the
 // embedded JVM already own. Deliberately matches the existing Stage-6
 // __macapk_arm64_sigaction refusal list in bionic_shim.cpp (grep
 // "Runtime-owned fatal signals" there) so the two tiers agree from the
@@ -626,7 +626,7 @@ int do_sigaction(int bionic_sig, const GuestSigEntry* new_entry,
         if (logged.fetch_add(1) < 16) {
             std::fprintf(stderr,
                 "[arm32-sig] guest sigaction(sig=%d) recorded but NOT wired "
-                "to the host: this signal is owned by Mac.apk's own "
+                "to the host: this signal is owned by Apk on Mac's own "
                 "crash-recovery net / the embedded JVM (see "
                 "docs/arm32-signal-unwind_2026-07-28.md). Set "
                 "MACAPK_KEEP_APP_CRASHHANDLER=1 to override for diagnostics "
@@ -674,7 +674,7 @@ int do_sigaction(int bionic_sig, const GuestSigEntry* new_entry,
         return 0;
     }
 
-    // A real guest function-pointer handler on a signal Mac.apk does
+    // A real guest function-pointer handler on a signal Apk on Mac does
     // NOT already own. Registration is recorded (above) so the guest's
     // own bookkeeping (repeated sigaction() calls, oldact queries)
     // stays faithful, but delivery-into-guest-code is deliberately NOT

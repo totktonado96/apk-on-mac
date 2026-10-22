@@ -1,5 +1,5 @@
 // android.app.Service -- the framework component for long-running work
-// without a UI. AOSP API-1+. Mac.apk is single-process, so a Service is
+// without a UI. AOSP API-1+. Apk on Mac is single-process, so a Service is
 // instantiated + driven in-process by android.app.ServiceRegistry
 // (started via Context.startService / PendingIntent.getService) rather
 // than by an ActivityManagerService across a binder.
@@ -37,7 +37,7 @@ public abstract class Service extends ContextWrapper
         implements android.content.ComponentCallbacks2 {
     /** onStartCommand return values. AOSP API-5+. Apps return these to
      *  tell the system how to behave if the service is killed; on
-     *  Mac.apk the service is never killed, so the value is bookkeeping
+     *  Apk on Mac the service is never killed, so the value is bookkeeping
      *  only, but it must be the right constant. */
     public static final int START_CONTINUATION_MASK = 0x0000000f;
     public static final int START_STICKY_COMPATIBILITY = 0;
@@ -111,7 +111,7 @@ public abstract class Service extends ContextWrapper
     }
 
     /** Set true for apps targeting API < 5 (they expect onStart, not
-     *  onStartCommand). AOSP toggles this from the target SDK; Mac.apk
+     *  onStartCommand). AOSP toggles this from the target SDK; Apk on Mac
      *  leaves it false (modern default). */
     private boolean mStartCompatibility = false;
 
@@ -152,7 +152,7 @@ public abstract class Service extends ContextWrapper
 
     /** Promote the service to the foreground with an ongoing
      *  notification. AOSP renders the notification in the status bar;
-     *  Mac.apk records the state (we don't display Android
+     *  Apk on Mac records the state (we don't display Android
      *  notifications). The notification id + object are kept so a later
      *  stopForeground(STOP_FOREGROUND_DETACH) can leave it posted. */
     public final void startForeground(int id, Notification notification) {

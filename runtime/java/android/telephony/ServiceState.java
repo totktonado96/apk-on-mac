@@ -11,7 +11,7 @@ import java.util.Objects;
 /**
  * Snapshot of the device's telephony service state.
  *
- * Mac.apk hosts no radio, so a default-constructed ServiceState is
+ * Apk on Mac hosts no radio, so a default-constructed ServiceState is
  * OUT_OF_SERVICE with no operator, no cell bandwidths, no CDMA ids and an empty
  * registration list. Every one of those is AOSP's own "nothing to report"
  * value, not a made-up network.

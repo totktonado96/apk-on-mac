@@ -486,7 +486,7 @@ public class AlertDialog extends Dialog implements DialogInterface {
                 int v = th.resolveAttrColor(attr, fallback);
                 if (System.getenv("MACAPK_TRACE_WINDOW_FLAGS") != null) {
                     int stat = android.content.res.Resources.macapkThemeColor(attr, fallback);
-                    com.macapk.loader.NativeLog.i("Mac.apk.AlertDialog",
+                    com.macapk.loader.NativeLog.i("Apk on Mac.AlertDialog",
                         "attr=" + attr + " viaContext=#" + Integer.toHexString(v)
                         + " viaGlobal=#" + Integer.toHexString(stat)
                         + " ctx=" + mContext.getClass().getName()

@@ -2,7 +2,7 @@
 // ContentResolver.applyBatch / ContentProvider.applyBatch applies against a
 // provider, plus the Builder that constructs it.
 //
-// Why Mac.apk needs it: three corpus apps reference the class (Fossify Gallery,
+// Why Apk on Mac needs it: three corpus apps reference the class (Fossify Gallery,
 // Telegram, Signal). Contacts / calendar / media code is the usual caller, and
 // the pattern is always the same -- build an ArrayList of operations where a
 // later row refers to the row id an EARLIER operation produced, then hand the

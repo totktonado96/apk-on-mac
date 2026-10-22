@@ -20,7 +20,7 @@ import java.nio.ByteBuffer;
  *    result an app was tuned against.
  *  - The eight true alpha-compositing operators run on PREMULTIPLIED colour,
  *    which is the representation their formulas assume. A device gets that for
- *    free because its Allocation holds premultiplied Bitmap bytes; Mac.apk's
+ *    free because its Allocation holds premultiplied Bitmap bytes; Apk on Mac's
  *    Bitmap is non-premultiplied end to end, so the conversion happens around
  *    the operator. For fully opaque pixels (the common case) the round trip is
  *    exact and changes nothing. See IntrinsicSupport's note.

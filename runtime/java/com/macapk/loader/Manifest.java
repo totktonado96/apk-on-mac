@@ -48,7 +48,7 @@ public final class Manifest {
         if (!e.hasAttributeNS(ANDROID_NS, name)) return null;
         return e.getAttributeNS(ANDROID_NS, name);
     }
-    private static final String TAG = "Mac.apk.Manifest";
+    private static final String TAG = "Apk on Mac.Manifest";
 
     /** MACAPK_TARGETSDK_ZERO (default ON). A manifest with NO <uses-sdk>
      *  reports targetSdkVersion 0, AOSP's DEFAULT_TARGET_SDK_VERSION, instead
@@ -180,7 +180,7 @@ public final class Manifest {
      *  hardcoded true that put AnkiDroid (target 35) on a legacy-folder branch
      *  no device takes. preserveLegacyExternalStorage is carried for fidelity
      *  but not consulted: it only keeps a legacy state an EARLIER install
-     *  already had, and Mac.apk keeps no such history. */
+     *  already had, and Apk on Mac keeps no such history. */
     public String requestLegacyExternalStorageRaw;
     public String preserveLegacyExternalStorageRaw;
 
@@ -694,7 +694,7 @@ public final class Manifest {
      *
      *  Kept as one flat map rather than a field on each entry type because
      *  ServiceEntry / ProviderEntry are deliberately minimal POJOs, and the
-     *  one consumer wants every component type at once: Mac.apk runs an
+     *  one consumer wants every component type at once: Apk on Mac runs an
      *  app's whole component set inside the ONE runtime process, so anything
      *  AOSP would have isolated in a sibling process needs its
      *  process-scoped operations contained. See ClassFileRewriter's
@@ -1664,7 +1664,7 @@ public final class Manifest {
         // Real Android's PackageManager.queryIntentActivities skips
         // entries where the component is disabled, so the LAUNCHER
         // shows just the real MainActivity. Without that filter,
-        // Mac.apk picks the FIRST manifest entry that matches --
+        // Apk on Mac picks the FIRST manifest entry that matches --
         // which happens to be CalculatorActivity in F-Droid's case --
         // and opens the fake calc UI instead of the real app.
         //
@@ -1691,7 +1691,7 @@ public final class Manifest {
         // An Android TV-only app has no LAUNCHER entry: its one way in is a
         // MAIN + LEANBACK_LAUNCHER filter (the leanback launcher's
         // getLeanbackLaunchIntentForPackage, ApplicationPackageManager
-        // android14). Mac.apk is the launcher the user opened the app from, so
+        // android14). Apk on Mac is the launcher the user opened the app from, so
         // when nothing else is launchable we start that entry, with that
         // category on the intent. It changes nothing for an app that has a
         // LAUNCHER entry (SmartTube declares both), and the device we present

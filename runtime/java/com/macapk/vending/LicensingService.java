@@ -3,7 +3,7 @@
 //
 // WHAT THIS IS. On a device, an app that wants to know whether the user bought
 // it binds to the Play Store's licensing service and gets back a verdict signed
-// by Google. Mac.apk hosts that service itself: we take the app's request, ask
+// by Google. Apk on Mac hosts that service itself: we take the app's request, ask
 // Google with the user's own account, and hand back GOOGLE'S OWN SIGNED ANSWER,
 // untouched. The app's verifier runs unmodified and accepts the token only
 // because Google really signed it.
@@ -258,7 +258,7 @@ public final class LicensingService extends android.app.Service {
      * AOSP's check is `packageInfo.applicationInfo.uid == Binder.getCallingUid()`
      * -- "you may only ask about yourself".
      *
-     * We express the SAME property differently, and deliberately. Mac.apk hosts
+     * We express the SAME property differently, and deliberately. Apk on Mac hosts
      * exactly one package in one process, so "the caller is the package it is
      * asking about" reduces exactly to "the package asked about is the running
      * app". Comparing uids here would not be more faithful, it would be less:
@@ -323,7 +323,7 @@ public final class LicensingService extends android.app.Service {
     }
 
     static void log(String m) {
-        try { com.macapk.loader.NativeLog.i("Mac.apk.GMS", "licensing: " + m); }
+        try { com.macapk.loader.NativeLog.i("Apk on Mac.GMS", "licensing: " + m); }
         catch (Throwable t) { System.err.println("[licensing] " + m); }
     }
 }

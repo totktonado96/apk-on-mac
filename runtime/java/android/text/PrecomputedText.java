@@ -9,7 +9,7 @@
 // androidx.core.text.PrecomputedTextCompat.Params.Builder gates on
 // SDK_INT >= 29 to build a real platform Params.Builder instead of its
 // own polyfill (androidx-main core/core/.../PrecomputedTextCompat.java:179);
-// Mac.apk reports SDK_INT 29 (Linkify.java), so that branch always runs
+// Apk on Mac reports SDK_INT 29 (Linkify.java), so that branch always runs
 // here. Before this file was implemented, PrecomputedText was a 10-line
 // stub with no nested Params/Builder at all -- any app using the standard
 // AndroidX "precompute text off the main thread" optimization (common for
@@ -17,7 +17,7 @@
 // NoClassDefFoundError'd the first time it built one, typically on a
 // background prefetch thread.
 //
-// Mac.apk has no separate render thread contending for text layout, so
+// Apk on Mac has no separate render thread contending for text layout, so
 // create() runs synchronously on the calling thread instead of AOSP's
 // background-thread dance; the OBSERVABLE contract (a correctly measured,
 // paragraph-indexed, span-carrying CharSequence comes back) is the same
@@ -302,7 +302,7 @@ public class PrecomputedText implements Spannable {
         // elegant-height), text direction, break strategy, hyphenation
         // frequency, and line-break config. (AOSP additionally compares
         // Paint.getFontVariationSettings(), which our TextPaint/Paint has no
-        // accessor for -- Mac.apk's Paint does not model variable-font axes.)
+        // accessor for -- Apk on Mac's Paint does not model variable-font axes.)
         @Override public boolean equals(Object o) {
             if (o == this) return true;
             if (!(o instanceof Params)) return false;

@@ -26,7 +26,7 @@ import javax.crypto.spec.SecretKeySpec;
 //     generator -- a later KeyStore.getKey(alias, null) must return it),
 //     and returns the SecretKey.
 // The generated key is a plain software SecretKeySpec (see
-// MacApkKeyStoreBackend for why that is the correct Mac.apk analogue of
+// MacApkKeyStoreBackend for why that is the correct Apk on Mac analogue of
 // the device's non-extractable keymaster key).
 public abstract class AndroidKeyStoreKeyGeneratorSpi extends KeyGeneratorSpi {
 

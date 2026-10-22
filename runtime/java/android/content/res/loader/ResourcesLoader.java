@@ -3,7 +3,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 /** A set of ResourcesProviders addable to a Resources object at runtime (API 30).
- *  Mac.apk holds the providers but resolves resources from the base apk, so an
+ *  Apk on Mac holds the providers but resolves resources from the base apk, so an
  *  added loader contributes no overrides.
  *  Source: frameworks/base/core/java/android/content/res/loader/ResourcesLoader.java */
 // AOSP-conformance (framework_lint vs android-30 stub jar): AOSP does not

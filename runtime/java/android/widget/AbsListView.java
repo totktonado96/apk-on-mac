@@ -8,7 +8,7 @@
 // same path ScrollView uses), and dispatches item clicks through
 // AdapterView.performItemClick.
 //
-// We do not run a velocity-fling animation loop (Mac.apk lays out content
+// We do not run a velocity-fling animation loop (Apk on Mac lays out content
 // statically each frame and the in-tree OverScroller settles immediately),
 // so smoothScroll/fling jump to their destination rather than animate. Drag
 // scrolling is fully interactive. AOSP:
@@ -340,7 +340,7 @@ public abstract class AbsListView extends AdapterView<ListAdapter>
     //     (see the class-level comment at the top of this file). Separately
     //     -- and this would be true even if we had that state -- grepping
     //     the runtime shows ViewTreeObserver.dispatchOnTouchModeChanged has
-    //     zero callers anywhere in this tree: Mac.apk has no keyboard/dpad-
+    //     zero callers anywhere in this tree: Apk on Mac has no keyboard/dpad-
     //     vs-touch focus-mode duality to track, so nothing ever fires this
     //     callback in practice yet either.
     // Declaring both interfaces is still correct and useful independent of

@@ -2,7 +2,7 @@
 // to implement a sync adapter, and the class its SyncService returns a binder
 // for from onBind().
 //
-// Why Mac.apk needs it: Telegram and Signal both subclass it. A missing
+// Why Apk on Mac needs it: Telegram and Signal both subclass it. A missing
 // superclass is a link failure at CLASS LOAD, so the app's whole sync-service
 // class fails to define -- not merely "sync does not run", but a
 // NoClassDefFoundError the first time anything touches that class.
@@ -19,7 +19,7 @@
 // ---------------------------------------------------------------------------
 // On real Android the SyncManager -- a system_server component -- decides WHEN
 // to sync, binds to the app's SyncService, and calls startSync over the
-// ISyncAdapter AIDL interface. Mac.apk has no SyncManager and no binder
+// ISyncAdapter AIDL interface. Apk on Mac has no SyncManager and no binder
 // transport, so nothing ever requests a sync. That is not a broken state: it
 // is exactly what a real device looks like when no account of the adapter's
 // accountType has been added, which is a case every sync adapter already has

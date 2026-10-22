@@ -1,6 +1,6 @@
 // android.app.NotificationChannel -- AOSP API-26+. Notification
 // channels group notifications by importance for user customization.
-// Mac.apk stub: stores fields, no real notification system.
+// Apk on Mac stub: stores fields, no real notification system.
 package android.app;
 
 public class NotificationChannel implements android.os.Parcelable {
@@ -73,7 +73,7 @@ public class NotificationChannel implements android.os.Parcelable {
         @Override public NotificationChannel[] newArray(int size) { return new NotificationChannel[size]; }
     };
 
-    // Conversation support (API 30). Mac.apk has no shade, so these are held
+    // Conversation support (API 30). Apk on Mac has no shade, so these are held
     // values an app round-trips.
     private String mConversationId;
     private String mParentChannelId;
@@ -111,7 +111,7 @@ public class NotificationChannel implements android.os.Parcelable {
 
     /** AOSP's mUserLockedFields: the USER_LOCKED_* bitmask recording which
      *  channel settings the USER has changed by hand, which the system then
-     *  refuses to let the app override. Mac.apk has no notification settings UI,
+     *  refuses to let the app override. Apk on Mac has no notification settings UI,
      *  so nothing is ever user-locked -- but the field is what
      *  hasUserSetImportance / hasUserSetSound read, so it is real state rather
      *  than two constants. */

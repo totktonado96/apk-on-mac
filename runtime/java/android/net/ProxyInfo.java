@@ -171,7 +171,7 @@ public class ProxyInfo implements Parcelable {
         @Override public ProxyInfo[] newArray(int size) { return new ProxyInfo[size]; }
     };
 
-    // Mac.apk helper (not an AOSP API): build a ProxyInfo from the host JVM's
+    // Apk on Mac helper (not an AOSP API): build a ProxyInfo from the host JVM's
     // system proxy properties, or null if no HTTP proxy is configured. Used by
     // ConnectivityManager.getProxyForNetwork / getDefaultProxy so apps that
     // read the platform proxy see whatever the host has set. Intentionally

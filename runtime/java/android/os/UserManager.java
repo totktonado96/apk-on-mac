@@ -13,7 +13,7 @@ import java.util.List;
 // android.os.UserManager stub. AOSP's UserManager mediates multi-user
 // state (work profiles, secondary users, ephemeral users, the
 // distinction between credential-encrypted and device-encrypted
-// storage). Mac.apk is single-user so all the boolean queries return
+// storage). Apk on Mac is single-user so all the boolean queries return
 // the "single owner, fully unlocked" answer.
 //
 // We model the minimum surface SDKs actually probe. Most popular paths:
@@ -163,13 +163,13 @@ public class UserManager {
 
     public int getUserCount() { return 1; }
 
-    // ---- Multi-user surface. Mac.apk runs exactly one user (the macOS
+    // ---- Multi-user surface. Apk on Mac runs exactly one user (the macOS
     // account that launched it), user id 0 == UserHandle.SYSTEM, with no
     // profiles, no work profile and no quiet mode. Every answer below is the
     // single-owner answer that a device in that configuration gives; none of
     // them pretends a facility we do not have.
 
-    /** AOSP :2655 -- `getMaxSupportedUsers() > 1 && ...`. Mac.apk has exactly
+    /** AOSP :2655 -- `getMaxSupportedUsers() > 1 && ...`. Apk on Mac has exactly
      *  one user and no way to create another (createUser is not public API and
      *  we implement no UserManagerService), so the max is 1. */
     public static boolean supportsMultipleUsers() { return false; }
@@ -201,7 +201,7 @@ public class UserManager {
 
     /** AOSP :2943 -- "As of R, this method always returns false in order to
      *  protect goat privacy"; below R it reports whether
-     *  com.coffeestainstudios.goatsimulator is installed. Mac.apk presents at
+     *  com.coffeestainstudios.goatsimulator is installed. Apk on Mac presents at
      *  least SDK 29 and installs exactly one package per process, so the
      *  pre-R branch could only differ if the app under test WERE Goat
      *  Simulator, which cannot query itself into a different answer. */
@@ -213,7 +213,7 @@ public class UserManager {
 
     /** AOSP :5836/:5854 delegate to the service, which (UserManagerService,
      *  ensureCanModifyQuietMode) throws IllegalArgumentException when the
-     *  handle is not a PROFILE. Mac.apk has no profiles, so every handle
+     *  handle is not a PROFILE. Apk on Mac has no profiles, so every handle
      *  reaches that branch. Throwing is the device behaviour; returning true
      *  would claim we toggled a profile that does not exist. */
     public boolean requestQuietModeEnabled(boolean enableQuietMode, UserHandle userHandle) {
@@ -246,7 +246,7 @@ public class UserManager {
     }
 
     /** AOSP :6824 -- "creation time in milliseconds since Epoch time".
-     *  Answered from the real host rather than from a constant: the Mac.apk
+     *  Answered from the real host rather than from a constant: the Apk on Mac
      *  android_root is created once, when this install first ran, which is
      *  exactly when this "user" came into existence. macOS records a birth
      *  time (HFS+/APFS `st_birthtime`), which java.nio surfaces as
@@ -267,7 +267,7 @@ public class UserManager {
     }
 
     /** AOSP :2888 -- @NonNull; the user's own display name. Wire it to the
-     *  real host account (the macOS user actually running Mac.apk) rather
+     *  real host account (the macOS user actually running Apk on Mac) rather
      *  than a made-up "Owner": that is the same host-first choice
      *  BatteryManager makes with /usr/bin/pmset. `user.name` is always set by
      *  the JDK, but keep AOSP's empty-string (never null) fallback. */
@@ -360,7 +360,7 @@ public class UserManager {
 
     /** AOSP docs: "a Bundle with the restrictions for that package, or an
      *  empty Bundle if there are no saved restrictions" -- never null, never
-     *  throws on a device with no MDM/admin. Mac.apk has no
+     *  throws on a device with no MDM/admin. Apk on Mac has no
      *  DevicePolicyManager backing this, so "no restrictions imposed" is the
      *  honest single-owner answer, matching isSystemUser/isAdminUser above. */
     public Bundle getApplicationRestrictions(String packageName) { return new Bundle(); }
@@ -372,7 +372,7 @@ public class UserManager {
         synchronized (mRestrictions) { return mRestrictions.getBoolean(restrictionKey, false); }
     }
 
-    /** AOSP: "whether the context user is a demo user." Mac.apk has no
+    /** AOSP: "whether the context user is a demo user." Apk on Mac has no
      *  demo-mode retail-provisioning path. */
     public boolean isDemoUser() { return false; }
 

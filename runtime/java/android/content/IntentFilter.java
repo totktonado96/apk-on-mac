@@ -63,7 +63,7 @@ public class IntentFilter implements Parcelable {
     // partial-type branches of findMimeType cannot fire at all.
     private boolean mHasPartialTypes;
     // AOSP mPriority: ordering hint for broadcast receivers and for resolution
-    // among competing filters. Storage only here (Mac.apk hosts one package so
+    // among competing filters. Storage only here (Apk on Mac hosts one package so
     // nothing competes), but registerReceiver call sites set it and read it
     // back, and its absence was a NoSuchMethodError.
     private int mPriority;

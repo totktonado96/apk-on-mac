@@ -115,7 +115,7 @@ public final class MacApkDragSession {
                 new android.os.Handler(android.os.Looper.getMainLooper()).post(r);
                 return;
             } catch (Throwable t) {
-                com.macapk.loader.NativeLog.w("Mac.apk.Drag", "UI post failed, running inline: " + t);
+                com.macapk.loader.NativeLog.w("Apk on Mac.Drag", "UI post failed, running inline: " + t);
             }
             // GATE-MUTANT(touchinput:ui-hop) end
         }
@@ -129,7 +129,7 @@ public final class MacApkDragSession {
         if (!source.isAttachedToWindow()) {                              // mAttachInfo == null
             // AOSP View.startDragAndDrop (android14 View.java:28000) logs this Log.w
             // before returning false; keeping it makes the refusal STATED, not silent.
-            com.macapk.loader.NativeLog.w("Mac.apk.Drag", "startDragAndDrop: called on a detached view");
+            com.macapk.loader.NativeLog.w("Apk on Mac.Drag", "startDragAndDrop: called on a detached view");
             return false;
         }
         View root = source.getRootView();
@@ -142,18 +142,18 @@ public final class MacApkDragSession {
         android.app.Activity act = com.macapk.loader.ActivityHost.peek();
         View content = act != null ? act.macapkContentView() : null;
         if (content != null && root != content) {
-            com.macapk.loader.NativeLog.w("Mac.apk.Drag",
+            com.macapk.loader.NativeLog.w("Apk on Mac.Drag",
                 "startDragAndDrop: drag from a floating window is not supported");
             return false;
         }
         float[] pt = com.macapk.loader.TouchDispatcher.macapkPointerIfDown();
         if (pt == null) {                                                 // transferTouchFocus fails
-            com.macapk.loader.NativeLog.w("Mac.apk.Drag",
+            com.macapk.loader.NativeLog.w("Apk on Mac.Drag",
                 "startDragAndDrop: no pointer is down (AOSP: unable to transfer touch focus)");
             return false;
         }
         if (sActive != null) {                                            // "Drag already in progress"
-            com.macapk.loader.NativeLog.w("Mac.apk.Drag", "startDragAndDrop: drag already in progress");
+            com.macapk.loader.NativeLog.w("Apk on Mac.Drag", "startDragAndDrop: drag already in progress");
             return false;
         }
         android.graphics.Point size = new android.graphics.Point();
@@ -178,19 +178,19 @@ public final class MacApkDragSession {
         } catch (Throwable t) {
             // The shadow is cosmetic; AOSP draws into a surface that cannot fail
             // this way. Keep the drag, lose only the picture.
-            com.macapk.loader.NativeLog.w("Mac.apk.Drag", "shadow draw failed: " + t);
+            com.macapk.loader.NativeLog.w("Apk on Mac.Drag", "shadow draw failed: " + t);
             shadow = null;
         }
         MacApkDragSession s = new MacApkDragSession(root, localState, data, flags, shadow,
                 touch.x, touch.y, pt[0] - root.getLeft(), pt[1] - root.getTop());
         synchronized (MacApkDragSession.class) {
             if (sActive != null) {                                        // lost a race to another start
-                com.macapk.loader.NativeLog.w("Mac.apk.Drag", "startDragAndDrop: drag already in progress");
+                com.macapk.loader.NativeLog.w("Apk on Mac.Drag", "startDragAndDrop: drag already in progress");
                 return false;
             }
             sActive = s;
         }
-        com.macapk.loader.NativeLog.i("Mac.apk.Drag", "drag started from "
+        com.macapk.loader.NativeLog.i("Apk on Mac.Drag", "drag started from "
                 + source.getClass().getName() + " at (" + s.mX + "," + s.mY + ") shadow="
                 + size.x + "x" + size.y + " desc=" + s.mDescription);
         // STARTED arrives asynchronously on a device (a message from the
@@ -224,7 +224,7 @@ public final class MacApkDragSession {
         mCurrentDragView = null;
         DragEvent ev = obtain(DragEvent.ACTION_DRAG_STARTED, mX, mY, mDescription, null, false);
         try { mRoot.dispatchDragEvent(ev); }
-        catch (Throwable t) { com.macapk.loader.NativeLog.w("Mac.apk.Drag", "DRAG_STARTED threw: " + t); }
+        catch (Throwable t) { com.macapk.loader.NativeLog.w("Apk on Mac.Drag", "DRAG_STARTED threw: " + t); }
     }
 
     /** Consumes the one pending source-window cancel (step 2). */
@@ -309,7 +309,7 @@ public final class MacApkDragSession {
             s.mShadow.eraseColor(0);
             builder.onDrawShadow(new android.graphics.Canvas(s.mShadow));
         } catch (Throwable t) {
-            com.macapk.loader.NativeLog.e("Mac.apk.Drag", "Unable to update drag shadow: " + t);
+            com.macapk.loader.NativeLog.e("Apk on Mac.Drag", "Unable to update drag shadow: " + t);
         }
         try { s.mRoot.invalidate(); } catch (Throwable ignored) {}
         return true;
@@ -321,12 +321,12 @@ public final class MacApkDragSession {
                 action == DragEvent.ACTION_DROP ? mData : null, false);
         boolean result = false;
         try { result = mRoot.dispatchDragEvent(ev); }
-        catch (Throwable t) { com.macapk.loader.NativeLog.w("Mac.apk.Drag", "drag dispatch threw: " + t); }
+        catch (Throwable t) { com.macapk.loader.NativeLog.w("Apk on Mac.Drag", "drag dispatch threw: " + t); }
         if (action == DragEvent.ACTION_DRAG_LOCATION && !ev.mEventHandlerWasCalled) {
             setDragFocusOn(this, null, ev);
         }
         if (action == DragEvent.ACTION_DROP) {
-            com.macapk.loader.NativeLog.i("Mac.apk.Drag", "Reporting drop result: " + result
+            com.macapk.loader.NativeLog.i("Apk on Mac.Drag", "Reporting drop result: " + result
                     + " at (" + x + "," + y + ")");
         }
         return result;
@@ -349,8 +349,8 @@ public final class MacApkDragSession {
         DragEvent ev = obtain(DragEvent.ACTION_DRAG_ENDED, ex, ey, null, null, result);
         mCurrentDragView = null;
         try { mRoot.dispatchDragEvent(ev); }
-        catch (Throwable t) { com.macapk.loader.NativeLog.w("Mac.apk.Drag", "DRAG_ENDED threw: " + t); }
-        com.macapk.loader.NativeLog.i("Mac.apk.Drag", "drag ended result=" + result);
+        catch (Throwable t) { com.macapk.loader.NativeLog.w("Apk on Mac.Drag", "DRAG_ENDED threw: " + t); }
+        com.macapk.loader.NativeLog.i("Apk on Mac.Drag", "drag ended result=" + result);
         try { mRoot.invalidate(); } catch (Throwable ignored) {}
     }
 

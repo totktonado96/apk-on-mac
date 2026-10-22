@@ -110,7 +110,7 @@ public class ViewConfiguration {
     private static final float CONFIG_AMBIGUOUS_GESTURE_MULTIPLIER = 2.0f;
 
     // ---- Instance state. AOSP's field set (ViewConfiguration.java:312-338),
-    // minus the ones no Mac.apk caller can observe (fading marquee, screenshot
+    // minus the ones no Apk on Mac caller can observe (fading marquee, screenshot
     // chord, a11y shortcut).
     private final boolean mConstructedWithContext;
     private final int mEdgeSlop;

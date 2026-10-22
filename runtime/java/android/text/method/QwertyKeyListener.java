@@ -6,7 +6,7 @@
 // ⚠ WHAT IS AND IS NOT HERE. AOSP's onKeyDown is a ~340-line hardware-keyboard
 // text engine: auto-capitalisation, auto-text replacement, dead keys, and the
 // "backspace right after a correction restores the original" undo built on the
-// package-private Replaced marker span. Mac.apk does not route hardware key
+// package-private Replaced marker span. Apk on Mac does not route hardware key
 // events through KeyListener at all -- text arrives through the IME/host path
 // -- so onKeyDown is inherited from BaseKeyListener (false, "not handled"),
 // exactly as it would behave on a device with no hardware keyboard attached.

@@ -5,7 +5,7 @@
 //
 // This is NOT telephony hardware: on every real Android device the tones are a
 // pure software oscillator bank feeding an AudioTrack, so "this device has no
-// supervisory-tone synth" was never a truthful answer. Mac.apk owns the same
+// supervisory-tone synth" was never a truthful answer. Apk on Mac owns the same
 // output path (android.media.AudioTrack -> com.macapk.loader.NativeAudio ->
 // CoreAudio), so the honest implementation is the real synthesizer rather than
 // a startTone() that returns true and plays silence.
@@ -686,7 +686,7 @@ public class ToneGenerator {
     private boolean mReleased;
 
     // AOSP builds its AudioTrack in the constructor and throws RuntimeException
-    // when the audio HAL is missing. Mac.apk's CoreAudio stream is cheap but not
+    // when the audio HAL is missing. Apk on Mac's CoreAudio stream is cheap but not
     // free, so the track is created on the first startTone() instead; nothing
     // observable depends on the difference (getAudioSessionId reports 0 for a
     // track that does not exist yet, which is what AOSP reports for a null

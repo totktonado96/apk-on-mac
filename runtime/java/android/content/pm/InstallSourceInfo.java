@@ -8,7 +8,7 @@ import android.os.Parcelable;
  * and the current installing package.
  *
  * Apps use this for two things -- attribution ("installed from Play?") and
- * tamper checks ("refuse to run if sideloaded"). Mac.apk has no package
+ * tamper checks ("refuse to run if sideloaded"). Apk on Mac has no package
  * installer at all, which is the same state AOSP reports for an app installed
  * by adb or by a caller that has since been uninstalled: every name null. That
  * is a legitimate value AOSP itself returns and which apps must already handle,
@@ -97,7 +97,7 @@ public final class InstallSourceInfo implements Parcelable {
      *
      *  UPDATE OWNERSHIP is Android 14's "the store that installed this app gets
      *  first refusal on updating it" mechanism, requested per-session via
-     *  SessionParams.setRequestUpdateOwnership. Mac.apk grants it to nobody --
+     *  SessionParams.setRequestUpdateOwnership. Apk on Mac grants it to nobody --
      *  our PackageInstaller does not record an update owner, and the macOS
      *  install helper enforces no such policy -- so null is the honest answer,
      *  and it is exactly what AOSP returns for any package whose installer never

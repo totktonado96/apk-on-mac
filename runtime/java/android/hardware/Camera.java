@@ -554,7 +554,7 @@ public class Camera {
     }
 
     /** AOSP lock()/unlock() hand the camera between this process and the media
-     *  server for MediaRecorder. Mac.apk records in-process, so there is no
+     *  server for MediaRecorder. Apk on Mac records in-process, so there is no
      *  ownership to transfer and these are genuinely no-ops -- not stubs. */
     public void lock() { }
     public void unlock() { }

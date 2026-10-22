@@ -87,7 +87,7 @@ public interface LineHeightSpan extends ParagraphStyle, WrapTogetherSpan {
             writeToParcelInternal(dest, flags);
         }
         @Override public void writeToParcelInternal(android.os.Parcel dest, int flags) {
-            // No IPC in Mac.apk; spans never cross a process boundary. Honest no-op.
+            // No IPC in Apk on Mac; spans never cross a process boundary. Honest no-op.
         }
     }
 }

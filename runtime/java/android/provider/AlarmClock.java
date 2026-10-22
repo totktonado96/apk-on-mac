@@ -3,7 +3,7 @@ package android.provider;
 /**
  * Intent actions and extras for driving the device's clock app.
  *
- * Pure constants. Mac.apk ships no clock app, so an app that fires
+ * Pure constants. Apk on Mac ships no clock app, so an app that fires
  * ACTION_SET_ALARM finds no activity to handle it -- exactly as on a device
  * with no clock app installed. Declaring the constants is not a claim that one
  * exists; it is what lets the app build the Intent at all.

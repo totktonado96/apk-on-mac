@@ -19,7 +19,7 @@
 // (packages/providers/MediaProvider) is fundamentally a SQLite-backed
 // ContentProvider that a MediaScanner keeps in sync with the filesystem;
 // query() ultimately becomes a SQLiteQueryBuilder-built SELECT against a
-// per-volume "external.db". Mac.apk has no separate scanner process or
+// per-volume "external.db". Apk on Mac has no separate scanner process or
 // provider host, so this class folds "scanner" and "provider" into one:
 // query() (re)syncs a real on-disk SQLite index
 // (android.database.sqlite.SQLiteDatabase -- backed by the system
@@ -84,8 +84,8 @@
 // is either genuinely absent or a documented-honest default, never a faked
 // one):
 //   - insert()/update()/delete() are NOT overridden (inherited
-//     ContentProvider defaults: null/0). Mac.apk's MediaStore.java already
-//     documents "Mac.apk exposes no writable media provider" for
+//     ContentProvider defaults: null/0). Apk on Mac's MediaStore.java already
+//     documents "Apk on Mac exposes no writable media provider" for
 //     insertImage(); a real pending-file insert lifecycle is future work.
 //   - EXIF (DATE_TAKEN, ORIENTATION, LATITUDE/LONGITUDE) is not parsed;
 //     ORIENTATION defaults to 0 (no rotation, a real AOSP value), DATE_TAKEN
@@ -144,7 +144,7 @@ import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 public final class MediaStoreProvider extends android.content.ContentProvider {
-    private static final String TAG = "Mac.apk.MediaStoreProvider";
+    private static final String TAG = "Apk on Mac.MediaStoreProvider";
 
     // ---- physical schema (column names are MediaStore's own constants) --
     private static final String TABLE = "files";
@@ -200,7 +200,7 @@ public final class MediaStoreProvider extends android.content.ContentProvider {
     //     op.withValue(AudioColumns.TRACK, null);
     //     FileUtils.computeAudioTypeValuesFromData(file.getAbsolutePath(), op::withValue);
     // and only THEN refines artist/album/genre/year from a MediaMetadataRetriever.
-    // Mac.apk has no container-tag parser, so it stops after the baseline --
+    // Apk on Mac has no container-tag parser, so it stops after the baseline --
     // which is a real AOSP state (every untagged file on a device ends up
     // there), not an invented one. Everything the retriever would have supplied
     // stays NULL, which reads back as an honest NULL through the
@@ -440,7 +440,7 @@ public final class MediaStoreProvider extends android.content.ContentProvider {
             // "~/Documents/android" until 2026-08-12 -- that shared root is
             // DELETED and A13_NO_LEGACY_ROOT fails if anything recreates it.
             root = System.getProperty("user.home", ".")
-                    + "/Library/Caches/Mac.apk/scratch/android";
+                    + "/Library/Caches/Apk on Mac/scratch/android";
         }
         if (root.equals("~") || root.startsWith("~/")) {
             String home = System.getProperty("user.home");
@@ -451,7 +451,7 @@ public final class MediaStoreProvider extends android.content.ContentProvider {
 
     // ---- URI routing ---------------------------------------------------
     // AOSP dispatches these shapes via a UriMatcher inside MediaProvider;
-    // Mac.apk has one provider instance and a handful of shapes, so a plain
+    // Apk on Mac has one provider instance and a handful of shapes, so a plain
     // path-segment check is the direct equivalent without pulling in
     // UriMatcher for five cases.
     private static final class Route {
@@ -678,7 +678,7 @@ public final class MediaStoreProvider extends android.content.ContentProvider {
         return s;
     }
 
-    // images/thumbnails and video/thumbnails. Mac.apk generates no thumbnail
+    // images/thumbnails and video/thumbnails. Apk on Mac generates no thumbnail
     // files, so the table genuinely holds zero rows -- "WHERE 0" is a real empty
     // table with the AOSP column shape, not a refusal. MediaStore.Images.
     // Thumbnails.getThumbnail() already documents the same absence by returning
@@ -939,7 +939,7 @@ public final class MediaStoreProvider extends android.content.ContentProvider {
             return c;
         }
 
-        // Mac.apk has one real scanned tree (the "external"/"external_primary"
+        // Apk on Mac has one real scanned tree (the "external"/"external_primary"
         // volume MediaStore.getExternalVolumeNames() already advertises); there
         // is no separate "internal" media collection to serve, so that volume
         // is honestly empty rather than aliased onto the external one.
@@ -1224,7 +1224,7 @@ public final class MediaStoreProvider extends android.content.ContentProvider {
     // ---- filesystem sync (the "MediaScanner" half) ----------------------
     // Runs at the top of every query(): cheap after the first call because
     // unchanged files (same date_modified as last sync) are skipped, and
-    // Mac.apk's corpus is a local Pictures/DCIM tree, not a real device's
+    // Apk on Mac's corpus is a local Pictures/DCIM tree, not a real device's
     // millions of rows. Synchronized so two overlapping query() calls from
     // different threads cannot both decide the same new file is unseen and
     // race an INSERT against the _data UNIQUE index.
@@ -2662,7 +2662,7 @@ public final class MediaStoreProvider extends android.content.ContentProvider {
      *  file never does. (macOS keeps xattrs across rename, and APFS/HFS+ store
      *  them; a volume without xattr support loses only this recovery, and the
      *  index alone then decides, as before.) */
-    static final String PHOTOS_OWNER_XATTR = "org.macapk.photos.id";
+    static final String PHOTOS_OWNER_XATTR = "io.github.totktonado96.apkonmac.photos.id";
     private static final java.util.concurrent.atomic.AtomicBoolean sTagWarned =
         new java.util.concurrent.atomic.AtomicBoolean();
 

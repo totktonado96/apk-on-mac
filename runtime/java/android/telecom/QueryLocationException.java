@@ -2,7 +2,7 @@
 // the OutcomeReceiver of Connection.queryLocationForEmergency().
 //
 // A REAL implementation (plain RuntimeException + Parcelable value), and the
-// value Mac.apk actually USES: queryLocationForEmergency asks the CELLULAR
+// value Apk on Mac actually USES: queryLocationForEmergency asks the CELLULAR
 // network for the device's location during an emergency call. A Mac has no
 // radio and no emergency call, so the request reports
 // ERROR_NOT_ALLOWED_FOR_NON_EMERGENCY_CONNECTIONS -- which is literally true

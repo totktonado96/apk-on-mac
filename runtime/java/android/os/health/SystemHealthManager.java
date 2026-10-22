@@ -2,7 +2,7 @@
 //
 // AOSP's battery/CPU health-stats service. Apps fetch it via getSystemService(
 // SYSTEM_HEALTH_SERVICE) and call takeMyUidSnapshot() to read aggregate power
-// metrics. Mac.apk collects no health stats, so the snapshot is an empty
+// metrics. Apk on Mac collects no health stats, so the snapshot is an empty
 // HealthStats -- the honest "no health metrics" result. Mirrors
 // frameworks/base/core/java/android/os/health/SystemHealthManager.java.
 package android.os.health;

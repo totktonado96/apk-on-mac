@@ -22,7 +22,7 @@ public class InputMethodManager {
 
     public static InputMethodManager peekInstance() { return INSTANCE; }
 
-    // Mac.apk IS the IME: there is no on-screen keyboard, so when an app
+    // Apk on Mac IS the IME: there is no on-screen keyboard, so when an app
     // shows the soft input for a View we record that View as the active
     // text target and route host (Mac) keyboard keystrokes into it (see
     // TouchDispatcher + TextView.macapkHandleSoftKey). This is how a Unity
@@ -131,7 +131,7 @@ public class InputMethodManager {
             sActiveConnection = ic;   // still null for a plain View / non-editor
             sCurrentEditorInfo = ei;
             if (sTrace) {
-                System.err.println("[Mac.apk.IME] startInput " + view.getClass().getName()
+                System.err.println("[Apk on Mac.IME] startInput " + view.getClass().getName()
                     + " editor=" + safeIsEditor(view)
                     + " ic=" + (ic == null ? "null" : ic.getClass().getSimpleName())
                     + " imeOptions=0x" + Integer.toHexString(ei.imeOptions)
@@ -205,7 +205,7 @@ public class InputMethodManager {
     //         return mServedInputConnectionWrapper != null;
     //     }
     //
-    // Mac.apk had NEITHER path: sServedView / sActiveConnection / sCurrentEditorInfo
+    // Apk on Mac had NEITHER path: sServedView / sActiveConnection / sCurrentEditorInfo
     // were written ONLY by showSoftInput and restartInput, so an editor focused
     // by a TAP was never bound. Measured 2026-08-25 on debug/imetest with a
     // plain EditText: focus GRANTED, then isActive=false anyActive=false
@@ -327,7 +327,7 @@ public class InputMethodManager {
      *  {@link android.view.inputmethod.InputConnection#performEditorAction},
      *  or {@code IME_ACTION_NONE} for "this is a plain newline, insert it".
      *
-     *  This is AOSP LatinIME's rule, and it is the authority because Mac.apk
+     *  This is AOSP LatinIME's rule, and it is the authority because Apk on Mac
      *  IS the IME -- the physical Mac keyboard is the only input method these
      *  guests have. Two sources, both quoted:
      *
@@ -369,7 +369,7 @@ public class InputMethodManager {
     public static android.view.inputmethod.InputConnection macapkActiveConnection() {
         // AOSP's own pattern: every public query re-syncs the served view
         // against the focused view first (isAcceptingText -> checkFocus). This
-        // is the IME-side read -- Mac.apk IS the IME, and TouchDispatcher is
+        // is the IME-side read -- Apk on Mac IS the IME, and TouchDispatcher is
         // its InputMethodService -- so it is the right place for the same call.
         macapkCheckFocus();
         android.view.inputmethod.InputConnection ic = sActiveConnection;
@@ -383,7 +383,7 @@ public class InputMethodManager {
 
     public boolean showSoftInput(View view, int flags) {
         if (sTrace) {
-            System.err.println("[Mac.apk.IME] showSoftInput view="
+            System.err.println("[Apk on Mac.IME] showSoftInput view="
                 + (view == null ? "null" : view.getClass().getName()));
         }
         macapkSetActiveInput(view);
@@ -483,7 +483,7 @@ public class InputMethodManager {
 
     public void toggleSoftInput(int showFlags, int hideFlags) {
         if (sTrace) {
-            System.err.println("[Mac.apk.IME] toggleSoftInput served="
+            System.err.println("[Apk on Mac.IME] toggleSoftInput served="
                 + (sServedView == null ? "null" : sServedView.getClass().getName())
                 + " shown=" + sSoftInputShown
                 + " activeInput=" + (sActiveInput == null ? "null" : "set")
@@ -544,7 +544,7 @@ public class InputMethodManager {
     public void updateCursorAnchorInfo(View view, android.view.inputmethod.CursorAnchorInfo info) {}
     public void sendAppPrivateCommand(View view, String action, android.os.Bundle data) {}
 
-    // IME enumeration (API 3+). Mac.apk exposes no installable IMEs -- text is
+    // IME enumeration (API 3+). Apk on Mac exposes no installable IMEs -- text is
     // entered through the host (Mac) keyboard, not an in-app soft keyboard -- so
     // these honestly return empty lists, the same shape a device with all IMEs
     // disabled returns. Callers iterate/size-check the list; none should NPE.
@@ -562,14 +562,14 @@ public class InputMethodManager {
     public boolean setCurrentInputMethodSubtype(InputMethodSubtype subtype) { return false; }
     /** AOSP: an undocumented passthrough to
      *  IInputMethodManager.getLastInputMethodSubtype() -- the subtype that was
-     *  active the last time the user switched IMEs. Mac.apk exposes no
+     *  active the last time the user switched IMEs. Apk on Mac exposes no
      *  installable IMEs and never switches between them (see class comment),
      *  so there has never been a "last" one; null is the same honest answer
      *  getCurrentInputMethodSubtype() already gives for the identical reason. */
     public InputMethodSubtype getLastInputMethodSubtype() { return null; }
 
     /** AOSP stylus handwriting delegation (API 34). No stylus/IME handwriting on
-     *  Mac.apk, so preparation is a no-op and acceptance reports "not handled". */
+     *  Apk on Mac, so preparation is a no-op and acceptance reports "not handled". */
     public void prepareStylusHandwritingDelegation(android.view.View delegatorView) { }
     public boolean acceptStylusHandwritingDelegation(android.view.View delegateView) { return false; }
 
@@ -579,9 +579,9 @@ public class InputMethodManager {
     public void showSoftInputFromInputMethod(android.os.IBinder token, int flags) { }
 
     // ======================================================================
-    //  AOSP API-36 surface completion (Mac.apk API-gap lane, android.view).
+    //  AOSP API-36 surface completion (Apk on Mac API-gap lane, android.view).
     //
-    //  Mac.apk installs NO input methods: text reaches the focused view straight
+    //  Apk on Mac installs NO input methods: text reaches the focused view straight
     //  from the Cocoa key handler, and getInputMethodList() / getEnabledInputMethodList()
     //  above already report an empty list. Every answer below is therefore the
     //  one AOSP gives on a device where the operation names an IME that is not
@@ -619,7 +619,7 @@ public class InputMethodManager {
     public void showInputMethodPicker() {}
 
     /** AOSP InputMethodManager.showInputMethodAndSubtypeEnabler(String):
-     *  open Settings' "enable subtypes" screen for one IME. Mac.apk has no
+     *  open Settings' "enable subtypes" screen for one IME. Apk on Mac has no
      *  Settings app to launch, so nothing opens. */
     public void showInputMethodAndSubtypeEnabler(String imiId) {}
 

@@ -3,7 +3,7 @@
 // .START"), in-process, answered from the PLATFORM fused provider, which is macOS
 // Location Services (android.location.LocationManager over CoreLocation, v1.0.1712).
 //
-// WHY IT EXISTS. Mac.apk tells GMS-aware apps that Play services is available
+// WHY IT EXISTS. Apk on Mac tells GMS-aware apps that Play services is available
 // (PlayServices.availability() == SUCCESS), so an app with play-services-location
 // -- Google's library, or microG's client re-implementation (Organic Maps ships
 // that one) -- never falls back to LocationManager: it binds this action through

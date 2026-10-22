@@ -2,7 +2,7 @@
 //
 // AOSP makes this an abstract class that registers a SensorManager
 // accelerometer listener and calls onOrientationChanged(int) as the
-// device is rotated. macOS has no accelerometer, so a Mac.apk window
+// device is rotated. macOS has no accelerometer, so a Apk on Mac window
 // has a fixed orientation -- the honest equivalent of a device with no
 // rotation sensor: canDetectOrientation() returns false, enable()/
 // disable() are inert, and onOrientationChanged() simply never fires.

@@ -311,7 +311,7 @@ public class ImageView extends View {
                 int eff = (mImageTintList == null) ? 0
                     : mImageTintList.getColorForState(getDrawableState(),
                                                       mImageTintList.getDefaultColor());
-                com.macapk.loader.NativeLog.i("Mac.apk.ImageView",
+                com.macapk.loader.NativeLog.i("Apk on Mac.ImageView",
                     "imageTint " + drawable.getClass().getSimpleName()
                     + " -> #" + Integer.toHexString(eff)
                     + " default=#" + (mImageTintList == null ? "null"

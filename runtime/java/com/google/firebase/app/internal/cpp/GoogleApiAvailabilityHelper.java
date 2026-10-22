@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-// Mac.apk note (GMS-free adaptation, why this differs from the upstream class):
+// Apk on Mac note (GMS-free adaptation, why this differs from the upstream class):
 // This is the last of the Firebase C++ SDK's embedded com.google.firebase.app.
 // internal.cpp.* helpers that the native firebase::util::Initialize FindClass-es
 // (the others -- Log / CppThreadDispatcher / CppThreadDispatcherContext /

@@ -43,7 +43,7 @@ public interface ViewParent {
     // getParent().requestSendAccessibilityEvent(this, event) so ancestors can
     // augment/veto before AccessibilityManager sends it; notifySubtreeAccessibi
     // lityStateChanged tells an ancestor a descendant's a11y-relevant subtree
-    // changed shape. Mac.apk bridges no accessibility service to NSAccessibility
+    // changed shape. Apk on Mac bridges no accessibility service to NSAccessibility
     // and AccessibilityManager.isEnabled() is honestly false (View.
     // sendAccessibilityEventInternal), so the correct default mirrors a real
     // device with no a11y service connected: the event is declined (false, not
@@ -75,7 +75,7 @@ public interface ViewParent {
     // ---- The rest of AOSP's ViewParent surface (frameworks/base
     // core/java/android/view/ViewParent.java, android16-release). AOSP declares
     // all of these as REQUIRED interface members; they are `default` here for the
-    // same reason the block above is -- Mac.apk has ViewParent implementers
+    // same reason the block above is -- Apk on Mac has ViewParent implementers
     // (ViewRootImpl, overlay hosts) that predate the full surface, and an
     // interface method with no body would break them at compile time while the
     // app-visible signature is identical either way. ViewGroup / View supply the
@@ -110,7 +110,7 @@ public interface ViewParent {
     default ViewParent getParentForAccessibility() { return null; }
 
     /** AOSP ViewParent.requestFitSystemWindows(): ask for a fitSystemWindows
-     *  pass. Mac.apk dispatches no WindowInsets by design, so the default is a
+     *  pass. Apk on Mac dispatches no WindowInsets by design, so the default is a
      *  no-op -- ViewGroup/View still forward it upward. */
     default void requestFitSystemWindows() {}
 

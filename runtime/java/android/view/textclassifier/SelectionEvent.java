@@ -3,7 +3,7 @@
 // Source: frameworks/base
 // core/java/android/view/textclassifier/SelectionEvent.java (android16-release).
 //
-// Mac.apk has no on-device model (TextClassifier.NO_OP), so
+// Apk on Mac has no on-device model (TextClassifier.NO_OP), so
 // TextClassifier.onSelectionEvent drops what it is given -- which is exactly
 // what AOSP's NO_OP does. The type must exist because that method names it, and
 // because a widget CONSTRUCTS one before calling.

@@ -1,4 +1,4 @@
-// Mac.apk AccessibilityNodeInfo: minimum-shape stub so AOSP
+// Apk on Mac AccessibilityNodeInfo: minimum-shape stub so AOSP
 // accessibility callbacks compile. We do not surface accessibility
 // to VoiceOver / NSAccessibility on the macOS host; methods are
 // no-op or trivially-getter shaped for caller round-trip.
@@ -996,7 +996,7 @@ public class AccessibilityNodeInfo implements android.os.Parcelable {
     }
 
     // ======================================================================
-    //  AOSP API-36 surface completion (Mac.apk API-gap lane, android.view).
+    //  AOSP API-36 surface completion (Apk on Mac API-gap lane, android.view).
     // ======================================================================
 
     /** AOSP AccessibilityNodeInfo(View, int virtualDescendantId): the public

@@ -4,7 +4,7 @@ import android.content.Context;
 
 // com.google.android.gms.games.PlayGamesSdk -- the v2 Play Games initializer.
 // initialize() is a no-op registration call apps make in Application.onCreate.
-// Mac.apk has no Play Games backend, so nothing is wired, but the call must
+// Apk on Mac has no Play Games backend, so nothing is wired, but the call must
 // succeed (it never returns a value). Ref: developers.google.com/android/reference
 public final class PlayGamesSdk {
     private PlayGamesSdk() {}

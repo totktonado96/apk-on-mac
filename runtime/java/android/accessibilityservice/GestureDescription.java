@@ -9,7 +9,7 @@ import java.util.List;
  * A gesture an accessibility service asks the platform to inject, described as
  * up to MAX_STROKE_COUNT timed strokes along Paths.
  *
- * Mac.apk injects nothing on behalf of a service (AccessibilityService.
+ * Apk on Mac injects nothing on behalf of a service (AccessibilityService.
  * dispatchGesture returns false and never calls the callback), but the
  * description itself is a pure value object and is fully honest here: an app
  * that builds one and reads its strokes back gets exactly what it put in, and
@@ -47,7 +47,7 @@ public final class GestureDescription {
      *  mutate a description already handed out. */
     public static class Builder {
         private final List<StrokeDescription> mStrokes = new ArrayList<StrokeDescription>();
-        // AOSP defaults to the default display. Mac.apk has exactly one window,
+        // AOSP defaults to the default display. Apk on Mac has exactly one window,
         // so android.view.Display.DEFAULT_DISPLAY (0) is the only valid answer.
         private int mDisplayId = android.view.Display.DEFAULT_DISPLAY;
 

@@ -1,7 +1,7 @@
-// Mac.apk v1.0.92 -- auto-generated stub, upgraded to a real Parcelable
+// Apk on Mac v1.0.92 -- auto-generated stub, upgraded to a real Parcelable
 // wrapper (2026-08-23 conformance sweep). AOSP's WindowId wraps an
 // IWindowId AIDL Binder stub used for cross-process focus observation
-// (frameworks/base/core/java/android/view/WindowId.java); Mac.apk is a
+// (frameworks/base/core/java/android/view/WindowId.java); Apk on Mac is a
 // single process and has no IWindowId AIDL stub, so registerFocusObserver
 // / unregisterFocusObserver / isFocused are not implemented here -- that
 // is out of scope for the Parcelable-conformance fix. What IS in scope
@@ -57,11 +57,11 @@ public class WindowId implements android.os.Parcelable {
     }
 
     /** AOSP WindowId.isFocused(): whether the window this id names currently has
-     *  input focus. Mac.apk runs ONE window, which is the focused one whenever
+     *  input focus. Apk on Mac runs ONE window, which is the focused one whenever
      *  the app is frontmost; NativeCocoa reports that state, so the answer is
      *  read from the real window rather than assumed. */
     public boolean isFocused() {
-        // Mac.apk presents ONE window and does not track macOS key-window
+        // Apk on Mac presents ONE window and does not track macOS key-window
         // transitions (the Cocoa bridge exposes no focus signal). The tree
         // already answers this same question in View.hasWindowFocus(), which
         // uses "attached to the window" as the stand-in -- see View.java:2327
@@ -72,7 +72,7 @@ public class WindowId implements android.os.Parcelable {
     }
 
     /** AOSP WindowId.registerFocusObserver(FocusObserver) /
-     *  unregisterFocusObserver(FocusObserver). Mac.apk has one window whose
+     *  unregisterFocusObserver(FocusObserver). Apk on Mac has one window whose
      *  focus state is owned by macOS and not surfaced as a callback, so the
      *  observer is retained (so add/remove pairs behave and nothing leaks) and
      *  the CURRENT state is delivered immediately -- which is the part a caller

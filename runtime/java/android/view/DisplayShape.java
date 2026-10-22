@@ -1,7 +1,7 @@
 package android.view;
 import android.graphics.Path;
 /** The physical outline of the display (rounded corners / notches) as a Path.
- *  Mac.apk targets rectangular windows, so the shape is an empty (rectangular)
+ *  Apk on Mac targets rectangular windows, so the shape is an empty (rectangular)
  *  path -- getPath() is unchanged from the pre-Parcelable stub. The 7 scalar
  *  fields below exist only so instances round-trip through a Parcel the way
  *  AOSP's do (an app that stores a DisplayShape in saved state and reads it

@@ -4,7 +4,7 @@
 // `lib*.so` name is forced by PackageManager (it extracts and chmods 0755 only
 // files matching that pattern), not by the file being a library: it is an
 // ET_DYN PIE executable with PT_INTERP and DF_1_PIE set and, typically, zero
-// exports. macOS cannot exec a Linux ELF, so Mac.apk swaps in a real Mach-O
+// exports. macOS cannot exec a Linux ELF, so Apk on Mac swaps in a real Mach-O
 // stand-in (`macapk-elfexec`) that loads the guest ELF through the Stage-6
 // loader and jumps to its entry point.
 //

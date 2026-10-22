@@ -4,7 +4,7 @@ package android.graphics;
  * A DrawFilter subclass can be installed in a Canvas, allowing it to modify (or
  * disregard) the paint settings made by the application for each drawing call.
  *
- * Mac.apk note: this AWT-backed Canvas is software-only and does not honor the
+ * Apk on Mac note: this AWT-backed Canvas is software-only and does not honor the
  * filter's effects (PaintFlagsDrawFilter's clear/set flag masks are ignored at
  * raster time). The class exists so that bytecode which constructs a filter and
  * calls Canvas.setDrawFilter()/getDrawFilter() links and round-trips correctly,

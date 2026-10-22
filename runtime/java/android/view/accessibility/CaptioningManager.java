@@ -138,7 +138,7 @@ public class CaptioningManager {
 
     /** AOSP CaptioningManager.isSystemAudioCaptioningEnabled() (API 31): is the
      *  system-wide "live caption" feature on? macOS has no such setting and
-     *  Mac.apk exposes none, so it is off -- the same answer a device gives with
+     *  Apk on Mac exposes none, so it is off -- the same answer a device gives with
      *  live caption disabled, which is the default. */
     public boolean isSystemAudioCaptioningEnabled() { return false; }
 

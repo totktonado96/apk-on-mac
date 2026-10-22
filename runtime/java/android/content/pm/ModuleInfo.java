@@ -10,7 +10,7 @@ package android.content.pm;
  *  the constructor is public here only because nothing else in this tree could
  *  build one otherwise.
  *
- *  Mac.apk has no mainline modules -- there is no APEX, no module metadata
+ *  Apk on Mac has no mainline modules -- there is no APEX, no module metadata
  *  provider, and PackageManager.getInstalledModules() correctly reports an
  *  empty list. The CLASS still has to exist: we present API 36, so a
  *  `List<ModuleInfo>` local or a checkcast on the (empty) result must resolve. */

@@ -352,7 +352,7 @@ AotState ApplyJdkSelectionAndAotCache(std::vector<std::string>& opts) {
     std::string dir;
     if (const char* d = std::getenv("MACAPK_AOT_DIR"); d && d[0]) dir = d;
     else if (const char* home = std::getenv("HOME"); home && home[0])
-        dir = std::string(home) + "/Library/Caches/Mac.apk/aot";
+        dir = std::string(home) + "/Library/Caches/Apk on Mac/aot";
     if (dir.empty()) {
         std::fprintf(stderr, "[jvm] aot-cache: OFF (%s) -- no $HOME and no MACAPK_AOT_DIR\n", mode);
         return st;

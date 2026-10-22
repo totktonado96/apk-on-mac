@@ -6,7 +6,7 @@ import java.nio.ByteBuffer;
  * Descrambles a conditional-access-protected transport stream using a MediaCas
  * session.
  *
- * Mac.apk has no CAS plugin and would not add one -- descrambling protected
+ * Apk on Mac has no CAS plugin and would not add one -- descrambling protected
  * broadcast content is out of scope for this project by the same rule that
  * keeps DRM out (CLAUDE.md, "Explicitly OUT of scope"). AOSP's own contract for
  * a CA system the device cannot service is

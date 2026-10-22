@@ -13,7 +13,7 @@
 // startActivityForResult finishes with RESULT_OK +
 // EXTRA_INSTALL_RESULT=INSTALL_SUCCEEDED (InstallSuccess.java), RESULT_FIRST_USER
 // + the legacy failure code (InstallFailed.java), or RESULT_CANCELED when the
-// user declines (PackageInstallerActivity). Mac.apk's equivalent of that
+// user declines (PackageInstallerActivity). Apk on Mac's equivalent of that
 // system app is the macapk-installhelper binary inside the .app bundle; this
 // class is the bridge from the guest's intent to that helper and back.
 //

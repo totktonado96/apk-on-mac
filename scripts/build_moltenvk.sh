@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# build_moltenvk.sh -- rebuild the MoltenVK Vulkan ICD with Mac.apk's patches and
+# build_moltenvk.sh -- rebuild the MoltenVK Vulkan ICD with Apk on Mac's patches and
 # stage it where scripts/build_angle.sh and runtime/scripts/build.sh pick it up.
 #
 # WHY THIS EXISTS. The MoltenVK in thirdparty/MoltenVK-build (gitignored, pinned at
@@ -50,7 +50,7 @@ ANGLE_OUT="$PROJECT_DIR/thirdparty/angle/out/Release"
 SPC="$MVK/External/SPIRV-Cross"
 [ -d "$SPC/.git" ] || { echo "no SPIRV-Cross checkout at $SPC -- run ./fetchDependencies --macos in $MVK once first" >&2; exit 2; }
 
-gitc() { git -c user.name="Mac.apk build" -c user.email="build@macapk.invalid" "$@"; }
+gitc() { git -c user.name="Apk on Mac build" -c user.email="build@macapk.invalid" "$@"; }
 
 # 1. SPIRV-Cross patches: apply + commit, or recognise as already applied.
 changed=0
@@ -59,7 +59,7 @@ for p in "$PATCHES"/*-spirv-cross-*.patch; do
     if git -C "$SPC" apply --check "$p" >/dev/null 2>&1; then
         git -C "$SPC" apply "$p"
         git -C "$SPC" add -A
-        gitc -C "$SPC" commit -q -m "Mac.apk: $(basename "$p" .patch)"
+        gitc -C "$SPC" commit -q -m "Apk on Mac: $(basename "$p" .patch)"
         echo "==> applied + committed $(basename "$p") in SPIRV-Cross"
         changed=1
     elif git -C "$SPC" apply --reverse --check "$p" >/dev/null 2>&1; then
@@ -77,7 +77,7 @@ REV="$MVK/ExternalRevisions/SPIRV-Cross_repo_revision"
 if [ "$(tr -d ' \n' < "$REV")" != "$SPC_SHA" ]; then
     printf '%s\n' "$SPC_SHA" > "$REV"
     gitc -C "$MVK" add ExternalRevisions/SPIRV-Cross_repo_revision
-    gitc -C "$MVK" commit -q -m "Mac.apk: pin patched SPIRV-Cross $SPC_SHA"
+    gitc -C "$MVK" commit -q -m "Apk on Mac: pin patched SPIRV-Cross $SPC_SHA"
     echo "==> MoltenVK now pins SPIRV-Cross $SPC_SHA (MoltenVK HEAD $(git -C "$MVK" rev-parse --short HEAD))"
     changed=1
 fi

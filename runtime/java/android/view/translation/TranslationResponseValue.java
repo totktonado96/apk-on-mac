@@ -1,5 +1,5 @@
 package android.view.translation;
-/** One field's translation result. Mac.apk performs no on-device translation
+/** One field's translation result. Apk on Mac performs no on-device translation
  *  (TranslationManager reports no capabilities), so a value is only ever
  *  constructed empty (STATUS_ERROR) by this framework -- but an app can build
  *  one with the Builder and everything it sets comes back.

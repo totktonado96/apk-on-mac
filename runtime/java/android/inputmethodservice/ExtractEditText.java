@@ -10,7 +10,7 @@ import android.widget.EditText;
  *
  *  AOSP wires this to the IME through a package-private setIME() called from
  *  InputMethodService.setExtractView(), which finds it by the internal id
- *  com.android.internal.R.id.inputExtractEditText. Mac.apk ships no internal
+ *  com.android.internal.R.id.inputExtractEditText. Apk on Mac ships no internal
  *  resources, so setExtractView() locates it by TYPE instead (a recursive scan
  *  for an ExtractEditText instance) -- the same object AOSP's id names, found a
  *  different way, with no per-app or internal-resource dependency.

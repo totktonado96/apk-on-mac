@@ -18,12 +18,12 @@ public final class FirebaseAppCheck {
 
     public Task<AppCheckToken> getAppCheckToken(boolean forceRefresh) {
         return Tasks.forException(new IllegalStateException(
-            "Mac.apk does not provide Firebase App Check; this is by design. "
+            "Apk on Mac does not provide Firebase App Check; this is by design. "
           + "App Check requires hardware attestation we cannot legitimately produce."));
     }
     public Task<AppCheckToken> getLimitedUseAppCheckToken() {
         return Tasks.forException(new IllegalStateException(
-            "Mac.apk does not provide Firebase App Check tokens."));
+            "Apk on Mac does not provide Firebase App Check tokens."));
     }
     public void installAppCheckProviderFactory(Object factory) {}
     public void setTokenAutoRefreshEnabled(boolean enabled) {}

@@ -11,7 +11,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
  *  is ONE observer per view tree (owned by the root, returned by every
  *  View.getViewTreeObserver() in that tree), and ViewRootImpl's
  *  performTraversals fires dispatchOnGlobalLayout() after layout and
- *  dispatchOnPreDraw() right before draw. Mac.apk's ViewCanvasDriver
+ *  dispatchOnPreDraw() right before draw. Apk on Mac's ViewCanvasDriver
  *  drives those same dispatches each frame.
  *
  *  Why this matters: AndroidComposeView implements OnGlobalLayoutListener /
@@ -290,7 +290,7 @@ public class ViewTreeObserver {
     // ---- system-gesture-exclusion listeners (API 29) -------------------------
     // AOSP ViewTreeObserver.add/removeOnSystemGestureExclusionRectsChangedListener:
     // told whenever the union of View.setSystemGestureExclusionRects across the
-    // hierarchy changes. Mac.apk stores those rects on the View (see
+    // hierarchy changes. Apk on Mac stores those rects on the View (see
     // View.setSystemGestureExclusionRects) but has no gesture-nav region for
     // them to affect, so the union never changes and no listener ever fires --
     // the same as a device with no gesture navigation enabled. The listeners are

@@ -7,7 +7,7 @@
 // bytes, the alias of the wrapping key, the unwrap transformation, and the
 // AlgorithmParameterSpec for it.
 //
-// ⚠ Mac.apk cannot perform secure key import. The whole point of the mechanism
+// ⚠ Apk on Mac cannot perform secure key import. The whole point of the mechanism
 // is that the unwrap happens inside secure hardware; doing it in the JVM would
 // expose the plaintext to the very process the feature exists to keep it from,
 // while letting the app believe otherwise. So AndroidKeyStoreSpi refuses a

@@ -1,7 +1,7 @@
 // android.net.IpSecAlgorithm
 //
 // Names a crypto algorithm + key for an IPsec transform. Pure value type +
-// algorithm-name constants. Mac.apk has no IPsec subsystem, but apps construct
+// algorithm-name constants. Apk on Mac has no IPsec subsystem, but apps construct
 // these to build (no-op) transforms, so the type + constants must resolve.
 // Mirrors AOSP android.net.IpSecAlgorithm public API.
 package android.net;

@@ -1,5 +1,5 @@
 package android.app;
-/** A structured crash/ANR report. Mac.apk never files one to a handler, but the
+/** A structured crash/ANR report. Apk on Mac never files one to a handler, but the
  *  type + public fields resolve.
  *  Source: frameworks/base/core/java/android/app/ApplicationErrorReport.java
  *
@@ -313,7 +313,7 @@ public class ApplicationErrorReport implements android.os.Parcelable {
      *  act is
      *  {@code if (Settings.Global.getInt(cr, Settings.Global.SEND_ACTION_APP_ERROR, 0) == 0)
      *  return null;} -- error reporting is OFF by default, and that is the state
-     *  here: Mac.apk has no error-report receiver installed and no crash-upload
+     *  here: Apk on Mac has no error-report receiver installed and no crash-upload
      *  path. null is what a caller checks for before offering a "report" button,
      *  so answering it correctly suppresses a button that would do nothing. */
     public static android.content.ComponentName getErrorReportReceiver(

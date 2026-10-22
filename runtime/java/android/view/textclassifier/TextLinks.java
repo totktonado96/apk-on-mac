@@ -10,7 +10,7 @@ import java.util.Map;
  * The result of asking the TextClassifier to find linkable entities (addresses,
  * phone numbers, URLs) in a span of text.
  *
- * Mac.apk has no on-device text-classifier model. AOSP's own contract when no
+ * Apk on Mac has no on-device text-classifier model. AOSP's own contract when no
  * classifier is available is TextClassifier.NO_OP, which returns a TextLinks
  * with an EMPTY link set -- so callers fall back to their own Linkify patterns,
  * which still work. That is the behaviour here. Everything an app SETS on the

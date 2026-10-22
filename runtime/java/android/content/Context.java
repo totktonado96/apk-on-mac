@@ -277,7 +277,7 @@ public abstract class Context {
      *  (createWindowContext) or a system/system-UI context; false for a
      *  display context or a non-UI context. ContextImpl.isUiContext()
      *  switches on the mContextType tag stamped at construction time.
-     *  Mac.apk carries no such tag, and the only Context in the tree that
+     *  Apk on Mac carries no such tag, and the only Context in the tree that
      *  owns a real window surface is an Activity, so derive the answer from
      *  the type. The loop mirrors AOSP's ContextWrapper, which delegates
      *  isUiContext() to its base context, so a ContextThemeWrapper /
@@ -299,7 +299,7 @@ public abstract class Context {
     /** AOSP Context.getDisplay(): the Display this Context is associated
      *  with. ContextImpl.getDisplay() throws UnsupportedOperationException
      *  when the Context is not display-associated and otherwise hands back
-     *  the DisplayManager's display. Mac.apk hosts exactly one logical
+     *  the DisplayManager's display. Apk on Mac hosts exactly one logical
      *  display and every Context in the tree ultimately belongs to it, so
      *  there is no non-associated case to distinguish; returning the default
      *  display is the honest answer and throwing would only add crashes
@@ -349,7 +349,7 @@ public abstract class Context {
      *  getApplicationContext pins the global Application. */
     private static final class ConfigOverrideContext extends ContextWrapper {
         // Stored for fidelity with AOSP (the override config shapes the
-        // returned context's Resources); Mac.apk's single-configuration
+        // returned context's Resources); Apk on Mac's single-configuration
         // Resources model has no consumer for it yet.
         private final android.content.res.Configuration overrideConfig;
         ConfigOverrideContext(Context origin, android.content.res.Configuration cfg) {
@@ -385,7 +385,7 @@ public abstract class Context {
      *  `mAttributionSource.getPackageName()` -- the package name AppOps
      *  attributes this Context's operations to. A normal app Context's
      *  attribution source just wraps the app's own package, which is the
-     *  only case Mac.apk has, so this is getPackageName(). Anything built
+     *  only case Apk on Mac has, so this is getPackageName(). Anything built
      *  against API 30+ (AppOps-aware AndroidX / Compose / media code) calls
      *  it during construction, so its absence was a NoSuchMethodError.
      *
@@ -579,7 +579,7 @@ public abstract class Context {
         revokeUriPermission(uri, modeFlags);
     }
 
-    /** {@hide} Is `uri`'s provider one Mac.apk hosts on behalf of ANOTHER
+    /** {@hide} Is `uri`'s provider one Apk on Mac hosts on behalf of ANOTHER
      *  package (ContentProvider.macapkIsAnotherPackage), e.g. HostDocumentsProvider
      *  standing in for com.android.externalstorage? Unregistered / unresolvable
      *  authorities answer false (nothing to revoke against). */
@@ -808,7 +808,7 @@ public abstract class Context {
         if (defStyleAttr == 0) return;
         if (System.getenv("MACAPK_TRACE_DEFSTYLE") == null) return;
         try {
-            com.macapk.loader.NativeLog.i("Mac.apk.Context",
+            com.macapk.loader.NativeLog.i("Apk on Mac.Context",
                 "oSA4 THEMELESS ctx=" + getClass().getName()
                 + " dsa=0x" + Integer.toHexString(defStyleAttr)
                 + " cause=" + (cause == null ? "getTheme()==null" : cause.toString()));
@@ -1021,7 +1021,7 @@ public abstract class Context {
     /** AOSP Context.openOrCreateDatabase. ContextImpl maps the mode bits to
      *  SQLiteDatabase open flags (CREATE_IF_NECESSARY always, plus
      *  ENABLE_WRITE_AHEAD_LOGGING / NO_LOCALIZED_COLLATORS when the matching
-     *  MODE_ bit is set) and opens getDatabasePath(name). Mac.apk's
+     *  MODE_ bit is set) and opens getDatabasePath(name). Apk on Mac's
      *  SQLiteDatabase is the real libsqlite3-backed implementation, so this
      *  is pure plumbing over factories that already exist -- it was simply
      *  never declared on Context, so apps doing raw pre-Room SQLite through
@@ -1164,7 +1164,7 @@ public abstract class Context {
      *  Ported as a direct delegate through our own
      *  getSystemService(WALLPAPER_SERVICE), which is already wired to a real
      *  WallpaperManager two cases below in the switch. That manager
-     *  honestly answers 0 for both dimensions (Mac.apk has no wallpaper),
+     *  honestly answers 0 for both dimensions (Apk on Mac has no wallpaper),
      *  so these two just carry the same honest 0 up to the Context-level
      *  convenience instead of throwing NoSuchMethodError on any caller that
      *  still uses the pre-API-15 accessor rather than fetching
@@ -1321,7 +1321,7 @@ public abstract class Context {
                 // service made requireNotNull throw IllegalArgumentException and
                 // aborted onCreate before first frame. AppWidgetManager.getInstance
                 // is the canonical accessor and returns our honest "no placed
-                // widgets" manager (Mac.apk has no home screen). Generic.
+                // widgets" manager (Apk on Mac has no home screen). Generic.
                 result = android.appwidget.AppWidgetManager.getInstance(this);
                 break;
             // v1.0.489: USER_SERVICE WIRED. The app's REAL Firebase (loaded under
@@ -1926,7 +1926,7 @@ public abstract class Context {
     // declared here for resolution; delegate to the single-arg form so any
     // subclass that only overrides startActivity(Intent) (Activity does, via
     // ActivityHost.start) still performs the launch. The Bundle (launch
-    // animation hints) is ignored -- Mac.apk has no activity transitions.
+    // animation hints) is ignored -- Apk on Mac has no activity transitions.
     public void startActivity(Intent intent, android.os.Bundle options) { startActivity(intent); }
     // AOSP startActivities(Intent[]) launches a back-STACK: intents[0] is the
     // ROOT of the task and each later intent is pushed on top of it, so the
@@ -1935,7 +1935,7 @@ public abstract class Context {
     // stack it synthesises is the entire reason the API exists.
     //
     // v1.0.834: this used to start ONLY the top-most intent carrying a
-    // component, on the reasoning that Mac.apk has a single foreground
+    // component, on the reasoning that Apk on Mac has a single foreground
     // activity. But com.macapk.loader.ActivityHost keeps a real LIFO task
     // stack and reveals the activity underneath on finish(), so the
     // simplification was silently discarding a stack we CAN model. Measured
@@ -2211,7 +2211,7 @@ public abstract class Context {
         }
         // A package-targeted broadcast must not reach a DYNAMIC receiver of a
         // different package either. The manifest path below already returns
-        // early on this test; the dynamic loop did not, and Mac.apk hosts
+        // early on this test; the dynamic loop did not, and Apk on Mac hosts
         // exactly one package, so `setPackage(somethingElse)` should deliver to
         // NOTHING rather than to whatever dynamic filter happens to match.
         // Concretely this is the FCM routing field: McsClient dispatches
@@ -2328,7 +2328,7 @@ public abstract class Context {
         // getAppStartModeLOSP, and that method returns APP_START_MODE_NORMAL
         // whenever the target uid has a live, non-idle UidRecord (AMS.java:6058-
         // 6117 -- the `alwaysRestrict || uidRec.isIdle()` branch is what leads to
-        // the restricted answer). Mac.apk hosts exactly one app, in this process,
+        // the restricted answer). Apk on Mac hosts exactly one app, in this process,
         // in the foreground, so on a device it would never be idle and its
         // manifest receivers would fire. Dropping them here was our gap, not
         // Android's behaviour.
@@ -2526,7 +2526,7 @@ public abstract class Context {
 
     // ---- Cross-user / permission-list / sticky broadcast variants.
     //
-    // Mac.apk has ONE user (UserManager reports a single profile and
+    // Apk on Mac has ONE user (UserManager reports a single profile and
     // UserHandle is always user 0) and dispatches broadcasts in-process to the
     // app's own registered receivers, which by definition hold every
     // permission the app declares. So the *AsUser and *WithMultiplePermissions
@@ -2620,7 +2620,7 @@ public abstract class Context {
                              initialCode, initialData, initialExtras);
     }
 
-    /** AOSP API-33 -- adds an appOp string alongside the permission. Mac.apk
+    /** AOSP API-33 -- adds an appOp string alongside the permission. Apk on Mac
      *  has no AppOps enforcement (there is no AppOpsManager gate on delivery),
      *  so the appOp cannot filter a receiver out. */
     public void sendOrderedBroadcast(Intent intent, String receiverPermission,
@@ -2866,7 +2866,7 @@ public abstract class Context {
      *
      *  This used to return false unconditionally and never touch the
      *  ServiceConnection, so every bound-service client sat waiting forever
-     *  for a callback that could not arrive. Mac.apk is single-process, so
+     *  for a callback that could not arrive. Apk on Mac is single-process, so
      *  there is nothing to fake: the IBinder that
      *  android.app.ServiceRegistry.bind() returns IS the Service's own
      *  onBind() result and the client can call straight through it.
@@ -2884,7 +2884,7 @@ public abstract class Context {
      *  INTERACT_ACROSS_USERS, and apps that call it (Signal does) are built to
      *  run as a device/profile owner where it is granted.
      *
-     *  Mac.apk models exactly one user -- UserHandle is always the single
+     *  Apk on Mac models exactly one user -- UserHandle is always the single
      *  running user, and `UserManager` reports one profile -- so a cross-user
      *  bind and a same-user bind are the same operation here. Delegating is
      *  therefore the faithful answer rather than a shortcut: there is no other
@@ -3106,7 +3106,7 @@ public abstract class Context {
     public int  checkCallingPermission(String permission) {
         if (permission == null) throw new IllegalArgumentException("permission is null");
         // Same-process guard: an app must not be able to answer a permission
-        // question about itself as though it were an IPC peer. Mac.apk's
+        // question about itself as though it were an IPC peer. Apk on Mac's
         // Binder.getCallingPid() is inert (0) outside a transaction rather
         // than returning our own pid the way AOSP's does, so today this
         // delegates; once Binder reports the process identity this becomes
@@ -3229,7 +3229,7 @@ public abstract class Context {
     // ---- Context creation variants -----------------------------------------
 
     /** AOSP :7904 declares this abstract and ContextImpl builds a new
-     *  ContextImpl carrying the params. Mac.apk has exactly one Context
+     *  ContextImpl carrying the params. Apk on Mac has exactly one Context
      *  implementation per role and the only thing ContextParams carries that
      *  we model is the attribution tag, which createAttributionContext() above
      *  also ignores -- so the returned Context is this one, with the params
@@ -3247,7 +3247,7 @@ public abstract class Context {
      *  itself. */
     public ContextParams getParams() { return mParams; }
 
-    /** AOSP :7889 -- createWindowContext with an explicit Display. Mac.apk has
+    /** AOSP :7889 -- createWindowContext with an explicit Display. Apk on Mac has
      *  exactly one display (createDisplayContext above also returns this), and
      *  the single-argument createWindowContext already returns this, so the
      *  two agree. The IllegalArgumentException for a null Display is AOSP's
@@ -3290,7 +3290,7 @@ public abstract class Context {
 
     // ---- Misc ---------------------------------------------------------------
 
-    /** AOSP: start an Instrumentation class against a target package. Mac.apk
+    /** AOSP: start an Instrumentation class against a target package. Apk on Mac
      *  has no ActivityManager to host an instrumentation run, and there is no
      *  second process to instrument. AOSP's own documented failure is a false
      *  return ("if the instrumentation could not be found"), which is exactly
@@ -3302,7 +3302,7 @@ public abstract class Context {
     }
 
     /** AOSP API-30/31 -- ask the system to revoke one of THIS app's own
-     *  runtime permissions the next time the app's process is killed. Mac.apk
+     *  runtime permissions the next time the app's process is killed. Apk on Mac
      *  grants every permission unconditionally (see checkPermission above) and
      *  has no runtime-permission store to revoke from, and the process is not
      *  restarted after a kill, so there is no state to change. Documented
@@ -3315,7 +3315,7 @@ public abstract class Context {
 
     /** AOSP API-29 -- reorder a bound service's process within its LRU group.
      *  A pure memory-management hint to the ActivityManager, with no return
-     *  value and no observable effect on the binding. Mac.apk runs one process
+     *  value and no observable effect on the binding. Apk on Mac runs one process
      *  and never kills it for memory, so there is no group to move it in.
      *  AOSP's own IllegalArgumentException for an unbound connection is kept
      *  -- it is the one thing a caller can get wrong. */
@@ -3330,7 +3330,7 @@ public abstract class Context {
      *
      *  ⚠ STATED DIVERGENCE. The bind itself is real: it goes through the same
      *  ServiceRegistry path bindService() uses, so the caller gets a live
-     *  binder and its onServiceConnected fires. What Mac.apk cannot provide is
+     *  binder and its onServiceConnected fires. What Apk on Mac cannot provide is
      *  the two properties in the method's name. There is one process, so the
      *  service is not isolated (a service asking Process.isIsolated() gets
      *  false -- as it does for every service here). And ServiceRegistry keys
@@ -3465,18 +3465,18 @@ public abstract class Context {
 
     public static final int DEVICE_ID_DEFAULT = 0;
     /** AOSP getDeviceId (API 34): the logical device this Context is associated
-     *  with. Mac.apk is the default device. */
+     *  with. Apk on Mac is the default device. */
     public int getDeviceId() { return DEVICE_ID_DEFAULT; }
     public Context createDeviceContext(int deviceId) { return this; }
 
     /** AOSP registerDeviceIdChangeListener (API 34): notified when this Context's
-     *  logical device changes. Mac.apk is one fixed device, so it never fires. */
+     *  logical device changes. Apk on Mac is one fixed device, so it never fires. */
     public void registerDeviceIdChangeListener(java.util.concurrent.Executor executor,
             java.util.function.IntConsumer listener) { }
     public void unregisterDeviceIdChangeListener(java.util.function.IntConsumer listener) { }
 
     /** AOSP getAttributionSource (API 31): the identity attributed to work done
-     *  through this Context. Mac.apk has one app identity. */
+     *  through this Context. Apk on Mac has one app identity. */
     public android.content.AttributionSource getAttributionSource() {
         return new android.content.AttributionSource(android.os.Process.myUid(),
                 com.macapk.loader.Boot.processName(), null);

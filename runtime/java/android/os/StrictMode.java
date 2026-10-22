@@ -69,7 +69,7 @@ public final class StrictMode {
             // AOSP core/java/android/os/StrictMode.java VmPolicy.Builder --
             // the remaining public detect*/permit*/penalty* selectors. Like
             // every other builder method in this class they only set a bit in
-            // the policy mask, and Mac.apk installs no violation detectors --
+            // the policy mask, and Apk on Mac installs no violation detectors --
             // build() returns the LAX policy regardless. So these are the same
             // chainable no-op every sibling already is, not a new special case.
             public Builder detectBlockedBackgroundActivityLaunch() { return this; }

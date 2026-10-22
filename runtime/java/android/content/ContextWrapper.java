@@ -1,6 +1,6 @@
 // ContextWrapper -- forwarding base for Activity, Service, Application.
 // Real Android delegates almost everything to a "base context" set by
-// the framework's Activity instantiation code. Mac.apk's Activity
+// the framework's Activity instantiation code. Apk on Mac's Activity
 // instantiates with `attachBaseContext(applicationContext)`; everything
 // resolves the app context.
 package android.content;
@@ -99,7 +99,7 @@ public class ContextWrapper extends Context {
         // diagnostic value (which Context subclass is asked) is preserved when
         // MACAPK_TRACE_APPINFO is set.
         if (System.getenv("MACAPK_TRACE_APPINFO") != null) {
-            com.macapk.loader.NativeLog.i("Mac.apk.CW",
+            com.macapk.loader.NativeLog.i("Apk on Mac.CW",
                 "getApplicationInfo() on " + this.getClass().getSimpleName());
         }
         return baseContext != null
@@ -116,7 +116,7 @@ public class ContextWrapper extends Context {
         // during attachBaseContext2, e.g.). Name the context class so
         // the next bring-up doesn't have to rediscover the chain.
         if (pm == null) {
-            com.macapk.loader.NativeLog.w("Mac.apk.CW",
+            com.macapk.loader.NativeLog.w("Apk on Mac.CW",
                 "getPackageManager() -> null on " + getClass().getName()
                 + " (base=" + (baseContext == null ? "null"
                               : baseContext.getClass().getName()) + ")");

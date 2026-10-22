@@ -1,6 +1,6 @@
 // android.view.ViewGroup -- View that holds children. We track them in
 // an ArrayList and forward layout/touch dispatch trivially. Real
-// Android measures and lays out children; Mac.apk's apps either don't
+// Android measures and lays out children; Apk on Mac's apps either don't
 // rely on layout (game-style: one full-screen GLSurfaceView child) or
 // they manage layout themselves.
 package android.view;
@@ -812,7 +812,7 @@ public class ViewGroup extends View implements ViewParent, ViewManager {
     }
     /** AOSP API-1: returns the currently focused descendant, or null
      *  if no descendant has focus. We don't track keyboard focus on
-     *  Mac.apk, so always null. Used by RecyclerView's LayoutManager
+     *  Apk on Mac, so always null. Used by RecyclerView's LayoutManager
      *  in onLayoutChildren to preserve focus across layout passes. */
     // AOSP focus chain: the child along the path to the focused leaf (v1.0.420).
     private View mFocused;
@@ -1204,7 +1204,7 @@ public class ViewGroup extends View implements ViewParent, ViewManager {
                         final boolean in = child.canReceivePointerEvents()
                                 && isTransformedTouchPointInView(x, y, child, null);
                         if (HIT_TRACE) {
-                            com.macapk.loader.NativeLog.i("Mac.apk.Hit",
+                            com.macapk.loader.NativeLog.i("Apk on Mac.Hit",
                                 getClass().getSimpleName() + " pt=(" + (int) x + "," + (int) y
                                 + ") child=" + child.getClass().getSimpleName()
                                 + " [" + child.getLeft() + "," + child.getTop()
@@ -1616,11 +1616,11 @@ public class ViewGroup extends View implements ViewParent, ViewManager {
 
     // ---- hit testing (AOSP :3038-3069) ----
 
-    /** Mac.apk DEVIATION -- LOAD-BEARING, read before touching it.
+    /** Apk on Mac DEVIATION -- LOAD-BEARING, read before touching it.
      *
      *  A child that was never laid out (TRULY zero-size: BOTH width and height
      *  degenerate, e.g. [0,0-0,0]) is treated as filling the parent, so a
-     *  fullscreen SurfaceView / GLSurfaceView that Mac.apk's layout pass never
+     *  fullscreen SurfaceView / GLSurfaceView that Apk on Mac's layout pass never
      *  sized still receives touch. cocos2d-x and Unity put their surface under a
      *  FrameLayout and render natively without a Java layout pass ever running,
      *  so without this every tap in those games would be swallowed by the
@@ -2555,7 +2555,7 @@ public class ViewGroup extends View implements ViewParent, ViewManager {
      *  ViewRootImpl.onDescendantInvalidated (ViewRootImpl.java:2563-2571),
      *  which calls invalidate() -> scheduleTraversals().
      *
-     *  This chain was DEAD in Mac.apk: ViewParent declared only the no-op
+     *  This chain was DEAD in Apk on Mac: ViewParent declared only the no-op
      *  default and no ViewGroup ever overrode it. Compose's layer
      *  implementations (RenderNodeLayer and GraphicsLayerOwnerLayer, both via
      *  WrapperRenderNodeLayerHelperMethods.onDescendantInvalidated) take
@@ -2566,7 +2566,7 @@ public class ViewGroup extends View implements ViewParent, ViewManager {
      *  gate never saw those invalidations, so the only thing repainting the
      *  window was ViewCanvasDriver's ~0.5s heartbeat backstop.
      *
-     *  Mac.apk is a single-window model with no ViewRootImpl-shaped ViewParent
+     *  Apk on Mac is a single-window model with no ViewRootImpl-shaped ViewParent
      *  terminating the chain (the content root's parent is null), so poke the
      *  schedule authority directly the way View.invalidate() does, AND still
      *  propagate upward so a subclass override -- or a real terminator, once
@@ -2582,7 +2582,7 @@ public class ViewGroup extends View implements ViewParent, ViewManager {
      *  in favor of onDescendantInvalidated, but older library code still calls
      *  it. Its hardware-accelerated branch is literally
      *  `onDescendantInvalidated(child, child); return;` before any of the
-     *  software damage-rect bookkeeping, and Mac.apk composites every frame
+     *  software damage-rect bookkeeping, and Apk on Mac composites every frame
      *  through ANGLE with no software-layer damage path to fall back to, so
      *  that branch is the whole method for us. */
     @Override public void invalidateChild(View child, Rect dirty) {
@@ -3017,7 +3017,7 @@ public class ViewGroup extends View implements ViewParent, ViewManager {
         if ("1".equals(ENV_MACAPK_TRACE_SHADOW)) {
             String cn = c.getClass().getSimpleName();
             if (macapkShadowTraced.putIfAbsent(cn, Boolean.TRUE) == null) {
-                com.macapk.loader.NativeLog.i("Mac.apk.ViewGroup",
+                com.macapk.loader.NativeLog.i("Apk on Mac.ViewGroup",
                     "M12 elevation shadow: " + cn + " z=" + z + "px radius=" + radius
                     + "px bounds=(" + l + "," + t + "-" + r + "," + b + ")");
             }
@@ -3258,7 +3258,7 @@ public class ViewGroup extends View implements ViewParent, ViewManager {
      *  A non-round-tripping pair breaks the standard read-modify idiom
      *  `container.getLayoutTransition().setDuration(...)` with an NPE. Found by
      *  the 2026-08-27 fleet census on Signal:
-     *      Mac.apk.LayoutInflater: onFinishInflate threw on
+     *      Apk on Mac.LayoutInflater: onFinishInflate threw on
      *      org.thoughtcrime.securesms.conversationlist.ConversationListItem:
      *      java.lang.NullPointerException: Cannot invoke
      *      "android.animation.LayoutTransition.setDuration(long)" because "<local1>" is null
@@ -3634,7 +3634,7 @@ public class ViewGroup extends View implements ViewParent, ViewManager {
             view.clearAnimation();
         }
         if (View.TRACE_LEGACY_ANIM) {
-            com.macapk.loader.NativeLog.i("Mac.apk.LegacyAnim", "finish on " + view.getClass().getName() + "@"
+            com.macapk.loader.NativeLog.i("Apk on Mac.LegacyAnim", "finish on " + view.getClass().getName() + "@"
                 + Integer.toHexString(System.identityHashCode(view)) + " started=" + view.mAnimationStarted);
         }
         if (view.mAnimationStarted) {
@@ -4293,7 +4293,7 @@ public class ViewGroup extends View implements ViewParent, ViewManager {
     // that are important for accessibility, which for us collapses to nothing.
     public void addChildrenForAccessibility(java.util.ArrayList<View> outChildren) { }
 
-    // No ActionMode host in the Mac.apk window; AOSP returns null when no
+    // No ActionMode host in the Apk on Mac window; AOSP returns null when no
     // ancestor starts one, which is our state.
     public android.view.ActionMode startActionModeForChild(View originalView,
             android.view.ActionMode.Callback callback) {
@@ -4307,7 +4307,7 @@ public class ViewGroup extends View implements ViewParent, ViewManager {
     public void dispatchProvideStructure(android.view.ViewStructure structure) { }
 
     // ======================================================================
-    //  AOSP API-36 surface completion (Mac.apk API-gap lane, android.view).
+    //  AOSP API-36 surface completion (Apk on Mac API-gap lane, android.view).
     //  Members AOSP declares on ViewGroup that this file did not have. Bodies
     //  mirror frameworks/base core/java/android/view/ViewGroup.java
     //  (android16-release); where AOSP reads a private mGroupFlags bit the
@@ -4379,7 +4379,7 @@ public class ViewGroup extends View implements ViewParent, ViewManager {
 
     /** AOSP ViewGroup.propagateRequestedFrameRate(float, boolean):9563 -- pushes
      *  a requested frame rate down from a parent, marking it as NOT
-     *  self-requested so a child's own setRequestedFrameRate still wins. Mac.apk
+     *  self-requested so a child's own setRequestedFrameRate still wins. Apk on Mac
      *  presents at the CAMetalLayer's own rate and View.setRequestedFrameRate is
      *  already a stored hint with no consumer, so this stores it the same way
      *  for the whole subtree -- the observable behaviour of a fixed-refresh-rate

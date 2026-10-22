@@ -1,6 +1,6 @@
 // android.bluetooth.BluetoothGattService
 //
-// A GATT service holder. Mac.apk never discovers services (no radio), so
+// A GATT service holder. Apk on Mac never discovers services (no radio), so
 // getServices returns empty, but the type + characteristic-enumeration surface
 // must resolve for service-walking code to compile. Mirrors
 // frameworks/base/core/java/android/bluetooth/BluetoothGattService.java.

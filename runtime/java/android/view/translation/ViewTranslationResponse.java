@@ -1,7 +1,7 @@
 package android.view.translation;
 import java.util.HashMap;
 import java.util.Map;
-/** The per-view translation result keyed by field id. Empty on Mac.apk (no
+/** The per-view translation result keyed by field id. Empty on Apk on Mac (no
  *  translation service, so nothing ever fills one in), but an app that builds
  *  one with the Builder reads back exactly what it set.
  *  Source: frameworks/base .../view/translation/ViewTranslationResponse.java

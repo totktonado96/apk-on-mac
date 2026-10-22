@@ -2,7 +2,7 @@
 //
 // AOSP's network service-discovery (DNS-SD/mDNS) service. Apps fetch it via
 // getSystemService(NSD_SERVICE) to register/discover network services on the LAN.
-// Mac.apk provides no mDNS bridge to the guest, so registration/discovery
+// Apk on Mac provides no mDNS bridge to the guest, so registration/discovery
 // callbacks report failure (the honest "discovery unavailable" result) rather
 // than a null service. Mirrors
 // frameworks/base/core/java/android/net/nsd/NsdManager.java surface used by apps.

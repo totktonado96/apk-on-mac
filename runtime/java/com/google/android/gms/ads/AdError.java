@@ -2,7 +2,7 @@
 //
 // Mirrors the modern Google Mobile Ads SDK public API
 // (developers.google.com/android/reference/com/google/android/gms/ads/AdError).
-// Mac.apk ships AdMob as a no-op "no ad available" surface: the app's
+// Apk on Mac ships AdMob as a no-op "no ad available" surface: the app's
 // ad SDK <clinit> never runs (this shadow is loaded parent-first), and
 // every load fails with the honest NO_FILL result a real device returns
 // when no ad backend is reachable. No ad is shown; no impression or

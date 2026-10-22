@@ -30,7 +30,7 @@ public class LocalServerSocket implements java.io.Closeable {
         throw new IOException("fd-based local server socket not supported");
     }
 
-    /** Mac.apk extension entry point: bind a FILESYSTEM-namespace path with a
+    /** Apk on Mac extension entry point: bind a FILESYSTEM-namespace path with a
      *  real JDK Unix-domain server channel. */
     public LocalServerSocket(LocalSocketAddress address) throws IOException {
         if (address.getNamespace() != LocalSocketAddress.Namespace.FILESYSTEM) {

@@ -1,7 +1,7 @@
 // android.os.RemoteCallbackList -- maintains a set of registered IInterface
 // callbacks keyed by their underlying IBinder, with a begin/get/finish broadcast
 // protocol and dead-callback pruning via linkToDeath. Single-process under
-// Mac.apk, so callbacks never die remotely, but the full API is implemented so
+// Apk on Mac, so callbacks never die remotely, but the full API is implemented so
 // Services that register/broadcast to clients behave correctly in-process.
 // Previously a bare-ctor stub.
 //
@@ -166,7 +166,7 @@ public class RemoteCallbackList<E extends IInterface> {
     // ---- Frozen-callee policy (AOSP :239-:373, API 36). The policy governs
     // what happens to a callback whose RECIPIENT PROCESS is frozen by the
     // kernel freezer: invoke anyway (UNSET), queue, keep only the newest, or
-    // drop. Mac.apk is one process and nothing can be frozen, so no code path
+    // drop. Apk on Mac is one process and nothing can be frozen, so no code path
     // here ever consults the policy -- but the value an app SET must be the
     // value it reads back, which is what these accessors and the Builder
     // guarantee. Answering a constant would break a caller that configures a

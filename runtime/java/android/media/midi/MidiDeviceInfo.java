@@ -1,5 +1,5 @@
 package android.media.midi;
-/** Describes a MIDI device. Mac.apk exposes no MIDI devices, so one is never
+/** Describes a MIDI device. Apk on Mac exposes no MIDI devices, so one is never
  *  produced; the type resolves. API 23. */
 public final class MidiDeviceInfo implements android.os.Parcelable {
     public static final int TYPE_USB = 1, TYPE_VIRTUAL = 2, TYPE_BLUETOOTH = 3;

@@ -1,6 +1,6 @@
 // android.app.ActivityOptions -- options for how an Activity launch is
 // animated/placed. On real Android these drive window transitions (scale-up,
-// scene/shared-element, clip-reveal). Mac.apk has a single fixed window with
+// scene/shared-element, clip-reveal). Apk on Mac has a single fixed window with
 // no activity transition animations, so every factory returns a no-op options
 // object and toBundle() returns an empty Bundle. The methods MUST exist,
 // though: apps build options before startActivity(intent, options.toBundle())
@@ -133,7 +133,7 @@ public class ActivityOptions {
     // AOSP ref: frameworks/base/core/java/android/app/ActivityOptions.java
     // (android16-release). ActivityOptions is a VALUE OBJECT: the system reads
     // the fields when it performs the launch, and the app reads them back to
-    // check what it configured. Mac.apk's single fixed window cannot honour the
+    // check what it configured. Apk on Mac's single fixed window cannot honour the
     // launch-time EFFECT of most of them (see the class comment), but the
     // round-trip is a separate contract from the effect, and AOSP's own getters
     // read the stored field -- so the setters below really store. Several of
@@ -240,7 +240,7 @@ public class ActivityOptions {
     /** AOSP setAppVerificationBundle(Bundle): "Set the Bundle that is provided to
      *  the app installer for additional verification if the call to
      *  Context.startActivity results in an app being installed. This Bundle is
-     *  not provided to any other app besides the installer." Mac.apk installs no
+     *  not provided to any other app besides the installer." Apk on Mac installs no
      *  apps from an activity launch, so nothing consumes it; stored so the
      *  object is not lost mid-chain. */
     public ActivityOptions setAppVerificationBundle(Bundle bundle) {

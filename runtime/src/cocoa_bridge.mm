@@ -150,7 +150,7 @@ int g_phone_h = 640;
 // replacing it with the auto-max canvas, so a user-chosen size is preserved.
 static bool g_explicit_size = false;
 
-// v1.0.996: the USER rotation -- Mac.apk's mUserRotation. On a device this is
+// v1.0.996: the USER rotation -- Apk on Mac's mUserRotation. On a device this is
 // the rotation the user last put the display in (WindowManager's
 // DisplayRotation.mUserRotation); an activity whose requested orientation is
 // non-committal gets THIS rotation back, which is how exiting fullscreen
@@ -800,7 +800,7 @@ static bool MacapkWakeKickRespectsBackground() {
 // FLAG_SECURE) != 0 ...) setSecure(win.isSecureLocked())"), so a runtime
 // addFlags/clearFlags takes effect on the live window.
 //
-// Mac.apk declared the flag and nothing acted on it, so a 2FA app that asks
+// Apk on Mac declared the flag and nothing acted on it, so a 2FA app that asks
 // not to be captured (Aegis sets it on every activity by default) could be
 // screenshotted and screen-shared. The host-native mirror is rung 1 of the
 // decision ladder: NSWindow.sharingType (SDK NSWindow.h:520-522: "specifies
@@ -808,7 +808,7 @@ static bool MacapkWakeKickRespectsBackground() {
 // sharing type is NSWindowSharingReadOnly ... If you set your window sharing
 // type to NSWindowSharingNone, so that the content cannot be captured ...").
 //
-// SCOPE: every window of this process. Mac.apk composes the whole Android
+// SCOPE: every window of this process. Apk on Mac composes the whole Android
 // window stack into one NSWindow, and SurfaceFlinger refuses a whole-display
 // capture while ANY visible layer is secure, so "all of this process's windows
 // while the stack carries the flag" is the closest mapping; a window created
@@ -961,7 +961,7 @@ extern "C" void* CocoaWebViewHostView(void) {
 // MACAPK_PAUSE_WHEN_HIDDEN (added 2026-07-24, default ON): real Android's
 // compositor (SurfaceFlinger) spends ~0 on a window the user cannot see; a
 // minimized or fully-occluded Activity's surface gets no composition work at
-// all. Mac.apk's MTKView instead free-runs drawInMTKView (below) at ~74-120Hz
+// all. Apk on Mac's MTKView instead free-runs drawInMTKView (below) at ~74-120Hz
 // FOREVER regardless of visibility -- a full eglMakeCurrent+eglSwapBuffers+
 // JNI-onDrawFrame cycle for a surface nobody can see. See
 // docs/efficiency-gpu-angle-metal_2026-07-24.md finding 2(b).
@@ -2738,7 +2738,7 @@ void SelfCaptureWriteRGBA(const uint8_t* rgba, int width, int height,
 // #69ceeb TINTED shape) transfers without re-calibration. Two deliberate
 // divergences, both because this side sees the frame rather than a window shot:
 // alpha is ignored (no rounded corners / drop shadow to exclude, and a GL
-// readback's alpha is routinely 0), and there is no title bar -- but Mac.apk's
+// readback's alpha is routinely 0), and there is no title bar -- but Apk on Mac's
 // OWN status bar still draws into a Canvas frame and scores 200-350 distinct
 // colours on an otherwise EMPTY screen, which is exactly why no threshold here
 // is a bare colour count.
@@ -3539,7 +3539,7 @@ void SelfCaptureScoreFrame(const uint8_t* px, int width, int height, int stride,
 // it at 507. A circular NSBezierPath roundedRect at the same radius visibly
 // bulges by comparison.
 //
-// Applied ONLY to the app's own icon (MACAPK_APP_ICON). The Mac.apk fallback
+// Applied ONLY to the app's own icon (MACAPK_APP_ICON). The Apk on Mac fallback
 // icon is already drawn to the macOS shape, and re-masking it would clip its
 // own edge treatment. Escape hatches: MACAPK_ICON_ROUND=0 disables, and
 // MACAPK_ICON_ROUND_N overrides the exponent (2 = ellipse, high = square).
@@ -4005,7 +4005,7 @@ bool CocoaInit() {
         macapk_install_drawable_swizzle();
         // ---- AppKit SAVED-STATE RESTORATION: OFF. ----
         //
-        // A Mac.apk app creates exactly ONE window programmatically and has no
+        // A Apk on Mac app creates exactly ONE window programmatically and has no
         // restorable AppKit state at all, so window restoration has nothing to
         // restore -- but it has something to ASK. When the bundle carries a
         // crash history (and an Android app that is force-quit, jetsam-killed,
@@ -4042,7 +4042,7 @@ bool CocoaInit() {
         // parent that sets MACAPK_HIDE_DOCK_ICON=1), use Accessory
         // policy so the runtime does NOT add its own Dock icon /
         // Cmd-Tab entry. Without this the user sees TWO Dock items
-        // ("Mac.apk" launcher + "macapk-runtime" child) which is
+        // ("Apk on Mac" launcher + "macapk-runtime" child) which is
         // confusing -- only the launcher should appear there.
         // Standalone CLI invocation still gets Regular policy so the
         // window is reachable via Cmd-Tab for debugging.
@@ -4058,9 +4058,9 @@ bool CocoaInit() {
         // order, so the Dock is NEVER blank (v1.0.340):
         //   1. MACAPK_APP_ICON     -- the launched app's own icon (a drawer
         //                             launch where the app ships an icon).
-        //   2. MACAPK_DEFAULT_ICON -- the Mac.apk fallback the launcher
+        //   2. MACAPK_DEFAULT_ICON -- the Apk on Mac fallback the launcher
         //                             passes so an app with no icon still
-        //                             gets the Mac.apk tile instead of blank.
+        //                             gets the Apk on Mac tile instead of blank.
         //   3. macapk_default_icon.png sitting next to the runtime binary --
         //                             covers a standalone CLI run with no
         //                             launcher env (resolved exe-relative).
@@ -4088,7 +4088,7 @@ bool CocoaInit() {
             // Executable-relative fallback: <dir-of-macapk-runtime>/macapk_default_icon.png.
             // Both build_launcher.sh (Resources/) and runtime/scripts/build.sh
             // (build/bin/) drop the icon next to the binary, so a bare CLI
-            // invocation gets the Mac.apk icon too.
+            // invocation gets the Apk on Mac icon too.
             char exePath[PATH_MAX];
             uint32_t sz = sizeof(exePath);
             if (_NSGetExecutablePath(exePath, &sz) == 0) {
@@ -4112,11 +4112,11 @@ bool CocoaInit() {
         }
         // The window title shows the app's display name (MACAPK_APP_LABEL,
         // the same label the launcher's app drawer shows) instead of the
-        // package name / "Mac.apk". Used for the placeholder below and as the
+        // package name / "Apk on Mac". Used for the placeholder below and as the
         // fallback the Java Activity.activeWindowTitle() also honors.
         const char* appLabel = std::getenv("MACAPK_APP_LABEL");
         NSString* titleStr = (appLabel && appLabel[0])
-            ? [NSString stringWithUTF8String:appLabel] : @"Mac.apk";
+            ? [NSString stringWithUTF8String:appLabel] : @"Apk on Mac";
         // We don't install an NSApplicationDelegate; the runtime drives
         // its own event loop in CocoaRunLoop(). Without a delegate,
         // Cocoa would not auto-terminate when the last window closes
@@ -4547,7 +4547,7 @@ bool CocoaUrlSchemeHandlers(const char* scheme, std::vector<std::string>& out) {
 // docs/signin-provider-layer_2026-09-30.md). On a device the browser routes the
 // redirect itself -- Chrome's Custom Tab hands a redirect intent the client app can
 // handle back to THAT client -- but LaunchServices binds a scheme to one bundle,
-// chosen by LaunchServices and not by the tab's opener, so with several Mac.apk apps
+// chosen by LaunchServices and not by the tab's opener, so with several Apk on Mac apps
 // bundling the Facebook SDK the redirect reached a bundle that never opened the tab
 // (Duolingo's fbconnect redirect launched Subway Surf).
 // -[NSWorkspace setDefaultApplicationAtURL:toOpenURLsWithScheme:
@@ -4574,7 +4574,7 @@ int CocoaSetUrlSchemeDefault(const char* bundlePath, const char* scheme) {
         [ws setDefaultApplicationAtURL:app toOpenURLsWithScheme:sc
                      completionHandler:^(NSError* err) {
             if (err) {
-                fprintf(stderr, "[W] Mac.apk.URL: [URL] default handler for %s not changed: %s\n",
+                fprintf(stderr, "[W] Apk on Mac.URL: [URL] default handler for %s not changed: %s\n",
                         s.c_str(), err.localizedDescription.UTF8String ?: "?");
             }
         }];
@@ -4704,7 +4704,7 @@ static void clamp_phone_to_max_aspect() {
 // (and, since API 31, the SplashScreen icon over it) BEFORE the app has drawn a
 // single frame -- see PhoneWindowManager.addSplashScreen /
 // SplashscreenContentDrawer, which read exactly that attribute. Our placeholder
-// existed but was hardcoded black, so every Mac.apk boot showed a black
+// existed but was hardcoded black, so every Apk on Mac boot showed a black
 // rectangle where a device shows the app's brand colour.
 //
 // The colour arrives from the Java side the moment the activity's theme is
@@ -4982,7 +4982,7 @@ int CocoaPhoneWidth()  { SFTRACE("CocoaPhoneWidth -> %d",  g_phone_w); return g_
 int CocoaPhoneHeight() { SFTRACE("CocoaPhoneHeight -> %d", g_phone_h); return g_phone_h; }
 
 // ---- the display density (v1.0.2187) -----------------------------------------
-// Mac.apk's Android display is measured in POINTS: one dp is one point on every
+// Apk on Mac's Android display is measured in POINTS: one dp is one point on every
 // Mac screen, so the density is the backing scale of the screen the app opens
 // on -- 320 dpi (density 2.0) on a Retina screen, 160 dpi (density 1.0) on a 1x
 // monitor. Until v1.0.2187 it was 320 everywhere, which is right only on
@@ -5908,7 +5908,7 @@ void* CocoaCreateWindow(const char* title) {
     // The window itself is a +1 alloc the pool cannot touch, and the body
     // runs synchronously, so draining on scope exit strands nothing.
     @autoreleasepool {
-        NSString* ns_title = macapk_titled(title ? [NSString stringWithUTF8String:title] : @"Mac.apk");
+        NSString* ns_title = macapk_titled(title ? [NSString stringWithUTF8String:title] : @"Apk on Mac");
         NSRect frame = NSMakeRect(0, 0, g_phone_w, g_phone_h);
         NSWindowStyleMask style = NSWindowStyleMaskTitled
                                 | NSWindowStyleMaskClosable
@@ -9508,7 +9508,7 @@ void CocoaSetWindowTitle(void* window, const char* title) {
 // whether the JVM happens to be ready. Only the SELECTION crosses into Java.
 static NSString* keybind_dir(void) {
     return [NSHomeDirectory() stringByAppendingPathComponent:
-            @"Library/Application Support/Mac.apk/keybinds"];
+            @"Library/Application Support/Apk on Mac/keybinds"];
 }
 
 static void keybind_set_active(NSString* name) {
@@ -11022,7 +11022,7 @@ static inline BOOL MacApkIsRotateShortcut(NSEvent* event) {
 // InputMethodManager.dispatchInputEvent returns DISPATCH_NOT_HANDLED when
 // isImeSessionAvailableLocked() is false (InputMethodManager.java:4284-4316),
 // so with no editor focused the key goes straight to the View with its literal
-// key code. Mac.apk IS the IME, and it already records the bound target:
+// key code. Apk on Mac IS the IME, and it already records the bound target:
 // macapkActiveInput() for a TextView target and macapkActiveConnection() for a
 // Compose/InputConnection editor. Mirroring that gate keeps gameplay keys
 // (WASD, arrows) on the raw KeyEvent path and keeps AppKit's press-and-hold
@@ -11635,7 +11635,7 @@ static JNIEnv* MacapkTouchJniEnv() {
 
 // TRACKPAD PINCH -> a synthesized TWO-FINGER Android gesture.
 //
-// Mac.apk delivered exactly ONE pointer, ever: `dispatch(IFFFF)` carries a single x/y and
+// Apk on Mac delivered exactly ONE pointer, ever: `dispatch(IFFFF)` carries a single x/y and
 // TouchDispatcher built every MotionEvent with pointerCount=1. So ACTION_POINTER_DOWN/UP were
 // never generated and `ScaleGestureDetector` -- fully implemented in this tree and simply never
 // fed -- could not fire. **Pinch-to-zoom was unreachable in every map, image, PDF and browser
@@ -12134,7 +12134,7 @@ static JNIEnv* MacapkTouchJniEnv() {
 //
 // Our "document" is the in-flight composition and nothing else: the guest owns
 // the real text buffer (a TextView or a Compose InputConnection reached through
-// InputMethodManager.macapkActiveInput/macapkActiveConnection) and Mac.apk has
+// InputMethodManager.macapkActiveInput/macapkActiveConnection) and Apk on Mac has
 // no synchronous read path into it. So we answer the geometry/content queries
 // for the composition we are holding and return "no document" otherwise, which
 // is enough for the input method to run its conversion session and place its
@@ -12973,7 +12973,7 @@ static void MacapkDriveTickAt(double dnow, double kPeriod) {
 // thread, so a busy UI thread delays only the UI thread's own frame; it never
 // delays another Looper's vsync, and it never delays a native AChoreographer's.
 //
-// Mac.apk produced every vsync inside drawInMTKView, i.e. ON the AppKit main thread,
+// Apk on Mac produced every vsync inside drawInMTKView, i.e. ON the AppKit main thread,
 // so ANY main-thread stall withheld vsync from every paced guest thread and the
 // engine advanced the whole gap in one frame. Measured on Subway Surfers 3.62.0 in
 // gameplay with MACAPK_MAIN_STALL_MS=40: JNI calls parked in
@@ -13360,7 +13360,7 @@ static bool MacapkNoteDisplaySize(JNIEnv* env, MTKView* view, int w, int h) {
     // RenderDragon never rendered a single frame -> BLACK menu. This was the real
     // multi-session black-render root cause. Verified via the emulator oracle: MCPE
     // renders fine on the SAME ANGLE-Vulkan-SwiftShader stack, so the gap was purely
-    // this Mac.apk vsync-gating, not MoltenVK/the driver/the GLES version.
+    // this Apk on Mac vsync-gating, not MoltenVK/the driver/the GLES version.
     // choreographer_fire is a safe no-op when a looper has no pending callbacks
     // (cocos2d-x / AndEngine / libGDX drive their own loops), and swappy_present_tick
     // no-ops unless a libunity Swappy layout is detected, so firing this for all apps

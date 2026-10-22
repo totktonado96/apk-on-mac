@@ -1,6 +1,6 @@
 // android.bluetooth.BluetoothDevice
 //
-// A remote Bluetooth device handle. Mac.apk has no Bluetooth backend, so
+// A remote Bluetooth device handle. Apk on Mac has no Bluetooth backend, so
 // instances are normally only constructed from an address string (apps that
 // hold a MAC and want to connect). Bonding/connection always report
 // "none/disconnected" and connectGatt returns a GATT client that immediately
@@ -138,12 +138,12 @@ public class BluetoothDevice implements Parcelable {
     /** L2CAP CoC channels (API 29). No radio, so the same honest IOException
      *  the RFCOMM socket factories above use rather than a dead socket. */
     public BluetoothSocket createL2capChannel(int psm) throws java.io.IOException {
-        throw new java.io.IOException("Mac.apk: no Bluetooth radio");
+        throw new java.io.IOException("Apk on Mac: no Bluetooth radio");
     }
 
     /** @see #createL2capChannel */
     public BluetoothSocket createInsecureL2capChannel(int psm) throws java.io.IOException {
-        throw new java.io.IOException("Mac.apk: no Bluetooth radio");
+        throw new java.io.IOException("Apk on Mac: no Bluetooth radio");
     }
 
     @Override public boolean equals(Object o) {

@@ -5,7 +5,7 @@
 // AOSP ref: frameworks/base/core/java/android/content/SyncAdapterType.java
 // (android16-release). Ported in full.
 //
-// Mac.apk registers no sync adapters, so getSyncAdapterTypes() returns an
+// Apk on Mac registers no sync adapters, so getSyncAdapterTypes() returns an
 // empty array and nothing here is ever constructed BY the framework -- but an
 // app constructs these itself (that is what the public constructors are for)
 // and hands them around, so the value semantics, the "key" mode and the

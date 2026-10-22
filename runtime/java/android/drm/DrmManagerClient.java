@@ -9,7 +9,7 @@
 // =============================================================================
 // WHAT THIS DEVICE REPORTS, AND WHY -- read before changing any return value
 // =============================================================================
-// Mac.apk has NO DRM plug-in. That is not a gap being papered over: it is a
+// Apk on Mac has NO DRM plug-in. That is not a gap being papered over: it is a
 // state real Android devices are in whenever no engine is installed that
 // claims the content, and AOSP has a documented answer for every entry point
 // in that state. Those answers are what this file returns:

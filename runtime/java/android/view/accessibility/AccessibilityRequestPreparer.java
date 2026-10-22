@@ -5,7 +5,7 @@
 // core/java/android/view/accessibility/AccessibilityRequestPreparer.java
 // (android16-release).
 //
-// Mac.apk bridges no accessibility service, so AccessibilityManager.isEnabled()
+// Apk on Mac bridges no accessibility service, so AccessibilityManager.isEnabled()
 // is honestly false and no request is ever prepared -- onPrepareExtraData is
 // never called, exactly as on a device with no service connected.
 package android.view.accessibility;

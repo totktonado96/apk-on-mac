@@ -20,7 +20,7 @@ if(NOT DEFINED ENV{JAVA_HOME})
   set(ENV{JAVA_HOME} "/opt/homebrew/opt/openjdk@21/libexec/openjdk.jdk/Contents/Home")
 endif()
 set(JAVA_HOME "$ENV{JAVA_HOME}")
-message(STATUS "Mac.apk: JAVA_HOME = ${JAVA_HOME}")
+message(STATUS "Apk on Mac: JAVA_HOME = ${JAVA_HOME}")
 
 if(NOT EXISTS "${JAVA_HOME}/include/jni.h")
   message(FATAL_ERROR "jni.h not found under JAVA_HOME=${JAVA_HOME}; install openjdk@21 or set JAVA_HOME.")
@@ -50,9 +50,9 @@ if(EXISTS "${ANGLE_LIB_DIR}/libGLESv2.dylib"
    AND EXISTS "${ANGLE_LIB_DIR}/libEGL.dylib"
    AND EXISTS "${ANGLE_ROOT}/include/GLES2/gl2.h")
     set(ANGLE_HAVE ON)
-    message(STATUS "Mac.apk: ANGLE found at ${ANGLE_ROOT} (libs ${ANGLE_LIB_DIR})")
+    message(STATUS "Apk on Mac: ANGLE found at ${ANGLE_ROOT} (libs ${ANGLE_LIB_DIR})")
 else()
-    message(WARNING "Mac.apk: ANGLE NOT found; GLES20 calls will be no-ops.")
+    message(WARNING "Apk on Mac: ANGLE NOT found; GLES20 calls will be no-ops.")
 endif()
 
 # libvpx (BSD-3-Clause, WebM project): software VP8 AND VP9 decode for
@@ -89,9 +89,9 @@ set(LIBVPX_ROOT "/opt/homebrew/opt/libvpx")
 set(LIBVPX_HAVE OFF)
 if(EXISTS "${LIBVPX_ROOT}/lib/libvpx.a" AND EXISTS "${LIBVPX_ROOT}/include/vpx/vpx_decoder.h")
     set(LIBVPX_HAVE ON)
-    message(STATUS "Mac.apk: libvpx found at ${LIBVPX_ROOT} (static -- VP8/VP9 decode via MediaCodec)")
+    message(STATUS "Apk on Mac: libvpx found at ${LIBVPX_ROOT} (static -- VP8/VP9 decode via MediaCodec)")
 else()
-    message(WARNING "Mac.apk: libvpx NOT found at ${LIBVPX_ROOT} (brew install libvpx); VP8/VP9 decode will be unavailable.")
+    message(WARNING "Apk on Mac: libvpx NOT found at ${LIBVPX_ROOT} (brew install libvpx); VP8/VP9 decode will be unavailable.")
 endif()
 
 # Native launcher -- spins up HotSpot, runs the Java side, owns the
@@ -127,7 +127,7 @@ set(MACAPK_RUNTIME_SOURCES
     src/audio_backend.mm
     # v1.0.940: the MacBook's real microphone and camera.
     #
-    # Mac.apk had been reporting no mic and no camera, and AudioRecord returned
+    # Apk on Mac had been reporting no mic and no camera, and AudioRecord returned
     # zero-filled silence while still claiming STATE_INITIALIZED. The owner's
     # call was that a MacBook plainly has both and we should wire them. These
     # two are the capture layers; the Android-facing surfaces sit above them.
@@ -232,7 +232,7 @@ add_executable(macapk-runtime ${MACAPK_RUNTIME_SOURCES})
 #
 # ⚠ WHY THIS CANNOT BE A BUNDLE PLIST. An INSTALLED app's stub execv()s this
 # binary from the SHARED runtime staging dir (~/Library/Application Support/
-# Mac.apk/runtime/), which is NOT inside any .app. After execv the process IS
+# Apk on Mac/runtime/), which is NOT inside any .app. After execv the process IS
 # this executable, so the .app's Info.plist never applies -- and macOS refuses a
 # TCC capability OUTRIGHT, WITHOUT PROMPTING, when the requesting code carries no
 # usage description. For a bare Mach-O the only place macOS looks is this
@@ -241,7 +241,7 @@ add_executable(macapk-runtime ${MACAPK_RUNTIME_SOURCES})
 # Measured 2026-08-24 with debug/camtest installed to /Applications: auth status
 # was NotDetermined, requestAccessForMediaType was genuinely called, and the
 # completion handler returned DENIED immediately with no dialog ever shown. The
-# same APK launched from Mac.apk.app worked -- because there the runtime sits at
+# same APK launched from Apk on Mac.app worked -- because there the runtime sits at
 # Contents/Resources/macapk-runtime, INSIDE a bundle that has the keys.
 # That asymmetry is exactly the "worked before, errors now, never prompted" report.
 #

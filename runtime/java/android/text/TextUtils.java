@@ -64,7 +64,7 @@ public class TextUtils {
     public static final int SAFE_STRING_FLAG_FIRST_LINE = 0x4;
 
     // Standard AOSP enum used by TextView.setEllipsize. Apps reference
-    // it by simple name (TruncateAt.END etc). Stub-only; Mac.apk
+    // it by simple name (TruncateAt.END etc). Stub-only; Apk on Mac
     // doesn't actually ellipsize text.
     public enum TruncateAt {
         START, MIDDLE, END, MARQUEE, END_SMALL
@@ -310,7 +310,7 @@ public class TextUtils {
     }
 
     /** AOSP ellipsize: shorten `text` to fit `avail` pixels using `p`, inserting
-     *  an ellipsis at `where`. Mac.apk measures via Paint; the visual ellipsis
+     *  an ellipsis at `where`. Apk on Mac measures via Paint; the visual ellipsis
      *  position matters for maxLines/ellipsize TextViews.
      *
      *  AOSP's real implementation (frameworks/base core/java/android/text/
@@ -778,7 +778,7 @@ public class TextUtils {
     }
 
     // AOSP TextUtils.writeToParcel(CharSequence,...) + CHAR_SEQUENCE_CREATOR
-    // (TextUtils.java:747-799 and 801-...). Mac.apk has no cross-process
+    // (TextUtils.java:747-799 and 801-...). Apk on Mac has no cross-process
     // boundary, but these are the marshaller every AOSP value class with a
     // CharSequence field uses (ClipDescription.label, CorrectionInfo,
     // AccessibilityWindowInfo.mTitle in this tree), so the format has to be
@@ -1024,7 +1024,7 @@ public class TextUtils {
      *  remaining ICU-RTL scripts it reports as LTR (Pashto/Sindhi/Uyghur/
      *  Divehi/Syriac). The AOSP body also OR's in
      *  DisplayProperties.debug_force_rtl(), a developer-settings "force
-     *  RTL layout" debug toggle with no Mac.apk equivalent (there is no
+     *  RTL layout" debug toggle with no Apk on Mac equivalent (there is no
      *  such settings screen here); omitted, matching the overwhelmingly
      *  common real evaluation (flag unset -> false). */
     public static int getLayoutDirectionFromLocale(java.util.Locale locale) {

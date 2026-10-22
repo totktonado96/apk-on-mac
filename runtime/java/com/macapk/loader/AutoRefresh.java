@@ -1,4 +1,4 @@
-// AutoRefresh -- Mac.apk-platform UX policy: when an Activity becomes
+// AutoRefresh -- Apk on Mac-platform UX policy: when an Activity becomes
 // visible, walk its view tree for SwipeRefreshLayout instances with a
 // registered OnRefreshListener and invoke the listener once, after a
 // short stabilization delay.
@@ -10,7 +10,7 @@
 // The user-experience is "freshly installed apps show no content until
 // you swipe-pull-down to refresh." On a desktop runtime that's not the
 // expected UX -- the user clicks Launch and expects to see content
-// promptly. Mac.apk's policy: treat the act of becoming-visible as
+// promptly. Apk on Mac's policy: treat the act of becoming-visible as
 // an implicit pull-to-refresh gesture, invoking whatever
 // OnRefreshListener the app already wired up for its real swipe
 // gesture. Generic across any Android app that uses the
@@ -27,7 +27,7 @@
 //   JVM session; subsequent setContentView changes (e.g. tab switches
 //   inside the same Activity that don't create a new Activity) do NOT
 //   re-trigger. If the user wants to refresh again they can wait for
-//   the next periodic, or in a future Mac.apk version, swipe.
+//   the next periodic, or in a future Apk on Mac version, swipe.
 //
 // Deviation from real Android: real Android does NOT auto-trigger
 // onRefresh on every launch. This is a deliberate platform choice.
@@ -52,7 +52,7 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 public final class AutoRefresh {
-    private static final String TAG = "Mac.apk.AutoRefresh";
+    private static final String TAG = "Apk on Mac.AutoRefresh";
 
     /** How long to wait after onResume before walking the tree. Long
      *  enough for the Fragment's onCreateView (which typically

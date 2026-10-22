@@ -5,7 +5,7 @@ import android.os.OutcomeReceiver;
 import java.util.concurrent.Executor;
 
 // android.adservices.customaudience -- Privacy Sandbox (API 33+).
-// Mac.apk is a de-Googled device: the AdServices module is absent, so this
+// Apk on Mac is a de-Googled device: the AdServices module is absent, so this
 // manager reports the service as unavailable: async calls invoke
 // OutcomeReceiver.onError (the two status/list reads return the
 // DISABLED/empty value), so a compliant ad SDK disables that path. See [[gms-absent-device-contract]]; the class exists so an ad SDK's

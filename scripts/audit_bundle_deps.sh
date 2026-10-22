@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # audit_bundle_deps.sh
 #
-# Self-containment auditor for a Mac.apk .app bundle. Walks every Mach-O
+# Self-containment auditor for a Apk on Mac .app bundle. Walks every Mach-O
 # file inside Contents/ (executables and dylibs), runs `otool -L` on each,
 # and flags any linked dependency that is NOT one of:
 #   - a macOS system path (/usr/lib/..., /System/...)
@@ -17,7 +17,7 @@
 # real user's machine even though it works fine from a developer's terminal.
 #
 # Usage:
-#   scripts/audit_bundle_deps.sh [path/to/Mac.apk.app]
+#   scripts/audit_bundle_deps.sh [path/to/Apk on Mac.app]
 #
 # Exit code: 0 if fully self-contained, 1 if any external dependency found.
 # Always prints the full otool -L output for every Mach-O, so this doubles
@@ -25,7 +25,7 @@
 
 set -uo pipefail
 
-APP="${1:-build/Mac.apk.app}"
+APP="${1:-build/Apk on Mac.app}"
 if [ ! -d "$APP" ]; then
     echo "ERROR: $APP not found." >&2
     exit 2

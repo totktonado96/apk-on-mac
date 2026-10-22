@@ -13,7 +13,7 @@ import com.google.android.gms.tasks.TaskCompletionSource;
 import java.util.Arrays;
 
 // com.google.android.gms.auth.api.signin.GoogleSignIn -- the static entry point
-// for Google Sign-In. On a de-Googled / no-Play-services device (Mac.apk's
+// for Google Sign-In. On a de-Googled / no-Play-services device (Apk on Mac's
 // policy) there is never a signed-in Google account and no backend to reach, so:
 //   - getLastSignedInAccount: null (honest "nobody is signed in").
 //   - getSignedInAccountFromIntent: the Task fails with
@@ -46,7 +46,7 @@ public final class GoogleSignIn {
     // real method reads the account out of the Intent extras; here there is no
     // account, so the Task fails with the honest SIGN_IN_REQUIRED status. If the
     // Intent did carry a status with a real error code we would surface that,
-    // but on Mac.apk no GMS sign-in Activity runs, so data is always empty.
+    // but on Apk on Mac no GMS sign-in Activity runs, so data is always empty.
     public static Task<GoogleSignInAccount> getSignedInAccountFromIntent(Intent data) {
         TaskCompletionSource<GoogleSignInAccount> tcs =
                 new TaskCompletionSource<GoogleSignInAccount>();

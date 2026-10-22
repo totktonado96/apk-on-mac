@@ -14,7 +14,7 @@ import android.view.inputmethod.TextAttribute;
  * onStartInput / onUpdateSelection / onFinishInput as the user moves through
  * editable fields, and the service edits via getCurrentInputConnection().
  *
- * Mac.apk binds no accessibility service, so those callbacks never fire and no
+ * Apk on Mac binds no accessibility service, so those callbacks never fire and no
  * input connection is ever established -- getCurrentInputConnection() returns
  * null, which is precisely what AOSP returns before onStartInput and after
  * onFinishInput. A service that null-checks (all of them do; AOSP documents the
@@ -33,7 +33,7 @@ public class InputMethod {
         mService = service;
     }
 
-    /** AOSP: null until onStartInput and again after onFinishInput. Mac.apk
+    /** AOSP: null until onStartInput and again after onFinishInput. Apk on Mac
      *  never starts input for a service, so it stays null. */
     public final AccessibilityInputConnection getCurrentInputConnection() {
         return mConnection;
@@ -63,7 +63,7 @@ public class InputMethod {
     /**
      * The restricted editing surface an accessibility IME gets. On a device
      * every call is forwarded to the focused editor over the input-method
-     * binder. Mac.apk never hands one of these out (getCurrentInputConnection
+     * binder. Apk on Mac never hands one of these out (getCurrentInputConnection
      * is null), so the bodies exist for API completeness and for a service that
      * holds a reference across a field change -- AOSP's own methods become
      * no-ops in exactly that situation, because the underlying connection is

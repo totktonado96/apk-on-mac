@@ -8,7 +8,7 @@ import android.graphics.Bitmap;
  * superseded by MediaSession. Still referenced by 9 of 37 corpus apps whose
  * media code retains the old path.
  *
- * Mac.apk has no lock screen or bluetooth AVRCP transport to publish to, so the
+ * Apk on Mac has no lock screen or bluetooth AVRCP transport to publish to, so the
  * metadata and playback state are ACCEPTED and stored (a MetadataEditor that
  * round-trips) but not surfaced anywhere -- which is the same observable result
  * as a device with no remote-control display, and lets the app's media code run

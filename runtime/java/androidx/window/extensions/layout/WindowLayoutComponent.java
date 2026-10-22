@@ -1,7 +1,7 @@
 package androidx.window.extensions.layout;
 import android.content.Context;
 import java.util.Collections;
-/** Reports a window's display features. Mac.apk is flat, so every window has an
+/** Reports a window's display features. Apk on Mac is flat, so every window has an
  *  empty WindowLayoutInfo (no fold) and the listener fires once with it.
  *  Interface with inert default methods, so WindowExtensions returns an
  *  anonymous impl and androidx.window's reflective validation still sees an

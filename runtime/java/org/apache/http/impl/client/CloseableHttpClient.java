@@ -11,7 +11,7 @@ import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.conn.ClientConnectionManager;
 import org.apache.http.params.HttpParams;
 import org.apache.http.protocol.HttpContext;
-/** 4.3 base client. Mac.apk wires no apache transport, so doExecute throws; apps
+/** 4.3 base client. Apk on Mac wires no apache transport, so doExecute throws; apps
  *  that need real networking use the host-JVM path. The full API links. */
 public abstract class CloseableHttpClient implements HttpClient, Closeable {
     protected abstract HttpResponse doExecute(HttpHost target, HttpRequest request, HttpContext context)

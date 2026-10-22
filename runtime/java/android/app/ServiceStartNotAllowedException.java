@@ -3,7 +3,7 @@
 //   AOSP: frameworks/base/core/java/android/app/ServiceStartNotAllowedException.java
 //         (android14-release), mirrored member for member.
 //
-// Why it exists here although Mac.apk never throws it: 13 of the 62 corpus
+// Why it exists here although Apk on Mac never throws it: 13 of the 62 corpus
 // apps (debug/fwgap_census.py, column D) carry their OWN R8 "API stub" of this
 // class, because they catch it and were built with a minSdk that predates it.
 // On a device the boot classpath wins and the stub is dead code; here, with no

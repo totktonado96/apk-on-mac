@@ -7,7 +7,7 @@
 // accessors, Parcelable shape, and INVALID_TIME all verified against
 // AOSP source).
 //
-// Mac.apk note: since v1.0.1654 (MACAPK_PERSISTED_URI_GRANTS)
+// Apk on Mac note: since v1.0.1654 (MACAPK_PERSISTED_URI_GRANTS)
 // ContentResolver.getPersistedUriPermissions() returns real instances, built
 // by MacApkUriGrants.persisted() exactly as UriGrantsManagerService's
 // UriPermission.buildPersistedPublicApiObject does:

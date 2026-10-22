@@ -1,5 +1,5 @@
 // android.hardware.Sensor -- describes a single hardware sensor.
-// Mirrors the AOSP public type-constant and getter surface. Mac.apk
+// Mirrors the AOSP public type-constant and getter surface. Apk on Mac
 // has no real sensor hardware, so SensorManager synthesizes a small
 // set of "device flat / no motion" sensors (accelerometer reading the
 // gravity vector, etc.) and hands out Sensor instances describing
@@ -123,7 +123,7 @@ public final class Sensor {
 
     public int    getType()         { return type; }
     public String getName()         { return name; }
-    public String getVendor()       { return "Mac.apk"; }
+    public String getVendor()       { return "Apk on Mac"; }
     public int    getVersion()      { return 1; }
     public String getStringType()   { return stringType; }
     public float  getMaximumRange() { return maxRange; }

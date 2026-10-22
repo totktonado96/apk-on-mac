@@ -1,12 +1,12 @@
-Mac.apk -- Third-party notices
+Apk on Mac -- Third-party notices
 ==============================
 
-Mac.apk is distributed as a signed application bundle that includes the
+Apk on Mac is distributed as a signed application bundle that includes the
 third-party components listed below. Each is used under the terms of its own
-licence, reproduced (or pointed to) here to satisfy those terms. Mac.apk's own
+licence, reproduced (or pointed to) here to satisfy those terms. Apk on Mac's own
 code is licensed separately; see LICENSE and EULA.md.
 
-The Android application you choose to run through Mac.apk is not part of Mac.apk
+The Android application you choose to run through Apk on Mac is not part of Apk on Mac
 and is not covered by these notices; you are responsible for your rights to it.
 
 --------------------------------------------------------------------------------
@@ -16,7 +16,7 @@ SPDX-License-Identifier: GPL-2.0-only WITH Classpath-exception-2.0
 The complete OpenJDK licence and per-module notices ship inside this bundle at
 Contents/Resources/jre/legal/ (LICENSE and ADDITIONAL_LICENSE_INFO per module).
 OpenJDK is used under GPLv2 with the Classpath Exception, which permits the
-in-process embedding Mac.apk relies on. Source: https://openjdk.org/ .
+in-process embedding Apk on Mac relies on. Source: https://openjdk.org/ .
 
 
 --------------------------------------------------------------------------------
@@ -2893,7 +2893,7 @@ stb_vorbis (compiled into macapk-runtime) -- Ogg Vorbis decode
 SPDX-License-Identifier: MIT OR Unlicense
 
 Copyright (c) 2017 Sean Barrett. Available under the MIT licence or as public
-domain (Unlicense), at the user's choice; Mac.apk uses it under the MIT licence:
+domain (Unlicense), at the user's choice; Apk on Mac uses it under the MIT licence:
 
 Copyright (c) 2017 Sean Barrett
 Permission is hereby granted, free of charge, to any person obtaining a copy of
@@ -2921,7 +2921,7 @@ SPDX-License-Identifier: FTL
 
 Portions of this software are copyright (c) The FreeType Project
 (www.freetype.org). All rights reserved. FreeType is dual-licensed (FTL or
-GPLv2); Mac.apk uses it under the FreeType License (FTL), reproduced below.
+GPLv2); Apk on Mac uses it under the FreeType License (FTL), reproduced below.
 Source: https://freetype.org/ .
 
                     The FreeType Project LICENSE
@@ -3176,7 +3176,7 @@ PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR MODIFICATIONS.
 Graphite2 1.3.15 (jre/lib/libgraphite2.3.dylib) -- font shaping, used by HarfBuzz
 SPDX-License-Identifier: MIT OR MPL-2.0 OR LGPL-2.1-or-later OR GPL-2.0-or-later
 
-Graphite2 is offered under several licences; Mac.apk uses it under the MIT
+Graphite2 is offered under several licences; Apk on Mac uses it under the MIT
 licence. Source: https://github.com/silnrsi/graphite .
 
 Unless otherwise specified, source code and documentation aurthored, or
@@ -3671,8 +3671,8 @@ GLib is free software under the GNU Lesser General Public License, version
 linked library (Contents/Resources/jre/lib/libglib-2.0.0.dylib), unmodified
 from the Homebrew build of the version named above apart from Mach-O load-path
 metadata. The complete corresponding source (upstream tarball, Homebrew's patch,
-the build recipe) is attached to the same GitHub release as the Mac.apk download
-(https://github.com/kksimp/Mac.apk-Releases/releases), with
+the build recipe) is attached to the same GitHub release as the Apk on Mac download
+(https://github.com/totktonado96/apk-on-mac/releases), with
 LGPL-SOURCE-README.txt explaining how to use a modified build. Upstream:
 https://download.gnome.org/sources/glib/ . The LGPL-2.1 text follows.
 
@@ -4188,8 +4188,8 @@ libintl is free software under the GNU Lesser General Public License, version
 in the GLib entry above). It ships as a separate, dynamically linked library,
 unmodified from the Homebrew build of the version named above apart from Mach-O
 load-path metadata. The complete corresponding source (upstream tarball and the
-build recipe) is attached to the same GitHub release as the Mac.apk download
-(https://github.com/kksimp/Mac.apk-Releases/releases); see LGPL-SOURCE-README.txt
+build recipe) is attached to the same GitHub release as the Apk on Mac download
+(https://github.com/totktonado96/apk-on-mac/releases); see LGPL-SOURCE-README.txt
 there. Upstream: https://ftp.gnu.org/pub/gnu/gettext/ .
 
 

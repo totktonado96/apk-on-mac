@@ -131,7 +131,7 @@ public final class SharedLibraryInfo implements android.os.Parcelable {
      *
      *  This class carries no certificate state -- our libraries are all
      *  TYPE_BUILTIN entries backed by code inside this process, which is signed
-     *  as part of Mac.apk itself and not as a separate library package -- so
+     *  as part of Apk on Mac itself and not as a separate library package -- so
      *  the honest answer is the empty list, which is exactly what AOSP returns
      *  for every library whose digests were never recorded (all builtin and
      *  dynamic ones). @NonNull upstream, so this must not be null. */

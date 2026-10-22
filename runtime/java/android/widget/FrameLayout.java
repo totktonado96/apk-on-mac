@@ -53,7 +53,7 @@ public class FrameLayout extends ViewGroup {
 
     // AOSP View.isForegroundInsidePadding() reads mForegroundInfo.mInsidePadding,
     // whose default is true and whose only writer is the android:foregroundInsidePadding
-    // XML attribute. Mac.apk's View has no ForegroundInfo record and the inflater
+    // XML attribute. Apk on Mac's View has no ForegroundInfo record and the inflater
     // does not parse that attribute, so `true` is the only reachable state. Kept as
     // a named method so that a View that grows the real accessor can be wired in here
     // by changing one line instead of four call sites.
@@ -243,7 +243,7 @@ public class FrameLayout extends ViewGroup {
             android.view.ViewGroup.LayoutParams lp = c.getLayoutParams();
             // AOSP FrameLayout.layoutChildren (FrameLayout.java:287-288) lays a
             // child out at its MEASURED size, full stop -- it never re-derives
-            // the size from the LayoutParams. Mac.apk used to re-expand
+            // the size from the LayoutParams. Apk on Mac used to re-expand
             // MATCH_PARENT (and any child that measured 0) to the parent's
             // content rect here, which silently papered over measurement gaps
             // and, where measurement was already right, produced the wrong

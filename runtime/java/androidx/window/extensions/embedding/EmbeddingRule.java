@@ -1,6 +1,6 @@
 package androidx.window.extensions.embedding;
 
-/** Base for activity-embedding rules. Mac.apk does not embed activities, so a
+/** Base for activity-embedding rules. Apk on Mac does not embed activities, so a
  *  rule is inert (held but never applied). */
 public abstract class EmbeddingRule {
     private final String mTag;

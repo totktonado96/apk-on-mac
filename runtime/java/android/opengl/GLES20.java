@@ -439,7 +439,7 @@ public class GLES20 {
     // every caller back its own untouched buffer, i.e. a black screenshot from
     // libGDX's ScreenUtils.getFrameBufferPixels and from any in-app capture.
     //
-    // This does NOT feed Mac.apk's own render instrument: self-capture and the
+    // This does NOT feed Apk on Mac's own render instrument: self-capture and the
     // GL frame dumps call the C++ glReadPixels directly (runtime/src/angle_glue.cpp
     // and cocoa_bridge.mm), never this Java binding, so wiring it up cannot
     // perturb a render verdict. See docs/gles20-noop-sweep_2026-07-29.md.

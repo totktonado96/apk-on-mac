@@ -37,7 +37,7 @@ public class Environment {
     public static final String MEDIA_REMOVED            = "removed";
     public static final String MEDIA_UNMOUNTED          = "unmounted";
     // The remaining getExternalStorageState() results, AOSP verbatim
-    // (core/java/android/os/Environment.java). Mac.apk's single volume is
+    // (core/java/android/os/Environment.java). Apk on Mac's single volume is
     // permanently MEDIA_MOUNTED, so none of these is ever RETURNED -- but an
     // app switches on the value and its own switch arms reference the
     // constants, and any of them may be read reflectively.
@@ -126,7 +126,7 @@ public class Environment {
     // (name "") for the second, so any app deriving a path from either got a
     // location with no relationship to the one Android describes.
     //
-    // Rebased under the Mac.apk android_root rather than returned as the
+    // Rebased under the Apk on Mac android_root rather than returned as the
     // literal "/data" and "/system", for two reasons. (1) AOSP itself derives
     // both from environment variables via getDirectory(), so a relocated root
     // is inside the contract, not a deviation from it. (2) These are the
@@ -153,7 +153,7 @@ public class Environment {
     }
     // AOSP :252  public static File getStorageDirectory() { return DIR_ANDROID_STORAGE; }
     // where DIR_ANDROID_STORAGE = getDirectory(ENV_ANDROID_STORAGE, "/storage").
-    // Rebased under the Mac.apk android_root for the same reason as
+    // Rebased under the Apk on Mac android_root for the same reason as
     // getDataDirectory()/getRootDirectory() above, and to the same place the
     // native side resolves it: bionic_shim.cpp's remap sends a native
     // "/storage" or "/storage/..." here, prefix kept -- EXCEPT the primary
@@ -163,7 +163,7 @@ public class Environment {
     // getExternalStorageDirectory() ("/storage/emulated/0") nests UNDER this
     // one, whereas here external storage is "<root>/sdcard". Stage S3 of
     // docs/shared-storage-real-mac-folders-design_2026-09-25.md moves shared
-    // storage to a Mac.apk-wide folder that does nest; until then the nesting
+    // storage to a Apk on Mac-wide folder that does nest; until then the nesting
     // is not literal here.
     public static File getStorageDirectory() {
         File f = new File(resolveAndroidRoot(), "storage");

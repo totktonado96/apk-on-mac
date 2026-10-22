@@ -2,11 +2,11 @@
 # build_angle.sh
 #
 # Builds ANGLE (Google's GLES->{Vulkan,Metal,D3D} translator) into
-# libGLESv2.dylib + libEGL.dylib that we link from the Mac.apk runtime.
+# libGLESv2.dylib + libEGL.dylib that we link from the Apk on Mac runtime.
 #
 # Output: thirdparty/angle/out/Release/{libGLESv2.dylib, libEGL.dylib}
 # First build is ~30-60 minutes on an M-series Mac. Subsequent rebuilds
-# (after Mac.apk edits to the Mac.apk side, not ANGLE itself) are no-op
+# (after Apk on Mac edits to the Apk on Mac side, not ANGLE itself) are no-op
 # because gn/ninja are incremental and ANGLE source hasn't changed.
 #
 # Why not just download a prebuilt: Google does not ship ANGLE prebuilts
@@ -15,7 +15,7 @@
 #
 # Disk model (v1.0.200): we DELETED the 25 GB source checkout and keep only
 # the two prebuilt dylibs + the include/ headers + license files under
-# thirdparty/angle/. That is everything the Mac.apk runtime links and
+# thirdparty/angle/. That is everything the Apk on Mac runtime links and
 # compiles against. This script re-fetches the full source on demand (when
 # thirdparty/angle/.git is absent) so a rebuild is always possible, and it
 # pins the exact upstream commit those kept dylibs came from so the rebuild
@@ -83,7 +83,7 @@ if ! xcrun metal --version >/dev/null 2>&1; then
     exit 1
 fi
 
-# Mac.apk ANGLE-source patches (v1.0.604). These modify upstream ANGLE and MUST
+# Apk on Mac ANGLE-source patches (v1.0.604). These modify upstream ANGLE and MUST
 # be re-applied after any fresh clone (the disk model deletes the 25GB checkout
 # and re-clones on demand, which would drop them). Each is applied idempotently:
 # `git apply --check` succeeds only if the patch is NOT yet applied.
@@ -99,7 +99,7 @@ fi
 #                                PROBES these formats) -- it is a correctness
 #                                improvement kept on its own merit.
 #   0003 present-into-embedder-  when the embedder hands ANGLE-Vulkan a CAMetalLayer
-#        metal-layer             (Mac.apk's g_unity_layer), present into it DIRECTLY
+#        metal-layer             (Apk on Mac's g_unity_layer), present into it DIRECTLY
 #                                instead of creating + addSublayer:ing a private child
 #                                layer. The child path runs on the caller's thread
 #                                (the guest RENDER thread for a native-EGL engine);
@@ -249,7 +249,7 @@ autoninja -C "$OUT_DIR" libvulkan 2>/dev/null \
 # write an ICD manifest next to the dylibs. The runtime points VK_ICD_FILENAMES
 # at this manifest (see main.cpp / launcher) so no system Vulkan SDK is required.
 echo "[3/3] stage MoltenVK ICD..."
-# Prefer, in order: (1) a Mac.apk-built MoltenVK WITH provoking-vertex support
+# Prefer, in order: (1) a Apk on Mac-built MoltenVK WITH provoking-vertex support
 # (thirdparty/MoltenVK-build/... built with MVK_USE_METAL_PRIVATE_API=1 -- this
 # is the one that lets ANGLE expose GLES 3.1), (2) the Homebrew molten-vk 1.4.1
 # (modern but no provoking-vertex), (3) the Android SDK emulator's ancient copy

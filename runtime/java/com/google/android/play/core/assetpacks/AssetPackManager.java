@@ -12,7 +12,7 @@ import java.util.Map;
 // Asset Delivery) ships its Addressables bundles as PAD asset packs;
 // Unity's PlayAssetDeliveryAssetBundleProvider gates each bundle load on the
 // pack reporting status COMPLETED via this API, and resolves the bundle path
-// via getPackLocation(...).assetsPath(). Mac.apk has no Google Play, but the
+// via getPackLocation(...).assetsPath(). Apk on Mac has no Google Play, but the
 // bundles are present in the APK assets and extracted to the data dir, so
 // every pack is effectively an install-time pack that is already COMPLETED.
 //

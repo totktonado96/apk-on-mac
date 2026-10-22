@@ -1,7 +1,7 @@
 // android.net.RouteInfo
 //
 // One IP routing-table entry (destination prefix + gateway + interface).
-// Pure value type. Mac.apk does not expose the host routing table to the
+// Pure value type. Apk on Mac does not expose the host routing table to the
 // guest, but LinkProperties.getRoutes can hand these back, so the type +
 // getters must resolve. Mirrors AOSP android.net.RouteInfo public API.
 package android.net;

@@ -5,7 +5,7 @@
 // protocol are no longer used." AOSP's own implementation on a current device
 // returns false from every registration and connection method and null from
 // getMainChannelFd -- i.e. the answers below are the ones a REAL modern Android
-// device gives, not a Mac.apk degradation. There is also no Bluetooth bridge
+// device gives, not a Apk on Mac degradation. There is also no Bluetooth bridge
 // here, so the proxy is never delivered in the first place (see BluetoothA2dp's
 // header for that mechanism).
 //

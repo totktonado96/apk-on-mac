@@ -80,7 +80,7 @@ public class LocationManager {
     // === Test providers =====================================================
     // A "test provider" is a provider whose fixes the APP ITSELF supplies
     // (LocationManager.addTestProvider + setTestProviderLocation). Nothing
-    // about it needs hardware, so unlike GPS this is a capability Mac.apk can
+    // about it needs hardware, so unlike GPS this is a capability Apk on Mac can
     // honour honestly and completely: every coordinate that comes out of it was
     // put in by the caller, and AOSP's contract is that such a Location is
     // identifiable via Location.isMock(), which we set. A test provider added
@@ -89,7 +89,7 @@ public class LocationManager {
     //
     // ONE deliberate divergence, stated rather than hidden: a real device
     // throws SecurityException unless the caller is the selected "mock location
-    // app" in developer settings. Mac.apk has no such setting and runs exactly
+    // app" in developer settings. Apk on Mac has no such setting and runs exactly
     // one app, so the check has no meaning here and the operation is allowed.
     // Refusing instead would break test/mock code for no protective benefit.
     private static final class TestProvider {
@@ -481,7 +481,7 @@ public class LocationManager {
         boolean want = false;
         int level = PERMISSION_NONE;
         // Who wants fixes is decided first: asking macOS about authorization
-        // starts the Mac.apk Location helper, which an app with nothing
+        // starts the Apk on Mac Location helper, which an app with nothing
         // registered (a removeUpdates, a test provider) must not do.
         for (Registration r : sRegistrations) {
             if (r.host() && !PASSIVE_PROVIDER.equals(r.provider)) { want = true; break; }
@@ -811,7 +811,7 @@ public class LocationManager {
 
     /** Wrap a Looper as an Executor (falls back to the main looper, never
      *  throws) so every listener-taking overload can share one dispatch
-     *  path. Mac.apk is deliberately more lenient than AOSP here: a real
+     *  path. Apk on Mac is deliberately more lenient than AOSP here: a real
      *  device throws when the calling thread has no Looper and none was
      *  supplied, we degrade to the main looper instead of crashing an app
      *  that happened to work by luck. */

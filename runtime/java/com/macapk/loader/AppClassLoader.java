@@ -64,7 +64,7 @@ import java.util.List;
 // adds no behaviour over BaseDexClassLoader here, so this is a hierarchy fix,
 // not a behaviour change.
 public final class AppClassLoader extends dalvik.system.PathClassLoader {
-    private static final String TAG = "Mac.apk.AppCl";
+    private static final String TAG = "Apk on Mac.AppCl";
     /** Guards the per-class loadClass/findClass info lines (~25K/boot for
      *  Reddit, ~13K for GD Lite). Derived from NativeLog.isLoggable(INFO)
      *  OR'd with an explicit MACAPK_QUIET_CLASSLOAD, so these two hottest
@@ -95,7 +95,7 @@ public final class AppClassLoader extends dalvik.system.PathClassLoader {
      *  needs the app's own 4-arg Status ctor, which our shadow cannot declare).
      *  See {@link #GMS_CHILD_FIRST_PREFIXES} + {@link #isGmsChildFirstFamily}.
      *
-     *  Background: Mac.apk ships emulator-grade honest-unavailable SHADOWS for
+     *  Background: Apk on Mac ships emulator-grade honest-unavailable SHADOWS for
      *  com.google.android.gms.* / firebase / play-core / billing under
      *  runtime/java/com/google/** (loaded by the PARENT = Boot's system
      *  loader). Because AppClassLoader is parent-first, those shadows OVERRIDE
@@ -939,7 +939,7 @@ public final class AppClassLoader extends dalvik.system.PathClassLoader {
     /** DEVICE ORACLES -- PARENT-first even though they sit inside the child-first
      *  family above. A class that answers "what does this DEVICE have" is
      *  answered by the device; a class that CARRIES THE APP'S DATA stays the
-     *  app's. Mac.apk is the device, so its shadow owns the first kind. This is
+     *  app's. Apk on Mac is the device, so its shadow owns the first kind. This is
      *  the same parent-first arm of the decision tree that already keeps
      *  play.core.assetpacks.* (our real local-delivery impl) and gms.tasks.* for
      *  PAD apps on this side -- see the exclusions in isGmsChildFirstFamily.
@@ -1038,7 +1038,7 @@ public final class AppClassLoader extends dalvik.system.PathClassLoader {
     private volatile int padAppCache = -1;
 
     /** True when the app's OWN (child-loaded) code calls Play Asset Delivery,
-     *  which on Mac.apk binds to our parent-loaded AssetPackManagerImpl (the
+     *  which on Apk on Mac binds to our parent-loaded AssetPackManagerImpl (the
      *  assetpacks exclusion below). The canonical such caller is the Unity PAD
      *  glue class com.unity3d.player.PlayAssetDeliveryUnityWrapper (Crossy
      *  Road, Among Us, any Unity PAD title). When the app bundles its own
@@ -1594,7 +1594,7 @@ public final class AppClassLoader extends dalvik.system.PathClassLoader {
      *
      * It only ever "worked" before when a PRIOR launch had left lib-compressed
      * populated (a warm cache), which the Boot pass could then translate. But
-     * EVERY Mac.apk cache invalidation (a new converter/framework/native build id
+     * EVERY Apk on Mac cache invalidation (a new converter/framework/native build id
      * -- i.e. every update) wipes lib-compressed, and a fresh install starts
      * empty, so the first launch after an install or an update ALWAYS failed. The
      * warm/cold asymmetry is exactly why v1.0.1583's dev-session (which had
@@ -1726,7 +1726,7 @@ public final class AppClassLoader extends dalvik.system.PathClassLoader {
      * UNPACKING root (lib-compressed / lib-main, superpack) keeps System.load:
      * on a device SoLoader's UnpackingSoSource (RESOLVE_DEPENDENCIES) loads each
      * DT_NEEDED dep itself, which registers it with the app loader and runs its
-     * JNI_OnLoad, and on Mac.apk nothing else does that for the superpack libs
+     * JNI_OnLoad, and on Apk on Mac nothing else does that for the superpack libs
      * (they are served by the flags-0 fall-through DirectorySoSource). OPEN, the
      * faithful end state: System.load those deps at the moment the app loads
      * their dependent (RESOLVE_DEPENDENCIES timing).
@@ -1774,7 +1774,7 @@ public final class AppClassLoader extends dalvik.system.PathClassLoader {
             // i.e. superpack) is NOT loaded implicitly on a device: its
             // UnpackingSoSource has RESOLVE_DEPENDENCIES set and SoLoader
             // System.load()s each DT_NEEDED dep itself, registering it with the
-            // app loader and running its JNI_OnLoad. On Mac.apk those libs are
+            // app loader and running its JNI_OnLoad. On Apk on Mac those libs are
             // served by the fall-through DirectorySoSource (flags 0 for a
             // third-party app), which loads no dependency, so this premap is the
             // only thing that does -- and it must register + run JNI_OnLoad like
@@ -2443,7 +2443,7 @@ public final class AppClassLoader extends dalvik.system.PathClassLoader {
      *     (e.g. lib_native/libgame-armeabi-v7a.dylib), keeping the default
      *     path's lib<name>.dylib intact across runs.
      *
-     * Env var vs CLI flag: every existing diagnostic knob in Mac.apk is an
+     * Env var vs CLI flag: every existing diagnostic knob in Apk on Mac is an
      * env var (MACAPK_SKIP_LIBS, MACAPK_DISABLE_TRANSLATOR, MACAPK_KEEP_IR,
      * MACAPK_TRACE_VADDRS, MACAPK_OPT_LEVEL, ...); CLI flags are reserved
      * for steady-state user options (--apk, --orientation, --android-root).
@@ -2651,7 +2651,7 @@ public final class AppClassLoader extends dalvik.system.PathClassLoader {
         //
         // We then tried to TRANSLATE the substituted file, the translator read a
         // Mach-O, and every such app logged
-        //     [E] Mac.apk.AppCl: translator exited rc=1
+        //     [E] Apk on Mac.AppCl: translator exited rc=1
         // for `libcrashlytics-trampoline.so: not a valid ELF file`. Harmless to
         // the app -- it never wanted that file dlopen'd -- but it spends a
         // subprocess to fail, and a spurious [E] is worse than the wasted work:

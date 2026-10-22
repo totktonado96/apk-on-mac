@@ -236,7 +236,7 @@ final class MacApkDisplayList {
             if (!sDepthLogged) {
                 sDepthLogged = true;
                 try {
-                    com.macapk.loader.NativeLog.i("Mac.apk.RenderNode",
+                    com.macapk.loader.NativeLog.i("Apk on Mac.RenderNode",
                         "display-list replay nested " + MAX_DEPTH + " deep: a node is drawn into "
                         + "its own recording; the cycle is cut here");
                 } catch (Throwable ignored) { }

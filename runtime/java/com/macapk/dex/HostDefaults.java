@@ -1,5 +1,5 @@
-// HostDefaults -- Mac.apk's converter defaults. The ONE file in this package
-// that is Mac.apk's own: everything else is synced verbatim from the public
+// HostDefaults -- Apk on Mac's converter defaults. The ONE file in this package
+// that is Apk on Mac's own: everything else is synced verbatim from the public
 // dex2jvm repo by scripts/sync_dex2jvm.sh, which never touches this file.
 //
 // Options reads these fields when no system property or environment variable
@@ -7,7 +7,7 @@
 // what com.macapk.dex emitted before dex2jvm became its source of truth
 // (debug/dex2jvm_sync_gate.sh proves it):
 //
-//   SYNTHETIC_PREFIX  the synthetic member names Mac.apk has always emitted
+//   SYNTHETIC_PREFIX  the synthetic member names Apk on Mac has always emitted
 //                     (macapk$outline$..., macapk$part$..., macapk$spill$...).
 //   REDIRECT_UNSAFE   guest sun.misc.Unsafe calls go to MacApkUnsafe, which
 //                     answers ART-layout reads against HotSpot's real layout.

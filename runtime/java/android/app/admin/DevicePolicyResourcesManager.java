@@ -10,7 +10,7 @@
 // invoke the caller's own default, which is exactly what AOSP does when the
 // resource id is not overridden.
 //
-// Mac.apk has no device-policy role holder and no resource-override store (see
+// Apk on Mac has no device-policy role holder and no resource-override store (see
 // DevicePolicyManager's class comment), so every lookup takes the default path.
 // That is a REAL answer, not a stub: the caller gets its own fallback, which is
 // what it would render on an unmanaged device.

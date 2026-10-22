@@ -10,7 +10,7 @@ import java.util.concurrent.Executor;
  * SettingsPreferenceService and reads or writes its preferences.
  *
  * ⚠ THIS IS THE ONE CLASS IN THE PACKAGE WHERE THE HONEST ANSWER MATTERS.
- * Mac.apk runs one app: there is no second app hosting a
+ * Apk on Mac runs one app: there is no second app hosting a
  * SettingsPreferenceService to bind, and a guest does not get to read or write
  * the host's settings. So the constructor's connection receiver reports a
  * FAILURE, and every request reports a failure too.

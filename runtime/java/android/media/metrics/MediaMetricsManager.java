@@ -4,7 +4,7 @@ package android.media.metrics;
  * Entry point for the platform media-metrics pipeline (API 31+).
  *
  * On a device this ships playback telemetry to the system statsd collector.
- * Mac.apk has no such collector, and there is no user-visible behavior to
+ * Apk on Mac has no such collector, and there is no user-visible behavior to
  * reproduce -- so the sessions returned here ACCEPT every report and drop it.
  * That is the right call rather than throwing: ExoPlayer/Media3 create a
  * playback session and report into it on every buffer, error and track change,

@@ -3,7 +3,7 @@
 // core/java/android/view/translation/UiTranslationManager.java (android16-release).
 //
 // UI translation is driven by the SYSTEM (the user asks the assistant to
-// translate the screen), never by the app. Mac.apk has no such system surface
+// translate the screen), never by the app. Apk on Mac has no such system surface
 // and no on-device translator (see TranslationManager), so the state never
 // changes and a registered callback is never invoked -- which is exactly what
 // happens on a device where the user never requests a translation. The callback

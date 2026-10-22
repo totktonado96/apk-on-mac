@@ -2,7 +2,7 @@ package com.google.mlkit.common.model;
 
 // com.google.mlkit.common.model.RemoteModel -- base for models downloaded from a
 // remote source (Firebase ML custom models, etc.). Abstract in the real SDK;
-// concrete subclasses carry the download source. Mac.apk performs no model
+// concrete subclasses carry the download source. Apk on Mac performs no model
 // download, so RemoteModelManager.download (not shipped) would fail cleanly; this
 // base exists so apps that reference RemoteModel or subclass it link. Mirrors the
 // published getModelName accessor.

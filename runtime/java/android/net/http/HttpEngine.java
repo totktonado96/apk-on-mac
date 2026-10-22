@@ -18,7 +18,7 @@ public class HttpEngine {
 
     HttpEngine() { }
 
-    public static String getVersionString() { return "Mac.apk-platform-http/1"; }
+    public static String getVersionString() { return "Apk on Mac-platform-http/1"; }
 
     public void shutdown() { }
 
@@ -48,7 +48,7 @@ public class HttpEngine {
 
     public static final class Builder {
         public Builder(Context context) { }
-        public String getDefaultUserAgent() { return "Mac.apk-platform-http/1"; }
+        public String getDefaultUserAgent() { return "Apk on Mac-platform-http/1"; }
         public Builder setUserAgent(String userAgent) { return this; }
         public Builder setEnablePublicKeyPinningBypassForLocalTrustAnchors(boolean value) { return this; }
         public Builder setEnableHttpCache(int cacheMode, long maxSize) { return this; }

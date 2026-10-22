@@ -6,7 +6,7 @@
 // this). Promoted from the v1.0.92 empty stub to the real abstract base so the
 // chain compiles against the published meta-state constants + helpers.
 //
-// Mac.apk routes text input through the IME / InputConnection path, not the
+// Apk on Mac routes text input through the IME / InputConnection path, not the
 // hardware-key meta-state machine, so the meta tracking is the AOSP-shape
 // constants + no-op handlers; the observable contract callers depend on is the
 // META_* values and getInputType().

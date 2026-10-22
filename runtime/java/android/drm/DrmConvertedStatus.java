@@ -7,7 +7,7 @@
 //
 // SCOPE NOTE: the convert session is the legacy framework's transform path
 // (the OMA "forward lock" / .fl flow) -- the operation that turns protected
-// bytes into bytes a player can consume. Mac.apk has no plug-in and does not
+// bytes into bytes a player can consume. Apk on Mac has no plug-in and does not
 // implement it: DrmManagerClient.convertData/closeConvertSession answer
 // STATUS_ERROR, which is what a real device with no matching plug-in answers.
 // This class carries that answer; it never performs a conversion.

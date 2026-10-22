@@ -6,7 +6,7 @@
 //
 // Until now `PreferenceActivity.addPreferencesFromResource` and
 // `PreferenceFragment.addPreferencesFromResource` were no-ops carrying a KNOWN
-// GAP note: "Mac.apk has neither the inflater nor the preference list host ...
+// GAP note: "Apk on Mac has neither the inflater nor the preference list host ...
 // a PreferenceActivity subclass gets an empty settings screen." The persistence
 // half was covered generically by com.macapk.loader.PreferenceDefaultsScanner,
 // so an app's settings VALUES were right, but the settings SCREEN was empty and
@@ -20,7 +20,7 @@
 //   AOSP walks the compiled XML with an XmlPullParser and constructs each
 //   Preference through its (Context, AttributeSet) constructor; each constructor
 //   then reads its own attributes via obtainStyledAttributes keyed by
-//   com.android.internal.R.styleable ids. Mac.apk has no com.android.internal.R,
+//   com.android.internal.R.styleable ids. Apk on Mac has no com.android.internal.R,
 //   so the ATTRIBUTE READING moved to PreferenceAttrs (by name, same names, same
 //   defaults, same place -- inside the constructor). Everything else here is
 //   AOSP's own structure: same default package prefix, same
@@ -28,7 +28,7 @@
 //   addItemFromInflater(), same <intent>/<extra> child-tag handling, same
 //   onMergeRoots semantics.
 //
-//   The parser comes from Resources.getXml(resId), which Mac.apk implements over
+//   The parser comes from Resources.getXml(resId), which Apk on Mac implements over
 //   the apktool-decoded res/xml (see Resources.getXml -> ResourceIndex.openXml
 //   -> DomXmlResourceParser).
 //
@@ -67,7 +67,7 @@ class PreferenceInflater {
             new Class<?>[] { Context.class, AttributeSet.class };
 
     /** AOSP caches constructors in a static map keyed by tag name; same here.
-     *  Concurrent because Mac.apk can inflate from more than one thread. */
+     *  Concurrent because Apk on Mac can inflate from more than one thread. */
     private static final Map<String, Constructor<?>> sConstructorMap =
             new java.util.concurrent.ConcurrentHashMap<String, Constructor<?>>();
 
@@ -209,7 +209,7 @@ class PreferenceInflater {
 
     /**
      * AOSP routes this through Intent.parseIntent(Resources, parser, attrs),
-     * which reads the same six attributes off the same AttributeSet. Mac.apk's
+     * which reads the same six attributes off the same AttributeSet. Apk on Mac's
      * Intent has no parseIntent, so the six are read here by name -- the
      * attribute names are the platform's and are frozen.
      * (frameworks/base/core/java/android/content/Intent.java, parseIntent.)
@@ -325,7 +325,7 @@ class PreferenceInflater {
         }
     }
 
-    /** Mac.apk's Resources.getXml returns a DomXmlResourceParser, which IS an
+    /** Apk on Mac's Resources.getXml returns a DomXmlResourceParser, which IS an
      *  XmlResourceParser and therefore already an AttributeSet -- the same
      *  identity AOSP relies on (Xml.asAttributeSet). A non-XmlResourceParser
      *  parser can only reach here if an app calls the package-private overload

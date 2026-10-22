@@ -114,7 +114,7 @@ public class JSONArray {
         Long result = JSON.toLong(opt(i));
         return result != null ? result : fallback;
     }
-    // NOTE: default is 0.0, NOT AOSP's NaN. Mac.apk shipped 0.0 here
+    // NOTE: default is 0.0, NOT AOSP's NaN. Apk on Mac shipped 0.0 here
     // long before this turn; keeping it is the conservative no-regression
     // choice (switching to NaN had no proven benefit and risks poisoning
     // any caller that does arithmetic on a defaulted element, since NaN

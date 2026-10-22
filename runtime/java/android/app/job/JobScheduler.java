@@ -74,7 +74,7 @@ public abstract class JobScheduler {
     public static final JobScheduler STUB = new MacApkJobScheduler();
 
     /** AOSP JobScheduler.forNamespace (API 34): a scheduler view scoped to a
-     *  namespace. Mac.apk keeps one global job space, so a namespaced view
+     *  namespace. Apk on Mac keeps one global job space, so a namespaced view
      *  is the same scheduler. */
     public android.app.job.JobScheduler forNamespace(String namespace) { return this; }
     public String getNamespace() { return null; }
@@ -113,7 +113,7 @@ public abstract class JobScheduler {
      *  pending", or PENDING_JOB_REASON_INVALID_JOB_ID for an id this app has
      *  not scheduled. Answered from the scheduler's own job list, so it really
      *  distinguishes the three cases an app branches on: unknown id, currently
-     *  executing, and scheduled-but-waiting. Mac.apk's scheduler applies no
+     *  executing, and scheduled-but-waiting. Apk on Mac's scheduler applies no
      *  system-side throttle (no quota, no standby buckets, no doze), so a
      *  waiting job is waiting on its own constraints -- which AOSP labels
      *  PENDING_JOB_REASON_UNDEFINED when no single constraint is the blocker.
@@ -133,7 +133,7 @@ public abstract class JobScheduler {
     }
 
     /** AOSP getPendingJobReasonsHistory(int jobId): "@return a list of the most
-     *  recent pending-job reasons, ordered from most to least recent." Mac.apk's
+     *  recent pending-job reasons, ordered from most to least recent." Apk on Mac's
      *  scheduler keeps no per-job history of WHY a job was waiting -- there is
      *  no constraint-tracking timeline to sample -- so the honest answer is the
      *  empty list AOSP also returns before any reason has been recorded, not a
@@ -144,12 +144,12 @@ public abstract class JobScheduler {
 
     /** AOSP canRunUserInitiatedJobs(): "@return whether the app can run
      *  user-initiated jobs" -- false when the user has restricted the app's
-     *  background work. Mac.apk restricts nothing (there is no background-usage
+     *  background work. Apk on Mac restricts nothing (there is no background-usage
      *  setting), so the app can. */
     public boolean canRunUserInitiatedJobs() { return true; }
 
     /** AOSP cancelInAllNamespaces(): "Cancel all jobs that were scheduled by
-     *  the calling app, regardless of namespace." Mac.apk keeps ONE global job
+     *  the calling app, regardless of namespace." Apk on Mac keeps ONE global job
      *  space (forNamespace above returns this scheduler), so every job is in
      *  the only namespace there is and cancelAll() is exactly that set. */
     public void cancelInAllNamespaces() { cancelAll(); }

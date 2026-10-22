@@ -8,7 +8,7 @@
 // package-private there and stays package-private here, because only the
 // display pipeline can describe its own LUT hardware.
 //
-// Mac.apk's compositor applies no display LUTs (ANGLE/Metal into one
+// Apk on Mac's compositor applies no display LUTs (ANGLE/Metal into one
 // CAMetalLayer, no colour-management stage we can expose), so
 // OverlayProperties.getLutProperties() returns an EMPTY array and nothing
 // constructs one of these. The class must exist so an app that iterates that

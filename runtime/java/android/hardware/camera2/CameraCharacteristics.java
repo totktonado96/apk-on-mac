@@ -1,6 +1,6 @@
 // android.hardware.camera2.CameraCharacteristics -- immutable per-camera
 // capability metadata returned by CameraManager.getCameraCharacteristics.
-// Mac.apk has no camera, so getCameraCharacteristics throws
+// Apk on Mac has no camera, so getCameraCharacteristics throws
 // CameraAccessException and this is never handed out -- but the type +
 // Key constants must exist for camera apps to compile (they reference
 // keys like LENS_FACING / SENSOR_ORIENTATION even before opening).
@@ -176,7 +176,7 @@ public final class CameraCharacteristics extends CameraMetadata<CameraCharacteri
     // AOSP (core/java/android/hardware/camera2/CameraCharacteristics.java, fetched
     // verbatim via raw.githubusercontent.com): `public Set<String>
     // getPhysicalCameraIds() { return mProperties.getPhysicalCameraIds(); }` -- the set
-    // of physical camera ids backing a logical multi-camera device. Mac.apk exposes no
+    // of physical camera ids backing a logical multi-camera device. Apk on Mac exposes no
     // cameras at all (getCameraIdList() is honestly empty), so there are never any
     // physical camera ids to report; Collections.emptySet() is the correct answer for
     // that state, not a placeholder guess.

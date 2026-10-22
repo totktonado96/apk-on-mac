@@ -4,7 +4,7 @@
 // A REAL value object -- the class itself is pure data and apps construct it in
 // their own tests and callbacks. What is honestly EMPTY is where instances come
 // FROM: Connection.getCallAudioState() returns null until Telecom pushes a
-// state in, and Mac.apk has no Telecom service to push one. That is the same
+// state in, and Apk on Mac has no Telecom service to push one. That is the same
 // answer AOSP gives before a call is added to Telecom, so callers already
 // handle it.
 //

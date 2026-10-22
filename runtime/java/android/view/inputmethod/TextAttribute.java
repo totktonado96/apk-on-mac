@@ -3,7 +3,7 @@
 // bundle). Source: frameworks/base
 // core/java/android/view/inputmethod/TextAttribute.java (android16-release).
 //
-// Mac.apk routes keystrokes from the Cocoa bridge straight into the focused
+// Apk on Mac routes keystrokes from the Cocoa bridge straight into the focused
 // view and runs no IME, so nothing produces a TextAttribute -- but the type is
 // named by five InputConnection methods, so it must exist for those signatures.
 package android.view.inputmethod;

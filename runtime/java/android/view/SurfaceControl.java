@@ -10,7 +10,7 @@ import java.io.Closeable;
 /**
  * AOSP-faithful (minimal) android.view.SurfaceControl. Real Android uses this as
  * a SurfaceFlinger layer handle plus a batched Transaction for compositor-side
- * geometry/visibility. Mac.apk has no SurfaceFlinger (each Window is a Cocoa
+ * geometry/visibility. Apk on Mac has no SurfaceFlinger (each Window is a Cocoa
  * NSWindow / Metal layer composited by macOS), so SurfaceControl is a faithful
  * handle whose Transaction setters chain and record but apply() is a no-op. This
  * keeps the public API surface (Builder + Transaction) intact so libraries that
@@ -102,7 +102,7 @@ public final class SurfaceControl implements Parcelable {
     }
 
     /** AOSP SurfaceControl.TransactionCommittedListener: told once a transaction
-     *  has been latched by the compositor. Mac.apk applies transactions
+     *  has been latched by the compositor. Apk on Mac applies transactions
      *  synchronously (apply() is a no-op because macOS composites the window
      *  itself), so "committed" is true the moment apply() returns -- see
      *  Transaction.apply(). */
@@ -111,7 +111,7 @@ public final class SurfaceControl implements Parcelable {
     }
 
     /** AOSP SurfaceControl.JankData: per-frame jank classification a
-     *  compositor reports back. Mac.apk has no SurfaceFlinger frame timeline, so
+     *  compositor reports back. Apk on Mac has no SurfaceFlinger frame timeline, so
      *  no JankData is ever produced (see AttachedSurfaceControl.
      *  registerOnJankDataListener); the type exists because the listener
      *  signature names it. */
@@ -315,7 +315,7 @@ public final class SurfaceControl implements Parcelable {
         /** AOSP Transaction.setTrustedPresentationCallback(SurfaceControl,
          *  TrustedPresentationThresholds, Executor, Consumer&lt;Boolean&gt;),
          *  deprecated at API 35. AOSP calls back with true once the layer has
-         *  met the thresholds for the required time. Mac.apk's single window is
+         *  met the thresholds for the required time. Apk on Mac's single window is
          *  presented directly by macOS with nothing composited over it, so a
          *  layer that is shown DOES meet the thresholds -- the callback is
          *  invoked with true, which is the answer a device gives for an

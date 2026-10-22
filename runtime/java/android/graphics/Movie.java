@@ -1,5 +1,5 @@
 package android.graphics;
-/** A (deprecated) animated-GIF holder. Mac.apk has no Movie/GIF decoder wired,
+/** A (deprecated) animated-GIF holder. Apk on Mac has no Movie/GIF decoder wired,
  *  so decode* return an empty Movie and draw is a no-op; dimensions/duration
  *  report 0. Callers that only query it (or fall back to a static drawable) work.
  *  Source: frameworks/base/graphics/java/android/graphics/Movie.java */

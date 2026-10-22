@@ -1,6 +1,6 @@
 // android.content.pm.ActivityInfo -- metadata for a single activity
 // in an APK's manifest. AOSP populates this from PackageManagerService
-// when an app calls getActivityInfo(ComponentName); Mac.apk populates
+// when an app calls getActivityInfo(ComponentName); Apk on Mac populates
 // the bare minimum (name, packageName, applicationInfo, theme=0).
 package android.content.pm;
 
@@ -176,7 +176,7 @@ public class ActivityInfo extends ComponentInfo implements android.os.Parcelable
      *  `<layout>`, which is the case for nearly every app and is exactly what
      *  AOSP reports for one.
      *
-     *  Mac.apk's manifest parser does not read `<layout>` yet, so this stays
+     *  Apk on Mac's manifest parser does not read `<layout>` yet, so this stays
      *  null. The FIELD has to exist regardless: we present API 36, so a
      *  getfield on it must link, and null is a value AOSP hands out constantly
      *  (every caller upstream null-checks it -- see dump() below). */

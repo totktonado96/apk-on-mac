@@ -4,7 +4,7 @@
 // routes every Application/Activity bring-up call through it
 // (newApplication/callApplicationOnCreate/newActivity/callActivityOn*), and
 // the test framework (androidx.test / AndroidJUnitRunner) both SUBCLASSES it
-// and resolves it reflectively. Mac.apk previously open-coded the bring-up in
+// and resolves it reflectively. Apk on Mac previously open-coded the bring-up in
 // Boot/ActivityHost and shipped no Instrumentation class at all, so any app or
 // DI container that did `getInstrumentation()` / reflected
 // `android.app.Instrumentation` got ClassNotFound.
@@ -15,7 +15,7 @@
 // they construct the component and drive the same lifecycle methods AOSP does
 // (which are package-private/protected on our Activity, reachable because this
 // class is in android.app). The UI-injection helpers (sendKeySync, etc.) are
-// honest no-ops where Mac.apk has no input-injection transport, matching the
+// honest no-ops where Apk on Mac has no input-injection transport, matching the
 // "feature absent" contract rather than throwing.
 //
 // NOT modeled: getUiAutomation()/acquireLooperManager() -- their return types
@@ -87,7 +87,7 @@ public class Instrumentation {
         this.mComponent = component;
     }
 
-    // ---- Profiling (no-op; Mac.apk has no ART alloc-counting transport) ----
+    // ---- Profiling (no-op; Apk on Mac has no ART alloc-counting transport) ----
     public boolean isProfiling() { return false; }
     public void startProfiling() {}
     public void stopProfiling() {}
@@ -169,7 +169,7 @@ public class Instrumentation {
         return startActivitySync(intent, null);
     }
     public Activity startActivitySync(Intent intent, Bundle options) {
-        // Mac.apk has a single foreground activity owned by ActivityHost; we
+        // Apk on Mac has a single foreground activity owned by ActivityHost; we
         // do not synchronously materialize a NEW Activity instance here (that
         // would race the host). Route the launch through Context and return
         // the current foreground Activity, which is the AOSP-observable result
@@ -263,7 +263,7 @@ public class Instrumentation {
         // above it, which invokespecials our super method. That is the device
         // stack shape.
         //
-        // TWO DELIBERATE DEVIATIONS, both forced by Mac.apk's launch order:
+        // TWO DELIBERATE DEVIATIONS, both forced by Apk on Mac's launch order:
         //  (1) AOSP dereferences context.getPackageName() unconditionally and
         //      would NPE on a null context. We accept null, because
         //      LoadedApk.makeApplicationInner passes null (see that file).
@@ -317,7 +317,7 @@ public class Instrumentation {
         return app;
     }
     /** AOSP callApplicationOnCreate: drives Application.onCreate().
-     *  WARNING: no try/catch. Mac.apk's launch path drives onCreate from
+     *  WARNING: no try/catch. Apk on Mac's launch path drives onCreate from
      *  com.macapk.loader.Boot, inside its own tolerance machinery; do not put
      *  this method on the launch path. */
     public void callApplicationOnCreate(Application app) {
@@ -327,7 +327,7 @@ public class Instrumentation {
     // ---- Activity bring-up ----
     /** AOSP newActivity(Class, ...): instantiate the Activity and attach its
      *  context/intent. We honor the full AOSP signature so reflective callers
-     *  link; the IBinder/ActivityInfo/parent args are accepted but Mac.apk's
+     *  link; the IBinder/ActivityInfo/parent args are accepted but Apk on Mac's
      *  single-window model only needs the class + application + intent. */
     public Activity newActivity(Class<?> clazz, Context context, IBinder token,
                                 Application application, Intent intent,
@@ -409,7 +409,7 @@ public class Instrumentation {
      *  messages on the specified looper until TestLooperManager.release is
      *  called." AOSP first calls checkInstrumenting("acquireLooperManager"),
      *  which throws RuntimeException when the process is not being instrumented
-     *  -- Mac.apk never is. But android.os.TestLooperManager exists in this tree
+     *  -- Apk on Mac never is. But android.os.TestLooperManager exists in this tree
      *  and a harness that got this far has already accepted our other no-op
      *  automation answers, so hand back the manager rather than throwing: AOSP's
      *  own behaviour once instrumentation IS on, and the failure mode of a
@@ -498,7 +498,7 @@ public class Instrumentation {
         }
         public final synchronized Activity waitForActivityWithTimeout(long timeOut) {
             // Block until an activity hits this monitor or the timeout lapses.
-            // Mac.apk does not synchronously deliver new Activity instances to
+            // Apk on Mac does not synchronously deliver new Activity instances to
             // monitors yet, so this returns the last activity (possibly null)
             // after waiting, matching the "no activity arrived" timeout path.
             if (mLastActivity == null) {

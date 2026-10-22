@@ -13,7 +13,7 @@ import java.util.Objects;
  * An app's preferred presentation of the system output-switcher route list
  * (API 34). This is pure app-supplied DATA -- the app declares which route ids
  * it wants shown, in what order, with what subtext -- consumed by the System UI
- * output switcher. Mac.apk has no output switcher, so the preference is stored
+ * output switcher. Apk on Mac has no output switcher, so the preference is stored
  * and read back faithfully (an app that sets it and then reads
  * MediaRouter2.getRouteListingPreference() gets its own object back, as on
  * Android) and simply has no UI to influence.

@@ -64,7 +64,7 @@
 // Full write-up: docs/jobscheduler-workmanager_2026-07-29.md
 //
 // PERSISTENCE. AOSP persists jobs built with setPersisted(true) across
-// reboots. Mac.apk's store is process-lifetime only, which is the correct
+// reboots. Apk on Mac's store is process-lifetime only, which is the correct
 // answer for its principal consumer: WorkManager sets setPersisted(false)
 // and re-enqueues from its own WorkDatabase at every app start, so a
 // persisted platform store would double-schedule.
@@ -510,7 +510,7 @@ final class MacApkJobScheduler extends JobScheduler {
      *
      *  AOSP (JobStatus.createFromJobInfo) puts a periodic job's first run
      *  in [now + period - flex, now + period] -- i.e. a PeriodicWorkRequest
-     *  does NOT run promptly on a real device. Mac.apk has fired periodic
+     *  does NOT run promptly on a real device. Apk on Mac has fired periodic
      *  jobs promptly since v1.0.102 and apps in the fleet were measured
      *  against that, so switching to the faithful window could stop a
      *  worker that currently runs. The faithful behaviour is implemented
@@ -639,7 +639,7 @@ final class MacApkJobScheduler extends JobScheduler {
         log("fireJob id=" + id + " -> " + svcName + workSpecTag(info));
 
         // ONE instance per component, per AOSP JobService's javadoc. The
-        // ServiceRegistry is Mac.apk's stand-in for ActiveServices and
+        // ServiceRegistry is Apk on Mac's stand-in for ActiveServices and
         // already runs attach(Context) + onCreate exactly once, so the
         // JobScheduler path and the Context.startService path cannot end up
         // with two live instances of the same Service class.

@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * Android TV input framework (tuners, HDMI inputs, TV apps).
  *
- * Mac.apk is not a TV device and declares no TV inputs, which is what AOSP
+ * Apk on Mac is not a TV device and declares no TV inputs, which is what AOSP
  * reports on any phone or tablet: an empty input list. 19 of 37 corpus apps
  * reference the type without calling into it -- a leaf branch of some media
  * capability check -- so it only needs to exist and answer honestly.
@@ -40,7 +40,7 @@ public final class TvInputManager {
     /**
      * API 21. AOSP reads the parental-controls master switch out of
      * Settings.Secure (TV_PARENTAL_CONTROLS_ENABLED, which only the TV Settings
-     * app writes). Mac.apk is not a TV device and has no such setting, so
+     * app writes). Apk on Mac is not a TV device and has no such setting, so
      * parental controls are OFF -- which is exactly what a phone reports, and
      * what makes isRatingBlocked() below answer false consistently.
      */

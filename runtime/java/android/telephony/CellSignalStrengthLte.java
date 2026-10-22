@@ -6,7 +6,7 @@ import android.os.Parcelable;
 import java.util.Objects;
 
 /**
- * LTE signal strength. Mac.apk has no cellular modem, so getAllCellInfo() never
+ * LTE signal strength. Apk on Mac has no cellular modem, so getAllCellInfo() never
  * yields one and every measurement reports CellInfo.UNAVAILABLE with the level
  * NONE_OR_UNKNOWN -- AOSP's own setDefaultValues() state.
  *

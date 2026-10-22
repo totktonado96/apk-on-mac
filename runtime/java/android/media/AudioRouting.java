@@ -4,7 +4,7 @@ import android.os.Handler;
 
 /**
  * Interface implemented by AudioTrack/AudioRecord for output/input device
- * routing. On Mac.apk there is one synthetic output device; getRoutedDevice
+ * routing. On Apk on Mac there is one synthetic output device; getRoutedDevice
  * reports it and routing never changes, so listeners are retained but never
  * fire -- the same observable result as a device whose route is fixed.
  *

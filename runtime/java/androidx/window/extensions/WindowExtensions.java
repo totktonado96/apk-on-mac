@@ -1,5 +1,5 @@
 package androidx.window.extensions;
-/** The root of the WindowManager extensions surface. Mac.apk is a flat single-
+/** The root of the WindowManager extensions surface. Apk on Mac is a flat single-
  *  display device: the layout component reports no fold, embedding reports no
  *  split, area reports no rear display. */
 public interface WindowExtensions {

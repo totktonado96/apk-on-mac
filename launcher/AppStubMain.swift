@@ -2,11 +2,11 @@
 //
 // The per-app launcher stub: the executable inside every generated
 // <Label>.app bundle (see BundleGenerator.swift). Its whole job is to find
-// the ONE shared Mac.apk runtime and become it via execv, pointing the
+// the ONE shared Apk on Mac runtime and become it via execv, pointing the
 // runtime at the APK and app-data tree that live inside this bundle.
 //
 // COMPILED AS ITS OWN EXECUTABLE (the "stub template",
-// Resources/appstub/MacApkAppStub inside Mac.apk.app) by a separate
+// Resources/appstub/MacApkAppStub inside Apk on Mac.app) by a separate
 // swiftc invocation in build_launcher.sh: this file PLUS
 // InstallCore.swift, which is UI-free by contract (Foundation + CryptoKit
 // only, "a bare command-line helper links the same file") and supplies
@@ -49,7 +49,7 @@ private func stubLog(_ msg: String) {
 // MARK: - The run log
 //
 // WHY THIS EXISTS. A bundle launched from the Dock/Finder has no terminal, so
-// until v1.0.962 the runtime's entire stderr -- every `[I] Mac.apk.*` line and
+// until v1.0.962 the runtime's entire stderr -- every `[I] Apk on Mac.*` line and
 // any uncaught Java exception -- was discarded by launchd. That made every
 // owner-reported crash on an INSTALLED app unreproducible from evidence: the
 // harnesses capture stderr because they redirect it themselves, and the actual
@@ -65,7 +65,7 @@ private func stubLog(_ msg: String) {
 
 /// Archived run logs kept per app. Much smaller than the launcher's
 /// kLogArchiveKeep of 10, for two compounding reasons: this prunes PER APP and
-/// there are 11 installed bundles on the owner's machine, and a Mac.apk run log
+/// there are 11 installed bundles on the owner's machine, and a Apk on Mac run log
 /// is far bigger than a launcher one.
 ///
 /// MEASURED 2026-08-12, F-Droid, both a cold and a warm launch: ~1.1 MB per
@@ -105,7 +105,7 @@ private let kRunLogArchiveMaxBytes = 4 * 1024 * 1024
 ///
 /// The repo probe requires a sibling `VERSION` file AND a `runtime/` directory,
 /// not merely the presence of a `logs/` subdir. That is not belt-and-braces:
-/// the staged runtime lives at ~/Library/Application Support/Mac.apk/runtime/,
+/// the staged runtime lives at ~/Library/Application Support/Apk on Mac/runtime/,
 /// and a bare `logs/` existence test walks up to ~/Library and matches
 /// ~/Library/Logs -- the filesystem is case-insensitive, so `logs` == `Logs`.
 private func runLogDirectory(runtime: URL) -> URL {
@@ -245,8 +245,8 @@ private func beginRunLog(runtime: URL, identity: String,
 
 /// Show a modal alert naming the actual problem, then exit. A stub that
 /// dies silently is unusable, so every failure path routes through here.
-/// `openMacApk` non-nil adds an "Open Mac.apk" button that launches the
-/// resolved (or to-be-installed) Mac.apk before exiting.
+/// `openMacApk` non-nil adds an "Open Apk on Mac" button that launches the
+/// resolved (or to-be-installed) Apk on Mac before exiting.
 private func fatalAlert(_ title: String, _ body: String,
                         exitCode: Int32, openMacApk: URL? = nil) -> Never {
     stubLog("FATAL: \(title): \(body)")
@@ -269,7 +269,7 @@ private func fatalAlert(_ title: String, _ body: String,
     alert.alertStyle = .critical
     alert.addButton(withTitle: "OK")
     if openMacApk != nil {
-        alert.addButton(withTitle: "Open Mac.apk")
+        alert.addButton(withTitle: "Open Apk on Mac")
     }
     let response = alert.runModal()
     if response == .alertSecondButtonReturn, let url = openMacApk {
@@ -292,8 +292,8 @@ private func ownExecutableURL() -> URL {
 //
 // LaunchServices delivers a URL (a kAEGetURL Apple Event) to the RUNNING copy
 // of an app only when it knows that copy as this bundle. A runtime started
-// from the Mac.apk window runs under the run-wrapper's identity
-// (org.macapk.run, MacApkLauncherApp.makeRunWrapperExecPath), so a browser
+// from the Apk on Mac window runs under the run-wrapper's identity
+// (io.github.totktonado96.apkonmac.run, MacApkLauncherApp.makeRunWrapperExecPath), so a browser
 // redirect such as an Epic sign-in's `eos.<id>://epic/auth?code=...` launches
 // THIS stub instead and the event is addressed to the stub's process. The stub
 // then finds the run lock held and exits, which used to drop the URL: the
@@ -547,7 +547,7 @@ struct AppStubMain {
         guard contents.lastPathComponent == "Contents" else {
             fatalAlert("This app is damaged",
                        "The launcher stub is not inside an app bundle "
-                       + "(ran from \(exe.path)). Reinstall the app from Mac.apk.",
+                       + "(ran from \(exe.path)). Reinstall the app from Apk on Mac.",
                        exitCode: 78)
         }
         let bundleRoot = contents.deletingLastPathComponent()
@@ -560,14 +560,14 @@ struct AppStubMain {
               let plist = (try? PropertyListSerialization.propertyList(
                     from: plistData, format: nil)) as? [String: Any] else {
             fatalAlert("This app is damaged",
-                       "Could not read \(plistURL.path). Reinstall the app from Mac.apk.",
+                       "Could not read \(plistURL.path). Reinstall the app from Apk on Mac.",
                        exitCode: 78)
         }
         guard let package = plist["MacapkPackage"] as? String, !package.isEmpty else {
             fatalAlert("This app is damaged",
                        "Info.plist has no MacapkPackage key, so the stub does not "
                        + "know which Android package it belongs to. Reinstall the "
-                       + "app from Mac.apk.",
+                       + "app from Apk on Mac.",
                        exitCode: 78)
         }
         // The Android label. CFBundleName, not CFBundleDisplayName: the latter
@@ -593,24 +593,24 @@ struct AppStubMain {
         //
         //    ⚠ CONTRACT CHANGED 2026-08-12 (Runtime Install/Uninstall). We
         //    exec the STAGED runtime under
-        //        ~/Library/Application Support/Mac.apk/runtime/
-        //    and NEVER the copy inside Mac.apk.app, even though one is still
+        //        ~/Library/Application Support/Apk on Mac/runtime/
+        //    and NEVER the copy inside Apk on Mac.app, even though one is still
         //    shipped there. That is not a preference, it is the feature: the
         //    owner asked for an Uninstall button that removes the shared
         //    runtime while keeping the control panel and every installed app.
         //    While this list was a FALLBACK CHAIN ending at
-        //    Mac.apk.app/Contents/Resources/macapk-runtime, removing the
+        //    Apk on Mac.app/Contents/Resources/macapk-runtime, removing the
         //    staged copy changed nothing a user could observe -- the app just
         //    launched off the next candidate and the button looked broken.
-        //    So Mac.apk.app is resolved below for three things only: the
+        //    So Apk on Mac.app is resolved below for three things only: the
         //    payload to stage FROM, the default Dock icon, and the "Open
-        //    Mac.apk" button on the failure alert. Never as an exec candidate.
+        //    Apk on Mac" button on the failure alert. Never as an exec candidate.
         //    See RuntimeInstall in InstallCore.swift for the full rationale.
         //
-        //    Mac.apk.app itself still resolves the way it always did:
+        //    Apk on Mac.app itself still resolves the way it always did:
         //    MACAPK_CANONICAL_APP -> /Applications -> LaunchServices (a
         //    fallback only, because LS has been observed carrying stale
-        //    org.macapk.launcher registrations pointing at deleted checkouts).
+        //    io.github.totktonado96.apkonmac.launcher registrations pointing at deleted checkouts).
         //
         //    ⚠ THE COMMENT ABOVE DESCRIBED AN ORDER THE CODE DID NOT HAVE
         //    (fixed 2026-08-19). `RuntimeInstall.sourceContents` ranks the
@@ -620,7 +620,7 @@ struct AppStubMain {
         //    answer unconditionally made LS BEAT the canonical app, the exact
         //    opposite of "a fallback only", and LS is the one source here known
         //    to have pointed at deleted checkouts. It was not the cause of the
-        //    stale-runtime bug -- LS resolves to /Applications/Mac.apk.app on
+        //    stale-runtime bug -- LS resolves to /Applications/Apk on Mac.app on
         //    this machine today -- but it is the mechanism by which a stub
         //    could stage a guest app off a stale tree, silently.
         //
@@ -639,15 +639,15 @@ struct AppStubMain {
         let canonicalHasPayload = RuntimeInstall.sourceContents() != nil
         if !canonicalHasPayload,
            let ls = NSWorkspace.shared.urlForApplication(
-                withBundleIdentifier: "org.macapk.launcher") {
+                withBundleIdentifier: "io.github.totktonado96.apkonmac.launcher") {
             appCandidates.append(ls.appendingPathComponent("Contents", isDirectory: true))
         }
         let sourceContents = RuntimeInstall.sourceContents(extra: appCandidates)
         let macapkApp = sourceContents?.deletingLastPathComponent()
-        // Tell the runtime which Mac.apk.app this is. The staged runtime ships
+        // Tell the runtime which Apk on Mac.app this is. The staged runtime ships
         // no install helper and no location helper, so the guest side looks
         // them up in the control panel (PackageInstallerBackend.locateHelper,
-        // LocationBridge.locateHelper); with Mac.apk outside /Applications they
+        // LocationBridge.locateHelper); with Apk on Mac outside /Applications they
         // would otherwise find nothing (store installs and the location prompt
         // fail). An explicit MACAPK_CANONICAL_APP from the caller wins.
         if let app = macapkApp,
@@ -656,11 +656,11 @@ struct AppStubMain {
         }
 
         // Self-heal, part one: THIS FILE. The stub inside a generated bundle
-        // is a copy of Mac.apk.app's template, frozen at install time; after
-        // a Mac.apk update it is the one piece of an installed app nothing
+        // is a copy of Apk on Mac.app's template, frozen at install time; after
+        // a Apk on Mac update it is the one piece of an installed app nothing
         // else refreshes (the runtime below self-heals, the Dock-identity link
         // is remade every launch). So compare ourselves with the installed
-        // Mac.apk's template and, when we differ, swap the template in (a new
+        // Apk on Mac's template and, when we differ, swap the template in (a new
         // inode + rename, see StubRefresh) and re-execute it with our own
         // argv and environment: the launch that discovers the update already
         // runs the new stub, and every step below runs in the new code. The
@@ -679,7 +679,7 @@ struct AppStubMain {
                 if env["MACAPK_STUB_REFRESHED"] == nil {
                     do {
                         try StubRefresh.refresh(executable: exe, from: template)
-                        stubLog("stub differed from the installed Mac.apk's template; "
+                        stubLog("stub differed from the installed Apk on Mac's template; "
                                 + "refreshed \(exe.path) and re-executing")
                         setenv("MACAPK_STUB_REFRESHED", "1", 1)
                         execv(exe.path, CommandLine.unsafeArgv)
@@ -697,14 +697,14 @@ struct AppStubMain {
                             + "continuing on this one")
                 }
             } else if env["MACAPK_STUB_REFRESHED"] != nil {
-                stubLog("stub refreshed from the installed Mac.apk (re-executed)")
+                stubLog("stub refreshed from the installed Apk on Mac (re-executed)")
             }
             // The marker has done its job; the runtime and the app must not
             // inherit it.
             unsetenv("MACAPK_STUB_REFRESHED")
         }
 
-        // Self-heal, part two: the runtime. A build refreshes the payload inside Mac.apk.app and
+        // Self-heal, part two: the runtime. A build refreshes the payload inside Apk on Mac.app and
         // knows nothing about the staged copy, so without this every app would
         // run yesterday's runtime after a rebuild. It is a no-op once the
         // staged build-id matches, and -- the part that matters -- it REFUSES
@@ -715,24 +715,24 @@ struct AppStubMain {
         guard let runtime = runtimeURL else {
             let st = RuntimeInstall.state(extraSources: appCandidates)
             // Two genuinely different failures, and telling them apart is the
-            // difference between "press the button in Mac.apk" and "your
+            // difference between "press the button in Apk on Mac" and "your
             // install is broken". Say which one this is.
             let body: String
             if st.removedByUser {
-                body = "The Mac.apk runtime is not installed, so \(label) cannot run.\n\n"
+                body = "The Apk on Mac runtime is not installed, so \(label) cannot run.\n\n"
                      + "\(label) and its data are still installed and untouched. "
-                     + "Open Mac.apk and choose Runtime: Install to make it work again."
+                     + "Open Apk on Mac and choose Runtime: Install to make it work again."
             } else if !st.sourceAvailable {
-                body = "\(label) runs on the Mac.apk runtime, but Mac.apk.app could not "
+                body = "\(label) runs on the Apk on Mac runtime, but Apk on Mac.app could not "
                      + "be found in /Applications, ~/Applications or via Launch Services, "
                      + "so there is nothing to install the runtime from. "
-                     + "Install Mac.apk and try again."
+                     + "Install Apk on Mac and try again."
             } else {
-                body = "\(label) runs on the Mac.apk runtime, but it could not be "
-                     + "staged from Mac.apk.app. Open Mac.apk and choose "
+                body = "\(label) runs on the Apk on Mac runtime, but it could not be "
+                     + "staged from Apk on Mac.app. Open Apk on Mac and choose "
                      + "Runtime: Install to repair it."
             }
-            fatalAlert("The Mac.apk runtime is not installed", body,
+            fatalAlert("The Apk on Mac runtime is not installed", body,
                        exitCode: 66, openMacApk: macapkApp)
         }
         // The runtime's identity stamp (JAVA_ID/NATIVE_ID, written by the
@@ -885,7 +885,7 @@ struct AppStubMain {
         guard let apk = apkURL else {
             fatalAlert("The app's package file is missing",
                        "\(bundleRoot.path)/Contents/android/data/app has no installed "
-                       + "base.apk. Open Mac.apk to repair or reinstall \(label).",
+                       + "base.apk. Open Apk on Mac to repair or reinstall \(label).",
                        exitCode: 68, openMacApk: macapkApp)
         }
         // Skeleton per the bundle contract: data/data (the PARENT -- the
@@ -1049,7 +1049,7 @@ struct AppStubMain {
         //    resolution walks up from _NSGetExecutablePath()'s raw invoked
         //    path looking for Contents/Info.plist. The shared runtime lives
         //    OUTSIDE any .app bundle
-        //    (~/Library/Application Support/Mac.apk/runtime/Resources/), so
+        //    (~/Library/Application Support/Apk on Mac/runtime/Resources/), so
         //    that walk finds nothing and every one of those APIs falls back
         //    to the bare executable name, "macapk-runtime" -- reproduced
         //    directly: lsappinfo/NSRunningApplication read "macapk-runtime"
@@ -1154,7 +1154,7 @@ struct AppStubMain {
         let err = String(cString: strerror(errno))
         fatalAlert("Could not start \(label)",
                    "exec of \(execPath) failed: \(err) (errno \(errno)). "
-                   + "The Mac.apk runtime may be damaged; rebuild or reinstall Mac.apk.",
+                   + "The Apk on Mac runtime may be damaged; rebuild or reinstall Apk on Mac.",
                    exitCode: 69)
     }
 }

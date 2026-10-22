@@ -1,7 +1,7 @@
 // android.media.audiofx.AudioEffect -- base class for audio effects attached to
 // an audio session. AOSP frameworks/base media/java/android/media/audiofx/AudioEffect.java.
 //
-// Mac.apk's mixer has no per-session effect insertion path, so every effect is a
+// Apk on Mac's mixer has no per-session effect insertion path, so every effect is a
 // faithful "present but inert" implementation: construct succeeds, getEnabled
 // reflects setEnabled, and parameter setters are accepted but do not alter the
 // audio. The contract music apps rely on (construct an Equalizer/Visualizer
@@ -70,7 +70,7 @@ public class AudioEffect {
     protected boolean mReleased = false;
 
     // AOSP fills this from the native HAL's matched effect implementation at
-    // construction time (native_setup's desc[] out-param). Mac.apk's mixer
+    // construction time (native_setup's desc[] out-param). Apk on Mac's mixer
     // has no effect engine to match against (see class comment), so there is
     // no real implementation to describe -- but getDescriptor() must still
     // return a populated, non-null Descriptor (AOSP never returns null; it
@@ -101,7 +101,7 @@ public class AudioEffect {
         d.uuid = (uuid != null && !uuid.equals(EFFECT_TYPE_NULL)) ? uuid : d.type;
         d.connectMode = EFFECT_INSERT;
         d.name = "";
-        d.implementor = "Mac.apk";
+        d.implementor = "Apk on Mac";
         return d;
     }
 

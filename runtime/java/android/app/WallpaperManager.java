@@ -1,7 +1,7 @@
 // android.app.WallpaperManager
 //
 // AOSP's wallpaper service. Apps fetch it via getSystemService(WALLPAPER_SERVICE)
-// to read the current wallpaper or its desired dimensions. Mac.apk has no
+// to read the current wallpaper or its desired dimensions. Apk on Mac has no
 // wallpaper SURFACE, so the drawable getters return null and dimension queries
 // report 0 -- the honest "no wallpaper set" result rather than a null service
 // that NPEs. The wallpaper's COLOURS are the exception (getWallpaperColors):
@@ -66,7 +66,7 @@ public class WallpaperManager {
      *  per AOSP's own javadoc (the int return is a documented failure
      *  channel, not just a success id).
      *
-     *  Mac.apk has no wallpaper-rendering surface at all -- no home screen,
+     *  Apk on Mac has no wallpaper-rendering surface at all -- no home screen,
      *  no lock screen, nothing that would ever paint a system wallpaper --
      *  which is exactly why isWallpaperSupported()/isSetWallpaperAllowed()
      *  above already answer false. There is therefore no
@@ -103,7 +103,7 @@ public class WallpaperManager {
     // AOSP ref: frameworks/base/core/java/android/app/WallpaperManager.java
     // (android16-release). The premise for every answer below is the one
     // already stated at the top of this file and by isWallpaperSupported():
-    // Mac.apk has no home screen, no lock screen and no wallpaper-rendering
+    // Apk on Mac has no home screen, no lock screen and no wallpaper-rendering
     // surface, so there is no wallpaper set and nothing to set one on. Each
     // method therefore gives AOSP's own answer for "no wallpaper" rather than a
     // fabricated success.
@@ -154,7 +154,7 @@ public class WallpaperManager {
      *  SINCE 2026-09-26 (MACAPK_MONET_WALLPAPER_SEED, default ON) the colours are
      *  KNOWN: they are the Mac desktop picture's, extracted by AOSP's own
      *  WallpaperColors.fromBitmap maths (com.macapk.loader.monet) -- the very
-     *  WallpaperColors the system palette Mac.apk serves was derived from, which
+     *  WallpaperColors the system palette Apk on Mac serves was derived from, which
      *  is the relationship an app sees on a device (SystemUI seeds the palette
      *  from exactly what this method returns). FLAG_LOCK answers the same
      *  colours: WallpaperManagerService.getWallpaperColors falls back to the
@@ -255,7 +255,7 @@ public class WallpaperManager {
      *  activity can crop-and-set, and -- when NONE can -- ends with
      *  {@code throw new IllegalArgumentException("Cannot use passed URI to set
      *  wallpaper; check that the type returned by ContentProvider matches
-     *  image/*")}. Mac.apk installs one app and no wallpaper cropper, so we
+     *  image/*")}. Apk on Mac installs one app and no wallpaper cropper, so we
      *  reach that final throw. The two argument checks that precede it are
      *  reproduced verbatim because they are the ones a caller is most likely to
      *  trip. */

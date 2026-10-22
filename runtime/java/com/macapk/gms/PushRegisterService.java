@@ -245,7 +245,7 @@ public final class PushRegisterService extends android.app.Service {
     }
 
     static void log(String s) {
-        try { com.macapk.loader.NativeLog.i("Mac.apk.GMS", "register-svc: " + s); }
+        try { com.macapk.loader.NativeLog.i("Apk on Mac.GMS", "register-svc: " + s); }
         catch (Throwable t) { System.err.println("[register-svc] " + s); }
     }
 }

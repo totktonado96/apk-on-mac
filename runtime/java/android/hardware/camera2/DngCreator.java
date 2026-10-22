@@ -326,7 +326,7 @@ public final class DngCreator implements AutoCloseable {
 
     private String unreachableEncoderMessage() {
         return "DngCreator: this camera reports every DNG metadata tag, but the TIFF/EP encoder"
-                + " is not implemented in Mac.apk. Refusing rather than writing a malformed .dng.";
+                + " is not implemented in Apk on Mac. Refusing rather than writing a malformed .dng.";
     }
 
     private void checkNotClosed() {

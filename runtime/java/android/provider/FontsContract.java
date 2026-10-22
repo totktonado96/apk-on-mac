@@ -11,7 +11,7 @@ import android.os.Handler;
  * The platform downloadable-fonts client.
  *
  * A "font provider" is an ordinary ContentProvider installed by ANOTHER app
- * (Google Play Services ships the common one). Mac.apk runs exactly one app and
+ * (Google Play Services ships the common one). Apk on Mac runs exactly one app and
  * installs no font provider, so there is never a provider package to resolve.
  *
  * That is why fetchFonts throws PackageManager.NameNotFoundException and

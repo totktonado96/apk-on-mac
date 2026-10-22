@@ -1,5 +1,5 @@
 // android.hardware.biometrics.BiometricPrompt -- the system biometric
-// auth dialog. Mac.apk has no biometric hardware, so authenticate()
+// auth dialog. Apk on Mac has no biometric hardware, so authenticate()
 // immediately reports onAuthenticationError(BIOMETRIC_ERROR_HW_UNAVAILABLE)
 // on the supplied executor -- the honest "no biometric hardware" path.
 // The Builder + AuthenticationCallback + nested types must exist for

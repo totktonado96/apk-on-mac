@@ -1,7 +1,7 @@
 // com.macapk.icu.HostIcu -- the host's ICU (macOS libicucore) for the parts of
 // android.icu.* that need CLDR data the JDK does not carry.
 //
-// WHY. android.icu.* on Mac.apk is a front over java.text / java.util, which
+// WHY. android.icu.* on Apk on Mac is a front over java.text / java.util, which
 // share CLDR locale data with ICU for numbers, dates and collation. Unit
 // formatting is the exception: the JDK ships no CLDR unit patterns, so
 // "5 kilometer" (nl, WIDE) / "5 km" (SHORT) / "5km" (en, NARROW) cannot be

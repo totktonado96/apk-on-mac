@@ -1,5 +1,5 @@
 // android.content.pm.ShortcutInfo (API 25) -- a single app shortcut
-// descriptor. Mac.apk surfaces no launcher shortcuts, so these are
+// descriptor. Apk on Mac surfaces no launcher shortcuts, so these are
 // inert data holders: androidx.core.content.pm.ShortcutInfoCompat
 // builds a real ShortcutInfo via ShortcutInfo.Builder on API>=25 and
 // hands it to ShortcutManagerCompat, which our ShortcutManager
@@ -240,7 +240,7 @@ public final class ShortcutInfo implements android.os.Parcelable {
     // AOSP state getters (frameworks/base ShortcutInfo.java:1536-2102): on
     // real Android these reflect live ShortcutManager-tracked state (was
     // this shortcut published dynamically, pinned by the launcher, backed
-    // up and restored, etc). Mac.apk's ShortcutManager is an intentional
+    // up and restored, etc). Apk on Mac's ShortcutManager is an intentional
     // no-op sink (see the class header) -- a ShortcutInfo we hand back
     // never went through a real publish/pin lifecycle, so every one of
     // these reports the "freshly built, not yet touched by the system"
@@ -337,7 +337,7 @@ public final class ShortcutInfo implements android.os.Parcelable {
          *  the capability alone), and ACCUMULATES repeated params for the same
          *  capability in call order. All three reproduced.
          *
-         *  ⚠ Mac.apk has no assistant and no App Actions consumer, so nothing
+         *  ⚠ Apk on Mac has no assistant and no App Actions consumer, so nothing
          *  READS these bindings -- but they round-trip truthfully through
          *  getCapabilities()/getCapabilityParams(), which is what an app that
          *  builds a shortcut and inspects it back observes. Dropping them
@@ -361,7 +361,7 @@ public final class ShortcutInfo implements android.os.Parcelable {
          *  resource used for the STARTING WINDOW (the splash drawn before the
          *  activity's first frame) when the user launches this shortcut.
          *
-         *  Stored and readable back via the @hide getStartingThemeResId. Mac.apk
+         *  Stored and readable back via the @hide getStartingThemeResId. Apk on Mac
          *  surfaces no launcher, so no shortcut is ever launched from one and
          *  the theme is never applied -- but recording it keeps a built
          *  ShortcutInfo an honest description of what the app asked for. */

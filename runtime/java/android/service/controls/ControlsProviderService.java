@@ -14,7 +14,7 @@ import java.util.function.Consumer;
  * Base for a smart-home app's device-controls provider.
  *
  * PACKAGE NOTE -- see DeviceTypes for the full version. System UI's
- * device-controls panel binds this service; Mac.apk has no such panel, so
+ * device-controls panel binds this service; Apk on Mac has no such panel, so
  * nothing binds it, no publisher is subscribed to, and performControlAction is
  * never called. Everything else in the package (Control, the templates, the
  * actions) is ordinary value objects a provider builds outside the callback,

@@ -7,7 +7,7 @@
 // (android16-release). AOSP's constructor parses the service's
 // android.service.wallpaper meta-data XML and THROWS XmlPullParserException when
 // the meta-data is absent or malformed -- that is the behaviour a caller handles,
-// and it is the honest one here: Mac.apk hosts no WallpaperService, so no
+// and it is the honest one here: Apk on Mac hosts no WallpaperService, so no
 // ResolveInfo handed to this constructor can carry the meta-data AOSP requires.
 //
 // The class exists (rather than being omitted) because WallpaperManager's
@@ -34,7 +34,7 @@ public final class WallpaperInfo implements Parcelable {
     /** AOSP's public constructor: parses the service's
      *  "android.service.wallpaper" meta-data and throws
      *  XmlPullParserException("No android.service.wallpaper meta-data") when it
-     *  is missing. Mac.apk has no WallpaperService implementations to describe,
+     *  is missing. Apk on Mac has no WallpaperService implementations to describe,
      *  so that is always the case -- raising AOSP's own exception is the honest
      *  answer, and it is a CHECKED exception the caller already handles. */
     public WallpaperInfo(Context context, ResolveInfo service)

@@ -4,7 +4,7 @@
 //
 // A REAL, COMPLETE value type: every accessor below returns exactly what the
 // app's own Builder put in, so an app that configures a profile and reads it
-// back behaves the same on Mac.apk as on Android. None of that is a device
+// back behaves the same on Apk on Mac as on Android. None of that is a device
 // capability -- it is ordinary object state.
 //
 // What is honestly absent is the VPN SUBSYSTEM that would act on the profile:

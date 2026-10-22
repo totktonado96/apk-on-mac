@@ -2,7 +2,7 @@
 // by VpnManager.getProvisionedVpnProfileState().
 //
 // A REAL implementation: a plain immutable Parcelable value with no device
-// dependency. Mac.apk never hands one out (getProvisionedVpnProfileState()
+// dependency. Apk on Mac never hands one out (getProvisionedVpnProfileState()
 // returns null because nothing is ever provisioned -- see VpnManager), but the
 // type must resolve for an app that names it, and an app that constructs one
 // itself gets correct behaviour.

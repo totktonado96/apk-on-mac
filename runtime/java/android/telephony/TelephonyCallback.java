@@ -2,7 +2,7 @@
 //
 // The API 31+ replacement for PhoneStateListener. Apps subclass it and
 // implement the per-event interfaces (CallStateListener, etc.) then register
-// via TelephonyManager.registerTelephonyCallback. Mac.apk has no radio, so
+// via TelephonyManager.registerTelephonyCallback. Apk on Mac has no radio, so
 // values are always the honest "no service" defaults, but the type + the
 // nested listener interfaces must resolve for callback-registering code to
 // compile. Mirrors

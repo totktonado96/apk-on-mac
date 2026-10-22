@@ -2,7 +2,7 @@
 // PROVIDE a TTS engine. AOSP:
 // frameworks/base/core/java/android/speech/tts/TextToSpeechService.java
 //
-// Direction, as with RecognitionService: Mac.apk never calls this; a guest app
+// Direction, as with RecognitionService: Apk on Mac never calls this; a guest app
 // SUBCLASSES it. What the app needs is that the class exists, that the six
 // abstract methods carry AOSP's exact signatures and protection (so its
 // @Override compiles and its subclass links), and that the concrete hooks have

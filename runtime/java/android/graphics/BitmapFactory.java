@@ -47,7 +47,7 @@ public class BitmapFactory {
         public Bitmap  inBitmap;
         /** @deprecated AOSP: "As of {@link android.os.Build.VERSION_CODES#LOLLIPOP},
          *  this is ignored." Real Android still DECLARES these two fields on every
-         *  API level Mac.apk targets -- an app can assign them without
+         *  API level Apk on Mac targets -- an app can assign them without
          *  NoSuchFieldError, they just have zero effect. We had no fields at all,
          *  which is a regression relative to the real platform: a copy-pasted
          *  pre-Lollipop "efficient bitmap loading" helper (still common in older
@@ -81,7 +81,7 @@ public class BitmapFactory {
 
         /** @deprecated AOSP: "As of {@link android.os.Build.VERSION_CODES#N}, this
          *  will not affect the decode, though it will still set mCancel." Inert on
-         *  every Android version Mac.apk targets -- we have no cancellable native
+         *  every Android version Apk on Mac targets -- we have no cancellable native
          *  decode loop to hook into (our decodes are synchronous ImageIO/native
          *  calls that already returned by the time a caller could invoke this), so
          *  a faithful no-op matches AOSP's own observable behavior rather than
@@ -659,13 +659,13 @@ public class BitmapFactory {
         // round of bytecode reading (which has already produced a contradiction).
         final boolean trace = "1".equals(System.getenv("MACAPK_TRACE_DECODERES"));
         if (res == null) {
-            if (trace) android.util.Log.w("Mac.apk.DecodeRes",
+            if (trace) android.util.Log.w("Apk on Mac.DecodeRes",
                 "decodeResource(0x" + Integer.toHexString(id) + ") res==NULL -> null");
             return null;
         }
         try (InputStream in = res.openRawResource(id)) {
             Bitmap b = decodeStream(in, null, opts);
-            if (trace) android.util.Log.i("Mac.apk.DecodeRes",
+            if (trace) android.util.Log.i("Apk on Mac.DecodeRes",
                 "decodeResource(0x" + Integer.toHexString(id) + ") stream="
                 + (in == null ? "NULL" : "ok") + " -> "
                 + (b == null ? "NULL BITMAP" : (b.getWidth() + "x" + b.getHeight())));
@@ -711,7 +711,7 @@ public class BitmapFactory {
         } catch (Throwable ignored) {}
         Bitmap b = decodeStream(is, pad, opts);
         if (System.getenv("MACAPK_TRACE_COMPOSE_FALLBACK") != null) {
-            android.util.Log.i("Mac.apk.BitmapDecode", "decodeResourceStream -> "
+            android.util.Log.i("Apk on Mac.BitmapDecode", "decodeResourceStream -> "
                 + (b == null ? "NULL" : (b.getWidth() + "x" + b.getHeight()))
                 + " density=" + (value != null ? value.density : -1));
         }

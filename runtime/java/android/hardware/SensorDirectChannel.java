@@ -5,7 +5,7 @@
 // Mirrors frameworks/base/core/java/android/hardware/SensorDirectChannel.java
 // (android16-release).
 //
-// Mac.apk never creates one: the sensor values it reports are synthesised in
+// Apk on Mac never creates one: the sensor values it reports are synthesised in
 // Java (see SensorManager's header), there is no HAL to hand a buffer to, and
 // createDirectChannel therefore returns null -- which is AOSP's own documented
 // failure return ("null on failure"). The type must exist so an app's

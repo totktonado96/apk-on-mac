@@ -1,4 +1,4 @@
-// android.location.Geocoder -- forward/reverse geocoding. Mac.apk has
+// android.location.Geocoder -- forward/reverse geocoding. Apk on Mac has
 // no geocoding backend, so lookups return empty results cleanly (AOSP
 // also returns an empty list when the service has no data). Apps that
 // geocode an address must get an empty list, not a NoSuchMethodError or
@@ -25,7 +25,7 @@ public final class Geocoder {
         mLocale = locale;
     }
 
-    // AOSP: present only on devices with a geocoder backend. Mac.apk has none.
+    // AOSP: present only on devices with a geocoder backend. Apk on Mac has none.
     public static boolean isPresent() { return false; }
 
     // Deprecated synchronous overloads (pre-API-33). Return empty list.

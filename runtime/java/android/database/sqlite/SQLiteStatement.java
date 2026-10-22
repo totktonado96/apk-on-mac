@@ -160,7 +160,7 @@ public class SQLiteStatement extends SQLiteProgram {
     }
     /** AOSP simpleQueryForBlobFileDescriptor: returns a
      *  ParcelFileDescriptor opened on the first cell's blob (an ashmem
-     *  region on real Android). Mac.apk has no ashmem / file-descriptor
+     *  region on real Android). Apk on Mac has no ashmem / file-descriptor
      *  blob backing -- blobs are read inline -- so this honestly returns
      *  null (no descriptor available), matching the "no row" return
      *  shape callers handle. */

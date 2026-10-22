@@ -5,7 +5,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * MediaRouter2 discovery preference (which route types to scan for). Mac.apk
+ * MediaRouter2 discovery preference (which route types to scan for). Apk on Mac
  * has no external media routes; the preference is stored and honoured by an
  * empty route set, matching a device with no discoverable routes.
  *

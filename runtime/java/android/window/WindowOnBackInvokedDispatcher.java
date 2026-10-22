@@ -12,7 +12,7 @@
 // PhoneWindow.getOnBackInvokedDispatcher() returns a ProxyOnBackInvokedDispatcher
 // that buffers registrations until the ViewRootImpl exists and then forwards
 // them verbatim, in order (ProxyOnBackInvokedDispatcher.transferCallbacksToDispatcher).
-// Mac.apk has no ViewRootImpl per window, so android.view.Window owns this object
+// Apk on Mac has no ViewRootImpl per window, so android.view.Window owns this object
 // directly -- the proxy's only observable effect (same callbacks, same order,
 // same Checker) is preserved by construction.
 //
@@ -54,7 +54,7 @@ import java.util.function.Supplier;
 public class WindowOnBackInvokedDispatcher implements OnBackInvokedDispatcher {
     private static final String TAG = "WindowOnBackDispatcher";
 
-    /** Mac.apk bisect gate, read once per process (see the file header). */
+    /** Apk on Mac bisect gate, read once per process (see the file header). */
     public static final boolean MACAPK_BACK_INVOKED =
             !"0".equals(System.getenv("MACAPK_BACK_INVOKED"));
 
@@ -69,7 +69,7 @@ public class WindowOnBackInvokedDispatcher implements OnBackInvokedDispatcher {
             VANILLA_ICE_CREAM = 35, BAKLAVA = 36;
 
     /** main-branch WindowOnBackInvokedDispatcher guards both maps with mLock; the
-     *  android14 file relied on the UI thread. Mac.apk needs the lock: a BACK on
+     *  android14 file relied on the UI thread. Apk on Mac needs the lock: a BACK on
      *  a SurfaceView/GL tree is routed on the AppKit thread while the app
      *  registers on the Android main thread. Callbacks are always invoked
      *  OUTSIDE it. */
@@ -89,7 +89,7 @@ public class WindowOnBackInvokedDispatcher implements OnBackInvokedDispatcher {
         mChecker = new Checker(context);
     }
 
-    /** Mac.apk: a Window's context is assigned by its subclass constructor
+    /** Apk on Mac: a Window's context is assigned by its subclass constructor
      *  (ActivityWindow / DialogWindow set mContext themselves), so the window
      *  hands in a supplier that reads it at check time. AOSP gets the same
      *  effect from updateContext(), which PhoneWindow calls when it binds. */
@@ -152,7 +152,7 @@ public class WindowOnBackInvokedDispatcher implements OnBackInvokedDispatcher {
             // removed from dispatcher" -- sendCancelledIfInProgress, which fires
             // only while a GESTURE's progress animator runs. A key-driven BACK
             // never starts that animator (VRI calls onBackStarted directly), and
-            // Mac.apk has no back gesture, so there is never one to cancel.
+            // Apk on Mac has no back gesture, so there is never one to cancel.
         }
     }
 
@@ -195,7 +195,7 @@ public class WindowOnBackInvokedDispatcher implements OnBackInvokedDispatcher {
         }
     }
 
-    /** Mac.apk (debug / gate): the priority a callback is registered at, or null. */
+    /** Apk on Mac (debug / gate): the priority a callback is registered at, or null. */
     public Integer macapkPriorityOf(OnBackInvokedCallback callback) {
         synchronized (mLock) { return mAllCallbacks.get(callback); }
     }
@@ -284,7 +284,7 @@ public class WindowOnBackInvokedDispatcher implements OnBackInvokedDispatcher {
             // focus: Activity.onCreate registers its default (android14
             // Activity.java :1727-1733), Dialog.onStart registers onBackPressed
             // (Dialog.java :456-462), PopupDecorView registers dismiss (PopupWindow
-            // .java :2744-2757). Until those patches land in Mac.apk's Activity /
+            // .java :2744-2757). Until those patches land in Apk on Mac's Activity /
             // Dialog / PopupWindow, the legacy key IS their default back
             // behaviour, so hand it back rather than swallowing BACK. The observer
             // still hears it: the default would have been PRIORITY_SYSTEM.
@@ -301,7 +301,7 @@ public class WindowOnBackInvokedDispatcher implements OnBackInvokedDispatcher {
                 case KeyEvent.ACTION_DOWN:
                     // AOSP (android14 VRI :6555-6563): "ACTION_DOWN is emitted
                     // twice ... 0 means the button was pressed. 1 means the button
-                    // continues to be pressed (long press)." Mac.apk's host key
+                    // continues to be pressed (long press)." Apk on Mac's host key
                     // bridge sends autorepeat DOWNs with repeat 0, so
                     // TouchDispatcher.macapkBackRepeat numbers them first.
                     if (keyEvent.getRepeatCount() == 0) {
@@ -343,7 +343,7 @@ public class WindowOnBackInvokedDispatcher implements OnBackInvokedDispatcher {
     // ---- per-root dispatchers for windows that are not an Activity or Dialog --
 
     /** AOSP gives EVERY window (a PopupWindow, a raw WindowManager.addView root)
-     *  its own ViewRootImpl and therefore its own dispatcher. Mac.apk's overlay
+     *  its own ViewRootImpl and therefore its own dispatcher. Apk on Mac's overlay
      *  windows have no Window object, so their dispatcher lives here, keyed by
      *  the root view. Weak keys; com.macapk.loader.TouchDispatcher prunes a root
      *  whose window is gone (AOSP: detachFromWindow -> clear) before a BACK. */
@@ -393,7 +393,7 @@ public class WindowOnBackInvokedDispatcher implements OnBackInvokedDispatcher {
     /**
      * Class used to check whether a callback can be registered or not. This is
      * meant to be shared with {@link ProxyOnBackInvokedDispatcher} which needs to
-     * do the same checks. (AOSP; Mac.apk has no proxy -- see the file header.)
+     * do the same checks. (AOSP; Apk on Mac has no proxy -- see the file header.)
      */
     public static class Checker {
         private final Supplier<Context> mContext;

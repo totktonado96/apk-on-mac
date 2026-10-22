@@ -1,6 +1,6 @@
 // android.bluetooth.le.ScanSettings -- configuration for a BLE scan.
 //
-// A REAL, complete immutable value type. Mac.apk never scans (see
+// A REAL, complete immutable value type. Apk on Mac never scans (see
 // BluetoothLeScanner), but the settings object is pure data, so it stores and
 // reports everything it is given.
 //

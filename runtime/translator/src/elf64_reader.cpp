@@ -1,4 +1,4 @@
-// elf64_reader.cpp -- AArch64 ELF parser for the Mac.apk translator.
+// elf64_reader.cpp -- AArch64 ELF parser for the Apk on Mac translator.
 //
 // Same shape as elf_reader.cpp (Elf32). Bounds-checked, little-endian,
 // returns descriptive errors. The file format is stable enough that

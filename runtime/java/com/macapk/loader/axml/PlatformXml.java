@@ -34,7 +34,7 @@ import com.macapk.loader.ResourceIndex;
 import java.util.concurrent.ConcurrentHashMap;
 
 public final class PlatformXml {
-    private static final String TAG = "Mac.apk.AXML";
+    private static final String TAG = "Apk on Mac.AXML";
     private PlatformXml() {}
 
     /** In-apk path -> parsed block. Never evicted: the set is bounded by the

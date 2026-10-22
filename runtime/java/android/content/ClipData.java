@@ -184,7 +184,7 @@ public class ClipData implements android.os.Parcelable {
     // .writeToParcel flattens each Item's fields inline, and we mirror that
     // structure (description, then item count, then per-item fields).
     //
-    // Mac.apk's android.os.Parcel is an in-process object-graph shim
+    // Apk on Mac's android.os.Parcel is an in-process object-graph shim
     // (writeParcelable IS writeObjectRef), so the flattened representation
     // is a sequence of live object references rather than AOSP's byte
     // layout. That is the same contract the rest of our framework marshals

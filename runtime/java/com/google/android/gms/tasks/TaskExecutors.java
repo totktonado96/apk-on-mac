@@ -11,7 +11,7 @@ import java.util.concurrent.Executor;
 // "com.google.android.gms.tasks.TaskExecutors.MAIN_THREAD".
 //
 // MAIN_THREAD: real play-services posts the Runnable onto the application main
-// Looper. On Mac.apk we route through android.os.Handler bound to the main
+// Looper. On Apk on Mac we route through android.os.Handler bound to the main
 // Looper so the callback runs on the UI thread exactly as apps expect, matching
 // play-services' observable contract. Construction-order safety: the Handler is
 // created lazily on first execute() so class init does not depend on the main

@@ -5,7 +5,7 @@
 // read findLibrary()/getLdLibraryPath(). A missing class threw
 // NoClassDefFoundError during onCreate.
 //
-// Mac.apk's real loader is a URLClassLoader chain, so we slot BaseDexClassLoader
+// Apk on Mac's real loader is a URLClassLoader chain, so we slot BaseDexClassLoader
 // in as a URLClassLoader subclass; AppClassLoader (our PathClassLoader analogue)
 // and DexClassLoader both extend it, so getClassLoader() IS-A BaseDexClassLoader
 // and the casts succeed.
@@ -229,7 +229,7 @@ public class BaseDexClassLoader extends URLClassLoader {
         return false;
     }
 
-    /** Mac.apk-internal: open every jar on this loader's path NOW, then unlink
+    /** Apk on Mac-internal: open every jar on this loader's path NOW, then unlink
      *  the ephemeral ones.
      *
      *  URLClassPath opens a jar LAZILY, by path, on the first lookup that walks

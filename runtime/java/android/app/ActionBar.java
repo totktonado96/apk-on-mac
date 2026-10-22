@@ -2,7 +2,7 @@
 // non-AppCompat one returned by Activity.getActionBar()). AOSP API-11+.
 //
 // AOSP ref: frameworks/base/core/java/android/app/ActionBar.java
-// (declared abstract). Mac.apk has no system action-bar chrome; plain-
+// (declared abstract). Apk on Mac has no system action-bar chrome; plain-
 // theme apps still call getActionBar().setTitle(...) / hide() / etc., so
 // we provide a concrete instance that records title/subtitle/display
 // options and treats show/hide as state toggles. AppCompat apps use

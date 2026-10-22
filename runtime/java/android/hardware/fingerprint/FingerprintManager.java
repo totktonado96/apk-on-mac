@@ -1,5 +1,5 @@
 // android.hardware.fingerprint.FingerprintManager -- the deprecated
-// fingerprint API (pre-BiometricPrompt). Mac.apk has no fingerprint
+// fingerprint API (pre-BiometricPrompt). Apk on Mac has no fingerprint
 // hardware: isHardwareDetected/hasEnrolledFingerprints return false and
 // authenticate() reports FINGERPRINT_ERROR_HW_NOT_PRESENT. The nested
 // callback + CryptoObject types must exist for callers to compile.

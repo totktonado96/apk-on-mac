@@ -1048,7 +1048,7 @@ public class SQLiteDatabase extends SQLiteClosable {
             // anywhere said why. Measured 2026-08-20 on Aurora: the terminal
             // INSTALLED write was lost exactly this way and the store sat on
             // "Installing" forever. It is a silent data-loss primitive and it
-            // applied to EVERY Room/SQLite transaction on Mac.apk, not just
+            // applied to EVERY Room/SQLite transaction on Apk on Mac, not just
             // Aurora's.
             //
             // The ROLLBACK-then-propagate below is a deliberate divergence
@@ -1119,7 +1119,7 @@ public class SQLiteDatabase extends SQLiteClosable {
      *    (d) SQLiteConnectionPool.shouldYieldConnection() reports another
      *        thread actually WAITING for this connection.
      *  (a)-(c) are real preconditions and are evaluated here. (d) is
-     *  UNDER-answered for Mac.apk: since the per-thread transaction shape
+     *  UNDER-answered for Apk on Mac: since the per-thread transaction shape
      *  (v1.0.996) other threads genuinely can be parked in
      *  macapkAwaitTxConnectionLocked waiting for this transaction to end,
      *  but we do not keep a waiter count to consult, so this answers false
@@ -1237,12 +1237,12 @@ public class SQLiteDatabase extends SQLiteClosable {
     public void setCustomScalarFunction(String functionName,
             java.util.function.UnaryOperator<String> scalarFunction) {
         throw new UnsupportedOperationException(
-            "custom SQL functions are not supported by the Mac.apk SQLite backend");
+            "custom SQL functions are not supported by the Apk on Mac SQLite backend");
     }
     public void setCustomAggregateFunction(String functionName,
             java.util.function.BinaryOperator<String> aggregateFunction) {
         throw new UnsupportedOperationException(
-            "custom SQL functions are not supported by the Mac.apk SQLite backend");
+            "custom SQL functions are not supported by the Apk on Mac SQLite backend");
     }
 
     /** AOSP findEditTable: the first table named in a comma/space

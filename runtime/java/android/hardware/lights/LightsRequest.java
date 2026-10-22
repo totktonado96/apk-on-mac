@@ -1,7 +1,7 @@
 // android.hardware.lights.LightsRequest -- a batch of (Light -> LightState)
 // overrides built via Builder and submitted through
 // LightsManager.LightsSession#requestLights. Pure data holder; nothing in
-// Mac.apk consumes the contents (see LightsManager.java), but the shape
+// Apk on Mac consumes the contents (see LightsManager.java), but the shape
 // must match AOSP exactly so an app's Builder call chain compiles and links
 // against our classes unmodified.
 //

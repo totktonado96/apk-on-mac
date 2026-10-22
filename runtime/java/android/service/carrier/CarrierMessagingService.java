@@ -11,7 +11,7 @@ import java.util.List;
  * Base for a carrier app that wants to intercept, filter or send SMS/MMS on the
  * carrier's own network path.
  *
- * PACKAGE NOTE -- see CarrierIdentifier. Mac.apk has no radio, no SIM and no
+ * PACKAGE NOTE -- see CarrierIdentifier. Apk on Mac has no radio, no SIM and no
  * telephony stack, so nothing binds this service and none of the on* callbacks
  * fires. The result objects are plain value types and are faithful.
  *

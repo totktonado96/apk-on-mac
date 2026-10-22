@@ -1,7 +1,7 @@
 // android.media.MediaSyncEvent -- a synchronization point used to start a
 // capture (AudioRecord.startRecording(MediaSyncEvent)) relative to another
 // session. AOSP frameworks/base media/java/android/media/MediaSyncEvent.java.
-// Mac.apk has no cross-session sync, so this is a typed holder of the
+// Apk on Mac has no cross-session sync, so this is a typed holder of the
 // (type, audioSession) pair the app configures.
 package android.media;
 

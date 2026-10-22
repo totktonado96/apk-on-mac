@@ -1,5 +1,5 @@
 package android.util;
-/** Binary system event log. Mac.apk swallows events (no eventlog device). */
+/** Binary system event log. Apk on Mac swallows events (no eventlog device). */
 public class EventLog {
     private EventLog() {}
     public static int writeEvent(int tag, int value) { return 0; }

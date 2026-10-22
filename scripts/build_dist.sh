@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # build_dist.sh
 #
-# Produces a SELF-CONTAINED, signed Mac.apk.app under build/dist/ that runs
+# Produces a SELF-CONTAINED, signed Apk on Mac.app under build/dist/ that runs
 # on another Apple Silicon Mac with no Homebrew, no JDK, and (for the arm64
 # and pure-Java app set) no Xcode installed. It bundles a jlink'd JRE and
 # every non-system dylib the runtime links, rewrites all install names to
@@ -53,9 +53,9 @@ PROJECT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 . "$PROJECT_DIR/debug/jdk25_select.sh"
 JDK_HOME="$(macapk_jdk_home)" || { echo "ERROR: no JDK for MACAPK_JDK=$(macapk_jdk_selected)" >&2; exit 1; }
 echo "  JDK: $(macapk_jdk_version "$JDK_HOME") at $JDK_HOME (MACAPK_JDK=${MACAPK_JDK:-unset})"
-SRC_APP="$PROJECT_DIR/build/Mac.apk.app"
+SRC_APP="$PROJECT_DIR/build/Apk on Mac.app"
 DIST_DIR="$PROJECT_DIR/build/dist"
-APP="$DIST_DIR/Mac.apk.app"
+APP="$DIST_DIR/Apk on Mac.app"
 # MUST be the same file the dev/staging path signs with
 # (scripts/relink_bundle_deps.sh). This used to point at
 # launcher/MacApk.entitlements, and the two had drifted apart in BOTH
@@ -148,7 +148,7 @@ fi
 
 # ---------------------------------------------------------------------------
 # 0. Build the base bundle fresh, then copy to the dist staging area so we
-#    never mutate the dev tree's build/Mac.apk.app.
+#    never mutate the dev tree's build/Apk on Mac.app.
 # ---------------------------------------------------------------------------
 echo "[0/6] Building runtime + base app bundle from source..."
 # Rebuild the runtime binary (+ translator, shim, jars) from source first, so
@@ -156,13 +156,13 @@ echo "[0/6] Building runtime + base app bundle from source..."
 # self-contained .app. build_launcher.sh only bundles whatever runtime is
 # already built, so without this it would re-package a stale binary.
 # MACAPK_NO_BUNDLE_SYNC=1: build.sh otherwise syncs its payload into the
-# canonical /Applications/Mac.apk.app and relinks it -- and if the GUI is
+# canonical /Applications/Apk on Mac.app and relinks it -- and if the GUI is
 # running it SKIPS the relink and still exits 0, leaving the owner's installed
 # app Homebrew-absolute. A release build has no business touching it.
 MACAPK_NO_BUNDLE_SYNC=1 "$PROJECT_DIR/runtime/scripts/build.sh" >/dev/null
 "$PROJECT_DIR/scripts/build_launcher.sh" >/dev/null
 [ -d "$SRC_APP" ] || { echo "ERROR: $SRC_APP not produced" >&2; exit 1; }
-rm -rf "$DIST_DIR/Mac.apk.app"
+rm -rf "$DIST_DIR/Apk on Mac.app"
 mkdir -p "$DIST_DIR"
 ditto "$SRC_APP" "$APP"   # ditto, not cp -R: preserves xattrs/inodes like promote_app.sh
 CONTENTS="$APP/Contents"
@@ -376,13 +376,13 @@ fi
 # wipes the guest's x18 on every EL0 exception return.
 # Inside-out order matters: these are all inside $APP, which is sealed below.
 [ -f "$RES/jre/lib/jspawnhelper" ]   && sign "$RES/jre/lib/jspawnhelper" --entitlements "$ENT"
-[ -f "$RES/appstub/MacApkAppStub" ]  && sign "$RES/appstub/MacApkAppStub" --identifier org.macapk.appstub
+[ -f "$RES/appstub/MacApkAppStub" ]  && sign "$RES/appstub/MacApkAppStub" --identifier io.github.totktonado96.apkonmac.appstub
 [ -f "$BIN/macapk-elfexec" ]         && sign "$BIN/macapk-elfexec" --entitlements "$ENT"
 [ -f "$BIN/macapk-installhelper" ]   && sign "$BIN/macapk-installhelper"
-# "Mac.apk Location" (launcher/LocationHelperMain.swift): a nested app that must
+# "Apk on Mac Location" (launcher/LocationHelperMain.swift): a nested app that must
 # keep the location entitlement, or TCC refuses it without a prompt.
-[ -d "$APP/Contents/Helpers/Mac.apk Location.app" ] && \
-    sign "$APP/Contents/Helpers/Mac.apk Location.app" --entitlements "$ENT" --identifier org.macapk.location
+[ -d "$APP/Contents/Helpers/Apk on Mac Location.app" ] && \
+    sign "$APP/Contents/Helpers/Apk on Mac Location.app" --entitlements "$ENT" --identifier io.github.totktonado96.apkonmac.location
 sign "$RES/macapk-runtime" --entitlements "$ENT"
 [ -f "$BIN/macapk-translator" ] && sign "$BIN/macapk-translator" --entitlements "$ENT"
 # 5d. seal the whole bundle last (entitlements on the launcher executable too)
@@ -423,8 +423,8 @@ fi
 
 if [ "$DO_DMG" -eq 1 ]; then
     echo "Building .dmg..."
-    DMG="$DIST_DIR/${MACAPK_DMG_NAME:-macapk}.dmg"
-    STAGE_APP="${MACAPK_DMG_APP_NAME:-Mac.apk}.app"
+    DMG="$DIST_DIR/Apk-on-Mac.dmg"
+    STAGE_APP="Apk on Mac.app"
     STAGE="$DIST_DIR/.dmg_stage"
     rm -f "$DMG"; rm -rf "$STAGE"; mkdir -p "$STAGE"
     # ditto, not cp -R: this app is SIGNED and (usually) STAPLED by now, and
@@ -445,7 +445,7 @@ if [ "$DO_DMG" -eq 1 ]; then
     if [ -f "$APP/Contents/Resources/THIRD_PARTY_NOTICES.txt" ]; then
         cp -f "$APP/Contents/Resources/THIRD_PARTY_NOTICES.txt" "$STAGE/THIRD_PARTY_NOTICES.txt"
     fi
-    hdiutil create -volname "${MACAPK_DMG_VOLNAME:-Mac.apk}" -srcfolder "$STAGE" -ov -format UDZO "$DMG" >/dev/null
+    hdiutil create -volname "Apk on Mac" -srcfolder "$STAGE" -ov -format UDZO "$DMG" >/dev/null
     if [ -n "$SIGN_IDENTITY" ]; then
         codesign --force --sign "$SIGN_IDENTITY" "$DMG"
         # Only notarize/staple the DMG when we were asked to notarize at all.
@@ -516,7 +516,7 @@ echo "=================================================="
 # reminder is only as good as the person reading it at 1am.
 #
 # Compared against the bundle build_launcher.sh JUST produced, not against
-# /Applications/Mac.apk.app: the installed app can be an older promoted build,
+# /Applications/Apk on Mac.app: the installed app can be an older promoted build,
 # whose file-set legitimately differs, and that would fail check (a) for a
 # reason that has nothing to do with this release.
 echo

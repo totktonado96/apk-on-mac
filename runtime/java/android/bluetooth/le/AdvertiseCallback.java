@@ -2,7 +2,7 @@
 // BluetoothLeAdvertiser.startAdvertising().
 //
 // Mirrored exactly (both methods are concrete on AOSP, so an app overrides
-// only what it needs). Mac.apk always calls onStartFailure with
+// only what it needs). Apk on Mac always calls onStartFailure with
 // ADVERTISE_FAILED_FEATURE_UNSUPPORTED -- see BluetoothLeAdvertiser for why
 // that is the honest code and why failing beats going quiet.
 //

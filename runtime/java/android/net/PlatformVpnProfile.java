@@ -2,7 +2,7 @@
 //
 // Abstract base of the platform VPN profile types (Ikev2VpnProfile). Pure
 // immutable value type -- every accessor here reports what the app's own
-// Builder put in, so all of it behaves exactly as on Android. What Mac.apk
+// Builder put in, so all of it behaves exactly as on Android. What Apk on Mac
 // lacks is a VPN subsystem to ACT on the profile; see VpnManager.
 //
 // Mirrors frameworks/base/core/java/android/net/PlatformVpnProfile.java; the

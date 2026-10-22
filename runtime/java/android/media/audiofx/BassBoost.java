@@ -1,6 +1,6 @@
 // android.media.audiofx.BassBoost -- low-frequency boost effect. AOSP
 // frameworks/base media/java/android/media/audiofx/BassBoost.java. Inert on
-// Mac.apk (no per-session effect engine): strength is stored + read back, audio
+// Apk on Mac (no per-session effect engine): strength is stored + read back, audio
 // is unchanged.
 package android.media.audiofx;
 

@@ -1,5 +1,5 @@
 // android.view.AttachedSurfaceControl -- the SurfaceControl a ViewRootImpl /
-// SurfaceView root is attached to. Mac.apk composites its one window through
+// SurfaceView root is attached to. Apk on Mac composites its one window through
 // ANGLE/Metal and has no SurfaceControl transaction pipeline (see
 // SurfaceControl's own header), so every operation below answers the way a root
 // whose transaction was applied immediately, and whose buffer is never
@@ -16,7 +16,7 @@ public interface AttachedSurfaceControl {
 
     /** AOSP AttachedSurfaceControl.getBufferTransformHint(): the transform the
      *  compositor would like the app to pre-apply to its buffers, so a rotation
-     *  costs no extra composition pass. Mac.apk never asks for one -- the window
+     *  costs no extra composition pass. Apk on Mac never asks for one -- the window
      *  does not rotate under the app -- so the hint is Surface.ROTATION_0, the
      *  same value an unrotated device reports. */
     default int getBufferTransformHint() { return Surface.ROTATION_0; }
@@ -34,7 +34,7 @@ public interface AttachedSurfaceControl {
             OnBufferTransformHintChangedListener listener) {}
 
     /** AOSP AttachedSurfaceControl.setTouchableRegion(Region): restrict which
-     *  part of the window accepts touch, null meaning "the whole window". Mac.apk
+     *  part of the window accepts touch, null meaning "the whole window". Apk on Mac
      *  routes every Cocoa mouse event into the view hierarchy and has no
      *  window-manager input region to narrow, so the window stays fully
      *  touchable -- the default state on a device too. */
@@ -58,7 +58,7 @@ public interface AttachedSurfaceControl {
 
     /** AOSP AttachedSurfaceControl.registerOnJankDataListener(Executor,
      *  OnJankDataListener) (API 36): subscribe to per-frame jank classification
-     *  from the compositor. Mac.apk has no SurfaceFlinger frame timeline to
+     *  from the compositor. Apk on Mac has no SurfaceFlinger frame timeline to
      *  classify against, so the registration is live but never reports -- the
      *  same as a device whose layer has produced no frames yet. */
     default SurfaceControl.OnJankDataListenerRegistration registerOnJankDataListener(

@@ -3,7 +3,7 @@ package android.os;
 import java.io.FileDescriptor;
 
 // ParcelFileDescriptor -- AOSP wraps an open file descriptor so it can be
-// handed across binder + back to native code. Mac.apk only needs the
+// handed across binder + back to native code. Apk on Mac only needs the
 // "carry a real fd + size to native code" half: Unity's
 // UnityPlayerForActivityOrService.nativeRender calls
 // AssetManager.openFd(...).getParcelFileDescriptor() and then, on the native
@@ -22,7 +22,7 @@ public class ParcelFileDescriptor implements Parcelable, java.io.Closeable {
     // ---- reliable-channel state (AOSP calls this the "comm" fd) ------------
     // On a device a reliable PFD carries a second, socketpair fd: each end
     // WRITES its own close status to its comm fd, and the peer READS it, which
-    // is how checkError() distinguishes a clean EOF from a crash. Mac.apk is
+    // is how checkError() distinguishes a clean EOF from a crash. Apk on Mac is
     // single-process, so both ends of every such pair live here and the status
     // can be carried in a shared object instead of through a socket -- same
     // observable protocol, no kernel round trip. A PFD with mComm == null is
@@ -55,7 +55,7 @@ public class ParcelFileDescriptor implements Parcelable, java.io.Closeable {
 
     public ParcelFileDescriptor(FileDescriptor fd) { this.fd = fd; }
 
-    // Mac.apk helper: build a PFD around a real fd plus the stream that owns it
+    // Apk on Mac helper: build a PFD around a real fd plus the stream that owns it
     // (so close() releases it) and the byte size for getStatSize().
     public static ParcelFileDescriptor macapkWrap(FileDescriptor fd,
                                                     java.io.Closeable owner,
@@ -563,7 +563,7 @@ public class ParcelFileDescriptor implements Parcelable, java.io.Closeable {
     @Override public int describeContents() { return Parcelable.CONTENTS_FILE_DESCRIPTOR; }
 
     // AOSP flattens the live fd across the Binder transaction as ancillary data
-    // so the receiving side gets a real duplicate fd. Mac.apk has no real
+    // so the receiving side gets a real duplicate fd. Apk on Mac has no real
     // Binder (every Parcel round-trip is in-process), so this uses the same
     // live-object-ref idiom Parcel.java already uses for Bundle/Parcelable/
     // Messenger (writeValue -> writeObjectRef, readValue -> readObjectRef),

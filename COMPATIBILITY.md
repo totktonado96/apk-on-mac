@@ -1,6 +1,6 @@
-# Mac.apk App Compatibility
+# Apk on Mac App Compatibility
 
-Which Android apps run on Mac.apk, tested by hand on a Mac. Updated 2026-10-20.
+Which Android apps run on Apk on Mac, tested by hand on a Mac. Updated 2026-10-20.
 
 **71 apps tested:** ✅ 58 work · ⚠️ 10 partly work · ❌ 3 don't work yet
 
@@ -31,7 +31,7 @@ Which Android apps run on Mac.apk, tested by hand on a Mac. Updated 2026-10-20.
 | **Efteling** | 5.27.0 | ❌ | ❔ | Stuck on welcome screen. |
 | **Efteling** | 5.25.0 | ❌ | ❔ |  |
 | **Efteling** | 5.24.0 | ❌ | ❔ |  |
-| **Epic Games Store** | 1.7.2 | ✅ | ❔ | Icon: ❔. Signs in with Epic in a Mac.apk sign-in window and installs Rocket League Sideswipe. |
+| **Epic Games Store** | 1.7.2 | ✅ | ❔ | Icon: ❔. Signs in with Epic in a Apk on Mac sign-in window and installs Rocket League Sideswipe. |
 | **F-Droid** | 1.23.2 | ✅ | ❔ | Updating Mindustry from F-Droid and then opening it from F-Droid WORKS (install + cross-app launch). |
 | **Feudal Tactics** | 1.5.2 | ✅ | ✅ |  |
 | **Flappy Bird** | 1.3 | ✅ | ✅ |  |
@@ -53,7 +53,7 @@ Which Android apps run on Mac.apk, tested by hand on a Mac. Updated 2026-10-20.
 | **Lemuroid** | 1.17.0 | ✅ | ❔ | Icon: ❔. Retro game emulator (F-Droid). Super Mario Advance 2 (GBA) plays. Downloads each system's emulator core on first use. |
 | **Mastodon** | 2.13.1 | ⚠️ | ✅ | Only shows one post |
 | **Metrolist** | 13.7.0 | ✅ | ✅ | Icon: ❔. YouTube Music client. Google sign-in and playback work, and it shows in macOS Now Playing. |
-| **mGrađani** | 1.0.18 | ✅ | ❔ | Icon: ❔. NIAS login page works since Mac.apk v1.0.1723 (it was blank before). |
+| **mGrađani** | 1.0.18 | ✅ | ❔ | Icon: ❔. NIAS login page works since Apk on Mac v1.0.1723 (it was blank before). |
 | **Mindustry** | 8-fdroid-160.5 | ✅ | ✅ | Online multiplayer currently inop |
 | **Mindustry** | 8-fdroid-158 | ✅ | ✅ |  |
 | **Minecraft** | 1.26.52.3 | ✅ | ❔ | Multiplayer works (joined a server). |
@@ -66,7 +66,7 @@ Which Android apps run on Mac.apk, tested by hand on a Mac. Updated 2026-10-20.
 | **Organic Maps** | 2026.07.23-6-FDroid | ✅ | ✅ | Needs location permissions fixed |
 | **Pekka Kana 2** | 1.4.5 | ✅ | ✅ |  |
 | **PianOli** | 1.27 | ✅ | ✅ | Settings don't open |
-| **Plague Inc.** | 1.24.4 | ✅ | ✅ | 10-06: the very loud music and the gray bar over the in-game news ticker are fixed in the next Mac.apk update (after 1.0.1732); 1.0.1732 and earlier still have both. |
+| **Plague Inc.** | 1.24.4 | ✅ | ✅ | 10-06: the very loud music and the gray bar over the in-game news ticker are fixed in the next Apk on Mac update (after 1.0.1732); 1.0.1732 and earlier still have both. |
 | **Puzzles** | 2025-09-12-1919-23762278-fdroid | ✅ | ❔ |  |
 | **Reddit** | 2026.21.0 | ⚠️ | ✅ | Cannot log in via Google. Needs zoomed out when in full screen. Scrolling is odd. |
 | **RetroArch** | 1.22.2 | ✅ | ❔ | Icon: ❔. Games run when launched from RetroArch or from iiSU. To scroll the menu with a mouse wheel, turn on Settings > User Interface > Mouse Support. |

@@ -17,7 +17,7 @@ import java.util.Map;
 import org.xmlpull.v1.XmlPullParser;
 
 /**
- * The account types the running app's OWN authenticators manage -- Mac.apk's equivalent of
+ * The account types the running app's OWN authenticators manage -- Apk on Mac's equivalent of
  * the slice of AOSP's AccountAuthenticatorCache that belongs to the caller.
  *
  * AOSP (android14-release):
@@ -32,7 +32,7 @@ import org.xmlpull.v1.XmlPullParser;
  *     not registered).
  *   AccountManagerService.isAccountManagedByCaller (:5761) / getTypesForCaller (:5778) -- a
  *     caller manages a type when the authenticator's uid shares its signing identity
- *     (hasSignatureCapability ... AUTH). Mac.apk hosts ONE app per process, so the caller's
+ *     (hasSignatureCapability ... AUTH). Apk on Mac hosts ONE app per process, so the caller's
  *     own package's authenticators are exactly the types it manages; there is no second
  *     installed package whose authenticator could match.
  */

@@ -1862,7 +1862,7 @@ public class Canvas {
             int cx = Math.max(0, Math.min(img.getWidth() - 1, dev.x + dev.width / 2));
             int cy = Math.max(0, Math.min(img.getHeight() - 1, dev.y + dev.height / 2));
             java.awt.Shape clip = g.getClip();
-            com.macapk.loader.NativeLog.i("Mac.apk.FullFill",
+            com.macapk.loader.NativeLog.i("Apk on Mac.FullFill",
                 "canvas=" + getClass().getSimpleName() + "@" + Integer.toHexString(System.identityHashCode(this))
                 + " img=" + img.getWidth() + "x" + img.getHeight()
                 + " dev=" + dev.x + "," + dev.y + "," + dev.width + "x" + dev.height
@@ -2963,7 +2963,7 @@ public class Canvas {
                     ? ((RecordingCanvas) this).macapkOwner() : null;
             java.awt.Rectangle dev = g.getTransform()
                     .createTransformedShape(shape).getBounds();
-            com.macapk.loader.NativeLog.i("Mac.apk.Canvas",
+            com.macapk.loader.NativeLog.i("Apk on Mac.Canvas",
                 "punch #" + sPunchTraced + " on " + getClass().getSimpleName()
                 + "@" + Integer.toHexString(System.identityHashCode(this))
                 + " recording=" + (this instanceof RecordingCanvas)
@@ -3035,7 +3035,7 @@ public class Canvas {
         if (dl != null) { macapkReplayOpListNode(node, dl); return; }
         Bitmap rec = node.macapkRecordedBitmap();
         if (RenderNode.macapkStats && rec == null) RenderNode.sStReplayNoRec.incrementAndGet();
-        if (sRenderNodeTrace) com.macapk.loader.NativeLog.i("Mac.apk.RenderNode",
+        if (sRenderNodeTrace) com.macapk.loader.NativeLog.i("Apk on Mac.RenderNode",
             "drawRenderNode id=" + Integer.toHexString(System.identityHashCode(node))
             + " hw=" + isHardwareAccelerated() + " rec="
             + (rec != null) + " recNonNull=" + (rec != null ? rec.macapkAwtImage() != null : false)
@@ -3145,7 +3145,7 @@ public class Canvas {
      *  between frames, which this path does not (yet): the measured cost is in
      *  docs/rendernode-oplist-stage-a_2026-09-26.md. */
     private void macapkReplayOpListNode(RenderNode node, MacApkDisplayList dl) {
-        if (sRenderNodeTrace) com.macapk.loader.NativeLog.i("Mac.apk.RenderNode",
+        if (sRenderNodeTrace) com.macapk.loader.NativeLog.i("Apk on Mac.RenderNode",
             "drawRenderNode id=" + Integer.toHexString(System.identityHashCode(node))
             + " oplist ops=" + dl.size() + " pos=" + node.getLeft() + "," + node.getTop()
             + " " + node.getWidth() + "x" + node.getHeight() + " alpha=" + node.macapkAlpha());
@@ -4450,7 +4450,7 @@ public class Canvas {
             if (how == 1) sDiagClipShort++;
             long now = System.currentTimeMillis();
             if (now - sDiagClipT > 2000) {
-                com.macapk.loader.NativeLog.i("Mac.apk.DiagClip", "clipPath n=" + sDiagClipN
+                com.macapk.loader.NativeLog.i("Apk on Mac.DiagClip", "clipPath n=" + sDiagClipN
                     + " ms=" + (sDiagClipNs / 1000000) + " contained=" + sDiagClipShort
                     + " area=" + sDiagClipSlow + " areaMs=" + (sDiagClipSlowNs / 1000000));
                 sDiagClipT = now; sDiagClipN = 0; sDiagClipNs = 0; sDiagClipSlow = 0;
@@ -6029,7 +6029,7 @@ public class Canvas {
     // entry points (drawBitmap x3, drawRect, drawRoundRect, drawPath, drawPaint,
     // drawColor) and every 5 s logs the 14 heaviest keys -- op + source/dest size,
     // composite, shader, colour filter, filter flag, device clip, and the calling
-    // class -- as `[draw-cost]` (tag Mac.apk.DrawCost). It found Telegram's two
+    // class -- as `[draw-cost]` (tag Apk on Mac.DrawCost). It found Telegram's two
     // wallpaper blits (120 of 137 ms) in one run (2026-10-01,
     // docs/telegram-wallpaper-scaled-blit_2026-10-01.md). It walks the stack per
     // op, so its own cost inflates frame times: use it to RANK ops, never to
@@ -6060,7 +6060,7 @@ public class Canvas {
                 StringBuilder sb = new StringBuilder("[draw-cost] 5s top by total ms:");
                 sDrawCost.entrySet().stream().sorted((x, y) -> Long.compare(y.getValue()[1], x.getValue()[1])).limit(14)
                     .forEach(e -> sb.append(String.format("%n  %8.1fms n=%-5d %s", e.getValue()[1] / 1e6, e.getValue()[0], e.getKey())));
-                com.macapk.loader.NativeLog.i("Mac.apk.DrawCost", sb.toString());
+                com.macapk.loader.NativeLog.i("Apk on Mac.DrawCost", sb.toString());
                 sDrawCost.clear(); sDrawCostT0 = now;
             }
         }

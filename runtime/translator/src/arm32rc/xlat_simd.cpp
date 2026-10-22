@@ -2446,7 +2446,7 @@ bool is_simd_insn(unsigned id) {
             //  * ARM_INS_VLSTM / ARM_INS_VLLDM are the ARMv8-M Security
             //    Extension lazy-FP save/restore (DDI 0553B.y B4.5). They are
             //    UNDEFINED on ARMv7-A and ARMv8-A AArch32, the only profiles
-            //    Mac.apk loads, so every occurrence is misdecoded data and
+            //    Apk on Mac loads, so every occurrence is misdecoded data and
             //    inventing a behaviour for them would hide that.
             //  * ARM_INS_VSDOT / ARM_INS_VUDOT need FEAT_DotProd, which the
             //    assembler in this tree refuses for an ARMv7 target and

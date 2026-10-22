@@ -3330,9 +3330,9 @@ void RegisterWebViewBridgeMethods(JNIEnv* env) {
                      "file:///android_asset/ will not load\n");
     }
     env->GetJavaVM(&g_vm);
-    g_jsbridge_queue = dispatch_queue_create("org.macapk.jsbridge", DISPATCH_QUEUE_SERIAL);
-    g_event_queue = dispatch_queue_create("org.macapk.webview-events", DISPATCH_QUEUE_SERIAL);
-    g_asset_queue = dispatch_queue_create("org.macapk.webview-assets", DISPATCH_QUEUE_CONCURRENT);
+    g_jsbridge_queue = dispatch_queue_create("io.github.totktonado96.apkonmac.jsbridge", DISPATCH_QUEUE_SERIAL);
+    g_event_queue = dispatch_queue_create("io.github.totktonado96.apkonmac.webview-events", DISPATCH_QUEUE_SERIAL);
+    g_asset_queue = dispatch_queue_create("io.github.totktonado96.apkonmac.webview-assets", DISPATCH_QUEUE_CONCURRENT);
     // Host-view geometry changes (window resize / rotate) must re-place every
     // attached WKWebView; the per-frame Java pushes only fire when the ANDROID
     // rect changes. Under MACAPK_WEBVIEW_HOST_FOLLOW only the pages already ON

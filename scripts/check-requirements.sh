@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # check-requirements.sh -- verify every dependency needed to build + run
-# Mac.apk on a fresh Mac. Run this BEFORE rebuild_and_run.sh on a new
+# Apk on Mac on a fresh Mac. Run this BEFORE rebuild_and_run.sh on a new
 # machine. Prints a green check for each requirement that's already
 # present + a red X plus the install command for each one missing.
 #
@@ -81,7 +81,7 @@ fi
 if [[ "$(uname -m)" == "arm64" ]]; then
     ok "arm64 (Apple Silicon)"
 else
-    printf "%s✗%s Mac.apk is Apple Silicon-only. Detected: %s\n" "$RED" "$RST" "$(uname -m)"
+    printf "%s✗%s Apk on Mac is Apple Silicon-only. Detected: %s\n" "$RED" "$RST" "$(uname -m)"
     exit 2
 fi
 

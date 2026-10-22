@@ -378,7 +378,7 @@ public class GestureDetector {
      *  callback. Transcribed from AOSP minus its InputEventConsistencyVerifier
      *  (a debug-only checker that is @hide and off in release builds).
      *
-     *  ⚠ Mac.apk's MotionEvent.getActionButton() currently returns a constant 0
+     *  ⚠ Apk on Mac's MotionEvent.getActionButton() currently returns a constant 0
      *  (MotionEvent.java:448) and the Cocoa bridge does not synthesise
      *  ACTION_BUTTON_PRESS, so today no path reaches the listener -- exactly as
      *  on a device with no mouse or stylus attached. The moment the bridge

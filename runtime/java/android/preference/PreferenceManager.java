@@ -21,7 +21,7 @@
 //
 // ★ THE MEASURED BUG THIS FIXES (debug/preflight.py, 2026-07-29):
 //   `setDefaultValues(Context,int,boolean)` returns **void** in AOSP. The previous
-//   Mac.apk stub declared it `boolean`, which is a DIFFERENT descriptor
+//   Apk on Mac stub declared it `boolean`, which is a DIFFERENT descriptor
 //   (`(Landroid/content/Context;IZ)Z` vs `...)V`), so every app calling it got a
 //   NoSuchMethodError -- and because ActivityHost swallows onCreate exceptions,
 //   that aborts onCreate early and leaves late-set singletons null (memory
@@ -56,7 +56,7 @@ public class PreferenceManager {
 
     /** AOSP storage modes. STORAGE_DEFAULT is credential-encrypted storage
      *  (unreadable until the user unlocks); STORAGE_DEVICE_PROTECTED is the
-     *  direct-boot-safe area. Mac.apk has ONE storage area, so the flag is
+     *  direct-boot-safe area. Apk on Mac has ONE storage area, so the flag is
      *  tracked and reported faithfully but selects the same files -- see
      *  setStorageDeviceProtected(). */
     private static final int STORAGE_DEFAULT = 0;
@@ -68,7 +68,7 @@ public class PreferenceManager {
     /** AOSP: the Activity / PreferenceFragment hosting this hierarchy, used by
      *  RingtonePreference and any DialogPreference to start an activity for a
      *  result. Weakly held on AOSP; a plain field here because the manager does
-     *  not outlive its host in Mac.apk (nothing caches a PreferenceManager
+     *  not outlive its host in Apk on Mac (nothing caches a PreferenceManager
      *  statically). */
     private android.app.Activity mActivity;
     private PreferenceFragment mFragment;
@@ -109,7 +109,7 @@ public class PreferenceManager {
 
     public static SharedPreferences getDefaultSharedPreferences(Context ctx) {
         if (ctx == null) return null;
-        // MODE_PRIVATE = 0; Mac.apk's Context impl ignores the mode bits.
+        // MODE_PRIVATE = 0; Apk on Mac's Context impl ignores the mode bits.
         return ctx.getSharedPreferences(getDefaultSharedPreferencesName(ctx), 0);
     }
 
@@ -120,7 +120,7 @@ public class PreferenceManager {
         return (pkg == null ? "macapk" : pkg) + "_preferences";
     }
 
-    /** AOSP declares this PRIVATE. Kept public because the previous Mac.apk stub
+    /** AOSP declares this PRIVATE. Kept public because the previous Apk on Mac stub
      *  exposed it and some in-tree/app code may reference it; widening
      *  visibility cannot break a caller. */
     public static int getDefaultSharedPreferencesMode() { return 0; }
@@ -144,7 +144,7 @@ public class PreferenceManager {
      * through the correct typed `putXxx` -- then records the flag.
      *
      * ★ CORRECTED (this method previously could not inflate). The old body said
-     * "Mac.apk has no preference-XML inflater [...] so the inflate step is
+     * "Apk on Mac has no preference-XML inflater [...] so the inflate step is
      * satisfied by the EQUIVALENT generic mechanism", meaning
      * com.macapk.loader.PreferenceDefaultsScanner, and it named the residual gap
      * it left: a CUSTOM Preference subclass that overrides onSetInitialValue to
@@ -161,7 +161,7 @@ public class PreferenceManager {
      * two mechanisms agreeing is a no-op.
      *
      * ONE narrow fallback, and it is deliberately narrow: if the preference XML
-     * cannot be OPENED (Resources.NotFoundException -- a Mac.apk resource-index
+     * cannot be OPENED (Resources.NotFoundException -- a Apk on Mac resource-index
      * limitation, not an app bug) the scanner is used instead so the app's
      * defaults still land. Any other InflateException -- an unknown tag, a class
      * with no (Context, AttributeSet) constructor, malformed XML -- PROPAGATES,
@@ -258,7 +258,7 @@ public class PreferenceManager {
      * re-opening the SharedPreferences through
      * Context.createDeviceProtectedStorageContext().
      *
-     * Mac.apk has ONE storage area: there is no file-based-encryption split and
+     * Apk on Mac has ONE storage area: there is no file-based-encryption split and
      * no locked-boot state to be safe from, so the two areas are the same
      * directory. The FLAG is tracked exactly, so isStorageDefault() /
      * isStorageDeviceProtected() answer what the app set -- an app that stores a
@@ -390,7 +390,7 @@ public class PreferenceManager {
     PreferenceScreen inflateFromIntent(android.content.Intent queryIntent,
                                        PreferenceScreen rootPreferences) {
         // AOSP resolves every activity matching the intent and inflates the
-        // `android.preference` metadata XML of each. Mac.apk's PackageManager
+        // `android.preference` metadata XML of each. Apk on Mac's PackageManager
         // resolves only the app's own manifest, so this covers the single-app
         // case, which is the only one an APK can rely on anyway (the multi-app
         // case needs other installed packages, which do not exist here).

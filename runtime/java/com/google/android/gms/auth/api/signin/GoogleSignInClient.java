@@ -48,7 +48,7 @@ public class GoogleSignInClient extends GoogleApi<GoogleSignInOptions> {
 
     // Returns the Intent that, on a real device, launches the account-chooser
     // Activity. Here it targets the standard GMS sign-in action with the options
-    // attached. No GMS sign-in Activity exists on Mac.apk, so launching it via
+    // attached. No GMS sign-in Activity exists on Apk on Mac, so launching it via
     // startActivityForResult yields no result account; getSignedInAccountFromIntent
     // then fails SIGN_IN_REQUIRED. We never manufacture an account chooser UI.
     public Intent getSignInIntent() {

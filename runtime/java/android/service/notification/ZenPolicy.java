@@ -8,7 +8,7 @@ import android.os.Parcelable;
  * still ring, which visual effects are still shown.
  *
  * An app builds one of these to attach to an AutomaticZenRule
- * (NotificationManager.addAutomaticZenRule). Mac.apk enforces no zen mode --
+ * (NotificationManager.addAutomaticZenRule). Apk on Mac enforces no zen mode --
  * nothing here is muted on our behalf -- but the policy is a pure value object
  * and its builder round-trip is exact, so an app that constructs a policy,
  * reads its own getters back, and stores it behaves as it does on a device.

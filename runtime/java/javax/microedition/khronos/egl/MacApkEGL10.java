@@ -142,7 +142,7 @@ import android.opengl.EGL15;
 import com.macapk.loader.NativeLog;
 
 public final class MacApkEGL10 implements EGL10 {
-    private static final String TAG = "Mac.apk.EGL10";
+    private static final String TAG = "Apk on Mac.EGL10";
 
     public static final MacApkEGL10 INSTANCE = new MacApkEGL10();
 
@@ -1675,8 +1675,8 @@ public final class MacApkEGL10 implements EGL10 {
 
     private String legacyQueryString(EGLDisplay display, int name) {
         switch (name) {
-            case EGL_VENDOR:     return "Mac.apk";
-            case EGL_VERSION:    return "1.4 Mac.apk";
+            case EGL_VENDOR:     return "Apk on Mac";
+            case EGL_VERSION:    return "1.4 Apk on Mac";
             case EGL_EXTENSIONS: return "";
             default:             return "";
         }

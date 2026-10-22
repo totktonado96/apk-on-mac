@@ -30,7 +30,7 @@ public final class SurroundingText implements Parcelable {
 
     @Override public int describeContents() { return 0; }
     @Override public void writeToParcel(Parcel dest, int flags) {
-        // No IME IPC in Mac.apk; the InputConnection lives in-process. No-op.
+        // No IME IPC in Apk on Mac; the InputConnection lives in-process. No-op.
     }
 
     public static final Parcelable.Creator<SurroundingText> CREATOR =

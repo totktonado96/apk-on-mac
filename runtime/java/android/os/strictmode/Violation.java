@@ -7,7 +7,7 @@
 // Set<Violation> depends on message + stack trace + cause hashing together and
 // on the cache being invalidated by initCause/setStackTrace/fillInStackTrace.
 //
-// Mac.apk enforces no StrictMode policy, so nothing here constructs one -- but
+// Apk on Mac enforces no StrictMode policy, so nothing here constructs one -- but
 // an app may subclass, catch, or hash these itself, and the constructors are
 // public in AOSP, so the shapes have to be right.
 package android.os.strictmode;

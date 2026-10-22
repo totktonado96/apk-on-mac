@@ -5,7 +5,7 @@ import android.graphics.Point;
 
 // com.google.mlkit.vision.barcode.common.Barcode -- a single decoded barcode.
 // (The class moved to the vision.barcode.common artifact; the older
-// vision.barcode.Barcode is a thin re-export.) Mac.apk decodes no barcodes (no
+// vision.barcode.Barcode is a thin re-export.) Apk on Mac decodes no barcodes (no
 // model backend), so a scan Task fails and apps never receive a real Barcode via
 // the success path; the type exists so success-listener generics and field reads
 // link. Constants mirror the published format/type enums exactly because apps

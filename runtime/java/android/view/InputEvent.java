@@ -41,7 +41,7 @@ public abstract class InputEvent implements android.os.Parcelable {
      *
      *  Note the id contract this depends on: AOSP reserves deviceId 0 for
      *  "did not come from a physical device", so getDevice() on an event that
-     *  left its deviceId at the default correctly answers null. Mac.apk's
+     *  left its deviceId at the default correctly answers null. Apk on Mac's
      *  synthesized touches therefore carry the touchscreen's real id (see
      *  TouchDispatcher.touchEvent) and its keystrokes carry
      *  KeyCharacterMap.VIRTUAL_KEYBOARD. */

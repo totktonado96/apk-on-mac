@@ -932,7 +932,7 @@ public final class Bitmap implements android.os.Parcelable {
     public int  getHeight() { return height; }
     public Config getConfig() { return config; }
 
-    /** AOSP Bitmap.getHardwareBuffer (API 31). Mac.apk bitmaps are software-
+    /** AOSP Bitmap.getHardwareBuffer (API 31). Apk on Mac bitmaps are software-
      *  backed, so this returns a DESCRIPTOR of the bitmap (format + size), which
      *  satisfies callers that query it; it is not a mappable GPU buffer. */
     public android.hardware.HardwareBuffer getHardwareBuffer() {
@@ -947,7 +947,7 @@ public final class Bitmap implements android.os.Parcelable {
                 fmt, 1, android.hardware.HardwareBuffer.USAGE_GPU_SAMPLED_IMAGE);
     }
     /** AOSP Bitmap.wrapHardwareBuffer (API 29): a Bitmap over a HardwareBuffer.
-     *  Mac.apk has no GPU buffer to alias, so this materializes a same-size
+     *  Apk on Mac has no GPU buffer to alias, so this materializes a same-size
      *  software Bitmap. */
     public static Bitmap wrapHardwareBuffer(android.hardware.HardwareBuffer hardwareBuffer,
             android.graphics.ColorSpace colorSpace) {
@@ -1171,7 +1171,7 @@ public final class Bitmap implements android.os.Parcelable {
             // Cannot happen for our own fields; if it ever does, the replay
             // draws nothing for this bitmap, which is the pre-change behaviour.
             try {
-                com.macapk.loader.NativeLog.i("Mac.apk.RenderNode",
+                com.macapk.loader.NativeLog.i("Apk on Mac.RenderNode",
                     "bitmap pixel ref for a recording could not be filled: " + e);
             } catch (Throwable ignored) { }
         }
@@ -1255,7 +1255,7 @@ public final class Bitmap implements android.os.Parcelable {
             }
             // ⚠ v1.0.939: the `quality` argument used to be VALIDATED and then
             // DISCARDED -- ImageIO.write(img, "jpg", ...) always encodes at the
-            // writer's default 0.75, so EVERY JPEG Mac.apk has ever written was
+            // writer's default 0.75, so EVERY JPEG Apk on Mac has ever written was
             // ~q75 no matter what the app asked for. An app compressing a photo
             // at 95 got a visibly worse file, and one compressing a thumbnail
             // at 30 got a needlessly big one; nothing logged either.
@@ -1933,7 +1933,7 @@ public final class Bitmap implements android.os.Parcelable {
     /** AOSP asShared(): "Return an immutable bitmap backed by shared memory
      *  which can be efficiently passed between processes via Parcelable. If
      *  this bitmap already meets these criteria it will return itself."
-     *  Mac.apk is single-process and our Parcel passes live object references,
+     *  Apk on Mac is single-process and our Parcel passes live object references,
      *  so the shared-memory criterion is trivially met and immutability is the
      *  only one left to satisfy. */
     public Bitmap asShared() {

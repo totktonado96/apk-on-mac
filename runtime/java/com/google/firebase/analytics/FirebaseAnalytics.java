@@ -36,7 +36,7 @@ public final class FirebaseAnalytics {
     }
 
     public void logEvent(String name, Bundle params) {
-        // no-op. Per the Mac.apk Firebase strategy: never log to
+        // no-op. Per the Apk on Mac Firebase strategy: never log to
         // network. We deliberately don't even log to host stderr by
         // default to keep boot logs readable; turn on verbose tracing
         // (todo: MACAPK_FIREBASE_TRACE=1) when debugging.

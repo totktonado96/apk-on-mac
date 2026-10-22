@@ -9,7 +9,7 @@
 //
 // EVERY ANSWER HERE IS THE ONE AOSP GIVES WHEN THERE IS NO COMPOSER TO ASK.
 // AOSP guards each method with `if (mNativeObject == 0)` and returns
-// false/null in that case (:82, :101, :117); Mac.apk composites through
+// false/null in that case (:82, :101, :117); Apk on Mac composites through
 // ANGLE/Metal into one CAMetalLayer with no hardware-composer overlay planes
 // at all, so that is exactly our state and those are exactly our answers.
 //

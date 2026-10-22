@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # collect_lgpl_sources.sh <out-dir> [--upload <tag>]
 #
-# Gather the COMPLETE CORRESPONDING SOURCE of every LGPL library Mac.apk ships,
+# Gather the COMPLETE CORRESPONDING SOURCE of every LGPL library Apk on Mac ships,
 # for the exact versions in the build, so each GitHub release can carry it as
 # release assets (owner, 2026-10-02: "Lets fully comply").
 #
@@ -20,23 +20,23 @@
 #     same way, plus any inline `patch :DATA` text after `__END__`;
 #   - the recipe itself (homebrew-<formula>.rb), which holds the build commands
 #     and any `inreplace` edits;
-#   - LGPL-SOURCE-README.txt: checksums, what Mac.apk changed (load-path
+#   - LGPL-SOURCE-README.txt: checksums, what Apk on Mac changed (load-path
 #     metadata only), and how to use a modified build.
 #
 #   scripts/collect_lgpl_sources.sh ../scratch/lgpl_src
 #   scripts/collect_lgpl_sources.sh ../scratch/lgpl_src --upload v1.0.1667
 #
 # --upload runs `gh release upload <tag> <files> --clobber` on
-# kksimp/Mac.apk-Releases. Run it as a release step, after the DMG is built
+# totktonado96/apk-on-mac. Run it as a release step, after the DMG is built
 # from the same kegs (scripts/gen_third_party_notices.sh names these versions).
 set -euo pipefail
 
 OUT="${1:?usage: collect_lgpl_sources.sh <out-dir> [--upload <tag>]}"
 TAG=""
 [ "${2:-}" = "--upload" ] && TAG="${3:?--upload needs a release tag}"
-REPO_SLUG="${MACAPK_RELEASES_SLUG:-kksimp/Mac.apk-Releases}"
+REPO_SLUG="${MACAPK_RELEASES_SLUG:-totktonado96/apk-on-mac}"
 
-# formula : the dylib Mac.apk ships from it
+# formula : the dylib Apk on Mac ships from it
 LIBS="glib:libglib-2.0.0.dylib gettext:libintl.8.dylib"
 
 mkdir -p "$OUT"
@@ -58,10 +58,10 @@ fetch_verified() {   # <url> <sha256> <dest>
 
 {
 cat <<'HDR'
-Mac.apk -- LGPL source for the libraries it ships
+Apk on Mac -- LGPL source for the libraries it ships
 ================================================
 
-Mac.apk's bundle contains two libraries licensed under the GNU Lesser General
+Apk on Mac's bundle contains two libraries licensed under the GNU Lesser General
 Public License, version 2.1 or (at your option) any later version:
 
   Contents/Resources/jre/lib/libglib-2.0.0.dylib   GLib
@@ -73,18 +73,18 @@ source for the exact versions shipped: the upstream source tarball, every patch
 applied to it, and the build recipe (Homebrew formula) the binaries were built
 from. The full LGPL-2.1 text is in THIRD_PARTY_NOTICES.txt.
 
-What Mac.apk changed: nothing in the code. scripts/stage_jre.sh copies each
+What Apk on Mac changed: nothing in the code. scripts/stage_jre.sh copies each
 library unmodified and only rewrites Mach-O load-path metadata (the install
 name becomes @rpath/<name>, an @loader_path rpath is added, and references to
 sibling libraries become @rpath/<name>), then the bundle is code-signed.
 
 Using a modified version: build an interface-compatible library from this
 source, put it in Contents/Resources/jre/lib/ under the same file name, and
-re-sign the app (replacing a file invalidates Mac.apk's Developer ID
-signature). Mac.apk's runtime is signed with library validation disabled, so
-it loads a substituted library. Mac.apk copies its runtime, including these
-files, to ~/Library/Application Support/Mac.apk/runtime/ when an app next
-starts after Mac.apk changes.
+re-sign the app (replacing a file invalidates Apk on Mac's Developer ID
+signature). Apk on Mac's runtime is signed with library validation disabled, so
+it loads a substituted library. Apk on Mac copies its runtime, including these
+files, to ~/Library/Application Support/Apk on Mac/runtime/ when an app next
+starts after Apk on Mac changes.
 
 HDR
 } > "$readme"

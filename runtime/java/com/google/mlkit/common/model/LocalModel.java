@@ -2,7 +2,7 @@ package com.google.mlkit.common.model;
 
 // com.google.mlkit.common.model.LocalModel -- describes a model bundled in the
 // app's assets or stored at an absolute path, used by custom-model detectors
-// (custom image labeling, object detection). Pure config; Mac.apk runs no
+// (custom image labeling, object detection). Pure config; Apk on Mac runs no
 // inference so the descriptor is never loaded, but the type and its Builder must
 // link for apps that construct one. Mirrors the published Builder
 // (setAssetFilePath / setAbsoluteFilePath).

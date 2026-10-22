@@ -5,7 +5,7 @@ import android.os.Parcel;
 /**
  * A CDMA cell observation.
  *
- * Never produced on Mac.apk (no modem), so the identity and signal strength are
+ * Never produced on Apk on Mac (no modem), so the identity and signal strength are
  * both AOSP's all-UNAVAILABLE defaults. The type must still resolve for code
  * that instanceof-checks getAllCellInfo() results, and the Parcelable half is
  * real so an app can round-trip one it built itself.

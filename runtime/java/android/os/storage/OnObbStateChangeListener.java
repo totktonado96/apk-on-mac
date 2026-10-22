@@ -5,7 +5,7 @@
 // Shape verified against AOSP (fetched 2026-08-12, android13-release):
 // frameworks/base/core/java/android/os/storage/OnObbStateChangeListener.java
 //
-// See StorageManager.java in this package for why Mac.apk never actually
+// See StorageManager.java in this package for why Apk on Mac never actually
 // mounts an OBB (no loop-mount / OBB filesystem backend on macOS) and for
 // which of these status codes mountObb() hands back.
 package android.os.storage;

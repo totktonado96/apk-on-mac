@@ -63,7 +63,7 @@ public class ResolveInfo implements android.os.Parcelable {
 
     /** AOSP ResolveInfo.isInstantAppAvailable (API 26, ResolveInfo.java:84):
      *  "whether or not an instant app is available for the resolved intent."
-     *  Mac.apk has no Instant App resolver -- PackageManager.isInstantApp()
+     *  Apk on Mac has no Instant App resolver -- PackageManager.isInstantApp()
      *  already answers false unconditionally -- so this stays false, which is
      *  the same answer a device without an installed instant-app resolver
      *  gives. The FIELD must exist because we present API 36 and a getfield on
@@ -105,7 +105,7 @@ public class ResolveInfo implements android.os.Parcelable {
      *  verbatim: true only when the resolved activity IS the system's
      *  cross-profile forwarding stub.
      *
-     *  Mac.apk has one user and no work profile, so nothing we resolve ever
+     *  Apk on Mac has one user and no work profile, so nothing we resolve ever
      *  targets IntentForwarderActivity and this is always false -- the same
      *  answer a single-user device gives. Implemented as the real comparison
      *  rather than a hardcoded false so it stays correct if a forwarder ever

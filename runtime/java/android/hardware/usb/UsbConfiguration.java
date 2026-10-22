@@ -1,6 +1,6 @@
 // android.hardware.usb.UsbConfiguration
 //
-// A USB device's configuration descriptor (one or more UsbInterfaces). Mac.apk
+// A USB device's configuration descriptor (one or more UsbInterfaces). Apk on Mac
 // never exposes host USB to the guest (UsbDevice.getConfigurationCount() is
 // always 0), so instances are not handed out in practice -- but the TYPE must
 // exist with the exact AOSP return type: UsbDevice.getConfiguration(int) was

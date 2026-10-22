@@ -224,7 +224,7 @@ public class AudioTrack implements AudioRouting, VolumeAutomation {
     // The fill threshold: the native frameCount at construction, then
     // whatever setBufferSizeInFrames adopted. AOSP's getBufferSizeInFrames()
     // calls through to a native query that can reflect a post-creation route
-    // adjustment; Mac.apk has no HAL that resizes the buffer behind the app's
+    // adjustment; Apk on Mac has no HAL that resizes the buffer behind the app's
     // back, so the last adopted value is always the current value.
     public int getBufferSizeInFrames() { return effectiveBufferInFrames; }
 
@@ -403,7 +403,7 @@ public class AudioTrack implements AudioRouting, VolumeAutomation {
     // `timestamp` when the track's AudioAttributes carry FLAG_HW_AV_SYNC; for
     // any other track it logs and degrades to the plain write (verbatim from
     // AudioTrack.java's write(ByteBuffer,int,int,long): "Ignoring pts..." then
-    // return write(audioData, sizeInBytes, writeMode)). Mac.apk has no hardware
+    // return write(audioData, sizeInBytes, writeMode)). Apk on Mac has no hardware
     // audio-DSP passthrough path (CoreAudio via AVAudioSourceNode is a software
     // mixer), so every track here takes that same degrade branch.
     public int write(java.nio.ByteBuffer audioData, int sizeInBytes, int writeMode, long timestamp) {
@@ -724,7 +724,7 @@ public class AudioTrack implements AudioRouting, VolumeAutomation {
             .build();
     }
 
-    // Offload/direct-playback capability surface (AOSP AudioTrack.java). Mac.apk
+    // Offload/direct-playback capability surface (AOSP AudioTrack.java). Apk on Mac
     // has no hardware audio-DSP offload or passthrough silicon (CoreAudio via
     // AVAudioSourceNode is a software mixer), so this AudioTrack is never
     // offloaded -- the same terminal answer a real device without offload
@@ -749,7 +749,7 @@ public class AudioTrack implements AudioRouting, VolumeAutomation {
     // never fire -- an app that skipped the isOffloadedPlayback() guard would
     // otherwise wait forever for onDataRequest callbacks real Android would
     // never let it wait for either. isOffloadedPlayback() is always false on
-    // Mac.apk, so this always throws, matching a real device without offload
+    // Apk on Mac, so this always throws, matching a real device without offload
     // hardware.
     public void registerStreamEventCallback(java.util.concurrent.Executor executor,
                                              StreamEventCallback eventCallback) {
@@ -786,7 +786,7 @@ public class AudioTrack implements AudioRouting, VolumeAutomation {
     }
 
     // AOSP: notifications about offloaded-stream playback (AudioTrack.java).
-    // registerStreamEventCallback() always throws on Mac.apk (see above) since
+    // registerStreamEventCallback() always throws on Apk on Mac (see above) since
     // we never offload, so these bodies never fire; kept as real overridable
     // no-ops to match AOSP's exact shape for any code that subclasses it before
     // checking isOffloadedPlayback().
@@ -813,7 +813,7 @@ public class AudioTrack implements AudioRouting, VolumeAutomation {
         public Builder setTransferMode(int mode) { this.mode = mode; return this; }
         public Builder setSessionId(int sessionId) { this.sessionId = sessionId; return this; }
         public Builder setPerformanceMode(int performanceMode) { return this; }
-        // Recorded per AOSP's Builder surface; Mac.apk has no offload DSP, so
+        // Recorded per AOSP's Builder surface; Apk on Mac has no offload DSP, so
         // the constructed track is never actually offloaded regardless of this
         // request (isOffloadedPlayback() always answers false), matching how a
         // real device without offload hardware would deny the request too.
@@ -1016,7 +1016,7 @@ public class AudioTrack implements AudioRouting, VolumeAutomation {
      *       return ERROR_BAD_VALUE;
      *   return native_set_position(positionInFrames);
      *
-     * Mac.apk has no MODE_STATIC buffer to seek within -- every track we can
+     * Apk on Mac has no MODE_STATIC buffer to seek within -- every track we can
      * create is MODE_STREAM -- so the first branch is the terminal answer for
      * all of them, and it is the SAME answer a real device gives a MODE_STREAM
      * track. That makes this the cheapest possible correction of a fake
@@ -1079,7 +1079,7 @@ public class AudioTrack implements AudioRouting, VolumeAutomation {
                 "android.media.audiorecord.samplerate";
     }
 
-    /** API 29. Fired when an OFFLOADED codec's output format changes. Mac.apk
+    /** API 29. Fired when an OFFLOADED codec's output format changes. Apk on Mac
      *  never offloads (AudioManager.getPlaybackOffloadSupport reports
      *  NOT_SUPPORTED), so this cannot fire -- the registration is real, the
      *  event source genuinely does not exist. */

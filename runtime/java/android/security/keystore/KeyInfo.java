@@ -116,7 +116,7 @@ public class KeyInfo implements KeySpec {
 
     public String getKeystoreAlias() { return mKeystoreAlias; }
     public int getKeySize() { return mKeySize; }
-    /** @deprecated superseded by getSecurityLevel(). Mac.apk's keystore is
+    /** @deprecated superseded by getSecurityLevel(). Apk on Mac's keystore is
      *  file-backed, not a TEE/StrongBox -> false. */
     @Deprecated public boolean isInsideSecureHardware() { return mInsideSecureHardware; }
     public int getOrigin() { return mOrigin; }
@@ -142,7 +142,7 @@ public class KeyInfo implements KeySpec {
         return mInvalidatedByBiometricEnrollment;
     }
     public boolean isUserConfirmationRequired() { return mUserConfirmationRequired; }
-    /** KeyProperties.SECURITY_LEVEL_*. Always SOFTWARE on Mac.apk. */
+    /** KeyProperties.SECURITY_LEVEL_*. Always SOFTWARE on Apk on Mac. */
     public int getSecurityLevel() { return mSecurityLevel; }
     /** KeyProperties.UNRESTRICTED_USAGE_COUNT when the key has no usage limit. */
     public int getRemainingUsageCount() { return mRemainingUsageCount; }

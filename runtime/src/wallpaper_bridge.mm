@@ -5,7 +5,7 @@
 // constant: SystemUI's ThemeOverlayController derives it from the WALLPAPER
 // (WallpaperManagerService.extractColors -> WallpaperColors.fromBitmap -> CelebiQuantizer
 // -> ColorScheme.getSeedColor -> ColorScheme/SchemeTonalSpot) and installs it as
-// fabricated overlays on the "android" package. Mac.apk served the no-seed fallback
+// fabricated overlays on the "android" package. Apk on Mac served the no-seed fallback
 // forever, so every dynamic-colour app painted the same blue-violet whatever the user's
 // desktop looked like. The Mac already HAS a wallpaper, so this is rung 1 of the host-first
 // decision ladder: route the question to the host (NSWorkspace) and run AOSP's own

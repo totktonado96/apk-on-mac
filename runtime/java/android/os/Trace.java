@@ -1,7 +1,7 @@
 // android.os.Trace -- systrace / Perfetto entry points. Apps wrap
 // hot code paths in beginSection/endSection (or isEnabled() guards
 // around expensive label strings) for performance tracing on real
-// Android. Mac.apk does not feed systrace, so every method is a
+// Android. Apk on Mac does not feed systrace, so every method is a
 // safe no-op -- but the class must exist or any androidx.startup
 // caller (and many other modern libs) hits ClassNotFoundException
 // during init and never reaches the app code.

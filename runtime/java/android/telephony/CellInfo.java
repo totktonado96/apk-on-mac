@@ -2,7 +2,7 @@
 //
 // Abstract base for cell-tower observations (CellInfoGsm/Lte/etc.).
 //
-// Mac.apk has no cellular radio, so TelephonyManager.getAllCellInfo() returns an
+// Apk on Mac has no cellular radio, so TelephonyManager.getAllCellInfo() returns an
 // empty list and the framework never produces one of these. The type is still a
 // faithful data holder -- including the type-tagged Parcelable dispatch, which is
 // AOSP's own mechanism (the subclass writes a TYPE_* token first and

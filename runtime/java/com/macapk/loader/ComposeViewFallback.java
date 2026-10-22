@@ -50,7 +50,7 @@ public final class ComposeViewFallback {
     private static final String ENV_MACAPK_NAVSTACK_HOST_PROBE = System.getenv("MACAPK_NAVSTACK_HOST_PROBE");
     private static final String ENV_MACAPK_PROBE_SHEET = System.getenv("MACAPK_PROBE_SHEET");
 
-    private static final String TAG = "Mac.apk.ComposeFallback";
+    private static final String TAG = "Apk on Mac.ComposeFallback";
 
     private ComposeViewFallback() {}
 
@@ -1750,7 +1750,7 @@ public final class ComposeViewFallback {
     //   - every List field (the entries/back-stack) with per-element class + bool methods
     //     + a per-entry State value (the entry visibility otv.d) + the wrapped Screen.
     // The decompile of the gate logic (what SHOULD make it visible) runs in parallel; this
-    // probe gives the LIVE values (which input is actually false/empty on Mac.apk). Read-only.
+    // probe gives the LIVE values (which input is actually false/empty on Apk on Mac). Read-only.
     private static boolean sProbedNavHost = false;
     public static void probeNavstackHost(View rootView) {
         if (rootView == null || !"1".equals(ENV_MACAPK_NAVSTACK_HOST_PROBE)) return;

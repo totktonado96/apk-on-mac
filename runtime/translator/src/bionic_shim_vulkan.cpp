@@ -11,7 +11,7 @@
 // owner saw the Gameloft splash, then a black window. Play only installs such an
 // app on a device with Vulkan, so the faithful answer is a working Vulkan.
 //
-// macOS has Vulkan through MoltenVK, which Mac.apk already ships for ANGLE's
+// macOS has Vulkan through MoltenVK, which Apk on Mac already ships for ANGLE's
 // Vulkan backend (libMoltenVK.dylib next to the runtime, MoltenVK_icd.json).
 // This TU hands the guest MoltenVK's own entry points and translates only the
 // Android-specific window-system piece (the decision ladder's rung 1: route to

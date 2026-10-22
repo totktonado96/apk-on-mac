@@ -56,7 +56,7 @@ public class Reflection {
             Reflection.class, ALL_MEMBERS,
             AccessibleObject.class, ALL_MEMBERS,
             Class.class, Set.of("classLoader", "classData"),
-            // ⚠ Mac.apk java.base overlay (--patch-module java.base). This file is
+            // ⚠ Apk on Mac java.base overlay (--patch-module java.base). This file is
             // the JDK 21 jdk.internal.reflect.Reflection VERBATIM except that the
             // stock line `ClassLoader.class, ALL_MEMBERS,` has been REMOVED from
             // this map (it sat right here). Stock HotSpot filters EVERY field of
@@ -163,7 +163,7 @@ public class Reflection {
         boolean gotIsSameClassPackage = false;
         boolean isSameClassPackage = false;
 
-        // ⚠ Mac.apk java.base overlay, second deviation from JDK 21: a PUBLIC
+        // ⚠ Apk on Mac java.base overlay, second deviation from JDK 21: a PUBLIC
         // member is accessible whatever its declaring class's access. The
         // stock code first rejects any non-public declaring class from
         // another package, so Method.invoke on a public method of a

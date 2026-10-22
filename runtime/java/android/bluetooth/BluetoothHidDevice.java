@@ -1,7 +1,7 @@
 // android.bluetooth.BluetoothHidDevice -- the HID DEVICE profile proxy (this
 // machine acting as a Bluetooth keyboard / mouse / gamepad).
 //
-// Mac.apk exposes no Bluetooth bridge, so this proxy is never delivered:
+// Apk on Mac exposes no Bluetooth bridge, so this proxy is never delivered:
 // BluetoothAdapter.getProfileProxy() returns false without calling the
 // ServiceListener, which is AOSP's answer for a profile the device does not
 // support. The constructor is package-private, as on AOSP, so an app cannot

@@ -7,7 +7,7 @@
 // methods delegate upstream to the @hide FontScaleConverterFactory, which
 // holds a per-scale lookup table generated from the platform's own curves.
 //
-// ⚠ STATED GAP. Mac.apk ships neither that table nor a non-linear scaling
+// ⚠ STATED GAP. Apk on Mac ships neither that table nor a non-linear scaling
 // pass: TypedValue/DisplayMetrics apply the plain LINEAR sp -> px conversion
 // (px = sp * fontScale * density). So isNonLinearFontScalingActive() is false
 // for every scale and forScale() returns null -- which is exactly what a

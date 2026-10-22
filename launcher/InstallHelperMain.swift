@@ -196,8 +196,8 @@ struct InstallHelperMain {
             // exercised end to end on a machine holding the owner's real
             // library, and "we never test it" is not an acceptable answer for
             // the most destructive action in the product. The gate asserts the
-            // targeting -- throwaway present, Mac.apk.app absent, every target
-            // independently re-verified as org.macapk.app.* -- which is where
+            // targeting -- throwaway present, Apk on Mac.app absent, every target
+            // independently re-verified as io.github.totktonado96.apkonmac.app.* -- which is where
             // a bug here would actually live. The per-app REMOVAL primitive is
             // separately covered by A10b.
             if dryRun {
@@ -576,7 +576,7 @@ struct InstallHelperMain {
         }
     }
 
-    /// The runtime ships beside this helper inside Mac.apk.app. Resolving
+    /// The runtime ships beside this helper inside Apk on Mac.app. Resolving
     /// relative to our OWN binary rather than by bundle id means the helper
     /// always drives the runtime it was built with -- the same reason the
     /// per-app stub resolves by path first.
@@ -670,7 +670,7 @@ struct InstallHelperMain {
         it succeeds (or a one-line JSON object with --json).
 
         The runtime-* verbs manage the SHARED runtime under
-        ~/Library/Application Support/Mac.apk/runtime/. runtime-uninstall
+        ~/Library/Application Support/Apk on Mac/runtime/. runtime-uninstall
         removes ONLY that: the control panel, every installed app, their data
         and the registry are untouched, and the apps work again after
         runtime-install with no reinstall. --remove-all-apps additionally
@@ -704,14 +704,14 @@ struct InstallHelperMain {
 
         `special-access` is Android's Settings switch for "All files access"
         (android:manage_external_storage) or "Media management"
-        (android:manage_media). It is run BY the Mac.apk runtime, and it takes
+        (android:manage_media). It is run BY the Apk on Mac runtime, and it takes
         no app identity from its arguments: the asking app is its PARENT
         process, which must be a macapk-runtime whose --android-root is an
         installed app's bundle and which holds that app's run/<dirName>.pid
         lock. The question is a macOS system alert whose default button
         leaves the current state alone ("Don't Allow" while not allowed,
         "Allow" while allowed); the answer is recorded, signed, in
-        ~/Library/Application Support/Mac.apk/appops/app-ops.json. Only
+        ~/Library/Application Support/Apk on Mac/appops/app-ops.json. Only
         `--source android` is accepted and --no-ui is refused. Exit codes:
         0 allowed, 3 not allowed, 4 no answer within 5 minutes (nothing
         changed), 5 identity refused or the store could not be written,
@@ -736,9 +736,9 @@ struct InstallHelperMain {
         Android records it. --auto grants with no alert, and only into a group
         that already holds a granted permission (Android's silent grant); it is
         refused otherwise. The select / select_more prompts and --partial need
-        a photo picker Mac.apk does not have yet, and are refused (usage) until
+        a photo picker Apk on Mac does not have yet, and are refused (usage) until
         it does. --prompt location asks for ACCESS_FINE / ACCESS_COARSE_LOCATION
-        (the per-app grant; macOS Location Services is a separate, Mac.apk-wide
+        (the per-app grant; macOS Location Services is a separate, Apk on Mac-wide
         gate), and its --partial ACCESS_COARSE_LOCATION offers "Only
         approximate". Exit codes: 0 allowed (or approximate), 3 not allowed, 4 no answer within 5
         minutes (nothing changed), 5 identity refused or store error, 6 --auto
@@ -918,8 +918,8 @@ enum SpecialAccess {
         }
         let body = aosp + "\n\n" + (isFiles ? "This is Android\u{2019}s \u{201C}All files access\u{201D}"
                                            : "This is Android\u{2019}s \u{201C}Media management\u{201D}")
-            + " setting for \(label), kept by Mac.apk. " + state
-            + " You can revoke it later from the Mac.apk control panel."
+            + " setting for \(label), kept by Apk on Mac. " + state
+            + " You can revoke it later from the Apk on Mac control panel."
         // The default (Return) button keeps the current state; see the enum's
         // header. The alternate is the change the user would make.
         let keepAllowed = (current == .allow)
@@ -977,13 +977,13 @@ enum SpecialAccess {
             return 2
         }
         let filesOp = AppOpsStore.manageExternalStorage, mediaOp = AppOpsStore.manageMedia
-        let id = AppOpsStore.Identity(dirName: ".macapk-selftest", package: "org.macapk.selftest",
+        let id = AppOpsStore.Identity(dirName: ".macapk-selftest", package: "io.github.totktonado96.apkonmac.selftest",
                                       installedAt: "2026-01-01T00:00:00Z")
         // A second, throwaway package for the keying checks below; it is
         // removed again, so the directory ends with the one fixed entry the
         // Java side reads.
         let v1 = AppOpsStore.Identity(dirName: ".macapk-selftest-b_1.0",
-                                      package: "org.macapk.selftest.b",
+                                      package: "io.github.totktonado96.apkonmac.selftest.b",
                                       installedAt: "2026-02-02T00:00:00Z")
         let v2 = AppOpsStore.Identity(dirName: ".macapk-selftest-b_2.0",
                                       package: v1.package, installedAt: v1.installedAt)
@@ -1080,7 +1080,7 @@ enum CallerIdentity {
         }
         let exe = String(cString: pbuf)
         guard URL(fileURLWithPath: exe).lastPathComponent == "macapk-runtime" else {
-            return .failure(Refusal(message: "parent \(pid) (\(exe)) is not a Mac.apk runtime"))
+            return .failure(Refusal(message: "parent \(pid) (\(exe)) is not a Apk on Mac runtime"))
         }
         guard let argv = procArgs(pid) else {
             return .failure(Refusal(message: "cannot read the arguments of parent \(pid)"))
@@ -1233,8 +1233,8 @@ extension AppOpsStore {
         readExternal, writeExternal, accessMediaLocation, readMediaImages, readMediaVideo,
         readMediaAudio, readMediaUserSelected]
     /// The location runtime permissions (2026-10-05). macOS authorizes location
-    /// for Mac.apk as a WHOLE (locationd keys the client by the shared
-    /// runtime's signing identifier, org.macapk.runtime), so the per-app
+    /// for Apk on Mac as a WHOLE (locationd keys the client by the shared
+    /// runtime's signing identifier, io.github.totktonado96.apkonmac.runtime), so the per-app
     /// Android grant has to live here, as the storage family's does; the macOS
     /// prompt is only the host's own gate behind it.
     static let fineLocation = "android.permission.ACCESS_FINE_LOCATION"
@@ -1337,7 +1337,7 @@ enum RuntimePermission {
 
     /// KotlinUtils.isPhotoPickerPromptEnabled (DeviceConfig
     /// privacy/photo_picker_prompt_enabled; lineage-21.0 KotlinUtils.kt
-    /// :232-239). OFF until Mac.apk has a photo picker (stage S8): "Select
+    /// :232-239). OFF until Apk on Mac has a photo picker (stage S8): "Select
     /// photos and videos" would record limited access with nothing selected,
     /// and the later SELECT_MORE / picker-redirect states would promise a
     /// picker that never opens. With it off the runtime never plans a select
@@ -1512,7 +1512,7 @@ enum RuntimePermission {
     static func ask(label: String, prompt: String, perms: [String], partial: [String] = [],
                     level: Int, iconURL: URL?) -> Answer {
         let header = question(label: label, prompt: prompt, perms: perms, level: level)
-        var body = "This is Android\u{2019}s permission request for \(label), kept by Mac.apk."
+        var body = "This is Android\u{2019}s permission request for \(label), kept by Apk on Mac."
             + " You can change it later in the app\u{2019}s App info."
         let defaultTitle: String, alternateTitle: String
         var otherTitle: String? = nil
@@ -1521,7 +1521,7 @@ enum RuntimePermission {
             defaultTitle = "Don\u{2019}t allow"
             alternateTitle = "Allow all"
             otherTitle = "Select photos and videos"
-            body += "\n\nMac.apk cannot pick individual photos yet, so \u{201C}Select photos"
+            body += "\n\nApk on Mac cannot pick individual photos yet, so \u{201C}Select photos"
                 + " and videos\u{201D} gives limited access with no photos selected."
         case "select_more":
             defaultTitle = "Don\u{2019}t select more"
@@ -1534,7 +1534,7 @@ enum RuntimePermission {
             // for FINE and COARSE together (partial = the COARSE half).
             if !partial.isEmpty { otherTitle = "Only approximate" }
             body += "\n\nThe location comes from macOS Location Services, which"
-                + " asks once, separately, whether Mac.apk may use it."
+                + " asks once, separately, whether Apk on Mac may use it."
         default:
             defaultTitle = "Don\u{2019}t allow"
             alternateTitle = "Allow"
@@ -1602,7 +1602,7 @@ enum RuntimePermission {
         guard auto || promptOffered(prompt ?? ""),
               photoPickerPromptEnabled || partial.isEmpty || isLocation else {
             return usageError(json, "--prompt \(prompt ?? "") / --partial need a photo picker,"
-                                  + " which Mac.apk does not have yet (Allow means allow all)")
+                                  + " which Apk on Mac does not have yet (Allow means allow all)")
         }
         guard level >= 23 else { return usageError(json, "--level must be the presented API level") }
         guard let caller = resolveCaller(json) else { return 5 }
@@ -1758,9 +1758,9 @@ enum RuntimePermission {
         }
         let label = caller.label.isEmpty ? caller.package : caller.label
         let header = "App info: \(label)"
-        var body = "\(caller.package) -- Android\u{2019}s App info for this app, kept by Mac.apk."
+        var body = "\(caller.package) -- Android\u{2019}s App info for this app, kept by Apk on Mac."
         if rs.isEmpty {
-            body += "\n\nThis app has no permissions Mac.apk asks about."
+            body += "\n\nThis app has no permissions Apk on Mac asks about."
             var f: CFOptionFlags = 0
             let rc = CFUserNotificationDisplayAlert(
                 300, CFOptionFlags(kCFUserNotificationNoteAlertLevel), icon(caller) as CFURL?,
@@ -1832,7 +1832,7 @@ enum RuntimePermission {
             return usageError(json, "\(d.path) already holds a signing key; use a new directory")
         }
         let id = AppOpsStore.Identity(dirName: ".macapk-selftest-perms",
-                                      package: "org.macapk.selftest.perms",
+                                      package: "io.github.totktonado96.apkonmac.selftest.perms",
                                       installedAt: "2026-01-01T00:00:00Z")
         let img = AppOpsStore.readMediaImages, vid = AppOpsStore.readMediaVideo
         let aud = AppOpsStore.readMediaAudio, us = AppOpsStore.readMediaUserSelected
@@ -1922,15 +1922,15 @@ enum RuntimePermission {
                 try AppOpsStore.writeStore(root, in: d)
             }
             let legacy = AppOpsStore.Identity(dirName: ".macapk-selftest-v2",
-                                              package: "org.macapk.selftest.v2",
+                                              package: "io.github.totktonado96.apkonmac.selftest.v2",
                                               installedAt: "2026-01-02T00:00:00Z")
             let legacyPerms = AppOpsStore.Identity(dirName: ".macapk-selftest-v2p",
-                                                   package: "org.macapk.selftest.v2p",
+                                                   package: "io.github.totktonado96.apkonmac.selftest.v2p",
                                                    installedAt: "2026-01-03T00:00:00Z")
             // Left as /2 for the Java verifier's interop rows
             // (debug/mediaperm_verify/MediapermProbe.java interop).
             let legacyKept = AppOpsStore.Identity(dirName: ".macapk-selftest-v2k",
-                                                  package: "org.macapk.selftest.v2k",
+                                                  package: "io.github.totktonado96.apkonmac.selftest.v2k",
                                                   installedAt: "2026-01-04T00:00:00Z")
             try plant(legacy, perms: nil)
             try plant(legacyPerms, perms: [img: "granted"])

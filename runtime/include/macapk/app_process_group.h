@@ -12,7 +12,7 @@
 // forked, at any depth. So on a device a child an app fork()ed can never
 // outlive the app.
 //
-// Mac.apk leaves the process with _exit() (cocoa_bridge.mm
+// Apk on Mac leaves the process with _exit() (cocoa_bridge.mm
 // macapk_terminate_now), and a guest fork() child is re-parented to launchd and
 // keeps running: MEASURED on Instagram (lanes18 NN residual, Current_State
 // 2026-09-28) as orphaned `.Instagram` processes, ppid 1, ~97% CPU, that
@@ -24,9 +24,9 @@
 //   * a fork() child that has not exec'd: its executable is still ours
 //     (proc_pidpath == our proc_pidpath) -- the guest clone(SIGCHLD)/fork()
 //     shape, which is the Instagram orphan; and
-//   * an APK-shipped native executable, which Mac.apk runs through the
+//   * an APK-shipped native executable, which Apk on Mac runs through the
 //     macapk-elfexec stand-in (apk_native_exec.cpp kHelperName).
-// Everything else a Mac.apk process spawns plays a SYSTEM role on Android and
+// Everything else a Apk on Mac process spawns plays a SYSTEM role on Android and
 // must outlive the app exactly as system_server does there: the install helper
 // mid-Touch-ID (PackageInstaller runs in its own process on a device), the
 // detached relaunch shell CocoaExitProcess starts, `open` for a cross-app

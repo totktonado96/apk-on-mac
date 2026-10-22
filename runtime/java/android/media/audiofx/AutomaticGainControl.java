@@ -1,6 +1,6 @@
 // android.media.audiofx.AutomaticGainControl -- mic AGC preprocessor. AOSP
 // frameworks/base media/java/android/media/audiofx/AutomaticGainControl.java.
-// Mac.apk has no mic source/preprocessor: isAvailable false, create returns null.
+// Apk on Mac has no mic source/preprocessor: isAvailable false, create returns null.
 package android.media.audiofx;
 
 public class AutomaticGainControl extends AudioEffect {

@@ -1,7 +1,7 @@
 package com.google.android.gms.cast;
 
 // com.google.android.gms.cast.MediaStatus -- the receiver's current playback
-// state. Mac.apk has no Cast receiver, so an app never obtains a populated
+// state. Apk on Mac has no Cast receiver, so an app never obtains a populated
 // MediaStatus; the type exists with its published player-state constants so code
 // that switches on getPlayerState() links. Reports IDLE.
 // Ref: developers.google.com/android/reference/.../cast/MediaStatus

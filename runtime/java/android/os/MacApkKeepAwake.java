@@ -1,4 +1,4 @@
-// Mac.apk: keeps the Mac awake on behalf of Android's three "stay awake" levers.
+// Apk on Mac: keeps the Mac awake on behalf of Android's three "stay awake" levers.
 //   - WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON (Window.addFlags)
 //   - View.setKeepScreenOn(true) on an attached view
 //   - PowerManager.WakeLock: SCREEN_DIM/BRIGHT/FULL keep the display, PARTIAL the CPU

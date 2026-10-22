@@ -164,7 +164,7 @@ public final class McsClient {
      *  BOTH ports refused outright, and every failure at or after login pinned
      *  the retry at exactly 5s forever.
      *
-     *  That matters here more than it would on a phone, because every Mac.apk
+     *  That matters here more than it would on a phone, because every Apk on Mac
      *  app is its own process sharing ONE device androidId (GmsStore.dir() is
      *  installation-wide), so a rejected or evicted login is a state two apps
      *  can hold each other in indefinitely against Google's servers.
@@ -209,7 +209,7 @@ public final class McsClient {
         else if (backoffMs < 60_000) backoffMs += 10_000;
         else if (backoffMs < 600_000) backoffMs += 60_000;
         // JITTER. The ladder above is microG's, which is jitter-free because
-        // microG holds ONE connection in one persistent process. Mac.apk runs
+        // microG holds ONE connection in one persistent process. Apk on Mac runs
         // one process per app off a single shared androidId, so two apps that
         // start together retry on the same tick and stay phase-locked. Chromium
         // applies 33% for the same reason (gcm_backoff_policy.cc: "In order to
@@ -399,7 +399,7 @@ public final class McsClient {
 
             if (category == null) { log("data message with no category, dropped"); return; }
 
-            // Do not DISPATCH a message that is not ours. Every Mac.apk app
+            // Do not DISPATCH a message that is not ours. Every Apk on Mac app
             // process logs into MCS with the SAME device androidId
             // (GmsStore.dir() is installation-wide), so Google multiplexes the
             // messages for EVERY registered package down whichever socket is up,
@@ -607,7 +607,7 @@ public final class McsClient {
     }
 
     static void log(String m) {
-        try { com.macapk.loader.NativeLog.i("Mac.apk.GMS", "mcs: " + m); }
+        try { com.macapk.loader.NativeLog.i("Apk on Mac.GMS", "mcs: " + m); }
         catch (Throwable t) { System.err.println("[mcs] " + m); }
     }
 

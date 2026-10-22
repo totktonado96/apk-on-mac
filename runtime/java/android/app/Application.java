@@ -101,7 +101,7 @@ public class Application extends ContextWrapper
         //   base = ((ContextWrapper) base).getBaseContext(); base.getClass();
         // stopping only on its own gr.k ContextWrapper or a non-ContextWrapper,
         // and NPE'd the instant it unwrapped the Application (the Activity's base
-        // context in Mac.apk) to its null base. Install a ContextImpl-shaped
+        // context in Apk on Mac) to its null base. Install a ContextImpl-shaped
         // terminator so the chain ends cleanly: AppBaseContext extends Context
         // directly (so `instanceof ContextWrapper` is false and the walk
         // terminates there), and it serves every getter from this Application's
@@ -139,10 +139,10 @@ public class Application extends ContextWrapper
         StackTraceElement[] st = new Exception().getStackTrace();
         int jb = 0;
         for (StackTraceElement e : st) if (e.toString().startsWith("java.base/")) jb++;
-        android.util.Log.i("Mac.apk.LaunchStack",
+        android.util.Log.i("Apk on Mac.LaunchStack",
             "frames=" + st.length + " java.base=" + jb);
         for (int i = 0; i < st.length; i++) {
-            android.util.Log.i("Mac.apk.LaunchStack", "  [" + i + "] " + st[i]);
+            android.util.Log.i("Apk on Mac.LaunchStack", "  [" + i + "] " + st[i]);
         }
     }
 
@@ -337,7 +337,7 @@ public class Application extends ContextWrapper
      *          mLoadedApk = ContextImpl.getImpl(context).mPackageInfo;
      *      }
      *  We mirror it minus the mLoadedApk assignment, which needs a ContextImpl
-     *  Mac.apk does not have.
+     *  Apk on Mac does not have.
      *
      *  This exists so the attach-time call stack carries the genuine
      *  android.app.Application.attach frame a device shows, instead of jumping
@@ -363,7 +363,7 @@ public class Application extends ContextWrapper
      * Per AOSP frameworks/base Application.java, this is a STATIC method
      * that returns the name of the current process. The default process
      * name equals the package name; android:process="..." manifest
-     * entries produce ":suffix" forms which Mac.apk does not split.
+     * entries produce ":suffix" forms which Apk on Mac does not split.
      * Google Calculator's CalculatorApplication.onCreate calls this
      * during boot -- absent, it threw NoSuchMethodError after the
      * isIsolated stub let it past the first wall (v1.0.42).
@@ -567,7 +567,7 @@ public class Application extends ContextWrapper
         if (cbs != null) for (ActivityLifecycleCallbacks cb : cbs) {
             sb.append("\n    - ").append(cb.getClass().getName());
         }
-        android.util.Log.i("Mac.apk.AppLifecycle", sb.toString());
+        android.util.Log.i("Apk on Mac.AppLifecycle", sb.toString());
     }
 
     /** An ActivityLifecycleCallbacks implementation that throws USED to vanish
@@ -587,7 +587,7 @@ public class Application extends ContextWrapper
         new java.util.concurrent.atomic.AtomicInteger();
     private static void lcThrew(String phase, Object cb, Throwable t) {
         if (LC_THREW.getAndIncrement() >= 40) return;
-        android.util.Log.w("Mac.apk.AppLifecycle",
+        android.util.Log.w("Apk on Mac.AppLifecycle",
             "ActivityLifecycleCallbacks." + phase + " threw in "
             + (cb == null ? "null" : cb.getClass().getName()) + ": " + t);
     }
@@ -643,7 +643,7 @@ public class Application extends ContextWrapper
     // memory-trim listener, register here to react to onLowMemory / config
     // changes / trim-memory. v1.0.464 (subsystem-04 close-list): was a no-op,
     // so any registered ComponentCallbacks never heard a configuration change
-    // or a trim-memory level even when Mac.apk DID drive one. Maintain the
+    // or a trim-memory level even when Apk on Mac DID drive one. Maintain the
     // real list AOSP keeps (Context.mComponentCallbacks) and fan out from the
     // dispatch* helpers below. We don't synthesize memory-pressure events on
     // macOS, but a config change (rotation / night-mode) is a real event the
@@ -702,7 +702,7 @@ public class Application extends ContextWrapper
     }
 
     /** AOSP Application.OnProvideAssistDataListener: invoked when the
-     *  Assistant requests assist data for an activity. Mac.apk has no
+     *  Assistant requests assist data for an activity. Apk on Mac has no
      *  assistant transport, so the register/unregister round-trips but the
      *  callback is never invoked (the "feature absent" contract). Declared so
      *  reflective callers + apps that register an assist-data provider link.

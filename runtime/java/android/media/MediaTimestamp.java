@@ -1,5 +1,5 @@
 package android.media;
-/** A media/system-clock anchor pair. Mac.apk fills it from the media player when
+/** A media/system-clock anchor pair. Apk on Mac fills it from the media player when
  *  available; TIMESTAMP_UNKNOWN otherwise. Mirrors AOSP getters. */
 public final class MediaTimestamp {
     public static final MediaTimestamp TIMESTAMP_UNKNOWN = new MediaTimestamp(-1L, -1L, 0.0f);

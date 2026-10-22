@@ -1,7 +1,7 @@
 package android.app;
 import android.content.Context;
 import android.view.Display;
-/** A Dialog shown on a secondary Display. Mac.apk has one display, so it behaves
+/** A Dialog shown on a secondary Display. Apk on Mac has one display, so it behaves
  *  as a normal Dialog bound to the default display. */
 public class Presentation extends Dialog {
     private final Display mDisplay;
@@ -16,7 +16,7 @@ public class Presentation extends Dialog {
      *  be used to inflate layouts for this presentation" -- AOSP returns the
      *  resources of the presentation's OWN display-adjusted context, not the
      *  outer activity's, because a secondary display can have a different
-     *  density and size. Mac.apk has exactly one display (getDisplay() above
+     *  density and size. Apk on Mac has exactly one display (getDisplay() above
      *  always hands back the default one), so the presentation context's
      *  resources ARE the outer context's and there is no adjusted
      *  configuration to build. */

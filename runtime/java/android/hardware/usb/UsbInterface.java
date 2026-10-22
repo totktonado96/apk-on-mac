@@ -1,6 +1,6 @@
 // android.hardware.usb.UsbInterface
 //
-// A USB interface descriptor value type. Like UsbEndpoint, Mac.apk never
+// A USB interface descriptor value type. Like UsbEndpoint, Apk on Mac never
 // hands one out (no devices), but the type + getters must resolve for
 // device-inspection code to compile. Endpoint enumeration faithfully walks
 // the (possibly empty) endpoint array a caller supplies.

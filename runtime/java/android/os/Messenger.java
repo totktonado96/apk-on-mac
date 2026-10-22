@@ -5,7 +5,7 @@
 // IMessenger.aidl): `private final IMessenger mTarget;`, Messenger(Handler) is
 // `mTarget = target.getIMessenger()` (a Binder-backed stub the Handler caches),
 // Messenger(IBinder) is `IMessenger.Stub.asInterface(target)` and getBinder() is
-// `mTarget.asBinder()`. Mac.apk previously kept the Handler directly and
+// `mTarget.asBinder()`. Apk on Mac previously kept the Handler directly and
 // returned null from getBinder(), which broke the textbook bound-service idiom
 // outright: `Service.onBind -> return mMessenger.getBinder()` handed the client
 // a null IBinder, and `new Messenger(service)` on the other side discarded its
@@ -15,7 +15,7 @@
 // Messenger(IBinder) resolves it back through Binder.queryLocalInterface --
 // the exact same-process fast path AOSP's generated asInterface() takes first.
 // Nothing here is an approximation of a remote binder, because there is no
-// remote: every Mac.apk binder is a local one, which is the case AOSP already
+// remote: every Apk on Mac binder is a local one, which is the case AOSP already
 // handles without marshalling.
 package android.os;
 

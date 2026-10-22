@@ -7,7 +7,7 @@
 // deprecated isAppSourceCertificateTrusted(), which AOSP itself now hardcodes
 // to `return false` (FileIntegrityManager.java:165-168).
 //
-// Mac.apk answer: fs-verity is a Linux VFS feature. APFS has no equivalent the
+// Apk on Mac answer: fs-verity is a Linux VFS feature. APFS has no equivalent the
 // app can address, so isApkVeritySupported() is false -- the honest report of a
 // capability we do not have, and the same answer real devices with the feature
 // disabled give. Apps use it as a feature probe and fall back to their own
@@ -19,7 +19,7 @@ import java.security.cert.X509Certificate;
 
 public final class FileIntegrityManager {
 
-    /** Mac.apk wiring, not AOSP API: AOSP's constructor takes a Context and the
+    /** Apk on Mac wiring, not AOSP API: AOSP's constructor takes a Context and the
      *  IFileIntegrityService binder and is @hide, so there is nothing for
      *  Context.getSystemService to call. A public no-arg constructor is the
      *  safe direction for conformance -- an app compiled against real Android

@@ -4,7 +4,7 @@
 // AOSP ref: frameworks/base/core/java/android/app/RemoteInput.java.
 // Built via RemoteInput.Builder; the system populates the results
 // Bundle into the action's PendingIntent when the user replies, read
-// back via getResultsFromIntent. Mac.apk doesn't render inline-reply
+// back via getResultsFromIntent. Apk on Mac doesn't render inline-reply
 // UI, so no results are ever produced, but the full API resolves.
 package android.app;
 
@@ -96,7 +96,7 @@ public final class RemoteInput implements android.os.Parcelable {
     public boolean isDataOnly() { return !mAllowFreeFormInput && (mChoices == null || mChoices.length == 0); }
 
     /** AOSP: pulls the per-key reply text the system attached to the
-     *  Intent. Mac.apk never produces inline replies, so this is
+     *  Intent. Apk on Mac never produces inline replies, so this is
      *  null unless an app round-tripped results via addResultsToIntent. */
     public static Bundle getResultsFromIntent(Intent intent) {
         if (intent == null) return null;

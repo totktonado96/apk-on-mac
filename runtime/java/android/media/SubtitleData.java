@@ -1,6 +1,6 @@
 // android.media.SubtitleData -- a buffer of subtitle data for a selected track
 // (API 28+). AOSP frameworks/base media/java/android/media/SubtitleData.java.
-// Mac.apk produces none; this exists so OnSubtitleDataListener's parameter type
+// Apk on Mac produces none; this exists so OnSubtitleDataListener's parameter type
 // resolves.
 package android.media;
 

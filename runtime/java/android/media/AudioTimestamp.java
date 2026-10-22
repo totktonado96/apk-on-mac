@@ -1,7 +1,7 @@
 // android.media.AudioTimestamp -- a (framePosition, nanoTime) pair sampled from
 // an AudioTrack/AudioRecord clock. AOSP frameworks/base
 // media/java/android/media/AudioTimestamp.java. Public mutable fields, filled by
-// getTimestamp(); Mac.apk's getTimestamp approximations write into these.
+// getTimestamp(); Apk on Mac's getTimestamp approximations write into these.
 package android.media;
 
 public final class AudioTimestamp implements android.os.Parcelable {

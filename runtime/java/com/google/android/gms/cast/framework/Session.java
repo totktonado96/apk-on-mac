@@ -2,7 +2,7 @@ package com.google.android.gms.cast.framework;
 
 // com.google.android.gms.cast.framework.Session -- base type for a Cast
 // framework session (CastSession extends it). Abstract in the real SDK but kept
-// concrete-enough here so SessionManager's generics resolve. Mac.apk never
+// concrete-enough here so SessionManager's generics resolve. Apk on Mac never
 // produces a live session. Ref: developers.google.com/android/reference
 public class Session {
 

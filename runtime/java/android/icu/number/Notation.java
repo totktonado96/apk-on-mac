@@ -1,6 +1,6 @@
 package android.icu.number;
 /** Base for ICU number notation styles. Factory methods return the concrete
- *  notation; Mac.apk formats via the host, so these are structural holders. */
+ *  notation; Apk on Mac formats via the host, so these are structural holders. */
 public class Notation {
     Notation() {}
     public static CompactNotation compactShort() { return new CompactNotation(); }

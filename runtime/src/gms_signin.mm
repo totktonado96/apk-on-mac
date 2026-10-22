@@ -16,7 +16,7 @@
 // leaves the user stuck on a page that looks like it worked.
 // webview_bridge.mm's header records this already ("accounts.google.com, which
 // serves the EmbeddedSetupAndroid flow to our Android UA"), proven on a
-// hardened-runtime, ad-hoc-signed process. The UA below names Mac.apk in its
+// hardened-runtime, ad-hoc-signed process. The UA below names Apk on Mac in its
 // Build token rather than impersonating a specific handset: it is a statement
 // about the ENGINE ("an Android WebView"), which is true, and the device fields
 // in it are our own.
@@ -46,7 +46,7 @@ std::atomic<bool> g_active{false};
 /// The Android WebView UA plus the MinuteMaid suffix. See the header comment:
 /// without the suffix Google serves a flow that cannot complete here.
 NSString* const kSignInUserAgent =
-    @"Mozilla/5.0 (Linux; Android 10; Mac.apk Build/PR1; wv) "
+    @"Mozilla/5.0 (Linux; Android 10; Apk on Mac Build/PR1; wv) "
     @"AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 "
     @"Chrome/120.0.0.0 Mobile Safari/537.36 MinuteMaid";
 
@@ -106,7 +106,7 @@ const NSTimeInterval kSignInTimeout = 600.0;
     // thing and the phishing thing look identical to the user.
     NSView* content = [[NSView alloc] initWithFrame:frame];
     self.status = [NSTextField labelWithString:
-        @"This is Google's own sign-in page. Mac.apk never sees your password."];
+        @"This is Google's own sign-in page. Apk on Mac never sees your password."];
     self.status.font = [NSFont systemFontOfSize:11];
     self.status.textColor = [NSColor secondaryLabelColor];
     self.status.alignment = NSTextAlignmentCenter;

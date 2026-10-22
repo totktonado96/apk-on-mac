@@ -1,7 +1,7 @@
-# Building Mac.apk from source
+# Building Apk on Mac from source
 
-You don't need to build anything to use Mac.apk: the signed and notarized app is on
-the [Releases page](https://github.com/kksimp/Mac.apk/releases/latest). This page is
+You don't need to build anything to use Apk on Mac: the ad-hoc signed DMG is on
+the [Releases page](https://github.com/totktonado96/apk-on-mac/releases/latest). This page is
 for working on the code.
 
 ## Requirements
@@ -66,14 +66,14 @@ scripts/rebuild_and_run.sh
 ```
 
 `rebuild_and_run.sh` builds the runtime, the Java framework and the launcher, installs
-the result as `/Applications/Mac.apk.app` (override with `MACAPK_CANONICAL_APP`), and
+the result as `/Applications/Apk on Mac.app` (override with `MACAPK_CANONICAL_APP`), and
 opens it. Pass `--no-promote` to build without touching your installed app.
 
 Step by step instead:
 
 ```bash
 runtime/scripts/build.sh                # runtime, framework jars, translator -> runtime/build/
-scripts/build_launcher.sh               # the app bundle -> build/Mac.apk.app
+scripts/build_launcher.sh               # the app bundle -> build/Apk on Mac.app
 debug/build_java_only.sh                # fast check that the Java side compiles
 ```
 
@@ -128,10 +128,12 @@ That pulls about 25 GB and takes 30 to 60 minutes the first time.
 
 ## Signed builds
 
-`scripts/build_dist.sh --dmg` makes an ad-hoc signed app and disk image.
-`scripts/release.sh` makes a Developer ID signed, notarized DMG; it reads your signing
-identity and notary settings from an untracked `scripts/.release.env` (start from
-`scripts/.release.env.example`). Never commit that file.
+`scripts/build_dist.sh --dmg` makes an ad-hoc signed app and disk image (this is what the
+GitHub Actions workflow publishes; official builds are not notarized).
+`scripts/release.sh` can make a Developer ID signed, notarized DMG if you have your own
+Apple developer account; it reads your signing identity and notary settings from an
+untracked `scripts/.release.env` (start from `scripts/.release.env.example`). Never
+commit that file.
 
 ## What's not in this repository
 
@@ -155,8 +157,6 @@ identity and notary settings from an untracked `scripts/.release.env` (start fro
 | `scripts/` | Build, install and release scripts |
 | `debug/` | Build helpers, GLES bridge generators and standalone framework regression checks |
 
-The DEX to JVM bytecode converter is also published on its own as
-[dex2jvm](https://github.com/kksimp/dex2jvm).
 
 ## Canvas layer color filters
 

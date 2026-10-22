@@ -14,7 +14,7 @@ import java.util.Objects;
 import java.util.Set;
 
 /** Describes one media route (a speaker/display/cast target) for MediaRouter2.
- *  Mac.apk exposes only the built-in default route, so an app rarely receives a
+ *  Apk on Mac exposes only the built-in default route, so an app rarely receives a
  *  populated instance -- but the full descriptor surface is implemented because
  *  an app that DOES obtain one (from its own MediaRoute2ProviderService, or from
  *  the system controller) reads every accessor below. API 30.
@@ -165,7 +165,7 @@ public final class MediaRoute2Info implements Parcelable {
     // are therefore not modelled here. Writing our own field set in a
     // self-consistent order rather than AOSP's exact wire shape, per the
     // absent-fields-not-padded rule -- the Parcel never crosses a process
-    // boundary in Mac.apk, so only round-trip consistency with CREATOR matters.
+    // boundary in Apk on Mac, so only round-trip consistency with CREATOR matters.
     @Override public int describeContents() { return 0; }
 
     @Override public void writeToParcel(Parcel dest, int flags) {
@@ -386,7 +386,7 @@ public final class MediaRoute2Info implements Parcelable {
             mSuitabilityStatus = suitabilityStatus; return this;
         }
         /** AOSP's visibility controls gate which packages may SEE the route.
-         *  Mac.apk runs exactly one app per process and has no route registry to
+         *  Apk on Mac runs exactly one app per process and has no route registry to
          *  filter, so the flag is recorded by the builder and never consulted --
          *  it changes nothing observable in a single-app world. */
         public Builder setVisibilityPublic() { return this; }

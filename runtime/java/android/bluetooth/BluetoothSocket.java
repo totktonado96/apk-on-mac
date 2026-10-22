@@ -1,7 +1,7 @@
 // android.bluetooth.BluetoothSocket -- an RFCOMM/L2CAP/SCO socket to a remote
 // Bluetooth device.
 //
-// Mac.apk exposes no Bluetooth bridge, so no socket can ever carry traffic.
+// Apk on Mac exposes no Bluetooth bridge, so no socket can ever carry traffic.
 // connect() therefore THROWS IOException rather than returning silently:
 // AOSP's own contract is "@throws IOException on error, for example
 // connection failure", and a silent success would leave an app reading from a
@@ -26,7 +26,7 @@ public class BluetoothSocket implements Closeable {
     public static final int TYPE_SCO = 2;
     public static final int TYPE_L2CAP = 3;
 
-    private static final String NO_RADIO = "Mac.apk: no Bluetooth radio";
+    private static final String NO_RADIO = "Apk on Mac: no Bluetooth radio";
 
     public BluetoothSocket() {}
 

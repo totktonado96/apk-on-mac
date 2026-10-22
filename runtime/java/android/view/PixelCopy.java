@@ -6,7 +6,7 @@ import android.os.Handler;
 
 /**
  * AOSP-faithful android.view.PixelCopy. Copies pixels from a Surface / Window /
- * SurfaceView into a destination Bitmap asynchronously. Mac.apk has no GPU
+ * SurfaceView into a destination Bitmap asynchronously. Apk on Mac has no GPU
  * back-buffer readback path (Unity/ANGLE present to their own layers, which read
  * back black per the verification invariants), so a faithful copy isn't
  * possible; we validate the request the same way AOSP does, then report

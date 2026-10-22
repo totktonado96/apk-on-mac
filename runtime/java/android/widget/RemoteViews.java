@@ -364,14 +364,14 @@ public class RemoteViews implements Parcelable, LayoutInflater.Filter {
 
     /** AOSP's landscape/portrait pair constructor. */
     public RemoteViews(RemoteViews landscape, RemoteViews portrait) {
-        // Mac.apk has one orientation at a time and no cross-process apply;
+        // Apk on Mac has one orientation at a time and no cross-process apply;
         // the portrait layout is the one that gets inflated.
         this(portrait != null ? portrait : landscape);
     }
 
     /** AOSP setRemoteAdapter(viewId, items) (API 31): supplies an inline
      *  collection (the modern, RemoteViewsService-free path) to an adapter view.
-     *  Mac.apk has no home-screen/widget host applying this RemoteViews, so the
+     *  Apk on Mac has no home-screen/widget host applying this RemoteViews, so the
      *  items are retained on the RemoteViews but there is nothing to bind them
      *  into. */
     public void setRemoteAdapter(int viewId, RemoteCollectionItems items) { }
@@ -492,7 +492,7 @@ public class RemoteViews implements Parcelable, LayoutInflater.Filter {
 
     // Generic reflection setters (API 31 color/dimen/blend/icon families). Direct
     // values are applied via the existing invokeReflect bridge; the @*Res / @*Attr
-    // forms need remote resource resolution Mac.apk does not do, so they are
+    // forms need remote resource resolution Apk on Mac does not do, so they are
     // recorded no-ops (the RemoteViews still inflates + applies its other actions).
     public void setColorInt(int viewId, String methodName, int notNight, int night) {
         invokeReflect(viewId, methodName, int.class, notNight);
@@ -538,7 +538,7 @@ public class RemoteViews implements Parcelable, LayoutInflater.Filter {
     public void setOnClickResponse(int viewId, RemoteResponse response) { }
     public void setOnCheckedChangeResponse(int viewId, RemoteResponse response) { }
     /** AOSP RemoteResponse (API 31): a click/checked-change reaction (fill-in
-     *  intent or pending intent). Mac.apk applies RemoteViews locally with no
+     *  intent or pending intent). Apk on Mac applies RemoteViews locally with no
      *  collection host, so a response is held but not dispatched. */
     public static class RemoteResponse {
         public static RemoteResponse fromPendingIntent(android.app.PendingIntent pendingIntent) { return new RemoteResponse(); }
@@ -707,7 +707,7 @@ public class RemoteViews implements Parcelable, LayoutInflater.Filter {
             new java.util.HashMap<Integer, Integer>();
 
     /** AOSP :7027 -- a PendingIntent fired when a stylus starts handwriting on
-     *  the view. Mac.apk has no stylus input source and no host to fire a
+     *  the view. Apk on Mac has no stylus input source and no host to fire a
      *  PendingIntent from a remote view, so, exactly like the sibling
      *  setOnClickResponse/setOnCheckedChangeResponse above, the response is
      *  accepted and never dispatched. */

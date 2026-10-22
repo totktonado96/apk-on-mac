@@ -178,7 +178,7 @@ public class GLSurfaceView extends SurfaceView
     // ignore the parameter and use android.opengl.GLES20 directly.
     private static final GL10 STUB_GL10 = new StubGL10();
 
-    /** Mac.apk addition: the shared GL10 implementation, for
+    /** Apk on Mac addition: the shared GL10 implementation, for
      *  SurfaceView's reflection-driven renderer dispatch. On real
      *  Android the GL10 handed to onDrawFrame/onSurfaceCreated is
      *  never null; engines that issue GLES1-style calls through it
@@ -222,7 +222,7 @@ public class GLSurfaceView extends SurfaceView
     }
     public Renderer getRenderer() { return renderer; }
 
-    /** Mac.apk framework-internal (see SurfaceView.macapkRendersOnOsMain):
+    /** Apk on Mac framework-internal (see SurfaceView.macapkRendersOnOsMain):
      *  a set Renderer is driven by macapkDrawFrame on the AppKit thread, which
      *  therefore is this view's GL thread. */
     @Override public boolean macapkRendersOnOsMain() {
@@ -1028,7 +1028,7 @@ public class GLSurfaceView extends SurfaceView
     }
     public void queueEvent(Runnable r) {
         // GLSurfaceView.queueEvent runs work on the GL render thread. In
-        // Mac.apk that thread is the OS main thread (where ANGLE's context is
+        // Apk on Mac that thread is the OS main thread (where ANGLE's context is
         // current and onDrawFrame fires), serviced by Handler.drainGlobal each
         // frame (renderer path: macapkRunQueuedGlEvents, v1.0.1639; reflection
         // path: SurfaceView.macapkDrawFrame). Route to the GL-thread queue (GLOBAL_QUEUE) via
@@ -1056,7 +1056,7 @@ public class GLSurfaceView extends SurfaceView
     // AOSP GLSurfaceView's setters do exactly one thing: record the
     // request (checkRenderThreadState(); mField = value) so the GL thread's
     // EglHelper can pass it to eglCreateContext / eglChooseConfig later.
-    // Mac.apk never runs the app's EGL thread -- rendering goes through the
+    // Apk on Mac never runs the app's EGL thread -- rendering goes through the
     // MTKView/ANGLE path -- but RECORDING the request is still the setter's
     // job, and dropping it on the floor is what makes a
     // setEGLContextClientVersion(3) app silently run against the ES2
@@ -1095,7 +1095,7 @@ public class GLSurfaceView extends SurfaceView
         };
     }
     // libGDX (AndroidGraphics) installs custom EGL factories before
-    // setRenderer. Mac.apk never runs the app's EGL thread, so the
+    // setRenderer. Apk on Mac never runs the app's EGL thread, so the
     // factories are never invoked -- but the setters must exist or
     // onCreate dies with NoSuchMethodError (ShatteredPD / every libGDX
     // game), and the reference is kept so the request is at least
@@ -1107,14 +1107,14 @@ public class GLSurfaceView extends SurfaceView
         mEGLWindowSurfaceFactory = factory;
     }
 
-    /** Mac.apk addition (AOSP has no public getter): the value the app
+    /** Apk on Mac addition (AOSP has no public getter): the value the app
      *  passed to setEGLContextClientVersion, or 0 if it never called it.
      *  Read by the EGL-context creation path so a GLES3 request produces
      *  a GLES3 context instead of the hardcoded ES2 one. */
     public int macapkRequestedEGLContextClientVersion() {
         return mEGLContextClientVersion;
     }
-    /** Mac.apk addition: the {r, g, b, a, depth, stencil} sizes requested
+    /** Apk on Mac addition: the {r, g, b, a, depth, stencil} sizes requested
      *  through a numeric setEGLConfigChooser overload, or null if the app
      *  requested nothing (or installed its own chooser object). A copy, so
      *  a caller cannot mutate our record of the request. */
@@ -1122,7 +1122,7 @@ public class GLSurfaceView extends SurfaceView
         return mRequestedConfigSizes == null ? null
                                              : mRequestedConfigSizes.clone();
     }
-    /** Mac.apk addition: true when the app installed any of its own EGL
+    /** Apk on Mac addition: true when the app installed any of its own EGL
      *  chooser/context/window-surface factories. Diagnostic only -- the
      *  factory objects are never invoked (running them would mean standing
      *  up a second EGL driver alongside ANGLE). */

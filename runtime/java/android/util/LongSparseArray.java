@@ -235,7 +235,7 @@ public class LongSparseArray<E> implements Cloneable {
         return indexOfKey(key) >= 0;
     }
 
-    /** Mac.apk convenience alias kept from the previous implementation; AOSP's
+    /** Apk on Mac convenience alias kept from the previous implementation; AOSP's
      *  LongSparseArray has no `contains`, but in-tree callers used it. */
     public boolean contains(long key) {
         return indexOfKey(key) >= 0;

@@ -78,9 +78,9 @@ NSString* const kConcealedType = @"org.nspasteboard.ConcealedType";
 // the two facts Android's clipboard service keeps beside it: WHICH package set
 // it (ClipboardService's primaryClipUid/mPrimaryClipPackage, which decides
 // whether reading it is "another app's clip") and the ClipDescription label.
-// Another Mac.apk app, or this app after a restart, reads them back.
-NSString* const kSourceType = @"org.macapk.android.clip.source";
-NSString* const kLabelType  = @"org.macapk.android.clip.label";
+// Another Apk on Mac app, or this app after a restart, reads them back.
+NSString* const kSourceType = @"io.github.totktonado96.apkonmac.android.clip.source";
+NSString* const kLabelType  = @"io.github.totktonado96.apkonmac.android.clip.label";
 
 // Bit layout shared with ClipboardManager.MacApkHostPasteboard.TYPE_*.
 enum : jint {

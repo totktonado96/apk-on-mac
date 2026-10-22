@@ -6,7 +6,7 @@ import java.util.Map;
 import java.util.Set;
 
 // com.google.firebase.storage.StorageMetadata -- metadata about a Storage
-// object (content type, cache control, custom key/values, etc.). On Mac.apk
+// object (content type, cache control, custom key/values, etc.). On Apk on Mac
 // this is a real, fully-functional value object: apps build it via Builder to
 // attach to an upload, and read it back from a (failed) getMetadata Task. The
 // server-populated fields (size, generation, timestamps) read empty/zero

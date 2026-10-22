@@ -21,12 +21,12 @@
 // wrote, and a defaultValue declared in XML is persisted on first run. The
 // PICKER half depends on something outside this package: onClick fires
 // startActivityForResult with ACTION_RINGTONE_PICKER, and whether an activity
-// answers that is up to Mac.apk's PackageManager/Intent routing. If nothing
+// answers that is up to Apk on Mac's PackageManager/Intent routing. If nothing
 // answers, the row is inert and the stored value is untouched -- which is the
 // same thing that happens on an Android device with no ringtone picker
 // installed. Nothing here pretends a picker ran or invents a Uri; per the
 // no-shortcuts rule, a capability we cannot honour is not advertised.
-// RingtoneManager.getDefaultUri returns null on Mac.apk
+// RingtoneManager.getDefaultUri returns null on Apk on Mac
 // (runtime/java/android/media/RingtoneManager.java: "no system default"), so
 // EXTRA_RINGTONE_DEFAULT_URI is simply absent rather than fabricated.
 package android.preference;
@@ -129,7 +129,7 @@ public class RingtonePreference extends Preference
         ringtonePickerIntent.putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_DEFAULT, mShowDefault);
         if (mShowDefault) {
             Uri defaultUri = RingtoneManager.getDefaultUri(getRingtoneType());
-            // Null on Mac.apk (no system ringtone set). AOSP would put a real
+            // Null on Apk on Mac (no system ringtone set). AOSP would put a real
             // Uri; putting a null extra is what AOSP does when getDefaultUri
             // returns null, so the picker sees "no default" rather than a Uri
             // that resolves to nothing.

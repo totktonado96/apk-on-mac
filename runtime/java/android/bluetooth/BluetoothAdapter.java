@@ -1,6 +1,6 @@
 // android.bluetooth.BluetoothAdapter
 //
-// Mac.apk does not bridge macOS Bluetooth to the guest. AOSP's
+// Apk on Mac does not bridge macOS Bluetooth to the guest. AOSP's
 // getDefaultAdapter() returns null on a context with no Bluetooth
 // available to the app (no hardware, or no BLUETOOTH permission) -- a
 // state real apps already handle -- so returning null is the honest
@@ -186,24 +186,24 @@ public class BluetoothAdapter {
 
     public BluetoothServerSocket listenUsingInsecureRfcommWithServiceRecord(String name, java.util.UUID uuid)
             throws java.io.IOException {
-        throw new java.io.IOException("Mac.apk: no Bluetooth radio");
+        throw new java.io.IOException("Apk on Mac: no Bluetooth radio");
     }
 
     /** @see #listenUsingInsecureRfcommWithServiceRecord -- same, secure. */
     public BluetoothServerSocket listenUsingRfcommWithServiceRecord(String name,
             java.util.UUID uuid) throws java.io.IOException {
-        throw new java.io.IOException("Mac.apk: no Bluetooth radio");
+        throw new java.io.IOException("Apk on Mac: no Bluetooth radio");
     }
 
     /** L2CAP channel listen (API 29). No radio, so the same honest IOException
      *  as the RFCOMM twins -- never a socket that cannot carry traffic. */
     public BluetoothServerSocket listenUsingL2capChannel() throws java.io.IOException {
-        throw new java.io.IOException("Mac.apk: no Bluetooth radio");
+        throw new java.io.IOException("Apk on Mac: no Bluetooth radio");
     }
 
     /** @see #listenUsingL2capChannel */
     public BluetoothServerSocket listenUsingInsecureL2capChannel() throws java.io.IOException {
-        throw new java.io.IOException("Mac.apk: no Bluetooth radio");
+        throw new java.io.IOException("Apk on Mac: no Bluetooth radio");
     }
 }
 

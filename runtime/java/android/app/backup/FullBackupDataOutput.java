@@ -6,7 +6,7 @@ public class FullBackupDataOutput {
     // AOSP FullBackupDataOutput (android11-release) stores this from its
     // constructor: "private final int mTransportFlags;" set by both real
     // constructors (FullBackupDataOutput(long quota, int transportFlags) and
-    // the ParcelFileDescriptor-taking overload). Nothing in Mac.apk
+    // the ParcelFileDescriptor-taking overload). Nothing in Apk on Mac
     // currently constructs a FullBackupDataOutput -- like the rest of this
     // package (see BackupDataOutput's identical no-transport stub note),
     // there is no real backup transport wiring, only the linkage surface --

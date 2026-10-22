@@ -11,7 +11,7 @@ import java.util.Objects;
 /**
  * The device's 5G network-slicing configuration.
  *
- * Mac.apk has no 5G modem, so TelephonyManager.getNetworkSlicingConfiguration()
+ * Apk on Mac has no 5G modem, so TelephonyManager.getNetworkSlicingConfiguration()
  * delivers a default-constructed instance: no URSP rules and no slices. That is
  * the same object AOSP hands back before the modem has reported.
  *

@@ -55,7 +55,7 @@ public final class InputManager {
      *    throw there would abort the bringup, which the old no-op never did.
      *  - The touchscreen's axis bounds follow the window (see the rebuild
      *    below), which on real Android would be an onInputDeviceChanged; that
-     *    is still not fired: no Mac.apk app has been observed to re-query on
+     *    is still not fired: no Apk on Mac app has been observed to re-query on
      *    it, and it would run app callbacks from whatever thread resized the
      *    window. */
     public void registerInputDeviceListener(InputDeviceListener listener,
@@ -106,14 +106,14 @@ public final class InputManager {
     // The device registry
     // ------------------------------------------------------------------
     //
-    // THE RULE THIS TABLE OBEYS: advertise exactly what Mac.apk actually
+    // THE RULE THIS TABLE OBEYS: advertise exactly what Apk on Mac actually
     // delivers, and nothing more. Claiming a capability we do not deliver is
     // strictly WORSE than claiming nothing, because an app that believes it
     // then enables a control path that receives no events, with no fallback.
     //
     // What we deliver, and therefore what is listed:
     //
-    //  * A TOUCHSCREEN. Every MotionEvent Mac.apk synthesizes carries
+    //  * A TOUCHSCREEN. Every MotionEvent Apk on Mac synthesizes carries
     //    InputDevice.SOURCE_TOUCHSCREEN (android.view.MotionEvent's `source`
     //    field default) and TOOL_TYPE_FINGER, from the host mouse/trackpad via
     //    cocoa_bridge -> TouchDispatcher; multi-pointer works through
@@ -181,7 +181,7 @@ public final class InputManager {
      *  synthesize key events" (KeyCharacterMap.VIRTUAL_KEYBOARD) -- the IME's and
      *  `input keyevent`'s device -- while InputReader stamps a hardware key with
      *  the id of the device it was read from (KeyboardInputMapper::processKey,
-     *  getDeviceId()). Mac.apk stamped every host keystroke -1, i.e. reported
+     *  getDeviceId()). Apk on Mac stamped every host keystroke -1, i.e. reported
      *  "no hardware keyboard" (the Virtual device is skipped by
      *  DisplayContent.computeScreenConfiguration, "Ignore virtual input device")
      *  while delivering hardware key traffic.
@@ -210,7 +210,7 @@ public final class InputManager {
      *  keyboard's do. A 0x301 keyboard (one whose HID descriptor advertises
      *  KEY_SELECT, as many consumer-control keyboards do) would put SOURCE_DPAD
      *  back on host arrows, which is the bit libunity's joystick attach keys on. External (a keyboard attached to
-     *  the phone Mac.apk presents), id 2: ids 0 and 1 are taken (0 = "not from a
+     *  the phone Apk on Mac presents), id 2: ids 0 and 1 are taken (0 = "not from a
      *  physical device", 1 = the touchscreen). =0 restores the pre-change
      *  surface byte for byte: no such device, keystrokes from -1 with
      *  KEYBOARD|DPAD, Configuration KEYBOARD_NOKEYS / HARDKEYBOARDHIDDEN_YES. */

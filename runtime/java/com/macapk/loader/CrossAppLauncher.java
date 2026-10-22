@@ -1,5 +1,5 @@
 // The cross-app START sender (stage 3a, v1.0.1652): hand an activity start to
-// ANOTHER installed Mac.apk app, the way ActivityTaskManager hands a start to
+// ANOTHER installed Apk on Mac app, the way ActivityTaskManager hands a start to
 // another process on a device.
 //
 // docs/cross-app-launch-and-implicit-start-design_2026-09-26.md sections 5-6.
@@ -14,10 +14,10 @@
 // cold-starts it through its own stub, whose Boot drains the inbox. Nothing is
 // ever exec'd directly and nothing is registered globally.
 //
-// The trust boundary is the macOS user account (every Mac.apk app runs as this
+// The trust boundary is the macOS user account (every Apk on Mac app runs as this
 // user); what this guarantees is narrower and real: we only ever OPEN a bundle
 // that the installed-apps registry names AND whose own Info.plist agrees it is
-// that package's Mac.apk bundle directly under /Applications or the per-user
+// that package's Apk on Mac bundle directly under /Applications or the per-user
 // ~/Applications (where the installer puts it for a user who cannot write
 // /Applications, GitHub #28).
 package com.macapk.loader;
@@ -34,7 +34,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public final class CrossAppLauncher {
-    private static final String TAG = "Mac.apk.XAPP";
+    private static final String TAG = "Apk on Mac.XAPP";
 
     /** MACAPK_XAPP_START (default ON). =0: a registry-resolved start falls
      *  through to the pre-change path (performLaunch misses and logs). */
@@ -144,10 +144,10 @@ public final class CrossAppLauncher {
         t.start();
     }
 
-    /** null when `bundlePath` is an openable Mac.apk bundle of `pkg`, else why
+    /** null when `bundlePath` is an openable Apk on Mac bundle of `pkg`, else why
      *  not. The SAME guard BundleGenerator.remove applies before it will trash a
      *  bundle, plus identity: canonical parent is `root`, a real `.app`
-     *  directory (not a symlink), an Info.plist naming an org.macapk.app.*
+     *  directory (not a symlink), an Info.plist naming an io.github.totktonado96.apkonmac.app.*
      *  bundle whose MacapkPackage is `pkg` and, when the registry row knows it,
      *  whose MacapkDirName is `dirName`. */
     static String validateBundle(String root, String bundlePath, String pkg, String dirName) {
@@ -167,7 +167,7 @@ public final class CrossAppLauncher {
             String xml = plistXml(plist);
             if (xml == null) return "Info.plist unreadable";
             String bid = plistString(xml, "CFBundleIdentifier");
-            if (bid == null || !bid.startsWith("org.macapk.app.")) return "bundle id " + bid;
+            if (bid == null || !bid.startsWith("io.github.totktonado96.apkonmac.app.")) return "bundle id " + bid;
             String mp = plistString(xml, "MacapkPackage");
             if (!pkg.equals(mp)) return "MacapkPackage " + mp + " != " + pkg;
             if (dirName != null) {

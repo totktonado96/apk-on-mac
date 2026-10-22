@@ -60,14 +60,14 @@
 //     up via `actualSocket.getClass().getMethod(name, paramTypes)` -- i.e.
 //     reflection against the REAL socket object's REAL runtime class at
 //     invocation time, not against this class -- so on a real (non-
-//     conscrypt-backed) Mac.apk SSLSocket that lookup fails closed
+//     conscrypt-backed) Apk on Mac SSLSocket that lookup fails closed
 //     (NoSuchMethodException -> caught -> null -> the optional-call path
 //     no-ops) exactly the way it already does on any real Android OEM build
 //     whose vendor swapped in a differently-shaped TLS stack, which is
 //     precisely the vendor-fragmentation case OkHttp's reflection-based
 //     Android platform detection was designed to tolerate.
 // So providing this class only fixes the DETECTION phase (stops the
-// NullPointerException); it does not, and does not need to, make Mac.apk's
+// NullPointerException); it does not, and does not need to, make Apk on Mac's
 // actual sockets behave like real Conscrypt sockets.
 //
 // Method surface is exactly what platform.b.h()'s reflection asks for

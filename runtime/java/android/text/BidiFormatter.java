@@ -3,7 +3,7 @@
 // core.text.BidiFormatter delegates to / mirrors this; apps and some framework
 // code reference android.text.BidiFormatter directly, so a missing class threw
 // NoClassDefFoundError during inflate/format. v1.0.426 Tier-2.
-// Mac.apk is LTR-only (macOS has no RTL system pump and our targets are LTR), so
+// Apk on Mac is LTR-only (macOS has no RTL system pump and our targets are LTR), so
 // unicodeWrap is an identity pass -- the OBSERVABLE result for LTR English text
 // is identical to AOSP (no isolate chars are emitted when the text direction
 // matches the context). Source: frameworks/base/core/java/android/text/BidiFormatter.java
@@ -32,7 +32,7 @@ public final class BidiFormatter {
     // FIRSTSTRONG_LTR for EVERY instance regardless of isRtlContext (that
     // constructor param only affects unicodeWrap's wrapping decision, not
     // this content query). Unlike unicodeWrap -- an identity pass because
-    // Mac.apk's renderer has nothing to do with inserted bidi isolate
+    // Apk on Mac's renderer has nothing to do with inserted bidi isolate
     // characters -- isRtl() is pure Unicode string analysis with no
     // dependency on system RTL rendering support, and TextDirectionHeuristics
     // already ports the real first-strong-character algorithm faithfully

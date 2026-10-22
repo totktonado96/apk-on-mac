@@ -6,7 +6,7 @@ package android.view;
 public class SearchEvent {
     private final InputDevice mInputDevice;
 
-    /** @hide -- Mac.apk keeps the no-arg form the tree already handed out; AOSP
+    /** @hide -- Apk on Mac keeps the no-arg form the tree already handed out; AOSP
      *  declares only the InputDevice constructor. */
     public SearchEvent() { mInputDevice = null; }
 

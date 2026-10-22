@@ -1,6 +1,6 @@
 // android.net.wifi.WifiConfiguration -- a saved Wi-Fi network's configuration.
 //
-// A REAL, COMPLETE value type, and this one matters even though Mac.apk has no
+// A REAL, COMPLETE value type, and this one matters even though Apk on Mac has no
 // guest Wi-Fi control. A WifiConfiguration is built ENTIRELY by the app:
 //
 //     WifiConfiguration c = new WifiConfiguration();

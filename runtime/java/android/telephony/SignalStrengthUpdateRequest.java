@@ -12,7 +12,7 @@ import java.util.Objects;
 /**
  * A request to be told when signal strength crosses given thresholds.
  *
- * Mac.apk has no radio, so TelephonyManager.setSignalStrengthUpdateRequest()
+ * Apk on Mac has no radio, so TelephonyManager.setSignalStrengthUpdateRequest()
  * accepts the request and no threshold is ever crossed -- the same observable
  * behaviour as a device in airplane mode. The request object itself is a
  * faithful value type.

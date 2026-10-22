@@ -1,4 +1,4 @@
-// Mac.apk android.util.Base64 -- AOSP-faithful reimplementation.
+// Apk on Mac android.util.Base64 -- AOSP-faithful reimplementation.
 //
 // Previously an empty stub (v1.0.92, auto-generated for F-Droid). SafeDK's
 // com.safedk.android.analytics.brandsafety.BrandSafetyUtils.<clinit> calls

@@ -1,4 +1,4 @@
-// arm64_native.cpp -- Native arm64 Android ELF loader for Mac.apk.
+// arm64_native.cpp -- Native arm64 Android ELF loader for Apk on Mac.
 //
 // Apple Silicon macOS is arm64. An Android arm64 .so already contains
 // the same machine code that Apple's CPUs execute, so there's no need
@@ -45,7 +45,7 @@
 //
 // This replaces the obsolete arm64 instruction-lifting path (lift
 // arm64 -> LLVM IR -> arm64 again), which was generating buggy IR
-// for every `ldr w<n>` and similar idioms. The point of Mac.apk is
+// for every `ldr w<n>` and similar idioms. The point of Apk on Mac is
 // to run Android code on macOS natively -- for arm64 inputs, that
 // means executing the original instructions, not re-emitting them.
 
@@ -2645,7 +2645,7 @@ void* Image::resolve_external(const std::string& name, uint8_t bind) {
                 if (void* f = dlsym(RTLD_DEFAULT, "__macapk_note_unity_loaded"))
                     reinterpret_cast<void(*)()>(f)();
                 // v1.0.173: tell the bionic shim a Unity app is running so its
-                // sigaction shim retains Mac.apk's SIGSEGV recovery handler
+                // sigaction shim retains Apk on Mac's SIGSEGV recovery handler
                 // (Unity's own crash reporter would otherwise abort on a
                 // recoverable fault ~50s into rendering).
                 if (void* g = dlsym(RTLD_DEFAULT, "__macapk_arm64_mark_unity"))
@@ -2685,7 +2685,7 @@ void* Image::resolve_external(const std::string& name, uint8_t bind) {
     // FMOD import takes the same ladder as every other name. Everything from
     // here to the __cxa_throw probe below is the =0 routing, kept verbatim.
     const bool fmod_legacy_routing = !macapk_fmod_bind_by_name();
-    // FMOD real-vs-stub routing (MACAPK_FMOD_BIND_BY_NAME=0 only). Mac.apk
+    // FMOD real-vs-stub routing (MACAPK_FMOD_BIND_BY_NAME=0 only). Apk on Mac
     // ships a partial FMOD *stub* layer (bionic_shim.cpp
     // `__macapk_fmodstub_<FMOD_name>`, named `__macapk_arm64_<FMOD_name>`
     // until 2026-09-27 -> fake FMOD_OK + fake handles) built for GD/cocos,
@@ -3067,7 +3067,7 @@ __attribute__((noinline)) long macapk_unresolved_trap(void) {
 
     if (continue_mode) return 0;
     std::fprintf(stderr,
-        "[arm64-native] aborting: the app called a native symbol Mac.apk "
+        "[arm64-native] aborting: the app called a native symbol Apk on Mac "
         "does not implement. Implement it as a __macapk_arm64_<name> shim "
         "(see CLAUDE.md \"Missing shims are silent killers\"). Set "
         "MACAPK_UNRESOLVED_CONTINUE=1 to return 0 and continue for "
@@ -5998,7 +5998,7 @@ bool Image::load_common() {
     }
     // STEP 1 of the 54%-stall RE-POST fix (docs/mcpe-signaling-foreign-wake-defer_2026-07-17.md
     // "v648 FINAL VERIFIED BUILD SPEC"): capture the GS coroutine PUMP (pthread + TaskGroup) at
-    // TaskGroup::queue's OWNER branch mc+0x13203b28. LOG-ONLY (identify the pump on Mac.apk before
+    // TaskGroup::queue's OWNER branch mc+0x13203b28. LOG-ONLY (identify the pump on Apk on Mac before
     // wiring the deliver-trap PC-redirect). __macapk_install_pump_capture positive-IDs `mov w8,wzr`
     // so a wrong addr / non-MCPE binary just refuses to arm. Overridable via MACAPK_PUMP_CAPTURE_ADDR.
     if (macapk_mcpe_probe_env("MACAPK_PUMP_CAPTURE") && dbg_name_ && std::strstr(dbg_name_, "minecraftpe")) {
@@ -6009,7 +6009,7 @@ bool Image::load_common() {
         __macapk_install_pump_capture(reinterpret_cast<void*>(b + off));
     }
     // DIAGNOSTIC (MACAPK_TRACE_CORO_STEP): trace the GS access-coroutine step mc+0xbcb9c38
-    // (state->vt+0x20) — logs thread + HTTP status per hit. Reveals, on a Mac.apk stall, which
+    // (state->vt+0x20) — logs thread + HTTP status per hit. Reveals, on a Apk on Mac stall, which
     // thread(s) run the coroutine and how far it gets before orphaning (vs emulator: all on MAIN).
     if (macapk_mcpe_probe_env("MACAPK_TRACE_CORO_STEP") && dbg_name_ && std::strstr(dbg_name_, "minecraftpe")) {
         uintptr_t b = reinterpret_cast<uintptr_t>(base_);
@@ -6019,7 +6019,7 @@ bool Image::load_common() {
         __macapk_install_coro_step_trace(reinterpret_cast<void*>(b + off));
     }
     // THE decisive 54%-stall diagnostic (MACAPK_TRACE_DISPATCH): trace MCPE's XTaskQueue
-    // dispatch-one-port driver mc+0xad773ac. Shows on a Mac.apk stall whether the Completion
+    // dispatch-one-port driver mc+0xad773ac. Shows on a Apk on Mac stall whether the Completion
     // port (port==1) is ever dispatched (it never is = the strand) vs the emulator (Thread-9
     // dispatches both ports -> deliver fires -> cross).
     // MACAPK_COMPLETION_PUMP = THE 54%-stall FIX (see bionic_shim.cpp completion-port pump):
@@ -6521,7 +6521,7 @@ extern "C" {
 // __macapk_arm64_unity_render_state runs only under MACAPK_REGISTERNATIVES_VERBATIM=0,
 // and is deleted after one clean fleet cycle. The original text follows.
 //
-// WHAT THIS FIXES. Mac.apk drives Unity's per-frame work by posting the
+// WHAT THIS FIXES. Apk on Mac drives Unity's per-frame work by posting the
 // APK's `nativeRender` (libunity export, body 0x8ac244) to UnityMain each
 // frame; that streamlined path runs the MonoBehaviour script-update +
 // render phases but OMITS the player-loop's Director nodes
@@ -6541,7 +6541,7 @@ extern "C" {
 // forcing the gate flag advances the splash, proving the missing evaluation
 // is the only blocker. The DirectorManager nodes ARE present in libunity but
 // are reached only via the runtime-built indirect player-loop fn-ptr
-// dispatch (no static caller), which Mac.apk's partial loop never walks.
+// dispatch (no static caller), which Apk on Mac's partial loop never walks.
 //
 // WHY THIS IS THE ENGINE-CORRECT FIX (not a per-APK hack). It replicates
 // EXACTLY the work the omitted player-loop Director nodes perform, for ANY
@@ -9215,8 +9215,8 @@ extern "C" void __macapk_arm64_unity_director_tick(double dt) {
 // engine's own executor runs it too.
 // Called from the nativeRender wrap once per frame on UnityMain (right after
 // the DirectorManager tick). Drives Unity's NATIVE COROUTINE PUMP --
-// DelayedCallManager::Update -- which Mac.apk's streamlined nativeRender loop
-// omits. Mac.apk drives nativeRender = a SUBSET of player-loop nodes (verified:
+// DelayedCallManager::Update -- which Apk on Mac's streamlined nativeRender loop
+// omits. Apk on Mac drives nativeRender = a SUBSET of player-loop nodes (verified:
 // RunOneFrame=0 / UpdatePreloading=0 calls per frame); the native
 // ScriptRunDelayedDynamicFrameRate node, which IS DelayedCallManager::Update, is
 // not among them. Without it, NO Unity coroutine ever resumes past a yield, so
@@ -9313,7 +9313,7 @@ extern "C" void __macapk_arm64_unity_coroutine_pump(double dt) {
 // D0 -- player-loop node census (MACAPK_PLOOP_CENSUS, diagnostic)
 // ===================================================================
 // The keystone measurement: which player-loop Update nodes does the reduced
-// nativeRender actually drive on THIS build/app, and which must Mac.apk drive?
+// nativeRender actually drive on THIS build/app, and which must Apk on Mac drive?
 // (Per-build: changelog v1.0.254 showed Crossy's engine ran BehaviourUpdate +
 // scene integration natively; do NOT extrapolate to 2022.3 builds.) Anchored on
 // the structurally-found Director node thunk, we map the whole flattened
@@ -9531,7 +9531,7 @@ extern "C" void __macapk_arm64_unity_ploop_census(double dt) {
 
 // SCENE INTEGRATION DRIVER (MACAPK_SCENE_INTEGRATE). Ground truth (v1.0.253):
 // the scene-dump shows a scene sitting at state 2 (Loaded, NOT Integrated) on
-// Mac.apk -- the async scene-load COMPLETED but the per-frame integration that
+// Apk on Mac -- the async scene-load COMPLETED but the per-frame integration that
 // flips it 2->3 (IntegrateMainThread -> SceneActivationPass -> AwakeFromLoad,
 // reached from nativeRender's worker on real Android) never runs, so its objects
 // never activate -> no boot -> no menu. This drives the engine's own
@@ -9566,7 +9566,7 @@ extern "C" void __macapk_arm64_unity_scene_integrate(double dt) {
     // ENGINE-CORRECT driver: PreloadManager::UpdatePreloadingSingleStep (0x720134)
     // -- the real per-frame preload/integration step the engine reaches from
     // nativeRender (0x711164 -> 0x710e88 -> 0x72a00c -> 0x720134 -> stepper 0x71f810
-    // -> IntegrateMainThread 0x71ec9c -> SceneActivationPass), which Mac.apk's
+    // -> IntegrateMainThread 0x71ec9c -> SceneActivationPass), which Apk on Mac's
     // streamlined nativeRender omits. It drains the load queues and integrates any
     // COMPLETED (state-2/Loaded) scene IN-CONTEXT (unlike the raw SceneActivationPass
     // which corrupted the manager). Signature: x0 = PreloadManager* = GetInstance()
@@ -9641,7 +9641,7 @@ extern "C" void __macapk_arm64_unity_scene_integrate(double dt) {
 //   [0x1713000+0xba8] = GfxDevice* (NULL => full path short-circuits to
 //                       present-only; needs nativeRecreateGfxState + a Surface)
 // Reading these confirms WHICH lifecycle/state gap (player not started, no
-// GfxDevice, stuck-paused) makes Mac.apk skip the full player loop -- the
+// GfxDevice, stuck-paused) makes Apk on Mac skip the full player loop -- the
 // engine-correct root, vs hand-calling internal passes. Pure read, no mutation,
 // libunity-only (inert on cocos).
 extern "C" void __macapk_arm64_unity_render_state(double dt) {
@@ -9675,7 +9675,7 @@ extern "C" void __macapk_arm64_unity_render_state(double dt) {
         // branch (0x8ac4c8), gated by the "integration pending" flag
         // [GfxState(*(base+0x16a2b60)) + 0x14c], which the player-loop frame fn
         // 0x710800 RAISES (strh #0x101) as part of its present/render-thread
-        // handshake. If Mac.apk's render interception prevents that handshake, the
+        // handshake. If Apk on Mac's render interception prevents that handshake, the
         // flag never flips to 0x101 -> the integration branch never runs ->
         // [go+0x46] stays 0 -> no activation -> no boot. Watch whether intPend ever
         // becomes nonzero (0x101). gfxstate==0 or intPend always 0 => the root.
@@ -10168,7 +10168,7 @@ void Image::install_il2cpp_time_probe() {
 //
 // Crossy Road / Unity render gate (fully root-caused, v1.0.172): the
 // data.unity3d archive's VFS device is mounted under the RELATIVE prefix
-// "assets/bin/Data" (Mac.apk's relative-asset path remap lets Unity's
+// "assets/bin/Data" (Apk on Mac's relative-asset path remap lets Unity's
 // relative open of data.unity3d succeed), and its node map is keyed by
 // BARE node names ("globalgamemanagers"). But Unity's path resolver
 // (GetResolvedPath, fn 0x8b51a4) ABSOLUTIZES the per-node load request --
@@ -10179,7 +10179,7 @@ void Image::install_il2cpp_time_probe() {
 // real-FS device, stats a non-existent loose file, and returns false ->
 // fatal "Unable to initialize the Unity Engine". On real Android the
 // archive mount and the node load share ONE apk-anchored base so they
-// never split; Mac.apk split them by mounting relative.
+// never split; Apk on Mac split them by mounting relative.
 //
 // FIX UNDER TEST: NOP the conditional branch at 0x8b521c in 0x8b51a4
 //   0x8b521c: tbz w0,#0x0, 0x8b5240   ; (path not absolute) -> prepend base
@@ -10188,7 +10188,7 @@ void Image::install_il2cpp_time_probe() {
 // ("assets/bin/Data/globalgamemanagers"). The archive then matches the
 // relative prefix, strips it to the bare key "globalgamemanagers", and the
 // node-map lookup hits -> the node is served from the mounted archive.
-// Mac.apk's path remap already resolves relative asset paths, so other
+// Apk on Mac's path remap already resolves relative asset paths, so other
 // (non-archive) relative paths still resolve.
 //
 // STATUS: env-gated validation (default OFF), libunity-only, hardcoded
@@ -10209,7 +10209,7 @@ void Image::apply_unity_path_noabs() {
     // RELATIVE ("assets/bin/Data/<node>") and matches the relative prefix the
     // data.unity3d archive VFS device is mounted under, so the archive claims
     // the load (engine-init no longer fails with "Unable to initialize the
-    // Unity Engine"). Mac.apk's path remap already resolves relative asset
+    // Unity Engine"). Apk on Mac's path remap already resolves relative asset
     // paths, so non-archive paths still resolve. Engine-level (any libunity),
     // no per-APK code. Kill-switch: MACAPK_UNITY_NOABS_OFF.
     static const uint8_t kSig[16] = {
@@ -10370,7 +10370,7 @@ void Image::apply_unity_swappy_present_fix() {
 // AudioTrack output init (file 0xe617c) reads *outputrate and never writes it,
 // and its only JNI query is Build.VERSION.SDK_INT.
 //
-// On Mac.apk the Bionic JNI variadic bridge (bionic_shim.cpp
+// On Apk on Mac the Bionic JNI variadic bridge (bionic_shim.cpp
 // macapk_jni_CallBooleanMethodV_shim -> bionic_pack_typed_args, installed for
 // every Stage-6 load) reads that va_list exactly the way ART's va_arg does.
 // Sites A and B PREDATE the bridge (c20c9434, 2026-05-16). They were written
@@ -10903,7 +10903,7 @@ void Image::apply_libfmod_jni_audio_args_patch() {
 // SECURITY NOTE. This disables stack-overflow detection for patched
 // functions. We accept that trade because:
 //   (a) the alternative is the library doesn't run at all,
-//   (b) Mac.apk runs only APKs the user has explicitly opened, not
+//   (b) Apk on Mac runs only APKs the user has explicitly opened, not
 //       arbitrary untrusted code,
 //   (c) macOS itself has stack guard pages independent of canaries.
 //
@@ -12073,7 +12073,7 @@ size_t Image::apply_stack_canary_neutralization_live(size_t* tp_zeroed_out) {
     // reload looks like a plain GP-register write, so without tracking the spill
     // the epilogue guard load `ldr Xt,[Xt,#0x28]` goes unpatched and faults
     // (TPIDR_EL0 is not the Bionic TLS base on macOS; reloaded TPIDR can be junk
-    // on a non-Mac.apk-spawned thread -- e.g. UnityMain is a JVM thread). One
+    // on a non-Apk on Mac-spawned thread -- e.g. UnityMain is a JVM thread). One
     // slot covers the common case (the compiler spills the guard register once).
     int tpidr_slot_off = -1;
     size_t patched = 0;
@@ -15140,7 +15140,7 @@ extern "C" const void* __macapk_arm64_native_image_base_for(const void* addr) {
 
 // Is this process running the Stage-6 arm64 path at all?
 //
-// Mac.apk extracts exactly ONE ABI per app (v758), so a given run is either
+// Apk on Mac extracts exactly ONE ABI per app (v758), so a given run is either
 // all-arm64 (Stage-6: the guest's original Android arm64 bytes execute) or
 // all-ARM32 (the lifter emits arm64-darwin code via clang). The two never mix.
 //

@@ -1,4 +1,4 @@
-// android.content.MacApkUriGrants -- Mac.apk's in-process stand-in for the URI-grant
+// android.content.MacApkUriGrants -- Apk on Mac's in-process stand-in for the URI-grant
 // half of system_server: UriGrantsManagerService plus its per-grant record
 // com.android.server.uri.UriPermission (android14-release,
 // services/core/java/com/android/server/uri/{UriGrantsManagerService,UriPermission}.java).

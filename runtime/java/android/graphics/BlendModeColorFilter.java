@@ -5,7 +5,7 @@
 // to tint their content. AOSP signature:
 //   BlendModeColorFilter(@ColorInt int color, @NonNull BlendMode mode)
 // We accept and store the values; the actual tint compositing
-// happens elsewhere (or not at all on Mac.apk -- many tinted
+// happens elsewhere (or not at all on Apk on Mac -- many tinted
 // drawables still render correctly via their underlying bitmap
 // without explicit tint application).
 package android.graphics;

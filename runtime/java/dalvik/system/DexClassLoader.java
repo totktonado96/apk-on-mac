@@ -3,7 +3,7 @@
 // to dynamically load plugins, ad-network adapters, or DRM-wrapped
 // code paths. Reaches through PathClassLoader in real AOSP.
 //
-// Mac.apk's ClassLoader hierarchy is OpenJDK's URLClassLoader chain. Loading
+// Apk on Mac's ClassLoader hierarchy is OpenJDK's URLClassLoader chain. Loading
 // from a .dex / .apk file requires a DEX->JVM-bytecode step; we run
 // com.macapk.dex (the same in-process converter the primary app dex uses) over
 // each supplied code path at construction time and serve the resulting jars

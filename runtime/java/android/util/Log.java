@@ -1,5 +1,5 @@
 // android.util.Log -- single, well-known logging entry point.
-// Delegates to Mac.apk's NativeLog so every line winds up on the same
+// Delegates to Apk on Mac's NativeLog so every line winds up on the same
 // printf path as our own internal traces.
 package android.util;
 
@@ -82,7 +82,7 @@ public final class Log {
     // SKIP building an expensive debug/verbose message:
     // `if (Log.isLoggable(TAG, Log.DEBUG)) Log.d(TAG, expensiveToString());`
     // -- every such app unconditionally did the expensive-message-
-    // construction work Mac.apk's stub always told it was wanted. Wiring
+    // construction work Apk on Mac's stub always told it was wanted. Wiring
     // this to the SAME MACAPK_LOG_LEVEL gate our own framework logging
     // already respects (NativeLog.isLoggable) is at least as permissive as
     // AOSP's real default (our default MIN_LEVEL=0 for CLI runs is MORE

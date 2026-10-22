@@ -4,7 +4,7 @@ import android.util.DisplayMetrics;
 import com.macapk.loader.NativeCocoa;
 public class Display {
     /** AOSP Display.FLAG_* (android-11.0.0_r48 core/java/android/view/Display.java).
-     *  Absent here, which stopped the window battery compiling at all. Mac.apk's
+     *  Absent here, which stopped the window battery compiling at all. Apk on Mac's
      *  single display is neither private nor round, so the flags are declared for
      *  the API surface and Display.getFlags() does not set them. */
     public static final int FLAG_PRIVATE = 1 << 2;
@@ -23,7 +23,7 @@ public class Display {
      *  reference capture does too. Reporting a product name instead is simply
      *  a wrong answer to a framework question. */
     public String getName()             { return "Built-in Screen"; }
-    /** AOSP: rotation relative to natural orientation. Mac.apk tracks
+    /** AOSP: rotation relative to natural orientation. Apk on Mac tracks
      *  orientation as landscape-vs-portrait only (cocoa_bridge.mm's
      *  g_phone_w/g_phone_h swap on CocoaApplyRequestedOrientation / the
      *  Cmd+R shortcut), not a true 4-way physical rotation, so this is the
@@ -366,7 +366,7 @@ public class Display {
     /**
      * The HDR formats this display can present, plus its luminance range.
      *
-     * A Mac.apk window composites through a standard CAMetalLayer with no HDR
+     * A Apk on Mac window composites through a standard CAMetalLayer with no HDR
      * pipeline, so the honest answer is the same one AOSP gives for an SDR
      * display: an empty supported-types array and INVALID_LUMINANCE. Video
      * players read getSupportedHdrTypes() and pick an SDR rendition, which is
@@ -432,7 +432,7 @@ public class Display {
     }
 
     /** AOSP Display.getShape (API 34): the physical outline of the display.
-     *  Mac.apk targets rectangular windows, so this is the rectangular (empty
+     *  Apk on Mac targets rectangular windows, so this is the rectangular (empty
      *  path) DisplayShape. */
     public android.view.DisplayShape getShape() { return android.view.DisplayShape.NONE; }
 

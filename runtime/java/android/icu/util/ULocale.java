@@ -3,7 +3,7 @@
 //   developer.android.com/reference/android/icu/util/ULocale
 //   final class ULocale implements Serializable, Comparable<ULocale>
 //
-// On Mac.apk every locale-aware operation ultimately resolves through the
+// On Apk on Mac every locale-aware operation ultimately resolves through the
 // JDK's java.util.Locale, so ULocale is an immutable wrapper that round-trips
 // to java.util.Locale. java.util.Locale already models everything ICU's
 // locale ID carries that a formatter can act on: BCP-47 language / script /

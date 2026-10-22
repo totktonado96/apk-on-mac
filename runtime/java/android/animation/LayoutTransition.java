@@ -18,7 +18,7 @@
 //
 // What is NOT implemented, deliberately and visibly: the CHANGE_APPEARING /
 // CHANGE_DISAPPEARING / CHANGING bounds animations. AOSP builds those in
-// setupChangeAnimation() out of ViewGroup internals Mac.apk does not have --
+// setupChangeAnimation() out of ViewGroup internals Apk on Mac does not have --
 // ViewGroup.requestTransitionStart() and ViewGroup.suppressLayout(), plus a
 // live View.addOnLayoutChangeListener (real since MACAPK_LAYOUT_CHANGE_LISTENERS, 2026-09-26) and a ViewTreeObserver
 // pre-draw pass. Faking the result would be worse than not running it: AOSP
@@ -449,7 +449,7 @@ public class LayoutTransition {
      * ViewGroup to defer the transition start via requestTransitionStart(),
      * (c) calling ViewGroup.suppressLayout() while the bounds animate, and
      * (d) cleaning the listeners up from a ViewTreeObserver pre-draw pass.
-     * Mac.apk's View.addOnLayoutChangeListener fires since
+     * Apk on Mac's View.addOnLayoutChangeListener fires since
      * MACAPK_LAYOUT_CHANGE_LISTENERS (2026-09-26), but ViewGroup has neither
      * requestTransitionStart nor suppressLayout, so there is still no way to
      * hold layout still while animating a bounds change.

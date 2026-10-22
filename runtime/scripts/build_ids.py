@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""build_ids.py -- Mac.apk's per-subsystem build identity (Contract 3).
+"""build_ids.py -- Apk on Mac's per-subsystem build identity (Contract 3).
 
 Prints KEY=value lines on stdout, one per identity, in a stable order:
 

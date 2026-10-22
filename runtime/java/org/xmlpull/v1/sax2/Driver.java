@@ -1,7 +1,7 @@
 /* -*-             c-basic-offset: 4; indent-tabs-mode: nil; -*-  //------100-columns-wide------>|*/
 // for license please see accompanying LICENSE.txt file (available also at http://www.xmlpull.org/)
 //
-// Mac.apk note: vendored VERBATIM from AOSP libcore
+// Apk on Mac note: vendored VERBATIM from AOSP libcore
 // xml/src/main/java/org/xmlpull/v1/sax2/Driver.java (the xmlpull.org
 // public-domain SAX2-over-XmlPullParser adapter). Real Android ships
 // this class in libcore; logback-android's SaxEventRecorder

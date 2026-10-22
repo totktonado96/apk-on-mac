@@ -8,11 +8,11 @@ import com.google.android.play.core.assetpacks.model.AssetPackStorageMethod;
 // uses it to resolve the bundle file. Abstract in Play Core; we mirror
 // path()/assetsPath()/packStorageMethod().
 //
-// TWO storage methods, and the distinction is load-bearing on Mac.apk:
+// TWO storage methods, and the distinction is load-bearing on Apk on Mac:
 //
 //   STORAGE_FILES -- the pack's assets are extracted to the filesystem and
 //   path()/assetsPath() return a real directory. Used for on-demand packs,
-//   whose bundles Mac.apk extracts under <dataDir>/aa/Android.
+//   whose bundles Apk on Mac extracts under <dataDir>/aa/Android.
 //
 //   APK_ASSETS -- the pack's assets live INSIDE an APK and must be read via
 //   the AssetManager; per the Play Core contract path()/assetsPath() are

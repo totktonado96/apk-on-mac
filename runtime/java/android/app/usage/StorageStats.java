@@ -1,6 +1,6 @@
 package android.app.usage;
 /** Storage usage totals for a package/user (app / data / cache bytes). API 26.
- *  Mac.apk reports the on-disk size of the app's private data tree; unmeasured
+ *  Apk on Mac reports the on-disk size of the app's private data tree; unmeasured
  *  fields report 0.
  *  Source: frameworks/base/core/java/android/app/usage/StorageStats.java */
 public final class StorageStats implements android.os.Parcelable {
@@ -34,10 +34,10 @@ public final class StorageStats implements android.os.Parcelable {
      *  data of the given type", one slice of getAppBytes(). AOSP validates the
      *  type and returns 0 for a type the measurement did not produce.
      *
-     *  Mac.apk's queryStatsForPackage measures the app's on-disk tree as a
+     *  Apk on Mac's queryStatsForPackage measures the app's on-disk tree as a
      *  whole, without separating dexopt artifacts, profiles, the APK, .dm files
      *  and native libs -- those categories describe how the ART/installd
-     *  pipeline lays an app out on a device, which is not how Mac.apk stores
+     *  pipeline lays an app out on a device, which is not how Apk on Mac stores
      *  one. So every type reports 0, which is AOSP's own answer for a data type
      *  the platform did not measure. Deliberately NOT getAppBytes() for one
      *  arbitrary type: an app summing the types would then double-count. */

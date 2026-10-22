@@ -362,7 +362,7 @@ public class AppOpsManager {
     // Proxy ops. A proxy op records that THIS app performed an operation on
     // behalf of another one; AOSP notes it against both identities and returns
     // MODE_IGNORED when the proxied (uid, package) pair does not check out
-    // (AppOpsManager.java L9345-9347, L9434-9436, L9442-9444). Mac.apk runs a
+    // (AppOpsManager.java L9345-9347, L9434-9436, L9442-9444). Apk on Mac runs a
     // single package in the process, so there is no second identity to
     // disagree with and the answer collapses to the plain note for the op.
     // ---------------------------------------------------------------------
@@ -398,7 +398,7 @@ public class AppOpsManager {
      *  providers call this with a caller-supplied package name to reject
      *  spoofing, so it has to be able to say no.
      *
-     *  Exactly one package exists in a Mac.apk process, and it owns
+     *  Exactly one package exists in a Apk on Mac process, and it owns
      *  Process.myUid(), so the package name is the part we can answer
      *  truthfully. The uid is only enforced when the caller passed a real app
      *  uid: Binder.getCallingUid() is inert (0) in this runtime, and callers
@@ -455,7 +455,7 @@ public class AppOpsManager {
         void onOpChanged(String op, String packageName);
         /** AOSP's API-36 device-aware overload, a DEFAULT method whose base body
          *  forwards to the two-argument form -- so an existing listener keeps
-         *  working while a device-aware one can override. Mac.apk hosts only the
+         *  working while a device-aware one can override. Apk on Mac hosts only the
          *  default device, so deviceId is always the default. */
         default void onOpChanged(String op, String packageName, int userId, String persistentDeviceId) {
             onOpChanged(op, packageName);
@@ -519,7 +519,7 @@ public class AppOpsManager {
     public interface OnOpActiveChangedListener {
         void onOpActiveChanged(String op, int uid, String packageName, boolean active);
         /** AOSP's API-36 device-aware overload, a DEFAULT method forwarding to
-         *  the four-argument form. Mac.apk hosts only the default device and one
+         *  the four-argument form. Apk on Mac hosts only the default device and one
          *  attribution, so the extra arguments carry no additional information. */
         default void onOpActiveChanged(String op, int uid, String packageName,
                 String attributionTag, int virtualDeviceId, boolean active,
@@ -618,7 +618,7 @@ public class AppOpsManager {
     // AOSP ref: frameworks/base/core/java/android/app/AppOpsManager.java
     // (android16-release). Every three-argument form above is DEPRECATED there
     // in favour of one of these, which additionally carry the attribution tag
-    // and a developer message for the noted-op log. Mac.apk keeps no per-op
+    // and a developer message for the noted-op log. Apk on Mac keeps no per-op
     // state and no attribution registry, so the extra arguments do not change
     // the answer -- but the descriptors must exist or an app compiled against
     // API 30+ takes a NoSuchMethodError on the modern spelling.
@@ -705,7 +705,7 @@ public class AppOpsManager {
 
     // ---- Noted-op callback (API 30) ----
     // AOSP routes every op noted BY this process through the registered
-    // callback, so an app can attribute its own private-data accesses. Mac.apk's
+    // callback, so an app can attribute its own private-data accesses. Apk on Mac's
     // note/check entry points above are pure functions of the op name -- no
     // system service records anything -- so there is no note stream to
     // subscribe to and the callback never fires. That is the same observable

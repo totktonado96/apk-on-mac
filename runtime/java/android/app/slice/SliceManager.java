@@ -1,5 +1,5 @@
 package android.app.slice;
-/** The Slice system service. Mac.apk pins/binds no slices, so it is inert.
+/** The Slice system service. Apk on Mac pins/binds no slices, so it is inert.
  *
  * AOSP's SliceManager (core/java/android/app/slice/SliceManager.java,
  * android16-release) is a CONCRETE class -- apps can be handed a live instance
@@ -23,7 +23,7 @@ public class SliceManager {
     // AOSP API-36 surface completion.
     // AOSP ref: frameworks/base/core/java/android/app/slice/SliceManager.java
     // (android16-release). Every method below reaches a SliceProvider through
-    // the ContentResolver. Mac.apk installs exactly one app and no slice host,
+    // the ContentResolver. Apk on Mac installs exactly one app and no slice host,
     // and nothing in the runtime ever pins or binds a slice -- so each answer
     // is AOSP's own "no provider answered" result, which is what a caller
     // already branches on.
@@ -102,7 +102,7 @@ public class SliceManager {
 
     /** AOSP checkSlicePermission(Uri, int pid, int uid): "@return
      *  PackageManager.PERMISSION_GRANTED if the pid/uid may access the uri."
-     *  Mac.apk runs one app in one process: the only pid/uid that can ask is
+     *  Apk on Mac runs one app in one process: the only pid/uid that can ask is
      *  the app's own, and an app always has access to its own slice -- which is
      *  the same verdict a device gives for a self-owned uri. */
     public int checkSlicePermission(android.net.Uri uri, int pid, int uid) {

@@ -1,5 +1,5 @@
 #!/bin/bash
-# debug/staleness.sh -- is anything on this machine running stale Mac.apk code?
+# debug/staleness.sh -- is anything on this machine running stale Apk on Mac code?
 #
 # One line per artifact, ~1s total, cheap enough for every session start
 # (scripts/doctor.sh runs it) and printed by scripts/rebuild_and_run.sh as its
@@ -17,7 +17,7 @@
 #   3. build-id.txt         recomputes every id from the staged artifacts and
 #                           compares (catches staging that bypassed
 #                           runtime/scripts/build.sh)
-#   4. BUNDLES              dev build/Mac.apk.app and the canonical installed
+#   4. BUNDLES              dev build/Apk on Mac.app and the canonical installed
 #                           app vs the repo: build-id string compare, runtime
 #                           binary __TEXT compare, AND the three SWIFT
 #                           execution surfaces (Contents/MacOS/MacApk, the GUI;
@@ -28,7 +28,7 @@
 #                           copy of the stub at Contents/MacOS/<exec>; compared
 #                           to the canonical template BY CONTENT
 #   6. SHARED RUNTIME       the copy installed apps actually EXECUTE, at
-#                           ~/Library/Application Support/Mac.apk/runtime --
+#                           ~/Library/Application Support/Apk on Mac/runtime --
 #                           asked of macapk-installhelper, never recomputed here
 #   7. PER-APP CACHES       cached classes.jar carrying a JAVA_ID that no
 #                           longer matches (third field of .source-mtime),
@@ -93,7 +93,7 @@
 # anything). Check 2 now derives each target's real source list from the
 # CMakeLists.txt files themselves (cmake_block_sources / cmake_var_sources,
 # defined below) instead of a hand-maintained filename pattern -- see the
-# derivation block right above the "== Mac.apk staleness ==" banner.
+# derivation block right above the "== Apk on Mac staleness ==" banner.
 
 set -u
 
@@ -103,8 +103,8 @@ BIN="$BUILD/bin"
 LIB="$BUILD/lib"
 NATIVE_BUILD="$BUILD/native"
 TR_BUILD="$REPO/runtime/translator/build"
-DEV_APP="$REPO/build/Mac.apk.app"
-CANONICAL="${MACAPK_CANONICAL_APP:-/Applications/Mac.apk.app}"
+DEV_APP="$REPO/build/Apk on Mac.app"
+CANONICAL="${MACAPK_CANONICAL_APP:-/Applications/Apk on Mac.app}"
 DATA_ROOT="${AB_SCRATCH_ROOT:-${MACAPK_ANDROID_ROOT:-$HOME/Library/Caches/MacApk/scratch}}/android/data/data"
 
 QUIET=0; STRICT=0
@@ -352,7 +352,7 @@ target_newer_source() {
     return 1
 }
 
-[ "$QUIET" -eq 1 ] || echo "== Mac.apk staleness =="
+[ "$QUIET" -eq 1 ] || echo "== Apk on Mac staleness =="
 
 # ---- 1. staged vs built ----------------------------------------------------
 if [ ! -x "$BIN/macapk-runtime" ]; then
@@ -392,7 +392,7 @@ else
     # because it trains you to ignore the one time it's right; a freshness
     # tool that misses a real dependency is worse still, because it's the
     # exact "NEW code, OLD artifact, GREEN result" failure this script exists
-    # to catch. See the derivation block above the "== Mac.apk staleness =="
+    # to catch. See the derivation block above the "== Apk on Mac staleness =="
     # banner for the incident (arm64_native.cpp) that made both mistakes at
     # once, in these same two rows.
     if [ -f "$BIN/macapk-runtime" ]; then
@@ -620,7 +620,7 @@ else
             done
         fi
     }
-    check_bundle "$DEV_APP" "dev bundle (build/Mac.apk.app)"
+    check_bundle "$DEV_APP" "dev bundle (build/Apk on Mac.app)"
     check_bundle "$CANONICAL" "canonical app ($CANONICAL)"
     if [ ! -d "$DEV_APP" ] && [ ! -d "$CANONICAL" ]; then
         note "no launcher bundle anywhere (scripts/rebuild_and_run.sh builds + promotes one)"
@@ -686,8 +686,8 @@ check_app_stubs() {
 
 # ---- 6. the SHARED RUNTIME (the copy installed apps actually EXECUTE) -------
 # An installed app's Contents/MacOS/<exec> is a symlink into
-# ~/Library/Application Support/Mac.apk/runtime (RuntimeInstall.stagedRoot) --
-# never into this repo and never into Mac.apk.app. MEASURED 2026-08-19: nothing
+# ~/Library/Application Support/Apk on Mac/runtime (RuntimeInstall.stagedRoot) --
+# never into this repo and never into Apk on Mac.app. MEASURED 2026-08-19: nothing
 # on any build path wrote that root; its only automatic refresh was a guest app
 # launching. v1.0.998 was promoted at ~00:44 and the staged root still held
 # v1.0.997 at 09:15, while THIS SCRIPT said FRESH throughout -- because it
@@ -713,12 +713,12 @@ check_staged_runtime() {
     case "$js" in
         *'"removedByUser":"true"'*)
             # A deliberate user action (Runtime: Uninstall), not staleness.
-            note "the shared runtime is UNINSTALLED (Runtime: Uninstall was pressed) -- installed apps cannot launch until you reinstall it from Mac.apk"
+            note "the shared runtime is UNINSTALLED (Runtime: Uninstall was pressed) -- installed apps cannot launch until you reinstall it from Apk on Mac"
             return 0 ;;
     esac
     case "$js" in
         *'"installed":"false"'*)
-            stale "the SHARED RUNTIME is not installed -- every installed app would fail to launch; run scripts/rebuild_and_run.sh (or Mac.apk > Runtime: Install)"
+            stale "the SHARED RUNTIME is not installed -- every installed app would fail to launch; run scripts/rebuild_and_run.sh (or Apk on Mac > Runtime: Install)"
             return 0 ;;
     esac
     case "$js" in

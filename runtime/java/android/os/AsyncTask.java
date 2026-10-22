@@ -2,7 +2,7 @@
 // post results back to it" helper. We back it with a small fixed
 // thread pool plus the runtime's main-thread Handler. Most apps use
 // this for one-shot network/disk fetches that we don't actually want
-// to perform (no real network/disk side-effects in Mac.apk) -- but the
+// to perform (no real network/disk side-effects in Apk on Mac) -- but the
 // class still has to exist on the classpath so the verifier can link
 // callers, and the lifecycle methods need to fire so apps don't hang
 // waiting for results.
@@ -22,7 +22,7 @@ public abstract class AsyncTask<Params, Progress, Result> {
     public enum Status { PENDING, RUNNING, FINISHED }
 
     public static final Executor SERIAL_EXECUTOR     = Executors.newSingleThreadExecutor(r -> {
-        Thread t = new Thread(r, "Mac.apk-AsyncTask-Serial");
+        Thread t = new Thread(r, "Apk on Mac-AsyncTask-Serial");
         t.setDaemon(true);
         return t;
     });
@@ -58,14 +58,14 @@ public abstract class AsyncTask<Params, Progress, Result> {
             new RejectedExecutionHandler() {
         @Override public void rejectedExecution(Runnable r, ThreadPoolExecutor e) {
             com.macapk.loader.NativeLog.w(
-                "Mac.apk.AsyncTask", "Exceeded ThreadPoolExecutor pool size");
+                "Apk on Mac.AsyncTask", "Exceeded ThreadPoolExecutor pool size");
             synchronized (this) {
                 if (sBackupExecutor == null) {
                     sBackupExecutorQueue = new LinkedBlockingQueue<>();
                     sBackupExecutor = new ThreadPoolExecutor(
                         BACKUP_POOL_SIZE, BACKUP_POOL_SIZE, KEEP_ALIVE_SECONDS,
                         TimeUnit.SECONDS, sBackupExecutorQueue, backupThread -> {
-                            Thread t = new Thread(backupThread, "Mac.apk-AsyncTask-Backup");
+                            Thread t = new Thread(backupThread, "Apk on Mac-AsyncTask-Backup");
                             t.setDaemon(true);
                             return t;
                         });
@@ -81,7 +81,7 @@ public abstract class AsyncTask<Params, Progress, Result> {
         ThreadPoolExecutor tpe = new ThreadPoolExecutor(
             CORE_POOL_SIZE, MAXIMUM_POOL_SIZE, KEEP_ALIVE_SECONDS, TimeUnit.SECONDS,
             new SynchronousQueue<>(), r -> {
-                Thread t = new Thread(r, "Mac.apk-AsyncTask-Pool");
+                Thread t = new Thread(r, "Apk on Mac-AsyncTask-Pool");
                 t.setDaemon(true);
                 return t;
             });
@@ -197,7 +197,7 @@ public abstract class AsyncTask<Params, Progress, Result> {
                 try {
                     java.io.StringWriter sw = new java.io.StringWriter();
                     t.printStackTrace(new java.io.PrintWriter(sw));
-                    com.macapk.loader.NativeLog.w("Mac.apk.AsyncTask",
+                    com.macapk.loader.NativeLog.w("Apk on Mac.AsyncTask",
                         "doInBackground threw in "
                         + getClass().getName() + ": " + t + "\n" + sw);
                 } catch (Throwable ignored) {}

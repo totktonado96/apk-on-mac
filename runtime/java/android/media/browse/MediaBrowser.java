@@ -1,7 +1,7 @@
 // android.media.browse.MediaBrowser -- client for browsing a MediaBrowserService's
 // content tree. AOSP frameworks/base media/java/android/media/browse/MediaBrowser.java.
 //
-// Mac.apk has no MediaBrowserService binding mechanism (no Binder IPC), so a
+// Apk on Mac has no MediaBrowserService binding mechanism (no Binder IPC), so a
 // connect() attempt fails cleanly via onConnectionFailed and subscribe()/getItem
 // report no children/null item. The class links so apps that construct a browser
 // (Android Auto / Wear media clients) run without a NoSuchMethodError; there is

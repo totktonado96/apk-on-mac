@@ -7,7 +7,7 @@ import java.util.UUID;
 /**
  * DRM plugin interface (Widevine, PlayReady, ClearKey).
  *
- * Mac.apk has no DRM plugin of any kind. AOSP's contract for a scheme the
+ * Apk on Mac has no DRM plugin of any kind. AOSP's contract for a scheme the
  * device cannot service is an UnsupportedSchemeException from the constructor,
  * and that is what we do -- this is a real device state (many Android TV boxes
  * and all AOSP-without-Widevine builds behave identically), and ExoPlayer /

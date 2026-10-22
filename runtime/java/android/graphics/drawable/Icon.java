@@ -53,7 +53,7 @@ public class Icon implements android.os.Parcelable {
                 // Bitmap.writeToParcel's existing behaviour, not something this
                 // change introduces), so an Icon carrying one does not survive a
                 // cross-process hop. It survives an in-process round trip, which
-                // is the only kind Mac.apk has.
+                // is the only kind Apk on Mac has.
                 dest.writeParcelable(bitmap, flags);
                 break;
             case TYPE_RESOURCE:

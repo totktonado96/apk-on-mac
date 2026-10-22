@@ -62,7 +62,7 @@
 // hidden via FragmentTransaction.hide(), and once their views existed the
 // no-op drew all four ON TOP of the game board simultaneously.
 //
-// Intentionally still not implemented (no consumer on Mac.apk has needed
+// Intentionally still not implemented (no consumer on Apk on Mac has needed
 // them): the back stack (popBackStack is a logged no-op), detach()/attach()
 // (still no-ops -- Fragment's detached field has no setter), fragment
 // animations/transitions, and saved-instance state. Extend toward AOSP when an
@@ -83,7 +83,7 @@ import java.util.List;
 import java.util.Map;
 
 public class FragmentManagerImpl extends FragmentManager implements LayoutInflater.Factory2 {
-    private static final String TAG = "Mac.apk.FragmentManagerImpl";
+    private static final String TAG = "Apk on Mac.FragmentManagerImpl";
 
     // Fragment states, mirroring AOSP's Fragment.INITIALIZING/CREATED/
     // ACTIVITY_CREATED/STARTED/RESUMED ordering. Public (AOSP keeps them
@@ -115,7 +115,7 @@ public class FragmentManagerImpl extends FragmentManager implements LayoutInflat
         this.curState = initialState;
     }
 
-    // ---- host lifecycle dispatch (ActivityHost is Mac.apk's
+    // ---- host lifecycle dispatch (ActivityHost is Apk on Mac's
     // ActivityThread analogue and calls these after each activity
     // lifecycle phase, exactly as AOSP Activity.performStart/-Resume
     // call mFragments.dispatchStart()/dispatchResume()) ----
@@ -609,7 +609,7 @@ public class FragmentManagerImpl extends FragmentManager implements LayoutInflat
 
     /** AOSP FragmentManagerImpl.completeShowHideFragment (FragmentManager.java
      *  :1512-1560) -- the animation-free branch (:1546-1549), which is the only
-     *  one Mac.apk needs since it runs no fragment animations:
+     *  one Apk on Mac needs since it runs no fragment animations:
      *      final int visibility = fragment.mHidden && !fragment.isHideReplaced()
      *              ? View.GONE : View.VISIBLE;
      *      fragment.mView.setVisibility(visibility);
@@ -632,7 +632,7 @@ public class FragmentManagerImpl extends FragmentManager implements LayoutInflat
     }
 
     /** AOSP FragmentManager.java:1380-1428 -- the ACTIVITY_CREATED -> CREATED
-     *  half. Animations are omitted (Mac.apk runs no fragment transitions), so
+     *  half. Animations are omitted (Apk on Mac runs no fragment transitions), so
      *  this is the animation-free path: performDestroyView, remove from the
      *  container, null mContainer/mView/mInLayout. */
     private void destroyFragmentView(Fragment f) {
@@ -705,7 +705,7 @@ public class FragmentManagerImpl extends FragmentManager implements LayoutInflat
      *
      *  DEVIATIONS, both deliberate and both narrow:
      *  - attribute reading. AOSP reads android:name/id/tag through
-     *    obtainStyledAttributes(R.styleable.Fragment). Mac.apk cannot map
+     *    obtainStyledAttributes(R.styleable.Fragment). Apk on Mac cannot map
      *    framework attr ids back to the DOM (the long-standing gap noted at
      *    Resources.java:651), so we read the same three attributes straight off
      *    the DOM-backed AttributeSet. Same values, different accessor.
@@ -792,7 +792,7 @@ public class FragmentManagerImpl extends FragmentManager implements LayoutInflat
 
         // AOSP:3583-3591 -- "If we haven't finished entering the CREATED state
         // ourselves yet, push the inflated child fragment along." This is the
-        // normal Mac.apk case: setContentView runs inside the app's onCreate,
+        // normal Apk on Mac case: setContentView runs inside the app's onCreate,
         // before ActivityHost dispatches ACTIVITY_CREATED, so curState is still
         // INITIALIZING and the fragment must be walked to CREATED on its own for
         // ensureInflatedFragmentView to make its view.
@@ -841,7 +841,7 @@ public class FragmentManagerImpl extends FragmentManager implements LayoutInflat
         for (Fragment f : added) if (tag.equals(f.getTag())) return f;
         return null;
     }
-    // Back stack: not implemented (no Mac.apk consumer yet). Transactions
+    // Back stack: not implemented (no Apk on Mac consumer yet). Transactions
     // that call addToBackStack still execute their ops; popping is a no-op.
     @Override public void popBackStack() {}
     @Override public boolean popBackStackImmediate() { return false; }
@@ -950,7 +950,7 @@ public class FragmentManagerImpl extends FragmentManager implements LayoutInflat
 
     /** AOSP isStateSaved(): true between the host's onSaveInstanceState and its
      *  next onStart -- the window in which a commit() would be lost and AOSP
-     *  throws IllegalStateException. Mac.apk never destroys and recreates an
+     *  throws IllegalStateException. Apk on Mac never destroys and recreates an
      *  Activity instance (see Activity.java's ManagedDialog note), so the host
      *  never saves state that a later instance restores, and the answer is
      *  false right up until the manager is destroyed. Reporting a spurious true

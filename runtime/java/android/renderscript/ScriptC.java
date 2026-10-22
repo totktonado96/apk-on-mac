@@ -10,7 +10,7 @@ import android.content.res.Resources;
  * pretending. A .rs file is compiled by slang into LLVM BITCODE, shipped inside
  * the APK as a raw resource, and JIT-compiled at runtime by bcc (or run through
  * the CPU reference interpreter). Executing it therefore needs an LLVM bitcode
- * engine that understands the RenderScript runtime ABI. Mac.apk has no such
+ * engine that understands the RenderScript runtime ABI. Apk on Mac has no such
  * engine, and inventing one is a different project.
  *
  * The alternatives were considered and rejected:
@@ -38,7 +38,7 @@ public class ScriptC extends Script {
     private static final String NO_ENGINE =
             "This app ships a compiled RenderScript kernel (.rs source compiled to LLVM"
             + " bitcode by slang). Executing one needs the RenderScript bitcode engine,"
-            + " which Mac.apk does not have. The built-in ScriptIntrinsic kernels (blur,"
+            + " which Apk on Mac does not have. The built-in ScriptIntrinsic kernels (blur,"
             + " colour matrix, convolve, LUT, blend, resize, YUV, histogram) ARE"
             + " implemented and run on the CPU.";
 

@@ -1,7 +1,7 @@
 // android.app.Notification -- system notification descriptor. AOSP
 // API-1+ (extensively extended in subsequent APIs). F-Droid uses
 // this for foreground-service ongoing notifications + update-ready
-// alerts. Stubbed; Mac.apk doesn't show Android notifications, but
+// alerts. Stubbed; Apk on Mac doesn't show Android notifications, but
 // the class must exist + be constructible to satisfy app code.
 package android.app;
 
@@ -107,7 +107,7 @@ public class Notification implements android.os.Parcelable {
      *  (a CoroutineWorker's foreground-info construction); the worker
      *  fails on its very first invocation. We provide the public
      *  fields with reasonable defaults; the values are never read
-     *  by Mac.apk since we don't actually display Android
+     *  by Apk on Mac since we don't actually display Android
      *  notifications, but the JVM verifier resolves the field
      *  symbols at class link time. */
     public int iconLevel;
@@ -178,7 +178,7 @@ public class Notification implements android.os.Parcelable {
     // properties via these JNI methods when it reconstructs a scheduled
     // notification; a missing getter throws NoSuchMethodError and fails
     // the plugin's init stage (Subway: getGroup() was the next blocker
-    // after EXTRA_TITLE). The values mirror the public fields; Mac.apk
+    // after EXTRA_TITLE). The values mirror the public fields; Apk on Mac
     // does not display Android notifications, so they are reconstruction
     // bookkeeping only.
     public String getGroup()              { return group; }
@@ -629,7 +629,7 @@ public class Notification implements android.os.Parcelable {
         // setContent first (pre-API-24 path) and then through the
         // setCustom* variants (post-API-24); both code paths must
         // resolve at class-link time. The values aren't used since
-        // Mac.apk doesn't render system notifications -- the methods
+        // Apk on Mac doesn't render system notifications -- the methods
         // just need to exist.
         private android.widget.RemoteViews mContentView, mBigContentView, mHeadsUpContentView, mTickerView;
         public Builder setContent(android.widget.RemoteViews views) { mContentView = views; return this; }
@@ -766,7 +766,7 @@ public class Notification implements android.os.Parcelable {
         }
 
         /** AOSP Style.getStandardView(int layoutId): builds the platform's
-         *  standard RemoteViews for this style. Mac.apk renders no notification
+         *  standard RemoteViews for this style. Apk on Mac renders no notification
          *  at all -- there is no shade to inflate a RemoteViews into (see the
          *  class comment) -- so there is no standard view to hand back, and AOSP
          *  itself returns whatever the builder produced, which is nothing here.
@@ -775,7 +775,7 @@ public class Notification implements android.os.Parcelable {
         protected android.widget.RemoteViews getStandardView(int layoutId) { return null; }
     }
     /** Notification.ProgressStyle (API 36): a segmented progress bar (e.g. a
-     *  rideshare / delivery tracker). Mac.apk has no notification shade, so the
+     *  rideshare / delivery tracker). Apk on Mac has no notification shade, so the
      *  style builds an ordinary Notification; the segment/point holders exist so
      *  an app that composes one compiles and round-trips.
      *  Source: frameworks/base/core/java/android/app/Notification.java */
@@ -1382,7 +1382,7 @@ public class Notification implements android.os.Parcelable {
         // ---- AOSP API-36 surface completion ----
         // AOSP's FLAG_SUPPRESSABLE_BUBBLE (0x00000004) marks a bubble the system
         // is ALLOWED to hide while the app is in the foreground;
-        // isBubbleSuppressed() then reports whether it currently is. Mac.apk
+        // isBubbleSuppressed() then reports whether it currently is. Apk on Mac
         // renders no bubbles at all (NotificationManager.areBubblesEnabled is
         // false), so nothing is ever suppressed -- but the app-set FLAG must
         // round-trip through the Builder.

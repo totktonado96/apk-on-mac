@@ -59,7 +59,7 @@ public interface Menu {
 
     // -- addIntentOptions: AOSP queries PackageManager for activities
     // matching `intent`/`specifics` and adds one MenuItem per match,
-    // returning the count added. Mac.apk has no such query path exposed
+    // returning the count added. Apk on Mac has no such query path exposed
     // to a generic interface default; the honest answer for "how many
     // matching activities did you find" without running one is zero,
     // matching the real contract's return value when nothing matches.

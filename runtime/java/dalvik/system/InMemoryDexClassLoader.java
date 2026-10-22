@@ -10,7 +10,7 @@
 //   public InMemoryDexClassLoader(ByteBuffer dexBuffer, ClassLoader parent)      // single-buffer convenience
 // extends BaseDexClassLoader.
 //
-// ART maps the buffers as in-memory dex files. Mac.apk has no DEX interpreter,
+// ART maps the buffers as in-memory dex files. Apk on Mac has no DEX interpreter,
 // so we run com.macapk.dex (the same DEX->JVM-bytecode converter used for the
 // primary app dex) over all the buffers together, in memory, and serve the
 // resulting jar through the BaseDexClassLoader URL chain. That jar is

@@ -12,7 +12,7 @@
 // ★ WHAT CHANGED HERE (this file used to be 110 lines of honest stubs).
 //
 // The old file carried a "KNOWN GAP" note saying addPreferencesFromResource was
-// a deliberate no-op because "Mac.apk has neither the inflater nor the
+// a deliberate no-op because "Apk on Mac has neither the inflater nor the
 // preference list host ... a PreferenceActivity subclass gets an empty settings
 // screen", and that faking findPreference() would be worse than an empty screen.
 // That reasoning was right at the time and is now obsolete on both counts:
@@ -31,7 +31,7 @@
 //     instantiation path working.
 //  2. AOSP's two-pane layout comes from com.android.internal.R.layout
 //     .preference_list_content, with ids prefs / headers / list_footer /
-//     prefs_frame. Mac.apk has no internal layouts, so the same STRUCTURE is
+//     prefs_frame. Apk on Mac has no internal layouts, so the same STRUCTURE is
 //     built programmatically, carrying the frozen AOSP public ids where app
 //     code looks them up (android.R.id.list, android.R.id.title).
 //  3. showBreadCrumbs uses setTitle rather than a FragmentBreadCrumbs widget,
@@ -177,7 +177,7 @@ public class PreferenceActivity extends android.app.ListActivity
         super.onDestroy();
     }
 
-    /** AOSP declares this `protected`; Mac.apk's android.app.Activity declares
+    /** AOSP declares this `protected`; Apk on Mac's android.app.Activity declares
      *  it `public`, and Java forbids narrowing an override. Divergence is in
      *  Activity, not here. */
     @Override
@@ -326,7 +326,7 @@ public class PreferenceActivity extends android.app.ListActivity
 
     /** AOSP: whether to show headers and a fragment side by side.
      *  AOSP reads com.android.internal.R.bool.preferences_prefer_dual_pane,
-     *  which is true only on large screens. Mac.apk windows are phone-shaped by
+     *  which is true only on large screens. Apk on Mac windows are phone-shaped by
      *  default, and the value is a resource we do not have, so this answers
      *  false -- the single-pane behaviour every phone reports. A subclass that
      *  wants two panes overrides this, which is the documented way. */
@@ -784,7 +784,7 @@ public class PreferenceActivity extends android.app.ListActivity
         }
 
         /** AOSP writes the CharSequences through TextUtils.writeToParcel, which
-         *  preserves spans. Mac.apk's TextUtils has that pair, so it is used;
+         *  preserves spans. Apk on Mac's TextUtils has that pair, so it is used;
          *  the field ORDER is AOSP's, so a Parcel written here is readable by
          *  the reader below and vice versa. */
         @Override

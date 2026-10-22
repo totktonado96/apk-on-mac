@@ -1,7 +1,7 @@
 // android.icu.util.TimeZone -- ICU4J's TimeZone (the platform android.icu.* one,
 // API 24+). Published API: developer.android.com/reference/android/icu/util/TimeZone
 //
-// On Mac.apk every time-zone operation resolves through the JDK's
+// On Apk on Mac every time-zone operation resolves through the JDK's
 // java.util.TimeZone, so this is a thin concrete wrapper that round-trips to a
 // java.util.TimeZone delegate (mirroring how android.icu.util.ULocale wraps
 // java.util.Locale). It was a NoClassDefFoundError blocker: duolingo's

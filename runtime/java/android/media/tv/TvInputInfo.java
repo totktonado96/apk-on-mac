@@ -9,7 +9,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 /**
- * Description of one TV input. No TV inputs exist on this platform -- Mac.apk is
+ * Description of one TV input. No TV inputs exist on this platform -- Apk on Mac is
  * not a TV device, and TvInputManager reports an empty input list, which is what
  * AOSP reports on any phone or tablet -- so an app never receives a populated
  * instance. The full accessor surface is still implemented because an app that

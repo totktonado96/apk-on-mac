@@ -13,7 +13,7 @@
 //     thread can construct a Handler on it without racing)
 //   - quit() / quitSafely() tear down the Looper
 //
-// Mac.apk's android.os.Looper / android.os.Handler implement enough
+// Apk on Mac's android.os.Looper / android.os.Handler implement enough
 // of the Looper contract for posted Runnables to dispatch on the
 // owning thread. HandlerThread on top of those is straightforward.
 package android.os;
@@ -116,7 +116,7 @@ public class HandlerThread extends Thread {
         return true;
     }
     /** AOSP HandlerThread.getThreadId(): returns the tid captured inside
-     *  run() via Process.myTid() (-1 before the thread runs). Mac.apk's
+     *  run() via Process.myTid() (-1 before the thread runs). Apk on Mac's
      *  Process.myTid() returns the Java thread id of the running thread (no
      *  real Linux tid without native), but the AOSP STRUCTURE holds: the
      *  value is THIS HandlerThread's id, captured on its own thread, not the

@@ -9,7 +9,7 @@
 // and AOSP keeps it in exactly these fields. So the mutators really do move the
 // state here and the accessors really do report it: an app that adds two
 // Connections and asserts getConnections().size() == 2 behaves the same on
-// Mac.apk as on Android. addConnection() also sets the child Connection's
+// Apk on Mac as on Android. addConnection() also sets the child Connection's
 // back-pointer, so getConference() on the child answers correctly -- AOSP's
 // own bidirectional bookkeeping.
 //

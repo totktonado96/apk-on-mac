@@ -4,7 +4,7 @@
 //
 // AOSP ref:
 //   frameworks/base/core/java/android/content/pm/InstrumentationInfo.java
-// AOSP: InstrumentationInfo extends PackageItemInfo. Mac.apk does not run
+// AOSP: InstrumentationInfo extends PackageItemInfo. Apk on Mac does not run
 // instrumentation tests, but the class must exist (and carry its public
 // fields) so apps/SDKs that enumerate it do not hit NoClassDefFoundError /
 // NoSuchFieldError.

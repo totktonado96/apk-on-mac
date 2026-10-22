@@ -37,7 +37,7 @@ public interface IBinder {
 
     /** AOSP :458 / :481 -- both are `default` methods that
      *  `throw new UnsupportedOperationException()`, documented "if the kernel
-     *  binder driver does not support this feature". Mac.apk has no binder
+     *  binder driver does not support this feature". Apk on Mac has no binder
      *  driver at all, so that is exactly our case; keep the throw rather than
      *  silently accepting a registration whose callback would never fire. */
     default void addFrozenStateChangeCallback(java.util.concurrent.Executor executor,

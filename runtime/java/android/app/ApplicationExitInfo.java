@@ -13,7 +13,7 @@
 // This is the real data class: fields, AOSP's getters, the REASON_/SUBREASON_
 // constant sets, and Parcelable. It is deliberately a pure value object -- the
 // records themselves are produced by the caller that queries the exit history.
-// Mac.apk keeps no persistent process-exit history yet, so
+// Apk on Mac keeps no persistent process-exit history yet, so
 // ActivityManager.getHistoricalProcessExitReasons() is still missing; see the
 // AOSP-conformance follow-up. Populating a record uses the same public setters
 // AOSP exposes (they are @hide there, but public, and the platform's own

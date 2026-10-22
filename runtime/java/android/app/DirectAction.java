@@ -1,5 +1,5 @@
 package android.app;
-/** A voice-assistant direct action an activity exposes (API 29). Mac.apk has no
+/** A voice-assistant direct action an activity exposes (API 29). Apk on Mac has no
  *  assistant, so one is built but never invoked.
  *  Source: frameworks/base/core/java/android/app/DirectAction.java
  *

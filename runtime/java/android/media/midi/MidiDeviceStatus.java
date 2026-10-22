@@ -1,5 +1,5 @@
 package android.media.midi;
-/** The open/closed state of one MIDI device's ports. Mac.apk exposes no MIDI
+/** The open/closed state of one MIDI device's ports. Apk on Mac exposes no MIDI
  *  devices, so an instance is never produced and every port reads as closed.
  *  Source: frameworks/base/media/java/android/media/midi/MidiDeviceStatus.java */
 public final class MidiDeviceStatus implements android.os.Parcelable {

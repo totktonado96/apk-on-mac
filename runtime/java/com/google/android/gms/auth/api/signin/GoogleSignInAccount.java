@@ -11,7 +11,7 @@ import java.util.Set;
 
 // com.google.android.gms.auth.api.signin.GoogleSignInAccount -- the value object
 // describing a signed-in Google account. On a de-Googled / no-Play-services
-// device (Mac.apk's policy) there is NEVER a real signed-in account: the
+// device (Apk on Mac's policy) there is NEVER a real signed-in account: the
 // GoogleSignIn entry points return null / fail their Tasks with
 // SIGN_IN_REQUIRED, so the framework itself never manufactures a populated
 // instance. We still ship the full getter surface so apps that hold a reference

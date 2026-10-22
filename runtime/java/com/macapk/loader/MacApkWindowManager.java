@@ -1,6 +1,6 @@
 // MacApkWindowManager -- thin concrete impl of android.view.WindowManager.
 //
-// v1.0.691: addView/removeView/updateViewLayout are no longer no-ops. Mac.apk
+// v1.0.691: addView/removeView/updateViewLayout are no longer no-ops. Apk on Mac
 // owns ONE NSWindow, so a floating window (Dialog / PopupWindow / PopupMenu /
 // Spinner dropdown / AutoComplete suggestions) is registered in
 // WindowOverlayStack and composited over the Activity content view by

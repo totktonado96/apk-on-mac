@@ -51,7 +51,7 @@ public final class Outline {
      *  discardDisplayList()s it (it expects a re-record that clips by path),
      *  and this Compose build never re-records a discarded node by itself, so the
      *  whole layer drew nothing: Rhythm's Settings and Now Playing screens (a
-     *  path-shaped Surface) were blank on Mac.apk, never on an API 33+ device.
+     *  path-shaped Surface) were blank on Apk on Mac, never on an API 33+ device.
      *  Our clipToOutline already clips by path (RenderNode.macapkApplyOutlineClip
      *  and View's outline clip), so the 33+ answer is honoured end to end. */
     public boolean canClip() {
@@ -126,7 +126,7 @@ public final class Outline {
         else if (mMode == MODE_PATH && mPath != null) mPath.offset(dx, dy);
     }
 
-    /** Mac.apk runtime helper (not AOSP): realize the recorded outline
+    /** Apk on Mac runtime helper (not AOSP): realize the recorded outline
      *  as a clip Path in the view's local coords. Returns null for an
      *  empty outline. View.draw clips to this when clipToOutline is on. */
     public Path macapkClipPath() {

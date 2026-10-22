@@ -35,7 +35,7 @@ import java.util.Properties;
 public final class ArrowPad {
     private ArrowPad() {}
 
-    private static final String TAG = "Mac.apk.ArrowPad";
+    private static final String TAG = "Apk on Mac.ArrowPad";
 
     /** The controller's name: deliberately NOT containing "keyboard", which
      *  Rewired filters out of its joystick list. */
@@ -156,7 +156,7 @@ public final class ArrowPad {
 
     private static File storeFile() {
         return new File(System.getProperty("user.home")
-            + "/Library/Application Support/Mac.apk/arrow-pad.properties");
+            + "/Library/Application Support/Apk on Mac/arrow-pad.properties");
     }
 
     private static Properties store() {
@@ -181,7 +181,7 @@ public final class ArrowPad {
                 if (dir != null) dir.mkdirs();
                 File tmp = new File(f.getPath() + ".tmp");
                 try (FileOutputStream out = new FileOutputStream(tmp)) {
-                    p.store(out, "Mac.apk Arrow Keys as D-pad: packages with it turned on");
+                    p.store(out, "Apk on Mac Arrow Keys as D-pad: packages with it turned on");
                 }
                 if (!tmp.renameTo(f)) {
                     f.delete();

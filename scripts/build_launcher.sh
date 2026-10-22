@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 # build_launcher.sh
 #
-# Builds the Mac.apk launcher app bundle directly with swiftc and the macOS
+# Builds the Apk on Mac launcher app bundle directly with swiftc and the macOS
 # command line tools. No Xcode project required, which means contributors can
 # clone, run one script, and have a working .app.
 #
-# Output: build/Mac.apk.app
+# Output: build/Apk on Mac.app
 #
 # Why no Xcode project: project files are huge, churn on every minor edit, and
 # obscure the actual build steps. For an OS-layer free software project, having
@@ -15,7 +15,7 @@
 set -euo pipefail
 
 # --promote installs the bundle this script builds over the ONE canonical
-# Mac.apk.app, via scripts/promote_app.sh. WITHOUT it, the default path now
+# Apk on Mac.app, via scripts/promote_app.sh. WITHOUT it, the default path now
 # WARNS when a canonical app exists, because "built" and "installed" are
 # different things and this script only ever did the first -- see the block at
 # the tail for the measurement that made the warning necessary.
@@ -36,7 +36,7 @@ PROJECT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 LAUNCHER_DIR="$PROJECT_DIR/launcher"
 RUNTIME_BIN="$PROJECT_DIR/runtime/build/bin/macapk-runtime"
 BUILD_DIR="$PROJECT_DIR/build"
-APP_DIR="$BUILD_DIR/Mac.apk.app"
+APP_DIR="$BUILD_DIR/Apk on Mac.app"
 CONTENTS="$APP_DIR/Contents"
 MACOS_DIR="$CONTENTS/MacOS"
 RESOURCES_DIR="$CONTENTS/Resources"
@@ -47,7 +47,7 @@ RESOURCES_DIR="$CONTENTS/Resources"
 # machine-wide install lock across the promote + staging at the tail.
 . "$SCRIPT_DIR/install_guard.sh"
 if [ "$PROMOTE" -eq 1 ]; then
-    ig_check_contains "$PROJECT_DIR" "${MACAPK_CANONICAL_APP:-/Applications/Mac.apk.app}" || exit 3
+    ig_check_contains "$PROJECT_DIR" "${MACAPK_CANONICAL_APP:-/Applications/Apk on Mac.app}" || exit 3
 fi
 
 # Confirm Apple toolchain.
@@ -78,7 +78,7 @@ BUILD_ID="${BUILD_STAMP}-${GIT_HASH}${GIT_DIRTY}"
 # (launcher/UpdateCheck.swift). Only scripts/release.sh sets
 # MACAPK_RELEASE_VERSION, from VERSION, so only the build we publish carries
 # one; every other build bakes nil and never reports an update. Release tags on
-# kksimp/Mac.apk-Releases are "v" + this number.
+# totktonado96/apk-on-mac are "v" + this number.
 RELEASE_VERSION_SWIFT="nil"
 if [ -n "${MACAPK_RELEASE_VERSION:-}" ]; then
     if ! printf '%s' "$MACAPK_RELEASE_VERSION" | grep -Eq '^[0-9]+(\.[0-9]+)*$'; then
@@ -128,7 +128,7 @@ swiftc \
 
 # The per-app stub template. Each installed APK gets a generated .app whose
 # executable is a COPY of this binary; the stub resolves the one shared
-# Mac.apk and execv's its runtime, so the runtime is never copied per app.
+# Apk on Mac and execv's its runtime, so the runtime is never copied per app.
 #
 # It is signed HERE, once, as a STANDALONE FILE -- never inside a bundle.
 # That is load-bearing, and the obvious alternative does not work: running
@@ -153,7 +153,7 @@ swiftc \
     -o "$RESOURCES_DIR/appstub/MacApkAppStub" \
     "$LAUNCHER_DIR/AppStubMain.swift" \
     "$LAUNCHER_DIR/InstallCore.swift"
-codesign --force --sign - --identifier org.macapk.appstub \
+codesign --force --sign - --identifier io.github.totktonado96.apkonmac.appstub \
     "$RESOURCES_DIR/appstub/MacApkAppStub"
 
 # macapk-installhelper: a SYNCHRONOUS, headless install.
@@ -181,15 +181,15 @@ swiftc \
     "$LAUNCHER_DIR/BundleGenerator.swift" \
     "$BUILD_INFO_SWIFT"
 
-# "Mac.apk Location": the helper app that holds CLLocationManager for every
+# "Apk on Mac Location": the helper app that holds CLLocationManager for every
 # app's runtime (launcher/LocationHelperMain.swift has the why: macOS shows
 # its location prompt only to a process that IS a bundle's executable, and
 # the runtime is not one). It must be a real .app with its own Info.plist
 # (usage string, LSUIElement), signed with the hardened runtime and the
 # location entitlement, or TCC refuses it without a prompt. Signed as a
 # BUNDLE: nothing ever writes inside it, so the seal stays valid.
-echo "[3b/5] Building the Mac.apk Location helper app..."
-LOC_APP="$CONTENTS/Helpers/Mac.apk Location.app"
+echo "[3b/5] Building the Apk on Mac Location helper app..."
+LOC_APP="$CONTENTS/Helpers/Apk on Mac Location.app"
 rm -rf "$LOC_APP"
 mkdir -p "$LOC_APP/Contents/MacOS"
 swiftc \
@@ -204,9 +204,9 @@ cat > "$LOC_APP/Contents/Info.plist" <<'LOCPLIST'
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-    <key>CFBundleIdentifier</key><string>org.macapk.location</string>
-    <key>CFBundleName</key><string>Mac.apk Location</string>
-    <key>CFBundleDisplayName</key><string>Mac.apk Location</string>
+    <key>CFBundleIdentifier</key><string>io.github.totktonado96.apkonmac.location</string>
+    <key>CFBundleName</key><string>Apk on Mac Location</string>
+    <key>CFBundleDisplayName</key><string>Apk on Mac Location</string>
     <key>CFBundleExecutable</key><string>macapk-location</string>
     <key>CFBundlePackageType</key><string>APPL</string>
     <key>CFBundleInfoDictionaryVersion</key><string>6.0</string>
@@ -214,8 +214,8 @@ cat > "$LOC_APP/Contents/Info.plist" <<'LOCPLIST'
     <key>CFBundleVersion</key><string>1</string>
     <key>LSMinimumSystemVersion</key><string>26.4</string>
     <key>LSUIElement</key><true/>
-    <key>NSLocationWhenInUseUsageDescription</key><string>Android apps running in Mac.apk use your location through this. Each app also asks you separately, and only the apps you allow get it.</string>
-    <key>NSLocationUsageDescription</key><string>Android apps running in Mac.apk use your location through this. Each app also asks you separately, and only the apps you allow get it.</string>
+    <key>NSLocationWhenInUseUsageDescription</key><string>Android apps running in Apk on Mac use your location through this. Each app also asks you separately, and only the apps you allow get it.</string>
+    <key>NSLocationUsageDescription</key><string>Android apps running in Apk on Mac use your location through this. Each app also asks you separately, and only the apps you allow get it.</string>
 </dict>
 </plist>
 LOCPLIST
@@ -224,7 +224,7 @@ LOCPLIST
 # com.apple.security.personal-information.location since v1.0.1712.
 codesign --force --sign - --options runtime \
     --entitlements "$PROJECT_DIR/runtime/scripts/jit-entitlements.plist" \
-    --identifier org.macapk.location "$LOC_APP"
+    --identifier io.github.totktonado96.apkonmac.location "$LOC_APP"
 
 echo "[4/5] Copying Info.plist and bundling runtime binary..."
 cp "$LAUNCHER_DIR/Info.plist" "$CONTENTS/Info.plist"
@@ -271,7 +271,7 @@ fi
 # stricter monotonicity rules are the only reason to keep the two apart.
 #
 # NOTE: per-app bundles (launcher/BundleGenerator.swift) deliberately do NOT get
-# this -- their version keys describe the ANDROID app they wrap, not Mac.apk.
+# this -- their version keys describe the ANDROID app they wrap, not Apk on Mac.
 if [ -f "$PROJECT_DIR/VERSION" ]; then
     MACAPK_VER="$(tr -d '[:space:]' < "$PROJECT_DIR/VERSION")"
     if [ -n "$MACAPK_VER" ]; then
@@ -523,10 +523,10 @@ fi
 
 # ---- App icon -------------------------------------------------------
 # Generate AppIcon.icns from the 512px master PNG so the launcher shows
-# the Mac.apk icon in the Dock/Finder (CFBundleIconFile=AppIcon in
+# the Apk on Mac icon in the Dock/Finder (CFBundleIconFile=AppIcon in
 # Info.plist). The same master is copied next to the runtime binary as
 # macapk_default_icon.png so a launched app that ships no icon of its own
-# still gets the Mac.apk tile (the runtime resolves MACAPK_DEFAULT_ICON /
+# still gets the Apk on Mac tile (the runtime resolves MACAPK_DEFAULT_ICON /
 # exe-relative) instead of a blank Dock entry.
 ICON_SRC="$PROJECT_DIR/images/mac_apk_icon_512.png"
 if [ -f "$ICON_SRC" ]; then
@@ -587,8 +587,8 @@ echo "Built: $APP_DIR"
 # WHY THIS EXISTS (measured 2026-08-19). scripts/rebuild_and_run.sh was the ONLY
 # programmatic caller of this script in the whole repo, and CLAUDE.md's own
 # "Or step by step:" recipe tells the reader to run
-#     runtime/scripts/build.sh && scripts/build_launcher.sh && open build/Mac.apk.app
-# -- a sequence that never promotes. So /Applications/Mac.apk.app keeps serving
+#     runtime/scripts/build.sh && scripts/build_launcher.sh && open build/Apk on Mac.app
+# -- a sequence that never promotes. So /Applications/Apk on Mac.app keeps serving
 # the PREVIOUSLY promoted GUI, install helper and app-stub template while the
 # developer looks at a different bundle, and nothing anywhere says so. On this
 # machine at the time of writing, the canonical app's MacApk and
@@ -597,7 +597,7 @@ echo "Built: $APP_DIR"
 #
 # The warning names BOTH ids on purpose: "you did not promote" is only
 # actionable once you can see that the two builds actually differ.
-CANONICAL="${MACAPK_CANONICAL_APP:-/Applications/Mac.apk.app}"
+CANONICAL="${MACAPK_CANONICAL_APP:-/Applications/Apk on Mac.app}"
 _embedded_id() {  # the BuildInfo stamp linked into a Swift binary, or empty
     strings -a "$1" 2>/dev/null \
         | grep -oE '^[0-9]{6}\.[0-9]{4}-[0-9a-f]{7,}(\+dirty)?$' | sort -u | head -n 1
@@ -612,7 +612,7 @@ if [ "$PROMOTE" -eq 1 ]; then
         # STAGE THE SHARED RUNTIME TOO. Promoting without this leaves the
         # canonical app fresh while every INSTALLED app keeps executing the
         # previous build, because an app's Contents/MacOS/<exec> symlinks into
-        # ~/Library/Application Support/Mac.apk/runtime, not into this bundle.
+        # ~/Library/Application Support/Apk on Mac/runtime, not into this bundle.
         # That split was hit twice on 2026-08-19: staleness.sh reported it
         # correctly both times and nothing acted on it, which is how "newest
         # version always wins" quietly stops being true. Same one

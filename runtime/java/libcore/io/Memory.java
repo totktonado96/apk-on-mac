@@ -15,7 +15,7 @@
 // THE boolean-swap OVERLOADS (added for protobuf-lite, v1.0.296):
 // protobuf-lite (bundled in androidx.datastore-preferences, GMS, Firebase,
 // gRPC, etc.) probes for "am I on Android" via
-// `Class.forName("libcore.io.Memory")`. Because Mac.apk ships this class,
+// `Class.forName("libcore.io.Memory")`. Because Apk on Mac ships this class,
 // protobuf-lite picks its Android `MemoryAccessor` -- which it only
 // instantiates if libcore.io.Memory exposes the REAL AOSP boolean-swap
 // signatures (peekLong(long,boolean), pokeLong(long,long,boolean), ...).

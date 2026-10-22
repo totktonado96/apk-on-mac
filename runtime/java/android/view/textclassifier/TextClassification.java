@@ -10,7 +10,7 @@ import java.util.List;
 
 /**
  * The result of classifying a span of text (the entity types + suggested
- * actions the platform smart-linkify would offer). Mac.apk has no on-device
+ * actions the platform smart-linkify would offer). Apk on Mac has no on-device
  * classifier, so TextClassifier.NO_OP returns an empty classification -- apps
  * fall back to their own handling, which is AOSP's documented no-classifier
  * behaviour. Everything an app SETS on the builder still comes back out, which

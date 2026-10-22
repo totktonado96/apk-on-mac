@@ -2,7 +2,7 @@ package android.app;
 import android.content.Intent;
 import java.util.Collections;
 import java.util.Map;
-/** A record of one app start (reason / timing / mode). API 35. Mac.apk does not
+/** A record of one app start (reason / timing / mode). API 35. Apk on Mac does not
  *  keep historical start records, so an app that queries them gets a default
  *  record rather than a crash.
  *  Source: frameworks/base/core/java/android/app/ApplicationStartInfo.java */
@@ -31,7 +31,7 @@ public final class ApplicationStartInfo implements android.os.Parcelable {
     public boolean wasForceStopped() { return false; }
 
     /** AOSP getStartComponent(): "the component type that caused the app to
-     *  start", set for any startup state. Mac.apk boots a process for exactly
+     *  start", set for any startup state. Apk on Mac boots a process for exactly
      *  one reason -- the launcher opening the app's main Activity -- which is
      *  the same event getReason() already reports as START_REASON_LAUNCHER, so
      *  the component is START_COMPONENT_ACTIVITY. */

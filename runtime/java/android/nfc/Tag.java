@@ -1,7 +1,7 @@
 // android.nfc.Tag
 //
 // Represents a discovered NFC tag, delivered in the ACTION_TAG_DISCOVERED
-// intent. Mac.apk has no NFC, so tags are never discovered and instances are
+// intent. Apk on Mac has no NFC, so tags are never discovered and instances are
 // never produced, but apps reference Tag in fields/casts (e.g. reading the
 // intent extra), so the type + getId/getTechList must resolve. Mirrors
 // frameworks/base/core/java/android/nfc/Tag.java.

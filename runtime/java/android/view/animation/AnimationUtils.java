@@ -1,7 +1,7 @@
 // android.view.animation.AnimationUtils -- factory methods for loading
 // Animation / Interpolator instances by resource ID.
 //
-// Mac.apk's framework doesn't run actual animations through a frame
+// Apk on Mac's framework doesn't run actual animations through a frame
 // scheduler -- a static View tree is enough for our render path -- so
 // these factories return baseline implementations rather than parsing
 // the corresponding XML. The contract callers depend on is "I get back

@@ -6,7 +6,7 @@ package android.media.effect;
  *
  * The class is abstract in AOSP and every concrete implementation lives in the
  * platform's own private mediaframework filter graph -- an app never subclasses
- * it, it obtains one from {@link EffectFactory}. Mac.apk ships none of those
+ * it, it obtains one from {@link EffectFactory}. Apk on Mac ships none of those
  * implementations (see EffectFactory), so no instance is ever produced; the type
  * exists so an app's `Effect effect = factory.createEffect(...)` compiles and
  * links, and so the null it gets back is a value it already has to handle.

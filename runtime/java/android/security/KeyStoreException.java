@@ -9,7 +9,7 @@
 //
 // IMPLEMENTATION NOTE. AOSP stores the INTERNAL KeyMint/Keystore error code and
 // maps it to a public code through a ~200-entry table
-// (sErrorCodeToFailureInfo, KeyStoreException.java:481-692). Mac.apk has no
+// (sErrorCodeToFailureInfo, KeyStoreException.java:481-692). Apk on Mac has no
 // KeyMint, so there are no internal codes to map: we store the PUBLIC code
 // directly and classify it with the same indicator bits AOSP assigns to that
 // public code in its table. Observably identical for every caller, which only

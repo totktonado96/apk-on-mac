@@ -1,6 +1,6 @@
 // android.hardware.usb.UsbDeviceConnection
 //
-// The I/O handle returned by UsbManager.openDevice. Mac.apk never opens a
+// The I/O handle returned by UsbManager.openDevice. Apk on Mac never opens a
 // real device (the device list is always empty), so a connection is never
 // constructed in practice; the type + method surface must still resolve for
 // USB-protocol code to compile. All transfers report failure (-1) and

@@ -80,7 +80,7 @@ public class AudioManager {
     // Audio-device enumeration (API 23+). GeoDash Meltdown calls
     // getDevices(GET_DEVICES_OUTPUTS) in onCreate; a missing method threw
     // NoSuchMethodError and aborted onCreate before the GL surface was built.
-    // Mac.apk plays through one CoreAudio output, so we report a single
+    // Apk on Mac plays through one CoreAudio output, so we report a single
     // built-in speaker for output queries and nothing for input queries.
     public static final int GET_DEVICES_INPUTS  = 0x0001;
     public static final int GET_DEVICES_OUTPUTS = 0x0002;
@@ -491,7 +491,7 @@ public class AudioManager {
     // @Deprecated since API 21/26, but still present, still callable, and
     // still a documented no-throw-on-null contract on real devices --
     // real AOSP routes both overloads through MediaSessionLegacyHelper
-    // after a null check). Mac.apk has no MediaSessionLegacyHelper and no
+    // after a null check). Apk on Mac has no MediaSessionLegacyHelper and no
     // hardware media-button dispatch, so these mirror only the part of the
     // contract an app can observe: the call does not throw. AOSP's
     // ComponentName overload additionally rejects (logs + returns) a
@@ -773,7 +773,7 @@ public class AudioManager {
     /**
      * AOSP: "Returns a list of MicrophoneInfo that corresponds to the
      * characteristics of all available microphones", throwing IOException if the
-     * list cannot be obtained. Mac.apk records through CoreAudio's default
+     * list cannot be obtained. Apk on Mac records through CoreAudio's default
      * input, so exactly one built-in microphone is reported -- consistent with
      * getDevices(GET_DEVICES_INPUTS) and with AudioRecord actually working. The
      * per-microphone geometry CoreAudio does not publish is reported with AOSP's
@@ -789,7 +789,7 @@ public class AudioManager {
     /**
      * AOSP returns the mixer configurations the given output device supports.
      * Bit-perfect / exclusive-mode delivery is the whole point of this API, and
-     * Mac.apk cannot provide it: CoreAudio owns the mix and every stream goes
+     * Apk on Mac cannot provide it: CoreAudio owns the mix and every stream goes
      * through it. An EMPTY list is AOSP's documented answer for a device with no
      * such support, and it is the only honest one -- reporting a supported mixer
      * configuration we cannot honour is exactly the failure that shows up later
@@ -832,7 +832,7 @@ public class AudioManager {
     /**
      * AOSP maps AudioAttributes onto a "volume group" -- a set of streams that
      * move together -- and returns DEFAULT_VOLUME_GROUP (-1) when the attributes
-     * match no group. Mac.apk has no volume-group configuration at all (that is
+     * match no group. Apk on Mac has no volume-group configuration at all (that is
      * an automotive/OEM audio-policy XML feature), so -1 is the correct answer
      * for every input, and it is AOSP's own no-group sentinel rather than an
      * invented one.
@@ -850,7 +850,7 @@ public class AudioManager {
     // ---- surround-sound formats (API 29) ---------------------------------
     /**
      * Encoded-surround output means passing an untouched AC3/E-AC3/DTS
-     * bitstream to an external decoder over HDMI or S/PDIF. Everything Mac.apk
+     * bitstream to an external decoder over HDMI or S/PDIF. Everything Apk on Mac
      * outputs is decoded PCM through CoreAudio, which is the same position
      * getDirectPlaybackSupport already reports. So: no format is enabled, the
      * mode is NEVER, and the setters return false ("could not be applied").
@@ -927,7 +927,7 @@ public class AudioManager {
 
     /**
      * API 19. AOSP forwards the key event to whichever media session currently
-     * holds media-button focus. Mac.apk has no cross-app media-button router,
+     * holds media-button focus. Apk on Mac has no cross-app media-button router,
      * but it DOES have in-process MediaSessions, and dispatching to them is
      * exactly what the app expects: the key it sends must reach its own session.
      * Delivered through MediaSessionManager, which owns the active-session list.

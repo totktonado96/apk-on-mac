@@ -1,5 +1,5 @@
 // android.view.translation.TranslationCapability -- what the on-device
-// translator can do between one source and target spec. Mac.apk ships no
+// translator can do between one source and target spec. Apk on Mac ships no
 // on-device translator, so TranslationManager reports NO capabilities at all
 // (an empty set) rather than advertising one it cannot honour; the type still
 // has to exist because View.dispatchCreateViewTranslationRequest names it.

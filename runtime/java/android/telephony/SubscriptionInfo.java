@@ -1,6 +1,6 @@
 // android.telephony.SubscriptionInfo
 //
-// A value type describing one SIM subscription. Mac.apk has no SIM, so
+// A value type describing one SIM subscription. Apk on Mac has no SIM, so
 // SubscriptionManager never hands one out; the type + getters must resolve for
 // subscription-enumerating code, and everything a caller reads back is what it
 // (or a parcel) put in.

@@ -1,7 +1,7 @@
 package com.google.android.gms.cast.framework;
 
 // com.google.android.gms.cast.framework.SessionManagerListener -- the callback
-// interface apps register with SessionManager. On Mac.apk no session ever starts,
+// interface apps register with SessionManager. On Apk on Mac no session ever starts,
 // so none of these fire, but the interface must exist for apps to implement it.
 // Mirrors the published session-lifecycle callbacks.
 // Ref: developers.google.com/android/reference/.../framework/SessionManagerListener

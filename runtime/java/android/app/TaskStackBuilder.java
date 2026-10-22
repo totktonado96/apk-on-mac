@@ -3,7 +3,7 @@
 // should land on a screen with a correct Up/Back chain). AOSP API-11+.
 //
 // AOSP ref: frameworks/base/core/java/android/app/TaskStackBuilder.java.
-// Mac.apk is single-window, so the "stack" collapses to launching the
+// Apk on Mac is single-window, so the "stack" collapses to launching the
 // top (most specific) Intent. getPendingIntent wraps the whole stack in
 // a PendingIntent.getActivities token so a later send() launches it.
 package android.app;

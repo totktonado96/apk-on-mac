@@ -1,6 +1,6 @@
 // android.telephony.SmsManager
 //
-// Sends SMS/MMS. Mac.apk has no cellular radio. AOSP's send*TextMessage
+// Sends SMS/MMS. Apk on Mac has no cellular radio. AOSP's send*TextMessage
 // javadoc (frameworks/base/telephony/java/android/telephony/SmsManager.java)
 // documents sentIntent precisely: "broadcast when the message is successfully
 // sent, or failed", with the failure resultCode drawn from RESULT_ERROR_*
@@ -15,7 +15,7 @@
 //
 // KNOWN LIMITATION (cross-lane, not fixed here): BroadcastReceiver.getResultCode()
 // (android/content/BroadcastReceiver.java) is hardcoded to always return 0 --
-// Mac.apk's sendBroadcast has no ordered-broadcast result-code propagation
+// Apk on Mac's sendBroadcast has no ordered-broadcast result-code propagation
 // anywhere in the tree, in any package (PendingIntent.send(int) does not
 // thread its code through to the delivered broadcast either). So an app
 // reading the specific RESULT_ERROR_NO_SERVICE value back out of its receiver

@@ -49,7 +49,7 @@ public interface SurfaceHolder {
 
     /** AOSP SurfaceHolder.BadSurfaceTypeException: thrown by lockCanvas() when
      *  the surface is SURFACE_TYPE_PUSH_BUFFERS, which has no lockable software
-     *  buffer. Mac.apk's SurfaceHolder is always software-lockable (see
+     *  buffer. Apk on Mac's SurfaceHolder is always software-lockable (see
      *  Surface.lockCanvas), so nothing throws it -- but an app that catches it
      *  by name needs the type. */
     class BadSurfaceTypeException extends RuntimeException {

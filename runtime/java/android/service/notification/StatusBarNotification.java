@@ -10,7 +10,7 @@ import android.os.UserHandle;
  * Notification itself plus who posted it, when, and the keys the shade groups
  * and de-duplicates by.
  *
- * Mac.apk runs one app and has no shade to enumerate, so we do not manufacture
+ * Apk on Mac runs one app and has no shade to enumerate, so we do not manufacture
  * these -- but they are ordinary value objects, apps construct them directly
  * (the 10-argument constructor is public), and AOSP declares the class
  * `implements Parcelable`. That interface was missing here, which meant a

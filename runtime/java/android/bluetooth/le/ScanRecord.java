@@ -1,6 +1,6 @@
 // android.bluetooth.le.ScanRecord
 //
-// Parsed advertisement payload from a ScanResult. Mac.apk never produces one,
+// Parsed advertisement payload from a ScanResult. Apk on Mac never produces one,
 // but ScanResult.getScanRecord can be referenced, so the type + getters must
 // resolve. Mirrors
 // frameworks/base/core/java/android/bluetooth/le/ScanRecord.java.

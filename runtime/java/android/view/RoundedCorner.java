@@ -8,7 +8,7 @@ import android.os.Parcelable;
  * Describes one rounded corner of the display so an app can inset content that
  * would otherwise be clipped by the physical corner radius.
  *
- * A Mac.apk window is a rectangular NSWindow with square content corners, so
+ * A Apk on Mac window is a rectangular NSWindow with square content corners, so
  * the honest answer for every position is radius 0 with a center at the
  * corresponding window corner -- which is exactly what AOSP reports on a device
  * with no rounded corners. Apps use getRadius() == 0 to mean "nothing to inset",

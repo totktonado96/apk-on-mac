@@ -25,7 +25,7 @@ import java.nio.ByteBuffer;
  *    treating the outside as transparent.
  *  - The convolution runs on PREMULTIPLIED colour. AOSP does not premultiply
  *    here because a device's Allocation already holds premultiplied Bitmap
- *    bytes; Mac.apk's Bitmap is non-premultiplied end to end, so we do it
+ *    bytes; Apk on Mac's Bitmap is non-premultiplied end to end, so we do it
  *    around the kernel to land on the same visible result. See
  *    IntrinsicSupport's note.
  *

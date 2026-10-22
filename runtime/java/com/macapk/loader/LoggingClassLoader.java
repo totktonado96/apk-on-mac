@@ -5,7 +5,7 @@
 package com.macapk.loader;
 
 public final class LoggingClassLoader extends ClassLoader {
-    private static final String TAG = "Mac.apk.CL";
+    private static final String TAG = "Apk on Mac.CL";
     private final ClassLoader real;
 
     public LoggingClassLoader(ClassLoader real) {

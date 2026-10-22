@@ -2,7 +2,7 @@
 // for a display whose content is rendered into a caller-supplied Surface
 // (screen mirroring, Presentation on a second screen, MediaProjection capture).
 //
-// Why Mac.apk needs the CLASS: Organic Maps, VLC, and Telegram all reference
+// Why Apk on Mac needs the CLASS: Organic Maps, VLC, and Telegram all reference
 // it. Class resolution happens when the containing method is first linked, not
 // when the call executes, so an absent class breaks a method that may never
 // even take the createVirtualDisplay branch -- which is exactly why the type
@@ -17,7 +17,7 @@
 // This device does not create virtual displays, and says so honestly
 // ---------------------------------------------------------------------------
 // A VirtualDisplay is only meaningful if the compositor can actually rasterize
-// a second display into the caller's Surface. Mac.apk composites one logical
+// a second display into the caller's Surface. Apk on Mac composites one logical
 // display into one NSWindow; there is no second display pipeline to attach a
 // Surface to. So DisplayManager.createVirtualDisplay returns null -- which is a
 // documented AOSP outcome ("or null if the application could not create the

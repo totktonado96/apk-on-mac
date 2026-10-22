@@ -2,7 +2,7 @@
 // Per AOSP source at
 // https://raw.githubusercontent.com/aosp-mirror/platform_frameworks_base/android13-release/core/java/android/text/SpannableStringBuilder.java
 // implements Spannable + Editable + CharSequence + Appendable.
-// Mac.apk impl backs it with a StringBuilder + a List<SpanEntry> (AOSP
+// Apk on Mac impl backs it with a StringBuilder + a List<SpanEntry> (AOSP
 // uses a gap buffer + parallel arrays + an interval tree; we trade that
 // performance for a much smaller, easier-to-audit store -- the
 // OBSERVABLE contract is what apps/AndroidX depend on, not the internal
@@ -131,7 +131,7 @@ public class SpannableStringBuilder implements CharSequence, Spannable, Editable
         }
         // AOSP itself never calls this with a null CharSequence (delete() passes
         // "", not null; @throws NullPointerException is documented for the
-        // public entry points). Mac.apk's own delete() uses null as an internal
+        // public entry points). Apk on Mac's own delete() uses null as an internal
         // sentinel, so normalize here rather than make every filter/watcher/
         // span-merge step downstream special-case it.
         if (source == null) { source = ""; start = 0; end = 0; }

@@ -98,7 +98,7 @@ public class AndroidKeyStoreProvider extends Provider {
             "android.security.keystore.AndroidCAStoreSpi");
     }
 
-    // Mac.apk wiring (not an AOSP API): point the backing store at the app's
+    // Apk on Mac wiring (not an AOSP API): point the backing store at the app's
     // persistent data dir BEFORE install(). Key material lives under
     // <dataDir>/.androidkeystore/ -- the same per-app-and-version tree as
     // SharedPreferences. This is deliberate: EncryptedSharedPreferences

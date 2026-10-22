@@ -303,7 +303,7 @@ public final class AccountStore {
             Files.createFile(tmp.toPath());
             ownerOnly(tmp, "rw-------");
             try (OutputStream out = new FileOutputStream(tmp)) {
-                p.store(out, "Mac.apk accounts_ce (AccountManagerService CE rows)");
+                p.store(out, "Apk on Mac accounts_ce (AccountManagerService CE rows)");
             }
             Files.move(tmp.toPath(), mFile.toPath(), StandardCopyOption.REPLACE_EXISTING,
                     StandardCopyOption.ATOMIC_MOVE);

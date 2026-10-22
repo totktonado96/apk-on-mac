@@ -1,6 +1,6 @@
 // android.bluetooth.BluetoothA2dp -- the A2DP (audio sink) profile proxy.
 //
-// Mac.apk exposes no Bluetooth bridge, so no profile proxy is ever DELIVERED:
+// Apk on Mac exposes no Bluetooth bridge, so no profile proxy is ever DELIVERED:
 // BluetoothAdapter.getProfileProxy() returns false without calling the
 // ServiceListener, which is AOSP's answer for a profile the device does not
 // support. The constructor is package-private, as on AOSP, so an app cannot

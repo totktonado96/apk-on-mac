@@ -9,7 +9,7 @@ import android.os.Parcelable;
  *
  * PACKAGE NOTE -- applies to android.service.carrier. A CarrierService /
  * CarrierMessagingService is bound by the telephony stack of the app that is
- * the SIM's carrier-privileged app. Mac.apk has no radio, no SIM and no
+ * the SIM's carrier-privileged app. Apk on Mac has no radio, no SIM and no
  * telephony stack, so nothing binds either service and no SMS/MMS ever arrives.
  * The identifier and the result objects are ordinary value types, and those are
  * faithful.

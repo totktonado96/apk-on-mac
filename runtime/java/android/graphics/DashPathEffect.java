@@ -1,4 +1,4 @@
-// Mac.apk -- android.graphics.DashPathEffect.
+// Apk on Mac -- android.graphics.DashPathEffect.
 //
 // AOSP public surface: DashPathEffect(float[] intervals, float phase)
 // draws a stroked path as a dashed line. The intervals array holds the

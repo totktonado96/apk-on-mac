@@ -342,7 +342,7 @@ public class SparseArray<E> implements Cloneable {
         return buffer.toString();
     }
 
-    // ---- Mac.apk internal helpers (NOT AOSP API) ------------------------
+    // ---- Apk on Mac internal helpers (NOT AOSP API) ------------------------
     // Used by our own Parcel/Bundle equality paths, which need a content
     // comparison that SparseArray itself does not provide (AOSP's SparseArray
     // inherits Object.equals/hashCode deliberately).

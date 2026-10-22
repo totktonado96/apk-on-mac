@@ -11,7 +11,7 @@
 // stub that never called ANativeActivity_onCreate, so an Unreal game's engine
 // never started and its window stayed on the starting background.
 //
-// Two Mac.apk-specific pieces, both marked macapk*:
+// Two Apk on Mac-specific pieces, both marked macapk*:
 //   - macapkPostWork: AOSP's native side writes ANativeActivity_finish /
 //     setWindowFormat / setWindowFlags / show+hideSoftInput into a pipe on the
 //     main Looper; ours posts the same commands to the main Looper from Java.
@@ -324,7 +324,7 @@ public class NativeActivity extends Activity implements SurfaceHolder.Callback2,
         mIMM.hideSoftInputFromWindow(mNativeContentView.getWindowToken(), mode);
     }
 
-    // ---- Mac.apk ----------------------------------------------------------
+    // ---- Apk on Mac ----------------------------------------------------------
 
     // The command numbers of android_app_NativeActivity.cpp's ActivityWork.
     private static final int CMD_FINISH = 1;

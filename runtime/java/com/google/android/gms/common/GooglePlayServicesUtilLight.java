@@ -9,7 +9,7 @@
 //
 // WHY IT IS PARENT-FIRST even though the GMS family is child-first.
 // A class that answers "what does this DEVICE have" is answered by the device;
-// a class that CARRIES THE APP'S DATA stays the app's. Mac.apk is the device.
+// a class that CARRIES THE APP'S DATA stays the app's. Apk on Mac is the device.
 // That is not a new rule -- it is the parent-first arm of the decision tree in
 // docs/gms-shadow-classloader-contract_2026-06-21.md, already applied to
 // play.core.assetpacks.* and to gms.tasks.* for Play-Asset-Delivery apps. What

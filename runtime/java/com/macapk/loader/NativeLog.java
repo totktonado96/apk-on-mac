@@ -1,4 +1,4 @@
-// Mac.apk's single log sink. android.util.Log delegates here, so any
+// Apk on Mac's single log sink. android.util.Log delegates here, so any
 // app log line ends up at the same printf in native code -- which makes
 // it trivial to redirect later (file, launcher tail, etc).
 package com.macapk.loader;
@@ -48,7 +48,7 @@ public final class NativeLog {
     public static native void nativeInstallJniTrace();
 
     /** MACAPK_PAIRIP_GATE_EMU: re-bind the app's com.pairip.VMRunner.executeVM native to
-     *  Mac.apk's in-layer integrity gate (detection-preserving; corrects the HotSpot-on-macOS
+     *  Apk on Mac's in-layer integrity gate (detection-preserving; corrects the HotSpot-on-macOS
      *  structural false-positive that FALSELY detonates pairip's integrity VM). Bound natively
      *  to NativeLog (no new Java class needed). Returns true iff the rebind succeeded. */
     public static native boolean nativeRegisterPairipGate(Class<?> vmRunner);

@@ -1,5 +1,5 @@
 package android.view;
-/** Provides haptic/audio feedback during scrolling (API 34). Mac.apk has no
+/** Provides haptic/audio feedback during scrolling (API 34). Apk on Mac has no
  *  scroll-haptics surface, so the callbacks are no-ops -- the same as a device
  *  without a haptic actuator. Apps call these per scroll frame; they must not
  *  throw. Source: frameworks/base .../view/ScrollFeedbackProvider.java */

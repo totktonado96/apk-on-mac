@@ -306,7 +306,7 @@ public class RippleDrawable extends LayerDrawable {
     /** AOSP RippleDrawable.isStateful() is an unconditional `return true` --
      *  the ripple itself reacts to enabled/pressed/focused/hovered, so the
      *  drawable is stateful regardless of what its layers are. This is
-     *  load-bearing for Mac.apk: View.drawableStateChanged only calls
+     *  load-bearing for Apk on Mac: View.drawableStateChanged only calls
      *  setState when isStateful() reports true, and the inherited
      *  LayerDrawable default reports false whenever the content layer happens
      *  not to be stateful, which silently stranded the whole state change.

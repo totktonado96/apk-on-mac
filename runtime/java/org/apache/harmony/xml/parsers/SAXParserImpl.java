@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-// Mac.apk note (2026-09-25): AOSP android14-release libcore
+// Apk on Mac note (2026-09-25): AOSP android14-release libcore
 // luni/src/main/java/org/apache/harmony/xml/parsers/SAXParserImpl.java,
 // verbatim except that the reader is a MacApkExpatReader (Expat's feature
 // surface over the host Xerces parser) where AOSP builds an ExpatReader. The

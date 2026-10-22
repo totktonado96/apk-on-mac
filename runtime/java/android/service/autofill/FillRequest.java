@@ -19,7 +19,7 @@ import java.util.List;
  * this tree, so the method is MISSING and reported as a residual gap rather
  * than faked. Everything else is present.
  *
- * Mac.apk never issues a fill request. See the package note on AutofillService.
+ * Apk on Mac never issues a fill request. See the package note on AutofillService.
  *
  * Constant values transcribed VERBATIM from /tmp/aosp_api/android16.txt:
  *   FLAG_MANUAL_REQUEST = 1 (0x1)

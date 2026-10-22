@@ -78,7 +78,7 @@
 //   CONNECT FAIL IPv6 2606:4700:3034::6815:4b3d  -> NoRouteToHostException (0 ms)
 //
 // Reproduced for play.google.com and accounts.google.com. The exception string
-// "No route to host" is strerror(EHOSTUNREACH) from the host kernel; no Mac.apk
+// "No route to host" is strerror(EHOSTUNREACH) from the host kernel; no Apk on Mac
 // code produces it (`grep -rn "No route to host" runtime/` -> no hits).
 //
 // This is worth fixing even though most HTTP clients iterate the address list,
@@ -111,7 +111,7 @@
 // the platform's own level, exactly like runtime/java_base_patch/ and
 // runtime/jdk_unsupported_patch/ already do. Output lands in
 // runtime/build/classes/com/macapk/net/, which puts it in macapk-loader.jar --
-// Mac.apk infrastructure, not Android API surface.
+// Apk on Mac infrastructure, not Android API surface.
 //
 // It ALSO lands in android-framework.jar, and that is worth knowing rather than
 // being surprised by later. build.sh's framework file list reads
@@ -147,7 +147,7 @@
 // Two JDK behaviours this relies on, both read from InetAddress.java:459-502:
 //   * The resolver is looked up ONCE, lazily, on the first name resolution, and
 //     cached in a static. There is no ordering requirement against Boot.
-//   * A provider is skipped entirely when jdk.net.hosts.file is set. Mac.apk
+//   * A provider is skipped entirely when jdk.net.hosts.file is set. Apk on Mac
 //     sets that for MACAPK_OFFLINE=1 (jvm_loader.cpp), so offline mode keeps
 //     working unchanged and this class simply never loads.
 //
@@ -193,7 +193,7 @@ public final class AddrConfigResolverProvider extends InetAddressResolverProvide
             if (!ENABLED) return builtin;
             return new AddrConfigResolver(builtin);
         } catch (Throwable t) {
-            System.err.println("[W] Mac.apk.addrconfig: provider init failed, "
+            System.err.println("[W] Apk on Mac.addrconfig: provider init failed, "
                 + "using builtin resolver: " + t);
             try {
                 return configuration.builtinResolver();
@@ -338,7 +338,7 @@ public final class AddrConfigResolverProvider extends InetAddressResolverProvide
                 if (!everProbed) {
                     everProbed = true;
                     if (!h6 || !h4) {
-                        System.err.println("[I] Mac.apk.addrconfig: AI_ADDRCONFIG probe"
+                        System.err.println("[I] Apk on Mac.addrconfig: AI_ADDRCONFIG probe"
                             + " -- have_ipv4=" + h4 + " have_ipv6=" + h6
                             + " (matching AOSP libcore; MACAPK_ADDRCONFIG=0 disables)");
                     }
@@ -377,7 +377,7 @@ public final class AddrConfigResolverProvider extends InetAddressResolverProvide
         static void noteFiltered(String host, int before, int after) {
             if (loggedFilter) return;
             loggedFilter = true;
-            System.err.println("[I] Mac.apk.addrconfig: filtered unroutable addresses for '"
+            System.err.println("[I] Apk on Mac.addrconfig: filtered unroutable addresses for '"
                 + host + "' (" + before + " -> " + after + "); further filtering is silent");
         }
     }

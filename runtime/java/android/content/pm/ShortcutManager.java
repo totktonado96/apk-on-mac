@@ -1,7 +1,7 @@
 // android.content.pm.ShortcutManager (API 25) -- app-shortcut registry. Apps
 // obtain it via Context.getSystemService(SHORTCUT_SERVICE) and add/query
 // dynamic shortcuts at boot (Crossy Road's "initialize-shortcuts" thread loads
-// the class). Mac.apk surfaces no launcher shortcuts, so queries return empty
+// the class). Apk on Mac surfaces no launcher shortcuts, so queries return empty
 // and mutations are no-ops -- the same observable result as a launcher that
 // doesn't support pinning. The class must exist or referencing code throws
 // NoClassDefFoundError. List element type is ShortcutInfo in AOSP; we use raw
@@ -54,7 +54,7 @@ public class ShortcutManager {
     public boolean isRequestPinShortcutSupported() { return false; }
 
     /** AOSP requestPinShortcut (API 26): request the launcher pin a shortcut.
-     *  Mac.apk has no launcher, so pinning is not supported -> false. */
+     *  Apk on Mac has no launcher, so pinning is not supported -> false. */
     public boolean requestPinShortcut(ShortcutInfo shortcut, android.content.IntentSender resultIntent) { return false; }
     public android.content.Intent createShortcutResultIntent(ShortcutInfo shortcut) { return new android.content.Intent(); }
     public java.util.List<ShortcutInfo> getShortcuts(int matchFlags) { return java.util.Collections.emptyList(); }

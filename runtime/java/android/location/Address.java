@@ -1,5 +1,5 @@
 // android.location.Address -- a postal-address result from a Geocoder
-// lookup. Full data-holder surface per AOSP. Mac.apk never produces
+// lookup. Full data-holder surface per AOSP. Apk on Mac never produces
 // Address results (no geocoding backend), but maps/forms code constructs
 // and reads Address instances, so the type must be complete.
 package android.location;

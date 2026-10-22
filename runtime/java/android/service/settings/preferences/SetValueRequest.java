@@ -7,7 +7,7 @@ import android.os.Parcelable;
  * Asks a SettingsPreferenceService to WRITE one preference.
  *
  * See the package note on SettingsPreferenceValue -- and note specifically
- * that Mac.apk never carries this request to anything: a guest app does not get
+ * that Apk on Mac never carries this request to anything: a guest app does not get
  * to write the host's system settings, and there is no Android Settings host
  * to write to in the first place. The object itself is a plain value type.
  *

@@ -7,7 +7,7 @@
 //
 // WHAT IS REAL HERE, AND WHAT IS NOT
 // ----------------------------------
-// Mac.apk has no system print spooler, so nothing ever binds a PrintService and
+// Apk on Mac has no system print spooler, so nothing ever binds a PrintService and
 // none of the abstract callbacks below are ever invoked by the framework. What
 // this class does provide, and provides for real, is:
 //   - the abstract type + the exact SDK constants, so an app that ships a print
@@ -121,7 +121,7 @@ public abstract class PrintService extends Service {
     @Override
     public final IBinder onBind(Intent intent) {
         android.util.Log.i(LOG_TAG, getClass().getName()
-                + ": Mac.apk has no print spooler, so this print service cannot be bound"
+                + ": Apk on Mac has no print spooler, so this print service cannot be bound"
                 + " (PrintManager.isPrintServiceEnabled() reports false for the same reason)");
         return null;
     }

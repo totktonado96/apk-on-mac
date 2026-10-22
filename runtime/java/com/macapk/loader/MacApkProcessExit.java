@@ -112,7 +112,7 @@ import android.content.Intent;
  */
 public final class MacApkProcessExit {
     private MacApkProcessExit() {}
-    private static final String TAG = "Mac.apk.Process";
+    private static final String TAG = "Apk on Mac.Process";
     private static final boolean LEGACY = "legacy".equals(System.getenv("MACAPK_GUEST_EXIT"));
 
     public static void systemExit(int status)            { exit(status, "System.exit"); }

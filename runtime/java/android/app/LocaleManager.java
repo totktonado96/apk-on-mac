@@ -97,7 +97,7 @@ public class LocaleManager {
      *  override (revert to system). We also push the primary locale to the
      *  JVM default so date/number formatting and Locale.getDefault() follow
      *  -- correct here (not the cross-process bleed AOSP's real per-app
-     *  override guards against) because Mac.apk hosts exactly one app per
+     *  override guards against) because Apk on Mac hosts exactly one app per
      *  JVM process, so "JVM-global default" and "this app's process default"
      *  are the same scope; real Android's own ActivityThread.handleConfigurationChanged
      *  path calls Locale.setDefault() too when applying a locale change,
@@ -114,7 +114,7 @@ public class LocaleManager {
      *  real device-level config change would (Activity.dispatchConfigurationChanged,
      *  which updates Resources, calls onConfigurationChanged, and fans out to
      *  the Application's ComponentCallbacks -- see Activity.java). ActivityHost
-     *  (com.macapk.loader, our ActivityThread analogue) is Mac.apk's one-window
+     *  (com.macapk.loader, our ActivityThread analogue) is Apk on Mac's one-window
      *  "task stack", so its top entry is the whole live Activity stack to
      *  scope this to. */
     public void setApplicationLocales(LocaleList locales) {
@@ -154,7 +154,7 @@ public class LocaleManager {
         setApplicationLocales(locales);
     }
 
-    /** AOSP: the device's system locales. Mac.apk has a single locale, so
+    /** AOSP: the device's system locales. Apk on Mac has a single locale, so
      *  this mirrors the JVM default list. */
     public LocaleList getSystemLocales() {
         return LocaleList.getDefault();
@@ -165,7 +165,7 @@ public class LocaleManager {
     // dynamically-delivered language pack can widen the picker without a new
     // manifest. AOSP stores the override in the system's locale service and
     // getOverrideLocaleConfig returns null when none was set. The scope of that
-    // store is "this app", and Mac.apk runs exactly one app per process, so
+    // store is "this app", and Apk on Mac runs exactly one app per process, so
     // holding it here is the same scope -- and it means the setter/getter pair
     // an app uses to check its own override actually round-trips.
 

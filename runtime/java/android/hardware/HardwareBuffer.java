@@ -1,5 +1,5 @@
 package android.hardware;
-/** A cross-process graphics buffer handle (AHardwareBuffer). Mac.apk bitmaps and
+/** A cross-process graphics buffer handle (AHardwareBuffer). Apk on Mac bitmaps and
  *  images are software/Skia-backed rather than GPU HardwareBuffers, so this is a
  *  DESCRIPTOR (format + dimensions + usage) rather than a mappable buffer. Apps
  *  that query getFormat()/dimensions or pass the handle through work; genuine

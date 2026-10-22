@@ -1,4 +1,4 @@
-// Mac.apk PointerIcon: minimum AOSP-shape surface so
+// Apk on Mac PointerIcon: minimum AOSP-shape surface so
 // androidx.core.view.PointerIconCompat$Api24Impl (called from
 // BottomNavigationView's <init> chain and many other Material widgets)
 // links and runs. We do not render cursor icons on the macOS host --

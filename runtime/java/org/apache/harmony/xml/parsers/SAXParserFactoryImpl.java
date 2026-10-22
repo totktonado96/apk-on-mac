@@ -15,7 +15,7 @@
  */
 
 // ---------------------------------------------------------------------------
-// Mac.apk note (added with this file, 2026-09-25)
+// Apk on Mac note (added with this file, 2026-09-25)
 // ---------------------------------------------------------------------------
 // Port of AOSP android14-release libcore
 // luni/src/main/java/org/apache/harmony/xml/parsers/SAXParserFactoryImpl.java,
@@ -28,7 +28,7 @@
 // That factory REPORTS isNamespaceAware()==false (its map is empty), but the
 // reader it builds is an ExpatReader whose processNamespaces defaults to TRUE
 // (ExpatReader.java:53-54), so every startElement carries the real localName.
-// Mac.apk used to serve the host JDK's Xerces factory under the JAXP default
+// Apk on Mac used to serve the host JDK's Xerces factory under the JAXP default
 // instead: namespace processing OFF, so localName is "" for every element
 // (Xerces AbstractSAXParser.java:516). An Android SAX handler that dispatches
 // on localName then silently matches nothing.
@@ -49,7 +49,7 @@
 //
 // BISECT GATE: MACAPK_SAX_ANDROID_DEFAULTS=0 turns this factory into a plain
 // forwarder to SAXParserFactory.newDefaultInstance(), i.e. exactly the host
-// JAXP behaviour Mac.apk had before (namespace-unaware, Xerces features).
+// JAXP behaviour Apk on Mac had before (namespace-unaware, Xerces features).
 // Gate: debug/saxns_gate.sh.
 
 package org.apache.harmony.xml.parsers;

@@ -3,7 +3,7 @@ package android.renderscript;
 /**
  * Thrown when the RenderScript driver cannot service a request.
  *
- * This is the type Mac.apk uses to report the ONE capability it genuinely does
+ * This is the type Apk on Mac uses to report the ONE capability it genuinely does
  * not have: executing app-authored .rs kernels, which on a device are compiled
  * to LLVM bitcode by slang and JIT-ed by bcc. We have no bitcode engine, and
  * inventing one is out of scope, so ScriptC and ScriptGroup say so here rather

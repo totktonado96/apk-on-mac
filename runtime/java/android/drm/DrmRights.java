@@ -6,7 +6,7 @@
 // SCOPE NOTE: this class only CARRIES a rights blob the app already has -- it
 // reads a file the app names, keeps the bytes, and exposes them. It evaluates
 // nothing, decrypts nothing, and grants nothing; whether those rights are ever
-// honoured is the plug-in's question, and Mac.apk has no plug-in (saveRights
+// honoured is the plug-in's question, and Apk on Mac has no plug-in (saveRights
 // answers ERROR_UNKNOWN). Implementing the carrier is interoperability;
 // implementing the evaluation would not be, and is not done.
 package android.drm;

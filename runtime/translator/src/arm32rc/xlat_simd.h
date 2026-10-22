@@ -33,7 +33,7 @@
 //
 //   NOT owned, deliberately: VLSTM / VLLDM (the ARMv8-M Security Extension
 //        lazy FP save/restore, DDI 0553B.y B4.5). They are UNDEFINED on
-//        ARMv7-A / ARMv8-A AArch32, which is the only profile Mac.apk
+//        ARMv7-A / ARMv8-A AArch32, which is the only profile Apk on Mac
 //        loads, so every occurrence in a guest .so is misdecoded data.
 //        Refusing them keeps the stub visible instead of inventing
 //        behaviour. VSDOT / VUDOT are likewise left out: see the note at

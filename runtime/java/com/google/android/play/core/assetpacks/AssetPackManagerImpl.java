@@ -15,11 +15,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-// Mac.apk's AssetPackManager. Every asset pack a Unity title references is an
-// install-time pack: its bundle is in the APK assets and Mac.apk extracts the
+// Apk on Mac's AssetPackManager. Every asset pack a Unity title references is an
+// install-time pack: its bundle is in the APK assets and Apk on Mac extracts the
 // whole aa/ tree to the data dir on launch (see apk_unpacker). There is no
 // Google Play to download from, so every requested pack is reported COMPLETED
-// (status 4) with its assets already present -- which is the truth on Mac.apk.
+// (status 4) with its assets already present -- which is the truth on Apk on Mac.
 //
 // WHY THIS EXISTS (root cause it fixes): Unity's PlayAssetDeliveryAssetBundle-
 // Provider does NOT load a bundle until the owning pack reports COMPLETED via
@@ -44,13 +44,13 @@ public final class AssetPackManagerImpl implements AssetPackManager {
     // The asset-pack assetsPath() Unity's PAD integration uses as the
     // Addressables RuntimePath. When PAD is active Unity builds the catalog /
     // settings / bundle paths as `assetsPath() + "/aa/..."` (the "aa" folder
-    // is INSIDE the pack's assets). Mac.apk extracts the APK's assets/aa/*
+    // is INSIDE the pack's assets). Apk on Mac extracts the APK's assets/aa/*
     // tree to <dataDir>/aa (settings.json + catalog.bin at <dataDir>/aa/, the
     // bundles at <dataDir>/aa/Android/), so assetsPath() must be <dataDir>
     // (the PARENT of aa) -- returning <dataDir>/aa would double the segment
     // (<dataDir>/aa/aa/settings.json) and break Addressables init, so the
     // catalog/settings/bundles never load. (The actual bundle file is opened
-    // through the catalog InternalId; the Mac.apk file shim remaps it to the
+    // through the catalog InternalId; the Apk on Mac file shim remaps it to the
     // extracted tree, but the RuntimePath base must still be correct so the
     // C# constructs a path the shim can remap.)
     private String assetsRoot() {
@@ -139,9 +139,9 @@ public final class AssetPackManagerImpl implements AssetPackManager {
     // The Unity player builds the Addressables RuntimePath as
     //   getPackLocation(UnityStreamingAssetsPack).assetsPath() + "/aa"
     // and loads catalog.bin / settings.json / the bundles relative to it. The
-    // ONLY value that works on Mac.apk is the in-APK streaming-assets jar URL
+    // ONLY value that works on Apk on Mac is the in-APK streaming-assets jar URL
     // ("jar:file://<apk>!/assets"), which is exactly what the engine's DEFAULT
-    // (no-PAD) RuntimePath resolves to and which the Mac.apk file shim serves
+    // (no-PAD) RuntimePath resolves to and which the Apk on Mac file shim serves
     // in-place (no local-file UnityCache decompress). Empirically:
     //   - a filesystem dir (<dataDir>) -> RuntimePath <dataDir>/aa -> the player
     //     treats the bundles as local files and stalls in a UnityCache decompress;

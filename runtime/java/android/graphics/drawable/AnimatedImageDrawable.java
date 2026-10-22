@@ -29,7 +29,7 @@ public class AnimatedImageDrawable extends Drawable implements Animatable2 {
 
     public AnimatedImageDrawable() {}
 
-    /** Mac.apk setter so ImageDecoder.decodeDrawable can attach the decoded
+    /** Apk on Mac setter so ImageDecoder.decodeDrawable can attach the decoded
      *  first frame (AOSP builds this drawable natively from the decoder). */
     public void macapkSetBitmap(Bitmap bm) { mBitmap = bm; }
 

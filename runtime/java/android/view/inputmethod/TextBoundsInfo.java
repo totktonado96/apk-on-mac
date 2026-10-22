@@ -3,7 +3,7 @@
 // the real text layout. Source: frameworks/base
 // core/java/android/view/inputmethod/TextBoundsInfo.java (android16-release).
 //
-// Mac.apk runs no IME, so nothing in this tree BUILDS one -- but a custom editor
+// Apk on Mac runs no IME, so nothing in this tree BUILDS one -- but a custom editor
 // implementing InputConnection.requestTextBoundsInfo does, and the arithmetic
 // below is the real geometry maths rather than a stub, so such an editor gets
 // device-identical answers from the data it supplied.

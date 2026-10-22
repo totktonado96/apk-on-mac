@@ -1,7 +1,7 @@
 // android.graphics.RenderNode -- the display-list / hardware-layer
 // primitive (public API since API 29).
 //
-// Why this is load-bearing for Mac.apk: modern Jetpack Compose builds
+// Why this is load-bearing for Apk on Mac: modern Jetpack Compose builds
 // (Reddit 2026.21 ships compose-ui with the GraphicsLayer / RenderNode
 // layer path) construct `new RenderNode("Compose")` UNCONDITIONALLY on
 // API >= 29 for EVERY composable that owns a layer (graphicsLayer,
@@ -179,7 +179,7 @@ public class RenderNode {
      *  MACAPK_RENDERNODE_STATS is set. */
     public static void macapkStatsDump(String where) {
         if (!macapkStats) return;
-        com.macapk.loader.NativeLog.i("Mac.apk.RenderNode",
+        com.macapk.loader.NativeLog.i("Apk on Mac.RenderNode",
             "STATS " + where
             + " records=" + sStRecords.get()
             + " recEmpty=" + sStRecEmpty.get()
@@ -338,7 +338,7 @@ public class RenderNode {
                 if (h > sStMaxRecH) sStMaxRecH = h;
             }
             if (macapkTrace) {
-                com.macapk.loader.NativeLog.i("Mac.apk.RenderNode",
+                com.macapk.loader.NativeLog.i("Apk on Mac.RenderNode",
                     "beginRecording " + w + "x" + h + " name=" + name + " oplist");
             }
             return recordingCanvas;
@@ -375,12 +375,12 @@ public class RenderNode {
             if (h > sStMaxRecH) sStMaxRecH = h;
         }
         if (macapkTrace) {
-            com.macapk.loader.NativeLog.i("Mac.apk.RenderNode",
+            com.macapk.loader.NativeLog.i("Apk on Mac.RenderNode",
                 "beginRecording " + w + "x" + h + " name=" + name);
             StringBuilder sb = new StringBuilder("beginRecording stack:\n");
             StackTraceElement[] st = Thread.currentThread().getStackTrace();
             for (int i = 2; i < Math.min(st.length, 30); i++) sb.append("  ").append(st[i]).append('\n');
-            com.macapk.loader.NativeLog.i("Mac.apk.RenderNode", sb.toString());
+            com.macapk.loader.NativeLog.i("Apk on Mac.RenderNode", sb.toString());
         }
         return recordingCanvas;
     }
@@ -407,7 +407,7 @@ public class RenderNode {
             }
             if (macapkStats && list.drawOps == 0) sStRecEmpty.incrementAndGet();
             if (macapkTrace) {
-                com.macapk.loader.NativeLog.i("Mac.apk.RenderNode",
+                com.macapk.loader.NativeLog.i("Apk on Mac.RenderNode",
                     "recDelta " + getWidth() + "x" + getHeight() + " name=" + name
                     + " oplist ops=" + list.size() + " draws=" + list.drawOps
                     + (list.unrecorded ? " UNRECORDED" : ""));
@@ -429,7 +429,7 @@ public class RenderNode {
             // All-zero => the content lambda emitted no leaf draws (composed but
             // never drew); non-zero => content drew (then a replay/visibility
             // bug is downstream).
-            com.macapk.loader.NativeLog.i("Mac.apk.RenderNode",
+            com.macapk.loader.NativeLog.i("Apk on Mac.RenderNode",
                 "recDelta " + getWidth() + "x" + getHeight() + " name=" + name
                 + " rect=" + (Canvas.sGlobalRect - recRect)
                 + " text=" + (Canvas.sGlobalText - recText)
@@ -447,7 +447,7 @@ public class RenderNode {
                     for (int y = 0; y < h; y += 7) for (int x = 0; x < w; x += 7) {
                         total++; if ((bi.getRGB(x, y) >>> 24) != 0) nonzero++;
                     }
-                    com.macapk.loader.NativeLog.i("Mac.apk.RenderNode",
+                    com.macapk.loader.NativeLog.i("Apk on Mac.RenderNode",
                         "endRecording id=" + Integer.toHexString(System.identityHashCode(this))
                         + " " + w + "x" + h + " nonTransparent=" + nonzero + "/" + total
                         + " drawOps=" + (recordingCanvas != null ? recordingCanvas.macapkDrawOps : -1));
@@ -455,7 +455,7 @@ public class RenderNode {
                         new java.io.File("/tmp/reddit_layer_" + w + "x" + h + ".png"));
                 }
             } catch (Throwable t) {
-                com.macapk.loader.NativeLog.i("Mac.apk.RenderNode", "endRecording dump failed: " + t);
+                com.macapk.loader.NativeLog.i("Apk on Mac.RenderNode", "endRecording dump failed: " + t);
             }
         }
     }

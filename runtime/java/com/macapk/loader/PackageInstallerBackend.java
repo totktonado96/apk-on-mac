@@ -10,7 +10,7 @@
 // is SessionInstaller (AppInstaller.kt: `defaultInstaller get() =
 // sessionInstaller`, read from its master source 2026-08-12), and every other
 // backend it offers (Root/Service/AM/Shizuku/MicroG) falls back to it the
-// moment its availability check fails -- which they all do on Mac.apk. The
+// moment its availability check fails -- which they all do on Apk on Mac. The
 // flow Aurora runs, verbatim from SessionInstaller.kt:
 //     pm.getPackageInstaller() -> createSession(params) -> openSession(id)
 //     -> openWrite("<pkg>_<file>", 0, len) per apk (base + config splits)
@@ -158,7 +158,7 @@ public final class PackageInstallerBackend {
      *  PackageDeleteObserverAdapter.onPackageDeleted puts the RAW DELETE_*
      *  returnCode there (PackageInstallerService.java:1556-1573), alongside
      *  deleteStatusToPublicStatus(returnCode) in EXTRA_STATUS. Only the three
-     *  codes Mac.apk can actually produce are mirrored. */
+     *  codes Apk on Mac can actually produce are mirrored. */
     private static final int DELETE_SUCCEEDED             = 1;
     private static final int DELETE_FAILED_INTERNAL_ERROR = -1;
     private static final int DELETE_FAILED_ABORTED        = -5;
@@ -265,7 +265,7 @@ public final class PackageInstallerBackend {
      *  and for targetSdk >= P first
      *      mContext.enforceCallingOrSelfPermission(
      *              Manifest.permission.REQUEST_DELETE_PACKAGES, null);
-     *  which throws SecurityException. Mac.apk deliberately does NOT model
+     *  which throws SecurityException. Apk on Mac deliberately does NOT model
      *  the silent DELETE_PACKAGES branch: that permission is signature-level,
      *  no guest can genuinely hold it (our lenient checkPermission grants any
      *  permission the manifest merely DECLARES, and e.g. Aurora-adjacent
@@ -536,7 +536,7 @@ public final class PackageInstallerBackend {
 
         /** AOSP computeProgressLocked, verbatim in structure
          *  (PackageInstallerSession.java:1340-1361). The incremental-install
-         *  branch is omitted because Mac.apk has no incremental sessions --
+         *  branch is omitted because Apk on Mac has no incremental sessions --
          *  isIncrementalInstallation() is false for every session we create,
          *  so upstream would take this same branch unconditionally.
          *
@@ -1260,7 +1260,7 @@ public final class PackageInstallerBackend {
      *      and polls getPackageInfo / getInstalledPackages instead.
      *  (Both measured from their own converted bytecode + decoded manifests,
      *  2026-08-18, not from recollection of what those apps "probably" do.)
-     *  Before this, route 1 did not exist at all in Mac.apk and only F-Droid's
+     *  Before this, route 1 did not exist at all in Apk on Mac and only F-Droid's
      *  route worked. Implementing all of the device's routes is what makes a
      *  THIRD store we have never run work without knowing anything about it.
      *
@@ -1280,7 +1280,7 @@ public final class PackageInstallerBackend {
      *  nobody and look exactly like the bug this fixes.
      *
      *  DELIBERATE OMISSION -- EXTRA_UID. AOSP always carries the installed
-     *  package's uid. Mac.apk hosts one app per process and models no uid for
+     *  package's uid. Apk on Mac hosts one app per process and models no uid for
      *  any OTHER package, so there is no honest value to put here: sending
      *  Process.myUid() would assert the new package shares this app's sandbox,
      *  which on Android means something specific and false. Omitting it leaves
@@ -1313,7 +1313,7 @@ public final class PackageInstallerBackend {
         // all -- and this runs on the macapk-session-install worker, so a
         // store's package-event handler would otherwise get called off-main and
         // any UI it touches would be wrong in a way that only shows up in the
-        // field. (Mac.apk's general dynamic-broadcast dispatch is still inline
+        // field. (Apk on Mac's general dynamic-broadcast dispatch is still inline
         // on the caller's thread; narrowing the fix to this announcement keeps
         // the install contract right without changing what every other
         // in-process broadcast in the fleet does.)
@@ -1346,7 +1346,7 @@ public final class PackageInstallerBackend {
     /** The REMOVAL half of the same contract: announce that a package this
      *  process previously reported as installed is not installed any more.
      *
-     *  WHY IT EXISTS AT ALL, given that Mac.apk's PackageInstaller.uninstall()
+     *  WHY IT EXISTS AT ALL, given that Apk on Mac's PackageInstaller.uninstall()
      *  still reports STATUS_FAILURE (no auth gate on the helper's uninstall
      *  verb -- unchanged, and deliberately not weakened here): a package can
      *  stop being installed WITHOUT any uninstall API being called. macOS lets
@@ -1372,7 +1372,7 @@ public final class PackageInstallerBackend {
      *
      *  `dataRemoved` is NOT assumed. The caller passes true only for the case
      *  where the evidence says so (the row survives in the registry marked
-     *  `removed`, which in Mac.apk means precisely "the bundle -- and
+     *  `removed`, which in Apk on Mac means precisely "the bundle -- and
      *  therefore Contents/android, the app's data -- is gone"). A row that
      *  vanished from the registry entirely came from an explicit uninstall,
      *  which may have PARKED the data (KeptData), so we claim less and send no
@@ -1441,14 +1441,14 @@ public final class PackageInstallerBackend {
      *  interrupted session never accumulates. */
     public static File stagingRoot() throws IOException {
         File dir = new File(System.getProperty("user.home"),
-                "Library/Application Support/Mac.apk/staging");
+                "Library/Application Support/Apk on Mac/staging");
         if (!dir.isDirectory() && !dir.mkdirs()) {
             throw new IOException("cannot create staging dir " + dir);
         }
         return dir;
     }
 
-    /** Where the Mac.apk control panel (Mac.apk.app) may live, in order:
+    /** Where the Apk on Mac control panel (Apk on Mac.app) may live, in order:
      *  MACAPK_CANONICAL_APP (the app stub exports the one it resolved, which
      *  covers any folder Launch Services knows), /Applications, then the
      *  per-user ~/Applications (GitHub #13). The staged shared runtime ships
@@ -1458,9 +1458,9 @@ public final class PackageInstallerBackend {
         java.util.List<File> out = new java.util.ArrayList<>();
         String env = System.getenv("MACAPK_CANONICAL_APP");
         if (env != null && !env.isEmpty()) out.add(new File(env));
-        out.add(new File("/Applications/Mac.apk.app"));
+        out.add(new File("/Applications/Apk on Mac.app"));
         String home = System.getProperty("user.home");
-        if (home != null && !home.isEmpty()) out.add(new File(home, "Applications/Mac.apk.app"));
+        if (home != null && !home.isEmpty()) out.add(new File(home, "Applications/Apk on Mac.app"));
         return out;
     }
 
@@ -1497,7 +1497,7 @@ public final class PackageInstallerBackend {
         } catch (Throwable ignored) {}
         // The control panel: MACAPK_CANONICAL_APP (the stub exports the one it
         // resolved), then the two standard install locations (GitHub #13: a
-        // Mac.apk in ~/Applications left installed apps with no helper).
+        // Apk on Mac in ~/Applications left installed apps with no helper).
         for (File app : PackageInstallerBackend.canonicalAppCandidates()) {
             File f = new File(app, "Contents/bin/macapk-installhelper");
             if (f.canExecute()) return f;

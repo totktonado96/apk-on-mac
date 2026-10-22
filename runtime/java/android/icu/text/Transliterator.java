@@ -1,5 +1,5 @@
 package android.icu.text;
-/** ICU script/character transliterator. Mac.apk ships no transliteration tables,
+/** ICU script/character transliterator. Apk on Mac ships no transliteration tables,
  *  so instances pass text through unchanged; the API resolves. */
 public class Transliterator {
     private final String id;

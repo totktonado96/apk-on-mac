@@ -5,7 +5,7 @@
 //   frameworks/base/core/java/android/view/ViewGroupOverlay.java
 //   public class ViewGroupOverlay extends ViewOverlay
 //
-// Mac.apk v1.0.92 shipped this as a bare 3-line stub that did not even
+// Apk on Mac v1.0.92 shipped this as a bare 3-line stub that did not even
 // extend ViewOverlay, and nothing in the tree ever constructed it. This
 // turn makes the CLASS ITSELF correct (real extends, real View storage,
 // drawn on top of the inherited Drawable layer) -- but it is still dead

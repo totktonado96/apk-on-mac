@@ -9,7 +9,7 @@
 // identity -- the system matches the token it handed out against the one
 // handed back.
 //
-// Mac.apk has no cross-process input channels, so a token here identifies
+// Apk on Mac has no cross-process input channels, so a token here identifies
 // nothing beyond itself. That is enough for the only observable contract an
 // app can exercise: a token round-trips through a Parcel and compares equal to
 // itself and unequal to any other. The identity is a UUID rather than a

@@ -1,5 +1,5 @@
 // android.hardware.biometrics.BiometricManager -- queries whether the
-// device can do biometric auth. Mac.apk has no biometric hardware, so
+// device can do biometric auth. Apk on Mac has no biometric hardware, so
 // canAuthenticate reports BIOMETRIC_ERROR_NO_HARDWARE. The Authenticators
 // flag constants must exist for callers (and androidx.biometric) to
 // compile. Values mirror AOSP.

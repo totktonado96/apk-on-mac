@@ -1,6 +1,6 @@
 // android.bluetooth.le.ScanFilter -- a predicate applied to BLE scan results.
 //
-// A REAL, complete value type with a REAL matches(). Mac.apk never scans (see
+// A REAL, complete value type with a REAL matches(). Apk on Mac never scans (see
 // BluetoothLeScanner), but a ScanFilter is pure data plus pure comparison
 // logic -- no radio is involved in either -- so both are implemented properly.
 // An app that builds a filter and tests it against a ScanResult it constructed

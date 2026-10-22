@@ -4,7 +4,7 @@
 // Observable<ContentObserver>; dispatchChange forwards to each
 // observer's dispatchChange (which posts to the observer's Handler).
 // Self-change notifications are filtered to observers that opted in via
-// deliverSelfNotifications(). Mac.apk previously only had
+// deliverSelfNotifications(). Apk on Mac previously only had
 // ContentObserver, not this observable container, so cursors had
 // nowhere to register watchers; this restores the standard wiring.
 // Source: frameworks/base/core/java/android/database/ContentObservable.java

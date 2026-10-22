@@ -9,7 +9,7 @@ import com.google.mlkit.vision.common.InputImage;
 import java.io.Closeable;
 
 // com.google.mlkit.vision.text.TextRecognizer -- the OCR detector handle.
-// On-device OCR needs a bundled/downloaded model that Mac.apk does not ship, so
+// On-device OCR needs a bundled/downloaded model that Apk on Mac does not ship, so
 // process() returns a Task that fails with SERVICE_MISSING (honest "the ML Kit
 // model backend is not available on this device"). The app's failure listener
 // fires and it degrades, exactly as it would when a model download is blocked.

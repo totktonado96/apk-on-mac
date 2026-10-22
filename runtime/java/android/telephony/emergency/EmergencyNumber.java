@@ -11,7 +11,7 @@ import java.util.Objects;
 /**
  * One emergency number as reported by the modem / SIM / carrier database.
  *
- * Mac.apk has no modem, no SIM and no carrier database, so
+ * Apk on Mac has no modem, no SIM and no carrier database, so
  * TelephonyManager.getEmergencyNumberList() returns an empty map. That is the
  * honest answer: emergency numbers are country- and network-specific, and
  * inventing "911" would be actively dangerous -- an app that dials what we

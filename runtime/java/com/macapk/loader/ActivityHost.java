@@ -16,7 +16,7 @@ import java.util.ArrayDeque;
 import java.util.Deque;
 
 public final class ActivityHost {
-    private static final String TAG = "Mac.apk.ActivityHost";
+    private static final String TAG = "Apk on Mac.ActivityHost";
 
     // ---- START RESOLUTION (v1.0.1652; docs/cross-app-launch-and-implicit-
     // start-design_2026-09-26.md stages 2a/2b/2d/2e). Each is read ONCE (the JDK
@@ -1156,7 +1156,7 @@ public final class ActivityHost {
     // reaches it a second way: AppCompatDelegate.applyDayNight() calls
     // activity.recreate() itself.
     //
-    // Mac.apk had NEITHER. Activity.recreate() merely re-dispatched the current
+    // Apk on Mac had NEITHER. Activity.recreate() merely re-dispatched the current
     // Configuration, so a live light/dark flip repainted everything that
     // resolves a colour dynamically and left every ALREADY-INFLATED background
     // exactly as it was. Measured on F-Droid across a real appearance flip: the
@@ -1269,7 +1269,7 @@ public final class ActivityHost {
     //   https://raw.githubusercontent.com/aosp-mirror/platform_frameworks_base/android14-release/services/core/java/com/android/server/wm/ActivityStarter.java
     //   https://raw.githubusercontent.com/aosp-mirror/platform_frameworks_base/android14-release/services/core/java/com/android/server/wm/Task.java
     //
-    // Mac.apk honoured neither flag: `stack` is a single flat LIFO with no task
+    // Apk on Mac honoured neither flag: `stack` is a single flat LIFO with no task
     // model, and performLaunch simply pushed. So a CLEAR_TASK launch left every
     // old activity alive underneath the new one, and -- worse -- the launching
     // activity's own finish() would REVEAL one of those doomed activities and
@@ -1277,7 +1277,7 @@ public final class ActivityHost {
     // view into the shared NSWindow. On a device that instance no longer exists
     // by then.
     //
-    // Mac.apk models exactly one task (one window, one stack), so "the task
+    // Apk on Mac models exactly one task (one window, one stack), so "the task
     // that would be associated with the activity" is the whole stack. Two
     // halves, because our launches are QUEUED where AOSP's are synchronous:
     //   * at SUBMISSION (start/startAll) we condemn what is on the stack, which
@@ -1366,7 +1366,7 @@ public final class ActivityHost {
      *  performRestart -> performStart -> performResume, run only as far down as
      *  we actually drove it (see sBackgrounded). Also re-installs its content
      *  view: real Android gives every activity its own window and simply
-     *  reveals the one underneath, while Mac.apk shares ONE NSWindow whose
+     *  reveals the one underneath, while Apk on Mac shares ONE NSWindow whose
      *  content Activity.macapkInstallContentDirect swaps -- so the finished
      *  activity's now-orphaned view is still what the window shows until we put
      *  this one back. Generic; a no-op for the single-activity apps that never
@@ -1641,7 +1641,7 @@ public final class ActivityHost {
     // SurfaceFlinger refuses a capture while ANY visible layer is secure
     // (android-14.0.0_r1 SurfaceFlinger.cpp renderScreenImpl:
     // "capturedSecureLayers |= (snapshot->isVisible && snapshot->isSecure)").
-    // Mac.apk composes the visible activities into ONE NSWindow, so that window
+    // Apk on Mac composes the visible activities into ONE NSWindow, so that window
     // is secure while any VISIBLE activity's OWN window (Activity.mWindow, read
     // through macapkPeekWindow so asking never creates one) carries the flag:
     // the top, and those below it down to (and including) the first that owns
@@ -1715,7 +1715,7 @@ public final class ActivityHost {
     // 7582-7636); the top opaque activity's box is what is on screen; a
     // translucent or floating one inherits the box below (TransparentPolicy);
     // a revealed activity comes back with its own, untouched configuration.
-    // Before this, Mac.apk kept ONE box and ONE request for the whole app: every
+    // Before this, Apk on Mac kept ONE box and ONE request for the whole app: every
     // activity was laid out in the launcher's box (Aegis's portrait
     // IntroActivity at 3360x1636 where the tablet oracle gives 1227x1636), and a
     // request outlived the activity that made it.
@@ -1750,7 +1750,7 @@ public final class ActivityHost {
     /** The task has an activity, or had one whose start of the next is still
      *  in flight: a launch onto an EMPTY stack goes into this same task. Set
      *  by every launch; cleared only when the empty-task check (a later loop
-     *  turn with nothing pending) concludes the task ended. Mac.apk's finish()
+     *  turn with nothing pending) concludes the task ended. Apk on Mac's finish()
      *  is synchronous and its startActivity posted, so the splash idioms --
      *  `startActivity(X); finish()` and `finish(); startActivity(X)` -- and a
      *  CLEAR_TASK launch all reach X's launch with the stack empty; on a device
@@ -2460,7 +2460,7 @@ public final class ActivityHost {
      * do nothing with it. The PURE predicate half of resolveImplicitToHost.
      *
      * ⚠ v1.0.938: extracted so `MacApkPackageManager.queryIntentActivities` can
-     * ask the SAME question the start path asks. Before this, Mac.apk could
+     * ask the SAME question the start path asks. Before this, Apk on Mac could
      * PERFORM these intents but reported that nothing could handle them --
      * queryIntentActivities only ever scanned the app's own manifest. The
      * near-universal guard
@@ -2536,7 +2536,7 @@ public final class ActivityHost {
         // PackageInstaller/AndroidManifest.xml: .InstallStart takes
         // {VIEW, INSTALL_PACKAGE} x schemes {file, content} x mimeType
         // application/vnd.android.package-archive, plus INSTALL_PACKAGE alone
-        // on {file, package, content}); Mac.apk's equivalent is the install
+        // on {file, package, content}); Apk on Mac's equivalent is the install
         // helper inside the .app bundle. Predicate lives with the handler so
         // the install knowledge stays in one class; it tests action / scheme /
         // explicit type only, per this method's extras rule.
@@ -2728,7 +2728,7 @@ public final class ActivityHost {
         }
         if (claim) HostUrlIntake.claimRedirectSchemes(uri);
         // A sign-in whose redirect_uri is one of this app's VERIFIED App Links
-        // opens in the Mac.apk sign-in window, which hands that redirect back
+        // opens in the Apk on Mac sign-in window, which hands that redirect back
         // the way a device browser does; Safari would load it as a page.
         if (AppLinks.maybeOpenSignInWindow(uri)) return true;
         try {
@@ -2755,7 +2755,7 @@ public final class ActivityHost {
      * Two deliberate, stated divergences until the cross-app stages land
      * (docs/cross-app-launch-and-implicit-start-design_2026-09-26.md):
      *  - an EXPLICIT start of a component in ANOTHER package our PM reports as
-     *    installed (a Mac.apk registry app, a GMS stand-in) keeps the pre-change
+     *    installed (a Apk on Mac registry app, a GMS stand-in) keeps the pre-change
      *    path (performLaunch misses and logs). Throwing "not found" for an app
      *    that IS installed would be a lie; stage 3a hands it to that app.
      *  - an EXPLICIT start of an undeclared class in OUR package still launches
@@ -2782,7 +2782,7 @@ public final class ActivityHost {
                     && resolveImplicitToHost(intent)) {
                 return null;
             }
-            // Stage 3a: a component of ANOTHER installed Mac.apk app is handed to
+            // Stage 3a: a component of ANOTHER installed Apk on Mac app is handed to
             // that app (resolveForStart: not narrowed by package visibility).
             if (CrossAppLauncher.XAPP_START && macapkCrossAppStart(own, intent, null)) return null;
             if (macapkPackageInstalled(pkg)) return intent;
@@ -2836,7 +2836,7 @@ public final class ActivityHost {
                     + ") -> own " + pick.activityInfo.name);
             return copy;
         }
-        // Mac.apk's GMS stand-in has no process of its own: its sign-in activity
+        // Apk on Mac's GMS stand-in has no process of its own: its sign-in activity
         // (a framework class) runs as an activity of the CALLING app's task, so
         // the for-result round trip is the ordinary in-app one. On a device the
         // component's package is com.google.android.gms; here it is the caller's
@@ -2848,7 +2848,7 @@ public final class ActivityHost {
                     + ") -> in-process GMS " + pick.activityInfo.name);
             return copy;
         }
-        // Stage 3a: a row owned by ANOTHER installed Mac.apk app (the query was
+        // Stage 3a: a row owned by ANOTHER installed Apk on Mac app (the query was
         // scoped to it with setPackage): hand the start to that app.
         if (CrossAppLauncher.XAPP_START && macapkCrossAppStart(own, intent, pick.activityInfo)) {
             return null;
@@ -2864,7 +2864,7 @@ public final class ActivityHost {
         return null;
     }
 
-    /** Stage 3a: if `intent` targets a component of another INSTALLED Mac.apk
+    /** Stage 3a: if `intent` targets a component of another INSTALLED Apk on Mac
      *  app, hand it to that app and return true. `resolved` is the resolver's
      *  row for an implicit start, or null for an explicit component (looked up
      *  resolveForStart-style). May throw ActivityNotFoundException (the bundle
@@ -2977,7 +2977,7 @@ public final class ActivityHost {
             intent = routed;
         } else if (intent.getComponent() == null) {
             // v1.0.690: an IMPLICIT intent (no explicit component). On a device
-            // this resolves against installed apps' intent filters. Mac.apk has
+            // this resolves against installed apps' intent filters. Apk on Mac has
             // no second app to hand it to, but the common web/mail/tel/geo
             // handoffs have an honest MACOS-NATIVE target: open them on the
             // host. This is the fix for the audit-flagged "ActivityHost drops
@@ -3677,7 +3677,7 @@ public final class ActivityHost {
         // every LiveData observer "inactive" so Room's @Query never
         // runs and the UI never gets data. Driving the registry
         // explicitly here is the AOSP-faithful platform-level fix:
-        // Mac.apk's ActivityHost is the moral equivalent of
+        // Apk on Mac's ActivityHost is the moral equivalent of
         // ActivityThread, and AOSP ActivityThread does drive the
         // LifecycleRegistry state directly. Generic across any
         // androidx LifecycleOwner-based activity.
@@ -3841,7 +3841,7 @@ public final class ActivityHost {
         logLifecycleState(activity);
         // v1.0.104: schedule a one-shot SwipeRefreshLayout listener
         // invocation 2 seconds after the activity becomes visible.
-        // Mac.apk's platform UX policy: treat app launch as an
+        // Apk on Mac's platform UX policy: treat app launch as an
         // implicit pull-to-refresh gesture so apps whose content is
         // populated via a swipe-driven listener (the standard pattern
         // since SwipeRefreshLayout shipped in 2014) show fresh content

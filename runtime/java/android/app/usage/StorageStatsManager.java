@@ -1,7 +1,7 @@
 // android.app.usage.StorageStatsManager
 //
 // AOSP's storage-statistics service. Apps fetch it via getSystemService(
-// STORAGE_STATS_SERVICE) to read total/free bytes of a storage volume. Mac.apk
+// STORAGE_STATS_SERVICE) to read total/free bytes of a storage volume. Apk on Mac
 // backs storage with the host filesystem, so we report the real free/total
 // bytes of the app data dir's filesystem -- a faithful answer rather than a
 // stub, where the platform allows it. Mirrors
@@ -43,7 +43,7 @@ public class StorageStatsManager {
     public boolean isQuotaSupported(java.util.UUID storageUuid) { return false; }
 
     /** AOSP queryStatsForPackage(uuid, pkg, user) (API 26): the app / data /
-     *  cache byte totals for one package. Mac.apk reports the on-disk size of
+     *  cache byte totals for one package. Apk on Mac reports the on-disk size of
      *  the app's private data tree as dataBytes (with the cache subtree counted
      *  in cacheBytes); appBytes is the apk size when locatable, else 0. */
     public android.app.usage.StorageStats queryStatsForPackage(
@@ -99,7 +99,7 @@ public class StorageStatsManager {
     // ================================================================
 
     /** AOSP queryStatsForUid(UUID, int uid): "Query the size of media and
-     *  external storage owned by all apps sharing the given uid." Mac.apk runs
+     *  external storage owned by all apps sharing the given uid." Apk on Mac runs
      *  ONE app under ONE uid, so the uid's stats are that app's stats -- the
      *  same measurement queryStatsForPackage above performs, which is why this
      *  routes through it rather than answering a separate zero. */
@@ -123,7 +123,7 @@ public class StorageStatsManager {
      *  external storage statistics for the given user", broken down into audio
      *  / video / image / app bytes.
      *
-     *  Mac.apk's "external storage" is a directory inside the app's own tree
+     *  Apk on Mac's "external storage" is a directory inside the app's own tree
      *  (Environment.getExternalStorageDirectory), not a shared volume with a
      *  media index: nothing classifies files there by media type, and doing it
      *  by extension would be a guess reported as a measurement. So the TOTAL is

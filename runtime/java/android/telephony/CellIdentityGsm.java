@@ -17,7 +17,7 @@ import java.util.Set;
  * ⚠ Parcel-format deviation, stated rather than hidden: AOSP writes the
  * additional-PLMN set with Parcel.writeArraySet, which android.os.Parcel here
  * does not implement. We write it as a string list instead. The round trip is
- * exact; only the byte layout differs from a device's, and nothing in Mac.apk
+ * exact; only the byte layout differs from a device's, and nothing in Apk on Mac
  * exchanges parcels with a device.
  *
  * Source: frameworks/base/telephony/java/android/telephony/CellIdentityGsm.java

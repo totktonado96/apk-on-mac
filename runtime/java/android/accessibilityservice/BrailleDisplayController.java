@@ -11,7 +11,7 @@ import java.util.concurrent.Executor;
  * Braille display over Bluetooth or USB.
  *
  * This is an INTERFACE in AOSP, and the platform supplies the implementation
- * via AccessibilityService.getBrailleDisplayController(). Mac.apk has no HID
+ * via AccessibilityService.getBrailleDisplayController(). Apk on Mac has no HID
  * transport for a guest, so our implementation reports every connect attempt as
  * FLAG_ERROR_BRAILLE_DISPLAY_NOT_FOUND -- an outcome AOSP produces whenever the
  * named device is not a Braille display, so a service's own error path runs

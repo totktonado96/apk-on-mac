@@ -1,5 +1,5 @@
 // android.os.DropBoxManager -- a system-level ring buffer of tagged diagnostic
-// entries (crashes, ANRs, custom logs). Mac.apk has no system dropbox, so
+// entries (crashes, ANRs, custom logs). Apk on Mac has no system dropbox, so
 // addText/addData are accepted no-ops and getNextEntry() always returns null
 // (an empty dropbox). The Entry nested Parcelable + flag constants are present so
 // apps that read/enumerate entries compile and behave as if the box is empty.

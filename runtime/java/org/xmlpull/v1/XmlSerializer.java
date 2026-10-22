@@ -1,5 +1,5 @@
 // org.xmlpull.v1.XmlSerializer -- the XML *writing* half of the XmlPull API.
-// Mac.apk shipped only the parser half, so every app that wrote XML (the
+// Apk on Mac shipped only the parser half, so every app that wrote XML (the
 // AndroidX/Kotlin build dependency that reaches this is present in virtually
 // any modern Android Studio project) hit NoClassDefFoundError on the type and
 // NoSuchMethodError on android.util.Xml.newSerializer().

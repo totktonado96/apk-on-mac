@@ -5,9 +5,9 @@
 // NoClassDefFoundError which leaves the LiveOps init chain in an
 // undefined half-initialized state.
 //
-// ⚠ HISTORICAL: this class used to be a pure stub ("Mac.apk has no real popup
+// ⚠ HISTORICAL: this class used to be a pure stub ("Apk on Mac has no real popup
 // chrome, so all the show/dismiss methods are no-ops"). That has not been true
-// since WindowOverlayStack landed at v1.0.691 -- Mac.apk owns one NSWindow and
+// since WindowOverlayStack landed at v1.0.691 -- Apk on Mac owns one NSWindow and
 // composites every floating window as an overlay layer over the Activity
 // content, which is exactly what a popup needs. show/dismiss/update now go
 // through WindowManager.addView/removeView/updateViewLayout like AOSP's do; see
@@ -86,7 +86,7 @@ public class PopupWindow {
     /** AOSP setSplitTouchEnabled: whether a pointer that goes down over
      *  another window continues delivering its own touches to THIS popup
      *  (split) or the first-down window claims every pointer for its
-     *  lifetime (not split). Mac.apk has no overlapping-window touch router
+     *  lifetime (not split). Apk on Mac has no overlapping-window touch router
      *  yet, so nothing downstream consults this flag, but it is stored
      *  faithfully (matching AOSP's exact tri-state encoding) rather than a
      *  bare no-op. */
@@ -107,7 +107,7 @@ public class PopupWindow {
     // write / field read (PopupWindow.java setEnterTransition/getEnterTransition/
     // setExitTransition/getExitTransition); the playback itself lives in the
     // private PopupDecorView, which requests the enter transition when the popup
-    // window is attached and starts the exit transition on dismiss. Mac.apk has
+    // window is attached and starts the exit transition on dismiss. Apk on Mac has
     // no popup decor window to attach the content view to yet, so nothing is
     // played -- but the accessors must round-trip, because a caller that sets a
     // Transition and reads it back (AppCompat does exactly this when it clones a
@@ -151,7 +151,7 @@ public class PopupWindow {
     //    .measureAndLayout already clamps a layer to the screen, so a dropdown
     //    that does not fit below its anchor SLIDES up instead of FLIPPING above
     //    it. isAboveAnchor() therefore reports the clamped outcome, not a
-    //    decision we made. This is the one place a device and Mac.apk will place
+    //    decision we made. This is the one place a device and Apk on Mac will place
     //    a popup differently, and it only shows near the bottom edge.
     private android.view.View mDecorView;
     private android.view.WindowManager mAddedTo;

@@ -6,7 +6,7 @@
 // (used by every app that implements keyboard-aware layout on API 30+) hit
 // NoSuchMethodError on construction and on Bounds.
 //
-// Mac.apk never DRIVES these animations (there is no system bar or soft keyboard
+// Apk on Mac never DRIVES these animations (there is no system bar or soft keyboard
 // to animate), but the types must exist and behave: apps install a Callback in
 // onCreate unconditionally, and a missing Bounds/Callback breaks that path at
 // class-load time regardless of whether an animation ever runs.

@@ -4,7 +4,7 @@
 WHY THIS EXISTS. android.opengl.GLES10/GLES11 are the fixed-function API that
 pre-2012 Android games use (glMatrixMode, glVertexPointer, glFogf, ...). They have
 no GLES2 equivalent, so an app that calls one hits NoSuchMethodError at the first
-call. ANGLE already exports the entire GLES1 entry-point set and Mac.apk already
+call. ANGLE already exports the entire GLES1 entry-point set and Apk on Mac already
 requests an ES1 CONTEXT when the guest's native libs import ES1 symbols
 (runtime/src/main.cpp ApkNeedsGles1 -> MACAPK_GLES1_CONTEXT -> angle_glue.cpp).
 The ONLY missing link was the Java->native bridge, which is what this emits.

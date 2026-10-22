@@ -1,6 +1,6 @@
 // android.database.CrossProcessCursor -- the AOSP marker interface for
 // cursors whose row data can be marshalled into a CursorWindow for a
-// remote (cross-process) reader. In Mac.apk everything is in-process,
+// remote (cross-process) reader. In Apk on Mac everything is in-process,
 // so the window path is a local convenience rather than a Binder
 // transport, but the type must resolve: AbstractWindowedCursor-derived
 // cursors are CrossProcessCursors in AOSP and app/loader code branches

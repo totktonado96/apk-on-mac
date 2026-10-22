@@ -1,6 +1,6 @@
 // com.macapk.gms.GoogleSignInActivity -- the account chooser com.google.android.gms
 // shows when an app asks to sign a user in ("Choose an account / to continue to
-// <App>"), hosted in the calling app's process because Mac.apk's GMS stand-in
+// <App>"), hosted in the calling app's process because Apk on Mac's GMS stand-in
 // has no process of its own.
 //
 // Two entry points, one screen (see GoogleSignInBroker's header):
@@ -14,7 +14,7 @@
 // or Back) answers like GMS: errorCode 13 for the hub (it reports 12501
 // SIGN_IN_CANCELLED), TYPE_USER_CANCELED for Credential Manager. With no account
 // the screen offers only "Add an account", which opens the same Google sign-in
-// window as Mac.apk's Accounts panel (NativeSignIn) -- agents never type into it.
+// window as Apk on Mac's Accounts panel (NativeSignIn) -- agents never type into it.
 package com.macapk.gms;
 
 import android.app.Activity;
@@ -242,8 +242,8 @@ public class GoogleSignInActivity extends Activity {
     private void onAddAccount() {
         if (mBusy || mFinished) return;
         if (!NativeSignIn.available()) {
-            setStatus("Adding an account needs Mac.apk's Google sign-in window. "
-                    + "Add one in Mac.apk > Accounts, then try again.");
+            setStatus("Adding an account needs Apk on Mac's Google sign-in window. "
+                    + "Add one in Apk on Mac > Accounts, then try again.");
             return;
         }
         if (NativeSignIn.active()) return;

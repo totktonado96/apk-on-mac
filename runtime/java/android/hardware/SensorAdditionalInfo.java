@@ -1,6 +1,6 @@
 // android.hardware.SensorAdditionalInfo -- metadata frame some sensors
 // emit between data frames. Public field shape + TYPE_* constants match
-// AOSP. Mac.apk never emits these (synthetic sensors carry no extra
+// AOSP. Apk on Mac never emits these (synthetic sensors carry no extra
 // info) but the type must exist for SensorEventCallback to reference it.
 package android.hardware;
 

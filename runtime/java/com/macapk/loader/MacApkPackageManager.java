@@ -149,7 +149,7 @@ public final class MacApkPackageManager extends PackageManager {
     @Override public PackageInfo getPackageInfo(String packageName, int flags)
             throws NameNotFoundException {
         // AOSP: getPackageInfo throws NameNotFoundException for a package that is
-        // NOT installed. Mac.apk runs exactly one APK, so only the running app
+        // NOT installed. Apk on Mac runs exactly one APK, so only the running app
         // (this.packageName) is installed -- a BROWSED / other package is not.
         // Previously we returned the running app's PackageInfo for EVERY query, so
         // F-Droid's AppDetails saw every browsed app as installed and showed
@@ -159,7 +159,7 @@ public final class MacApkPackageManager extends PackageManager {
         // MACAPK_PM_SELF_ONLY=0 restores the legacy always-return for A/B.
         //
         // Registry consult (MACAPK_PM_REGISTRY, default ON): a package another
-        // Mac.apk install registered IS installed on this machine, so answer for
+        // Apk on Mac install registered IS installed on this machine, so answer for
         // it instead of throwing -- PROVIDED the caller can actually see it on a
         // real device (packageVisible: API 30 package-visibility filtering, see
         // its header). The reserved-Google deny-set inside InstalledRegistry
@@ -199,7 +199,7 @@ public final class MacApkPackageManager extends PackageManager {
             hi.applicationInfo = hai;
             return hi;
         }
-        // The synthetic Play Store, present only when Mac.apk's GMS layer is on
+        // The synthetic Play Store, present only when Apk on Mac's GMS layer is on
         // (com.macapk.loader.PlayServices.vendingPresent()). It is NOT a
         // fabricated app: we really do host com.android.vending's licensing
         // service in-process and really do answer it by asking Google with the
@@ -207,7 +207,7 @@ public final class MacApkPackageManager extends PackageManager {
         // gets a working service.
         //
         // ⚠ THE SIGNATURE IS OURS AND SAYS SO. PackageInfo.signatures carries a
-        // genuine self-signed certificate whose subject is CN=Mac.apk Platform
+        // genuine self-signed certificate whose subject is CN=Apk on Mac Platform
         // (com.macapk.gms.PlatformSignature). It will never equal Google's, so
         // an app that byte-compares against Google's embedded certificate
         // correctly concludes this store is not Google's -- which is the honest
@@ -279,7 +279,7 @@ public final class MacApkPackageManager extends PackageManager {
         // answer; ours came from System.currentTimeMillis() inside the
         // PackageInfo constructor and moved on every call. The APK file's own
         // mtime is the closest honest analogue of "when was this installed" that
-        // Mac.apk has, and it is stable across calls AND across runs (which is
+        // Apk on Mac has, and it is stable across calls AND across runs (which is
         // what an app comparing a cached value against a fresh read needs).
         long installedAt = installTimeMillis();
         // v1.0.1641: AOSP keeps firstInstallTime across an update and moves only
@@ -394,7 +394,7 @@ public final class MacApkPackageManager extends PackageManager {
                     info.requestedPermissions = requested.toArray(new String[0]);
                     int[] grants = new int[requested.size()];
                     // Every permission the manifest declares is granted here
-                    // (see checkPermission for why Mac.apk uses the install-time
+                    // (see checkPermission for why Apk on Mac uses the install-time
                     // model), so each entry carries REQUESTED_PERMISSION_GRANTED
                     // -- the same bit checkPermission's answer is derived from,
                     // so the two cannot disagree. The exceptions are the same as
@@ -657,11 +657,11 @@ public final class MacApkPackageManager extends PackageManager {
                 int n;
                 while ((n = is.read(buf)) != -1) os.write(buf, 0, n);
             }
-            NativeLog.i("Mac.apk.PM", "extracted inner " + base.getName()
+            NativeLog.i("Apk on Mac.PM", "extracted inner " + base.getName()
                 + " from split bundle for signature read -> " + tmp.getPath());
             return tmp.getPath();
         } catch (Throwable t) {
-            NativeLog.w("Mac.apk.PM", "extractInnerBaseApk(" + bundlePath + ") failed (" + t + ")");
+            NativeLog.w("Apk on Mac.PM", "extractInnerBaseApk(" + bundlePath + ") failed (" + t + ")");
             return null;
         }
     }
@@ -710,10 +710,10 @@ public final class MacApkPackageManager extends PackageManager {
             Signature[] sigs = new Signature[certs.length];
             for (int i = 0; i < certs.length; i++)
                 sigs[i] = new Signature(certs[i].getEncoded());
-            NativeLog.i("Mac.apk.PM", "read " + sigs.length + " real APK signature(s) (v1/JAR) from " + path);
+            NativeLog.i("Apk on Mac.PM", "read " + sigs.length + " real APK signature(s) (v1/JAR) from " + path);
             return sigs;
         } catch (Throwable t) {
-            NativeLog.w("Mac.apk.PM", "readV1SignaturesVerified failed (" + t + ")");
+            NativeLog.w("Apk on Mac.PM", "readV1SignaturesVerified failed (" + t + ")");
             return null;
         }
     }
@@ -747,14 +747,14 @@ public final class MacApkPackageManager extends PackageManager {
                 if (leaf != null) out.add(new Signature(leaf.getEncoded()));
             }
             if (out.isEmpty()) {
-                NativeLog.i("Mac.apk.PM", "APK carries no signature in any scheme; signatures=null");
+                NativeLog.i("Apk on Mac.PM", "APK carries no signature in any scheme; signatures=null");
                 return null;
             }
-            NativeLog.i("Mac.apk.PM", "read " + out.size()
+            NativeLog.i("Apk on Mac.PM", "read " + out.size()
                 + " real APK signature(s) (v1/PKCS#7) from " + path);
             return out.toArray(new Signature[0]);
         } catch (Throwable t) {
-            NativeLog.w("Mac.apk.PM", "readV1SignaturesFromPkcs7 failed (" + t + "); signatures=null");
+            NativeLog.w("Apk on Mac.PM", "readV1SignaturesFromPkcs7 failed (" + t + "); signatures=null");
             return null;
         }
     }
@@ -809,7 +809,7 @@ public final class MacApkPackageManager extends PackageManager {
      *
      *  WHAT THIS DOES NOT DO: it does not verify the APK's content digests, and
      *  it does not verify the signature over signed-data. That is APK INTEGRITY
-     *  verification, which Mac.apk performs nowhere (it maps the DEX and the
+     *  verification, which Apk on Mac performs nowhere (it maps the DEX and the
      *  native libraries unconditionally), so doing a fraction of it here would
      *  buy no integrity guarantee while adding a way to fail closed on a
      *  perfectly good APK. What this method owes its callers is the same thing
@@ -836,7 +836,7 @@ public final class MacApkPackageManager extends PackageManager {
                     // separate v3.1 constant, and v3.1 is a rotation-targeting variant
                     // of the v3 block, not a distinct scheme version.
                     cachedSchemeVersion = v3 ? 3 : 2;
-                    NativeLog.i("Mac.apk.PM", "read " + sigs.length
+                    NativeLog.i("Apk on Mac.PM", "read " + sigs.length
                         + " real APK signature(s) (scheme block 0x"
                         + Integer.toHexString(blockId) + ", schemeVersion="
                         + cachedSchemeVersion + ") from " + path);
@@ -845,7 +845,7 @@ public final class MacApkPackageManager extends PackageManager {
             }
             return null;
         } catch (Throwable t) {
-            NativeLog.w("Mac.apk.PM", "readSigningBlockSignatures failed (" + t + ")");
+            NativeLog.w("Apk on Mac.PM", "readSigningBlockSignatures failed (" + t + ")");
             return null;
         }
     }
@@ -1068,7 +1068,7 @@ public final class MacApkPackageManager extends PackageManager {
             return gmsPackageInfo().applicationInfo;
         }
         if (packageName == null || !packageName.equals(this.packageName)) {
-            // MACAPK_PM_REGISTRY (default ON): another Mac.apk-installed app IS
+            // MACAPK_PM_REGISTRY (default ON): another Apk on Mac-installed app IS
             // installed on this machine, so report it -- if the caller can see
             // it (packageVisible). See InstalledRegistry.
             if (packageName != null && packageVisible(packageName)) {
@@ -1084,8 +1084,8 @@ public final class MacApkPackageManager extends PackageManager {
 
     // ---- The installed-apps registry (G9, v1.0.953) --------------------------
     //
-    // WHAT: Mac.apk installs every APK as its own macOS .app bundle and records
-    // it in ~/Library/Application Support/Mac.apk/installed_apps.json (written
+    // WHAT: Apk on Mac installs every APK as its own macOS .app bundle and records
+    // it in ~/Library/Application Support/Apk on Mac/installed_apps.json (written
     // ONLY by the Swift side: RegistryStore in launcher/InstallCore.swift,
     // schema 2, atomic tmp+fsync+rename -- so a reader always sees a complete
     // old or complete new file and needs no lock). Those packages ARE installed
@@ -1159,7 +1159,7 @@ public final class MacApkPackageManager extends PackageManager {
         // ⚠ DEFAULT FLIPPED TO ON 2026-08-17 (was default-OFF at v1.0.954 landing,
         // pending the visibility filter below + a sweep -- both now in). Owner
         // hand-test: F-Droid never flips Install->Open/Installed and never offers
-        // updates for anything Mac.apk installed, because this gate was dark by
+        // updates for anything Apk on Mac installed, because this gate was dark by
         // default and nothing ever set it. Same `!"0".equals(...)` idiom as
         // MACAPK_PM_SELF_ONLY / MACAPK_FOLLOW_SYSTEM_APPEARANCE elsewhere in this
         // tree: unset or any non-"0" value is ON, "0" is the explicit opt-out for
@@ -1174,7 +1174,7 @@ public final class MacApkPackageManager extends PackageManager {
                 return new java.io.File(override);
             }
             return new java.io.File(System.getProperty("user.home"),
-                "Library/Application Support/Mac.apk/installed_apps.json");
+                "Library/Application Support/Apk on Mac/installed_apps.json");
         }
 
         /** One parse of the file: the installed rows, plus the packages the
@@ -1184,7 +1184,7 @@ public final class MacApkPackageManager extends PackageManager {
          *  `announceRemovals`). */
         static final class Snapshot {
             final java.util.List<Row> installed;
-            /** Packages carrying a row whose state is `removed` -- Mac.apk's
+            /** Packages carrying a row whose state is `removed` -- Apk on Mac's
              *  "the app's macOS bundle, and therefore its data, is gone". */
             final java.util.Set<String> removed;
             Snapshot(java.util.List<Row> installed, java.util.Set<String> removed) {
@@ -1494,9 +1494,9 @@ public final class MacApkPackageManager extends PackageManager {
             // native library (the offline probes) it throws
             // UnsatisfiedLinkError, which must not escape a logging call --
             // same hazard this file already documents at manifest().
-            try { NativeLog.i("Mac.apk.PM", msg); }
+            try { NativeLog.i("Apk on Mac.PM", msg); }
             catch (Throwable ignored) {
-                try { System.err.println("[Mac.apk.PM] " + msg); }
+                try { System.err.println("[Apk on Mac.PM] " + msg); }
                 catch (Throwable ignored2) {}
             }
         }
@@ -1506,7 +1506,7 @@ public final class MacApkPackageManager extends PackageManager {
     //
     // WHY: flipping InstalledRegistry to default-ON (above) means EVERY app
     // that calls getPackageInfo/getInstalledPackages for a non-self package
-    // now potentially sees every OTHER app Mac.apk has installed, on this ONE
+    // now potentially sees every OTHER app Apk on Mac has installed, on this ONE
     // shared machine. A real device does not do that unconditionally past
     // Android 11 -- see https://developer.android.com/training/
     // package-visibility/automatic (fetched 2026-08-17): "if your app targets
@@ -1535,10 +1535,10 @@ public final class MacApkPackageManager extends PackageManager {
     //
     // DELIBERATELY NOT MIRRORED (conservative -- every omission here can only
     // HIDE a package a real device would show, never leak one the device
-    // would hide): the installer-of/installed-by relationship (Mac.apk's
+    // would hide): the installer-of/installed-by relationship (Apk on Mac's
     // getInstallSourceInfo already reports no installer chain, so there is
     // nothing to key this on); the four runtime-interaction grants (activity-
-    // result/service-bind/provider-access/IME) -- Mac.apk hosts one APK's
+    // result/service-bind/provider-access/IME) -- Apk on Mac hosts one APK's
     // process at a time, so there is no second live app to interact with;
     // <queries><intent>/<provider> matching -- doing this honestly means
     // resolving the caller's intent templates against every OTHER registered
@@ -1806,7 +1806,7 @@ public final class MacApkPackageManager extends PackageManager {
 
     /** The row's APK -- or, when that file is gone, the bundle's INSTALLED
      *  base.apk. v1.0.1639: rows written before v1.0.1585 record apkPath in the
-     *  ~/Library/Application Support/Mac.apk/apks retention dir, which was
+     *  ~/Library/Application Support/Apk on Mac/apks retention dir, which was
      *  dropped on 2026-09-19 (22 of 24 rows on the owner's machine), so every
      *  such package degraded to the thin row: no signatures, no min/target SDK,
      *  no metaData, no splits. The installed copy is
@@ -1818,10 +1818,10 @@ public final class MacApkPackageManager extends PackageManager {
     // ================= STAGE 1 (cross-app design): a REGISTRY app's activities
     // ================= docs/cross-app-launch-and-implicit-start-design_2026-09-26.md
     //
-    // Before this, a query or getActivityInfo naming another INSTALLED Mac.apk
+    // Before this, a query or getActivityInfo naming another INSTALLED Apk on Mac
     // app answered nothing: getPackageInfo said the package was installed while
     // getLaunchIntentForPackage said it had no launcher -- a state a device never
-    // has, and why F-Droid / Aurora hid "Open" for apps Mac.apk installed. A
+    // has, and why F-Droid / Aurora hid "Open" for apps Apk on Mac installed. A
     // query scoped to a registry package now resolves against THAT row's own
     // installed manifest, narrowed by package visibility as ComputerEngine does
     // for queries; the start path (macapkRegistryActivityForStart) is not
@@ -1843,7 +1843,7 @@ public final class MacApkPackageManager extends PackageManager {
     private static final java.util.concurrent.ConcurrentHashMap<String, Object[]> sRegistryIcons =
         new java.util.concurrent.ConcurrentHashMap<>();
 
-    /** Another installed Mac.apk app's icon: Contents/Resources/AppIcon.png of its
+    /** Another installed Apk on Mac app's icon: Contents/Resources/AppIcon.png of its
      *  bundle (launcher/BundleGenerator.swift renders it from the APK's own
      *  launcher icon at install). Only for a package the caller can see, like
      *  every other answer about it; null otherwise and for the running app, whose
@@ -2128,7 +2128,7 @@ public final class MacApkPackageManager extends PackageManager {
                 // exposure. A logging failure must never be able to escalate the
                 // error it was reporting.
                 try {
-                    NativeLog.w("Mac.apk.PM",
+                    NativeLog.w("Apk on Mac.PM",
                         "component manifest parse failed (" + t + ") -- getActivityInfo"
                         + " falls back to the permissive synthesised ActivityInfo");
                 } catch (Throwable ignored) {}
@@ -2154,7 +2154,7 @@ public final class MacApkPackageManager extends PackageManager {
      *  DELIBERATE DIVERGENCE, retained from the previous implementation: AOSP
      *  throws NameNotFoundException for a component that is not declared, and
      *  we instead return the old permissive stub for that case. Every Activity
-     *  Mac.apk hosts is "known" to the loader whether or not it is in the
+     *  Apk on Mac hosts is "known" to the loader whether or not it is in the
      *  manifest (ActivityHost can be asked to start a class directly), and
      *  several framework paths -- Activity.getComponentName-based lookups,
      *  AppCompat delegate theming -- call this for components the manifest
@@ -2188,7 +2188,7 @@ public final class MacApkPackageManager extends PackageManager {
     //     :118-152  isEnabled(state, isPackageEnabled, isComponentEnabled,
     //                          componentName, flags)
     //
-    // Before v1.1.0 Mac.apk instead open-coded `if (!e.enabled) continue;` at
+    // Before v1.1.0 Apk on Mac instead open-coded `if (!e.enabled) continue;` at
     // TWO sites (queryIntentActivities, queryBroadcastReceivers), had no test
     // at all at SIX more (Boot.installAutoInitProviders, ServiceRegistry.ensure,
     // Context.macapkDeliverToManifestReceiver, getServiceInfo, getProviderInfo,
@@ -2507,7 +2507,7 @@ public final class MacApkPackageManager extends PackageManager {
             ComponentName component, int flags, boolean receiver)
             throws android.content.pm.PackageManager.NameNotFoundException {
         String cls = (component != null) ? component.getClassName() : null;
-        // Stage 1: a component of ANOTHER installed Mac.apk app answers from
+        // Stage 1: a component of ANOTHER installed Apk on Mac app answers from
         // THAT app's manifest (the class name alone used to decide, so
         // (other.pkg, X) resolved against OUR manifest). Visible packages only,
         // as a query is; an undeclared class there is NameNotFoundException.
@@ -2835,7 +2835,7 @@ public final class MacApkPackageManager extends PackageManager {
      *  and by androidx TaskStackBuilder.addNextIntentWithParentStack when the
      *  next intent has no explicit component.
      *
-     *  Only OUR package can ever match -- Mac.apk hosts exactly one app, so a
+     *  Only OUR package can ever match -- Apk on Mac hosts exactly one app, so a
      *  device with no other packages installed is the faithful model, and the
      *  old unconditional empty list was only correct in the sense that a
      *  device with zero installed apps returns nothing. ⚠ "Only our package can
@@ -2877,7 +2877,7 @@ public final class MacApkPackageManager extends PackageManager {
             // getActivityInfo(comp) for a package that is not installed is null
             // (ComputerEngine.java:527-528), so the list stays empty. The class
             // name alone used to decide, and ("com.other", <our class>) resolved
-            // to us. Stage 1: an INSTALLED Mac.apk app's component resolves from
+            // to us. Stage 1: an INSTALLED Apk on Mac app's component resolves from
             // that app's own manifest (visible packages only).
             if (macapkRegistryActivities() && packageVisible(explicit.getPackageName())) {
                 registryScan(explicit.getPackageName(), query, resolvedType, flags, explicit,
@@ -2932,7 +2932,7 @@ public final class MacApkPackageManager extends PackageManager {
             out.add(ri);
             if (explicit != null) break;
         }
-        // Stage 1: a query scoped to ANOTHER installed Mac.apk app (setPackage,
+        // Stage 1: a query scoped to ANOTHER installed Apk on Mac app (setPackage,
         // getLaunchIntentForPackage) resolves against that app's own manifest,
         // credited and cut by the same code as the own scan above.
         if (explicit == null && want != null && !want.equals(packageName)
@@ -2941,7 +2941,7 @@ public final class MacApkPackageManager extends PackageManager {
                     perPackage, clamp, out, cuts);
         }
         // Stage 4 (MACAPK_XAPP_IMPLICIT, docs/cross-app-launch-and-implicit-start-design_2026-09-26.md
-        // section 9): an UNSCOPED implicit query also scans every installed Mac.apk
+        // section 9): an UNSCOPED implicit query also scans every installed Apk on Mac
         // app's manifest, as ComputerEngine.queryIntentActivitiesInternal unions all
         // installed packages. A query is narrowed by package visibility
         // (shouldFilterApplication); a START is not (ComputerEngine :561-569, :777),
@@ -2961,7 +2961,7 @@ public final class MacApkPackageManager extends PackageManager {
             }
         }
         if (order) aospSortResults(out, cuts);
-        // ⚠ v1.0.938: THE HOST HANDOFF. Mac.apk already routes some implicit
+        // ⚠ v1.0.938: THE HOST HANDOFF. Apk on Mac already routes some implicit
         // intents to macOS -- ACTION_VIEW of an http/https/geo/mailto/tel URI,
         // ACTION_SENDTO mailto:, ACTION_DIAL/CALL tel:, ACTION_SEND of text --
         // through ActivityHost -> NSWorkspace. But this method only ever scanned
@@ -3793,7 +3793,7 @@ public final class MacApkPackageManager extends PackageManager {
 
     /** MACAPK_PM_ACT_PRIORITY_CLAMP (default ON; only consulted on the
      *  MACAPK_PM_RESOLVE_ORDER path). An ACTIVITY filter's android:priority
-     *  above 0 counts as 0, because every app Mac.apk hosts is a non-privileged
+     *  above 0 counts as 0, because every app Apk on Mac hosts is a non-privileged
      *  install:
      *
      *    ComponentResolver.adjustPriority (android14-release services/core/java/
@@ -3999,7 +3999,7 @@ public final class MacApkPackageManager extends PackageManager {
      *
      *  1. A package that is NOT installed holds NO permissions
      *     (PackageManagerService.checkUidPermission returns DENIED for an
-     *     unknown package). Mac.apk hosts exactly one package, and
+     *     unknown package). Apk on Mac hosts exactly one package, and
      *     getPackageInfo / getApplicationInfo already answer
      *     NameNotFoundException for every other name, so this is the same
      *     "installed" fact read through a second API rather than a new claim.
@@ -4122,8 +4122,8 @@ public final class MacApkPackageManager extends PackageManager {
      *
      *  The location runtime permission left the declared == held rule the way
      *  the storage family did at S5, with TWO grants behind it, because macOS
-     *  authorizes location for Mac.apk as a WHOLE (locationd keys the client by
-     *  the shared runtime's signing identifier, org.macapk.runtime -- measured
+     *  authorizes location for Apk on Mac as a WHOLE (locationd keys the client by
+     *  the shared runtime's signing identifier, io.github.totktonado96.apkonmac.runtime -- measured
      *  in locationd's log on 2026-10-05), so one "Allow" there would otherwise
      *  hand every installed app's ad SDK the user's location:
      *    1. the PER-APP Android grant: the token macapk-installhelper's
@@ -4131,7 +4131,7 @@ public final class MacApkPackageManager extends PackageManager {
      *       (SpecialAccessStore.locationGranted) -- GrantPermissionsActivity's
      *       answer, asked when the app calls requestPermissions;
      *    2. the HOST gate: macOS Location Services' own authorization for
-     *       Mac.apk, asked once, right after the first per-app Allow.
+     *       Apk on Mac, asked once, right after the first per-app Allow.
      *  For an app targeting 23+:
      *    - not declared                       -> DENIED (as before)
      *    - per-app grant missing or denied    -> DENIED
@@ -4179,7 +4179,7 @@ public final class MacApkPackageManager extends PackageManager {
                 // one -- a runtime that cannot read its own manifest has a
                 // bigger problem than permission fidelity, and failing closed
                 // here would disable capabilities across the whole app.
-                NativeLog.w("Mac.apk.PM",
+                NativeLog.w("Apk on Mac.PM",
                     "no parsed manifest -- checkPermission falls back to GRANTED"
                     + " for the running package");
                 built = ALL_PERMISSIONS_GRANTED;
@@ -4216,7 +4216,7 @@ public final class MacApkPackageManager extends PackageManager {
      *  not declare the permission), so it must survive any change here.
      *
      *  For a DECLARING app the answer is now TRUE. On a device this reads the
-     *  user's per-app "install unknown apps" toggle; Mac.apk's equivalent gate
+     *  user's per-app "install unknown apps" toggle; Apk on Mac's equivalent gate
      *  is the NATIVE confirm + authorization step inside macapk-installhelper
      *  (launcher/InstallHelperMain.swift), which every Android-initiated
      *  install must pass DOWNSTREAM of this answer -- so "this app may ASK to
@@ -4226,7 +4226,7 @@ public final class MacApkPackageManager extends PackageManager {
      *  dead ACTION_MANAGE_UNKNOWN_APP_SOURCES settings round-trip and a
      *  misleading "allow unknown sources" toast before proceeding.
      *  ⚠ DELIBERATE fwprobe deviation FOR DECLARING CALLERS ONLY: a fresh AVD
-     *  answers false until the user flips the Settings toggle; Mac.apk has no
+     *  answers false until the user flips the Settings toggle; Apk on Mac has no
      *  such Settings surface, and the install-time auth gate is the replacement
      *  the master plan (7.4) specifies. The golden row is unaffected (its caller
      *  does not declare, so both sides THROW). */
@@ -4251,7 +4251,7 @@ public final class MacApkPackageManager extends PackageManager {
     }
 
     /** AOSP PackageManager.queryContentProviders(processName, uid, flags): the
-     *  providers installed in that process. Mac.apk runs one app in one process,
+     *  providers installed in that process. Apk on Mac runs one app in one process,
      *  so a query naming our process (or naming none) sees our declared
      *  providers and any other process sees nothing. */
     @Override public List<ProviderInfo> queryContentProviders(
@@ -4277,13 +4277,13 @@ public final class MacApkPackageManager extends PackageManager {
     // the available features as returned by getSystemAvailableFeatures()",
     // frameworks/base core/java/android/content/pm/PackageManager.java). On a
     // device PackageManagerService answers out of mAvailableFeatures, which
-    // SystemConfig builds from that device's own feature XML. Mac.apk's "device"
+    // SystemConfig builds from that device's own feature XML. Apk on Mac's "device"
     // IS this runtime, so the set below is what this runtime actually implements.
     //
     // The previous blanket `return false` was the same class of lie the real-
     // signature work (v580) removed from getPackageInfo: it told every app "no
     // audio output, no touchscreen, no screen orientations" about capabilities
-    // Mac.apk provides end to end, so an app that gates its touch controls or its
+    // Apk on Mac provides end to end, so an app that gates its touch controls or its
     // sound behind a feature probe degraded for no reason.
     //
     // Absent hardware stays absent on purpose. That is the same honest
@@ -4309,7 +4309,7 @@ public final class MacApkPackageManager extends PackageManager {
     private static final java.util.Set<String> SYSTEM_FEATURES;
     static {
         java.util.LinkedHashSet<String> f = new java.util.LinkedHashSet<>();
-        // FEATURE_TOUCHSCREEN. The device Mac.apk presents has a finger
+        // FEATURE_TOUCHSCREEN. The device Apk on Mac presents has a finger
         // touchscreen: android.content.res.Configuration.touchscreen is
         // TOUCHSCREEN_FINGER, and the Cocoa bridge turns host pointer events into
         // real ACTION_DOWN / MOVE / UP MotionEvents down the ordinary View +
@@ -4366,7 +4366,7 @@ public final class MacApkPackageManager extends PackageManager {
         // android.hardware.touchscreen or a sub-feature are presumed to also
         // support faketouch", and its definition ("might use a mouse ... and
         // emulate basic touch pointer events like down, up, drag") is literally
-        // how Mac.apk sources those events.
+        // how Apk on Mac sources those events.
         f.add("android.hardware.faketouch");
         // FEATURE_TOUCHSCREEN_MULTITOUCH (v1.0.1127). AOSP: "The device's touch
         // screen supports multitouch sufficient for basic two-finger gesture
@@ -4514,7 +4514,7 @@ public final class MacApkPackageManager extends PackageManager {
         // as ContextWrapper's getSystemService trace.
         if ("1".equals(System.getenv("MACAPK_TRACE_DEVICEINFO"))) {
             try {
-                NativeLog.i("Mac.apk.PM", "hasSystemFeature(\"" + name + "\") -> " + has);
+                NativeLog.i("Apk on Mac.PM", "hasSystemFeature(\"" + name + "\") -> " + has);
             } catch (Throwable ignored) {}
         }
         return has;
@@ -4553,7 +4553,7 @@ public final class MacApkPackageManager extends PackageManager {
                     sb.append(", ");
                 }
                 sb.append("]");
-                NativeLog.i("Mac.apk.PM", sb.toString());
+                NativeLog.i("Apk on Mac.PM", sb.toString());
             } catch (Throwable ignored) {}
         }
         return res.toArray(new android.content.pm.FeatureInfo[0]);
@@ -4660,7 +4660,7 @@ public final class MacApkPackageManager extends PackageManager {
         // caller's answer. Copy to keep that property.
         if ("1".equals(System.getenv("MACAPK_TRACE_DEVICEINFO"))) {
             try {
-                NativeLog.i("Mac.apk.PM",
+                NativeLog.i("Apk on Mac.PM",
                     "getSystemSharedLibraryNames() -> " + java.util.Arrays.toString(cached));
             } catch (Throwable ignored) {}
         }
@@ -4708,7 +4708,7 @@ public final class MacApkPackageManager extends PackageManager {
         }
         if ("1".equals(System.getenv("MACAPK_TRACE_DEVICEINFO"))) {
             try {
-                NativeLog.i("Mac.apk.PM", "getSharedLibraries(" + flags + ") -> " + out);
+                NativeLog.i("Apk on Mac.PM", "getSharedLibraries(" + flags + ") -> " + out);
             } catch (Throwable ignored) {}
         }
         return out;
@@ -5043,7 +5043,7 @@ public final class MacApkPackageManager extends PackageManager {
         // DELIBERATE DIVERGENCE, and it is honest: on a device these are three
         // DIFFERENT directories (/data/user/0/<pkg>, /data/user_de/0/<pkg>)
         // because file-based encryption splits credential- from device-
-        // protected storage. Mac.apk has exactly one storage area -- which is
+        // protected storage. Apk on Mac has exactly one storage area -- which is
         // also what Context.isDeviceProtectedStorage() (false) and
         // Context.createDeviceProtectedStorageContext() (returns `this`) already
         // say -- so pointing all three at the same real directory is the answer
@@ -5077,7 +5077,7 @@ public final class MacApkPackageManager extends PackageManager {
         info.appComponentFactory     = emptyToNull(appAttr("appComponentFactory"));
         info.descriptionRes          = resolveResRef(appAttr("description"), "string");
         // StorageManager.UUID_DEFAULT -- the UUID of internal ("private")
-        // storage, which is the volume every Mac.apk app's data lives on.
+        // storage, which is the volume every Apk on Mac app's data lives on.
         // AOSP frameworks/base core/java/android/os/storage/StorageManager.java:
         //   public static final UUID UUID_DEFAULT =
         //       UUID.fromString("41217664-9172-527a-b3d5-edabb50a7d69");
@@ -5207,7 +5207,7 @@ public final class MacApkPackageManager extends PackageManager {
                 // The split fields are additive metadata; a listing failure
                 // degrades to "no splits", never to a broken PackageManager.
                 try {
-                    NativeLog.w("Mac.apk.PM", "installed split set unreadable (" + t
+                    NativeLog.w("Apk on Mac.PM", "installed split set unreadable (" + t
                         + ") -- reporting no splits");
                 } catch (Throwable ignored) {}
                 ss = null;
@@ -5410,7 +5410,7 @@ public final class MacApkPackageManager extends PackageManager {
             // UnsatisfiedLinkError in any context where the runtime has not bound
             // it yet.
             try {
-                NativeLog.w("Mac.apk.PM",
+                NativeLog.w("Apk on Mac.PM",
                     "base.apk link not published (" + t + ") -- sourceDir stays " + abs);
             } catch (Throwable ignored) {}
         }
@@ -5501,7 +5501,7 @@ public final class MacApkPackageManager extends PackageManager {
                     }
                 }
             } catch (Throwable t) {
-                NativeLog.w("Mac.apk.PM",
+                NativeLog.w("Apk on Mac.PM",
                     "<application> attribute read failed (" + t + ") -- "
                     + "ApplicationInfo falls back to the targetSdk-derived flag defaults");
                 lazyAppElement = null;
@@ -5594,7 +5594,7 @@ public final class MacApkPackageManager extends PackageManager {
      *  Two of these bits are not manifest-derived and are stated here on
      *  purpose:
      *    FLAG_INSTALLED   -- the running package IS installed, by definition.
-     *    FLAG_EXTRACT_NATIVE_LIBS -- Mac.apk genuinely extracts (and translates)
+     *    FLAG_EXTRACT_NATIVE_LIBS -- Apk on Mac genuinely extracts (and translates)
      *      the APK's .so files to disk rather than mapping them from the zip,
      *      so `true` is a statement about what this runtime does, not a default
      *      copied from somewhere. AOSP's own default for the attribute is also
@@ -5636,7 +5636,7 @@ public final class MacApkPackageManager extends PackageManager {
         // android:supportsRtl defaults to false regardless of targetSdk.
         if (appAttrBool("supportsRtl", false))        f |= ApplicationInfo.FLAG_SUPPORTS_RTL;
         // android:usesCleartextTraffic defaults to true BELOW targetSdk 28 and
-        // false from 28 (Pie) on. Mac.apk enforces no cleartext policy, but the
+        // false from 28 (Pie) on. Apk on Mac enforces no cleartext policy, but the
         // flag is what an app's own networking layer reads to decide whether to
         // allow http, so answering it honestly by targetSdk is what keeps the
         // app's behaviour the same as on a device.
@@ -5847,8 +5847,8 @@ public final class MacApkPackageManager extends PackageManager {
     // killed PlayerService.onCreate, and with it every video NewPipe tried to
     // play (lanes19 media-playback, 2026-09-29).
     //
-    // THE SIGNATURE is this device's platform certificate: Mac.apk's own
-    // self-signed CN=Mac.apk Platform (com.macapk.gms.PlatformSignature), the
+    // THE SIGNATURE is this device's platform certificate: Apk on Mac's own
+    // self-signed CN=Apk on Mac Platform (com.macapk.gms.PlatformSignature), the
     // same one the vending branch reports. A device's "android" package is
     // signed by that device's platform key, and ours is this one; it is not
     // anyone else's identity.
@@ -5988,7 +5988,7 @@ public final class MacApkPackageManager extends PackageManager {
         try {
             return com.macapk.gms.PlatformSignature.signature();
         } catch (Throwable t) {
-            NativeLog.w("Mac.apk.PM", "no platform signature for " + forPackage
+            NativeLog.w("Apk on Mac.PM", "no platform signature for " + forPackage
                 + " (" + t + ") -- reporting an empty one");
             return null;
         }
@@ -6026,7 +6026,7 @@ public final class MacApkPackageManager extends PackageManager {
      * the identical matcher.
      *
      * Note we do NOT gate on ServiceEntry.exported: exported governs access
-     * from a DIFFERENT uid, and Mac.apk hosts exactly one package in one
+     * from a DIFFERENT uid, and Apk on Mac hosts exactly one package in one
      * process, so every query here is same-package by construction. Real
      * Android resolves an app's own non-exported service for that app too.
      *
@@ -6147,7 +6147,7 @@ public final class MacApkPackageManager extends PackageManager {
         return all.isEmpty() ? null : all.get(0);
     }
 
-    /** The one implicit service Intent Mac.apk can answer. Matches on ACTION
+    /** The one implicit service Intent Apk on Mac can answer. Matches on ACTION
      *  and, when the caller set one, on the package -- an Intent explicitly
      *  aimed at another package must not resolve to ours. */
     private ResolveInfo macapkResolveLicensingService(Intent intent) {

@@ -334,14 +334,14 @@ public class BaseBundle {
     }
     public void putString(String k, String v) {
         unparcel();
-        if (traceKey(k)) android.util.Log.i("Mac.apk.BundleTrace", "putString(" + k + ") = " + v);
+        if (traceKey(k)) android.util.Log.i("Apk on Mac.BundleTrace", "putString(" + k + ") = " + v);
         map.put(k, v);
     }
     public String getString(String k) {
         unparcel();
         Object v = map.get(k);
         String r = (v instanceof String) ? (String) v : null;
-        if (traceKey(k)) android.util.Log.i("Mac.apk.BundleTrace",
+        if (traceKey(k)) android.util.Log.i("Apk on Mac.BundleTrace",
             "getString(" + k + ") = " + r + " (present=" + map.containsKey(k) + ")");
         return r;
     }

@@ -4,7 +4,7 @@
 // core/java/android/view/VerifiedInputEvent.java (android16-release).
 //
 // Verification requires the system's own input pipeline to have signed the
-// event. Mac.apk synthesises its events from Cocoa (cocoa_bridge.mm) with no
+// event. Apk on Mac synthesises its events from Cocoa (cocoa_bridge.mm) with no
 // such pipeline, so InputManager.verifyInputEvent returns null -- which is
 // exactly what a device returns for an event it cannot verify (an injected one).
 // The types must exist because that method's return type names them.

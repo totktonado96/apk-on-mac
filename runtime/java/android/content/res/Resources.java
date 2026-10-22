@@ -253,7 +253,7 @@ public class Resources {
     private static final boolean sXmlTrace = System.getenv("MACAPK_MENU_TRACE") != null;
     public XmlResourceParser getXml(int id)
         throws android.content.res.Resources.NotFoundException {
-        if (sXmlTrace) com.macapk.loader.NativeLog.i("Mac.apk.Menu",
+        if (sXmlTrace) com.macapk.loader.NativeLog.i("Apk on Mac.Menu",
             "Resources.getXml(0x" + Integer.toHexString(id) + ")");
         // MACAPK_PLATFORM_LAYOUTS: a framework LAYOUT file answers the same
         // XmlBlock-semantics parser getLayout does. On a device the two are one
@@ -699,7 +699,7 @@ public class Resources {
         // 0x0106000d = @android:color/transparent (AOSP core/res/res/values/
         // public-final.xml:735, android14-release -- the colour ids are frozen
         // public API):
-        //   Mac.apk.ActivityHost: onStart threw Resources$NotFoundException:
+        //   Apk on Mac.ActivityHost: onStart threw Resources$NotFoundException:
         //     getXml(0x106000d) -- no matching XML resource -- continuing
         //     at androidx...getColorStateList
         //     at com.google.android.material.chip.Chip.setChipBackgroundColorResource
@@ -944,7 +944,7 @@ public class Resources {
                 }
                 Class<?> log = Class.forName("com.macapk.loader.NativeLog");
                 log.getMethod("i", String.class, String.class).invoke(null,
-                    "Mac.apk.getValue", "UNRESOLVED id=0x" + Integer.toHexString(id) + " -> " + tn);
+                    "Apk on Mac.getValue", "UNRESOLVED id=0x" + Integer.toHexString(id) + " -> " + tn);
             } catch (Throwable ignored) {}
         }
         outValue.type = android.util.TypedValue.TYPE_NULL;
@@ -1131,7 +1131,7 @@ public class Resources {
     // ⚠ CORRECTED v1.0.1047. This comment used to say the night-mode key was
     // "belt-and-suspenders today" because "macapkSetResourceIndex is called at
     // most once per real launch (Boot.java:319/1366; a fresh process, never a
-    // live in-place flip, is how Mac.apk picks up a new AppleInterfaceStyle)".
+    // live in-place flip, is how Apk on Mac picks up a new AppleInterfaceStyle)".
     // Two things were wrong with that: the cited line numbers named no such
     // call site (there was ONE, in Boot.run), and the premise is now false --
     // Boot.macapkOnSystemAppearanceChanged swaps in a freshly-built
@@ -1236,7 +1236,7 @@ public class Resources {
                     catch (Throwable t) { nm = "?"; }
                     String pth; try { pth = macapkResourcePath(id); }
                     catch (Throwable t) { pth = "?"; }
-                    com.macapk.loader.NativeLog.w("Mac.apk.Resources",
+                    com.macapk.loader.NativeLog.w("Apk on Mac.Resources",
                         "ZERO-DRAWABLE getDrawable(0x" + Integer.toHexString(id)
                         + " " + nm + ") -> " + macapkD.getClass().getName()
                         + " intrinsic=" + iw + "x" + ih
@@ -1340,7 +1340,7 @@ public class Resources {
             macapkDrawableCache.get(cacheKey);
         MacapkDrawableConstantState cached = cachedRef != null ? cachedRef.get() : null;
         if (cached != null) {
-            if (sDrawableCacheTrace) com.macapk.loader.NativeLog.d("Mac.apk.Resources",
+            if (sDrawableCacheTrace) com.macapk.loader.NativeLog.d("Apk on Mac.Resources",
                 "getDrawable(0x" + Integer.toHexString(id) + ") DrawableCache HIT");
             return cached.newDrawable(this);
         }
@@ -1388,7 +1388,7 @@ public class Resources {
                             if (state == null) state = new MacapkDrawableConstantState(bm);
                             macapkDrawableCache.put(cacheKey,
                                 new java.lang.ref.WeakReference<>(state));
-                            if (sDrawableCacheTrace) com.macapk.loader.NativeLog.d("Mac.apk.Resources",
+                            if (sDrawableCacheTrace) com.macapk.loader.NativeLog.d("Apk on Mac.Resources",
                                 "getDrawable(0x" + Integer.toHexString(id)
                                 + ") DrawableCache MISS -> decoded"
                                 + (state.isNinePatch ? " (9-patch)" : "")
@@ -1514,7 +1514,7 @@ public class Resources {
     // compile time and stores the divs + padding in a private PNG ancillary
     // chunk named "npTc" (tools/aapt2/compile/Png.cpp serializes a
     // Res_png_9patch and then calls deviceToFile()). apktool -- which
-    // produces the res/ tree Mac.apk actually reads -- REVERSES that: its
+    // produces the res/ tree Apk on Mac actually reads -- REVERSES that: its
     // Res9patchStreamDecoder re-draws the marker border from the chunk and
     // emits a PNG carrying NO npTc chunk. Measured on this tree: 400/400
     // sampled `_apkt/res/**/*.9.png` files hold only IHDR/IDAT/IEND, and
@@ -2182,7 +2182,7 @@ public class Resources {
         java.util.Collections.synchronizedSet(new java.util.HashSet<String>());
     private static void macapkWarnDrawableClass(String cls, String msg) {
         if (cls == null || !sWarnedDrawableClasses.add(cls)) return;
-        com.macapk.loader.NativeLog.w("Mac.apk.Resources",
+        com.macapk.loader.NativeLog.w("Apk on Mac.Resources",
             "drawable XML: " + msg + " -- it will not paint");
     }
 
@@ -2227,7 +2227,7 @@ public class Resources {
         // why ~50% of Instagram's drawables were invisible. The class fallback
         // above is the missing half; this warning is now only for a genuinely
         // unknown BARE tag. Say it once, by name.
-        com.macapk.loader.NativeLog.w("Mac.apk.Resources",
+        com.macapk.loader.NativeLog.w("Apk on Mac.Resources",
             "drawable XML: no inflater for root tag <" + tag + ">;"
             + " it will not paint. Add a case to macapkInflateDrawableElement.");
     }
@@ -4251,7 +4251,7 @@ public class Resources {
             // buttons are correct while the identical `?button_color` inside
             // @drawable/circle's <solid> paints opaque black.
             if ("1".equals(System.getenv("MACAPK_TRACE_ATTRCOLOR"))) {
-                android.util.Log.i("Mac.apk.AttrColor", "?" + attr
+                android.util.Log.i("Apk on Mac.AttrColor", "?" + attr
                     + " theme=" + (theme == null ? "NULL" : "obj")
                     + " -> 0x" + Integer.toHexString(out)
                     + (out == def ? "  (== DEFAULT, i.e. UNRESOLVED)" : ""));
@@ -5576,7 +5576,7 @@ public class Resources {
      *  resources, and is guarded upstream by a build flag:
      *      if (Flags.registerResourcePaths()) { ...ResourcesManager... }
      *      else throw new UnsupportedOperationException("Flag ... is disabled.");
-     *  Mac.apk has no ResourcesManager and no multi-APK resource path list, so
+     *  Apk on Mac has no ResourcesManager and no multi-APK resource path list, so
      *  it is in the flag-disabled state -- and AOSP's own behaviour there is
      *  the throw, not a silent success. Accepting the call and registering
      *  nothing would leave the caller believing a library's resources are
@@ -5660,7 +5660,7 @@ public class Resources {
                 // Logging tn[0] tests (a); logging force tests (b).
                 if (System.getenv("MACAPK_TRACE_WINDOW_FLAGS") != null) {
                     try {
-                        com.macapk.loader.NativeLog.i("Mac.apk.Theme",
+                        com.macapk.loader.NativeLog.i("Apk on Mac.Theme",
                             "applyStyle id=0x" + Integer.toHexString(resId)
                             + " type=" + ((tn instanceof String[]) ? ((String[]) tn)[0] : "?")
                             + " name=" + styleName
@@ -5713,7 +5713,7 @@ public class Resources {
             // session, which is invisible in every log we had.
             final String trAttr = System.getenv("MACAPK_TRACE_RESOLVEATTR");
             if (macapkResourceIndex == null) {
-                if (trAttr != null) com.macapk.loader.NativeLog.i("Mac.apk.ResolveAttr",
+                if (trAttr != null) com.macapk.loader.NativeLog.i("Apk on Mac.ResolveAttr",
                     "resolveAttribute(0x" + Integer.toHexString(resId) + ") -> NO INDEX");
                 return false;
             }
@@ -5734,7 +5734,7 @@ public class Resources {
                 final boolean trHit = trAttr != null
                     && ("*".equals(trAttr) || trAttr.equals(attrName));
                 if (!"attr".equals(attrType)) {
-                    if (trHit) com.macapk.loader.NativeLog.i("Mac.apk.ResolveAttr",
+                    if (trHit) com.macapk.loader.NativeLog.i("Apk on Mac.ResolveAttr",
                         attrName + ": type is '" + attrType + "', not attr -> false");
                     return false;
                 }
@@ -5751,7 +5751,7 @@ public class Resources {
                 String raw = ((resId >>> 24) != 0x01)
                     ? macapkResolveAppAttrRawHonest(attrName)
                     : macapkResolveAttrRawHonest(attrName);
-                if (trHit) com.macapk.loader.NativeLog.i("Mac.apk.ResolveAttr",
+                if (trHit) com.macapk.loader.NativeLog.i("Apk on Mac.ResolveAttr",
                     attrName + " (0x" + Integer.toHexString(resId) + "): raw=" + raw
                     + " hasAppliedStyles=" + !fallbackSourced);
                 if (raw == null) return false;
@@ -5832,7 +5832,7 @@ public class Resources {
                 boolean ok = macapkResolveRawToTypedValue(raw, attrName, this,
                                                     resolveRefs, outValue,
                                                     true, rawOrigin);
-                if (trHit) com.macapk.loader.NativeLog.i("Mac.apk.ResolveAttr",
+                if (trHit) com.macapk.loader.NativeLog.i("Apk on Mac.ResolveAttr",
                     attrName + " -> ok=" + ok + " type=0x" + Integer.toHexString(outValue.type)
                     + " data=0x" + Integer.toHexString(outValue.data)
                     + " resourceId=0x" + Integer.toHexString(outValue.resourceId)
@@ -6208,7 +6208,7 @@ public class Resources {
             } catch (Throwable ignored) {}
             if (trace) {
                 try {
-                    com.macapk.loader.NativeLog.i("Mac.apk.Theme",
+                    com.macapk.loader.NativeLog.i("Apk on Mac.Theme",
                         "resolveAttrRaw " + attrName + " -> " + answer
                         + "  from=" + from
                         + "  appliedStyles=" + appliedStyles);
@@ -6451,7 +6451,7 @@ public class Resources {
             // its broken link instead of hiding behind a caller default.
             if (System.getenv("MACAPK_TRACE_DEFSTYLE") != null && defStyleAttr != 0) {
                 try {
-                    com.macapk.loader.NativeLog.i("Mac.apk.TypedArray",
+                    com.macapk.loader.NativeLog.i("Apk on Mac.TypedArray",
                         "oSA4 dsa=0x" + Integer.toHexString(defStyleAttr)
                         + " dsr=0x" + Integer.toHexString(defStyleRes)
                         + " styleAttr=" + mergedStyle
@@ -7526,7 +7526,7 @@ public class Resources {
      *     FontsContract.getFontSync for it and, when the provider is not on
      *     the device, hands back the DEFAULT typeface (Typeface.java:330,
      *     "Downloaded font and it wasn't cached ... return a default font
-     *     instead"). Mac.apk answers the de-Googled no-GMS contract, so no
+     *     instead"). Apk on Mac answers the de-Googled no-GMS contract, so no
      *     provider resolves and DEFAULT is the AOSP-faithful answer here --
      *     never a pretend fetch.
      *
@@ -7660,7 +7660,7 @@ public class Resources {
     public Object getCompatibilityInfo() { return null; }
 
     /** AOSP Resources.addLoaders (API 30): registers runtime resource loaders.
-     *  Mac.apk resolves resources from the base apk, so held loaders contribute
+     *  Apk on Mac resolves resources from the base apk, so held loaders contribute
      *  no overrides; we accept them so an app that layers a ResourcesLoader does
      *  not crash. */
     public void addLoaders(android.content.res.loader.ResourcesLoader... loaders) { }

@@ -3,7 +3,7 @@
 //         (android14-release), mirrored member for member: final, Parcelable,
 //         and it parcels ONLY the message, exactly as AOSP does.
 //
-// Mac.apk never throws this (there is no background-start or foreground-type
+// Apk on Mac never throws this (there is no background-start or foreground-type
 // policy to enforce), but apps name it in catch clauses and in instanceof
 // checks guarded by SDK_INT, and we present SDK 34, so the class must exist
 // with the AOSP hierarchy. Census: docs/fwgap-new-platform-classes_2026-09-26.md.

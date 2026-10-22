@@ -247,7 +247,7 @@ public final class DomXmlResourceParser
                     || t == PROCESSING_INSTRUCTION || t == DOCDECL);
             if (t == TEXT || t == IGNORABLE_WHITESPACE) macapkCoalesceText();
             if (System.getenv("MACAPK_TRACE_XMLPULL") != null) {
-                NativeLog.i("Mac.apk.XmlPull", "next(pull) -> " + t + " name=" + getName());
+                NativeLog.i("Apk on Mac.XmlPull", "next(pull) -> " + t + " name=" + getName());
             }
             return t == IGNORABLE_WHITESPACE ? TEXT : t;
         }
@@ -256,7 +256,7 @@ public final class DomXmlResourceParser
         // Diagnostic (env-gated): dump the pull-event stream so we can
         // see exactly what a consumer's parse loop saw.
         if (System.getenv("MACAPK_TRACE_XMLPULL") != null) {
-            NativeLog.i("Mac.apk.XmlPull", "next -> " + t
+            NativeLog.i("Apk on Mac.XmlPull", "next -> " + t
                 + " name=" + getName() + " depth=" + getDepth()
                 + " p@" + Integer.toHexString(System.identityHashCode(this)));
         }
@@ -595,7 +595,7 @@ public final class DomXmlResourceParser
             Node probe = nthAttr(index);
             String pn = (probe == null) ? "?" : probe.getNodeName();
             if (sUnresolvedAttrWarned.add("PROBE:" + pn)) {
-                NativeLog.i("Mac.apk.CSL",
+                NativeLog.i("Apk on Mac.CSL",
                     "ANDROIDX asked getAttributeNameResource for " + pn);
             }
         }
@@ -637,7 +637,7 @@ public final class DomXmlResourceParser
         // Loud once, because 0 doubles as the state-spec terminator: an
         // unresolved STATE attr silently turns its row into a match-everything
         // wildcard rather than failing.
-        NativeLog.w("Mac.apk.Xml", "getAttributeNameResource: no id for "
+        NativeLog.w("Apk on Mac.Xml", "getAttributeNameResource: no id for "
             + ns + ":" + local + " (a state_* name here would silently"
             + " become a wildcard row)");
     }

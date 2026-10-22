@@ -18,7 +18,7 @@ package android.renderscript;
  *    regardless of how many channels they describe, so their size is the
  *    DataType's size and not size * vectorSize.
  *
- * The opaque RS_* handle types size to the driver's pointer width. Mac.apk is
+ * The opaque RS_* handle types size to the driver's pointer width. Apk on Mac is
  * 64-bit-only, so they are 32 bytes (see RenderScript.sPointerSize).
  *
  * Source: frameworks/rs/java/android/renderscript/Element.java

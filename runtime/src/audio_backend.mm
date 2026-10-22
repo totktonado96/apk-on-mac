@@ -1,4 +1,4 @@
-// audio_backend.mm -- real macOS audio output for Mac.apk.
+// audio_backend.mm -- real macOS audio output for Apk on Mac.
 //
 // PHASE 1 + PHASE 2 of "make sound work" (docs/future_implementations.md
 // #2). Until now every Android audio surface was a stub that swallowed

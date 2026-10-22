@@ -146,7 +146,7 @@ public class PackageInstaller {
     public List<SessionInfo> getAllSessions() { return liveInfos(); }
     public List<SessionInfo> getMySessions() { return liveInfos(); }
 
-    /** AOSP: staged (reboot-applied / APEX) sessions. Mac.apk sessions are
+    /** AOSP: staged (reboot-applied / APEX) sessions. Apk on Mac sessions are
      *  never the staged kind, so the empty answer is the honest one -- the
      *  same a device gives when nothing is staged. */
     public List<SessionInfo> getStagedSessions() { return new ArrayList<>(); }
@@ -246,7 +246,7 @@ public class PackageInstaller {
      *  PackageManager.DELETE_KEEP_DATA, which asks to remove the code but keep
      *  the app's data directory.
      *
-     *  ⚠ Mac.apk's uninstall path is the macOS install helper (see the class
+     *  ⚠ Apk on Mac's uninstall path is the macOS install helper (see the class
      *  header), and the helper removes the installed app wholesale; it has no
      *  keep-the-data verb. So a caller passing DELETE_KEEP_DATA would be told
      *  "done" while the data went away -- the exact shape of lie this project
@@ -268,7 +268,7 @@ public class PackageInstaller {
 
     /** AOSP PackageInstaller.uninstallExistingPackage(String, IntentSender)
      *  (API 29): remove the package FOR THE CALLING USER only, leaving it
-     *  installed for other users. Mac.apk has exactly one user, so "uninstall
+     *  installed for other users. Apk on Mac has exactly one user, so "uninstall
      *  for this user" and "uninstall" are the same operation -- which is also
      *  what AOSP does on a single-user device, where the last user's removal
      *  deletes the package. Routed to the same helper-gated path so the human
@@ -282,7 +282,7 @@ public class PackageInstaller {
      *  (API 29): make an ALREADY-INSTALLED-FOR-ANOTHER-USER package visible to
      *  the calling user, without re-staging any bytes.
      *
-     *  There is no such package on Mac.apk: one user, and a package is either
+     *  There is no such package on Apk on Mac: one user, and a package is either
      *  installed for it or not installed at all. AOSP reports a package it
      *  cannot find through the status receiver rather than throwing, so this
      *  delivers STATUS_FAILURE_INVALID with that reason. Inventing a success
@@ -314,7 +314,7 @@ public class PackageInstaller {
      *  Executor, Consumer) (API 34): ask, right now, whether the given
      *  constraints hold for the named packages.
      *
-     *  Every constraint AOSP defines is about state Mac.apk does not have: a
+     *  Every constraint AOSP defines is about state Apk on Mac does not have: a
      *  device idle window, a phone call in progress, another app in the
      *  foreground or interacting. There is one app and no telephony, so each
      *  constraint is vacuously satisfied -- the same answer a device gives when
@@ -387,7 +387,7 @@ public class PackageInstaller {
     }
 
     /** AOSP: "Reports the result of an unarchival to the system", called by an
-     *  INSTALLER that was asked to unarchive. Mac.apk never sends an
+     *  INSTALLER that was asked to unarchive. Apk on Mac never sends an
      *  ACTION_UNARCHIVE_PACKAGE broadcast, so no unarchive id can be
      *  outstanding; AOSP throws NameNotFoundException for an unarchive id it
      *  does not know, which is every id here. */
@@ -409,7 +409,7 @@ public class PackageInstaller {
 
     /** AOSP PackageInstaller.installPackageArchived(ArchivedPackageInfo,
      *  SessionParams, IntentSender) (API 35): install a package in the ARCHIVED
-     *  state -- icon and metadata only, no APK. Mac.apk cannot represent an
+     *  state -- icon and metadata only, no APK. Apk on Mac cannot represent an
      *  archived install (there is nothing to unarchive it with later), so the
      *  request fails through the status receiver rather than producing an entry
      *  that could never be launched. */
@@ -782,7 +782,7 @@ public class PackageInstaller {
          *  installers are steered away from updating it.
          *
          *  Recorded, and reported back by SessionInfo.isRequestUpdateOwnership().
-         *  Mac.apk grants no ownership -- InstallSourceInfo
+         *  Apk on Mac grants no ownership -- InstallSourceInfo
          *  .getUpdateOwnerPackageName() stays null, because the macOS install
          *  helper enforces no such policy -- so the request is honestly
          *  remembered and honestly not acted on, which is also what a device
@@ -800,7 +800,7 @@ public class PackageInstaller {
         public void setMultiPackage() { this.multiPackage = true; }
 
         /** AOSP API-31: the install scenario, an INSTALL_SCENARIO_* hint about
-         *  how aggressively to optimise (dexopt) the install. Mac.apk has no
+         *  how aggressively to optimise (dexopt) the install. Apk on Mac has no
          *  dexopt scheduler to hint -- our DEX conversion is unconditional and
          *  runs once at first launch -- so the value is recorded and reported
          *  but changes nothing, which is also true of a device whose
@@ -810,7 +810,7 @@ public class PackageInstaller {
         }
 
         /** AOSP API-30: whether the platform may auto-revoke this app's
-         *  permissions after a long idle period. Mac.apk never auto-revokes
+         *  permissions after a long idle period. Apk on Mac never auto-revokes
          *  anything (there is no permission-usage tracker and no idle job), so
          *  the value is recorded for read-back and nothing acts on it. */
         public void setAutoRevokePermissionsMode(boolean shouldAutoRevoke) {
@@ -818,7 +818,7 @@ public class PackageInstaller {
         }
 
         /** AOSP API-31: pre-set a permission to GRANTED or DENIED for this
-         *  install. Recorded per permission name. Mac.apk's permission model
+         *  install. Recorded per permission name. Apk on Mac's permission model
          *  answers from the manifest rather than from a mutable grant table, so
          *  nothing consumes this yet; it is stored rather than dropped so an
          *  installer reading its own params back sees what it set. */
@@ -831,14 +831,14 @@ public class PackageInstaller {
         }
 
         /** AOSP API-35: install this app's declared dependencies (SDK
-         *  libraries) automatically. Mac.apk resolves no SDK libraries --
+         *  libraries) automatically. Apk on Mac resolves no SDK libraries --
          *  PackageManager.getSharedLibraries() is empty -- so there is nothing
          *  to pull in and the flag is recorded only. */
         public void setAutoInstallDependenciesEnabled(boolean enabled) {
             this.autoInstallDependenciesEnabled = enabled;
         }
 
-        /** AOSP API-35: the unarchive id this install is fulfilling. Mac.apk
+        /** AOSP API-35: the unarchive id this install is fulfilling. Apk on Mac
          *  never issues one (see the archiving block on the outer class), so a
          *  caller can set it but no unarchival is ever matched to it. */
         public void setUnarchiveId(int unarchiveId) { this.unarchiveId = unarchiveId; }
@@ -1041,7 +1041,7 @@ public class PackageInstaller {
         }
 
         /** AOSP Session.isStaged(): a STAGED session is one applied at the next
-         *  reboot (APEX / system updates). Mac.apk has no reboot-time install
+         *  reboot (APEX / system updates). Apk on Mac has no reboot-time install
          *  path and SessionParams has no setStaged, so no session here is ever
          *  staged -- the same answer a device gives for an ordinary app
          *  install. */
@@ -1127,7 +1127,7 @@ public class PackageInstaller {
          *  (API 34): ask the user to approve an install BEFORE the APK is
          *  downloaded.
          *
-         *  Mac.apk's user approval happens natively, inside the macOS install
+         *  Apk on Mac's user approval happens natively, inside the macOS install
          *  helper, at COMMIT time -- see the class header on why we never emit
          *  STATUS_PENDING_USER_ACTION. There is no earlier point at which a
          *  system dialog could ask, so a pre-approval cannot be granted here,
@@ -1157,7 +1157,7 @@ public class PackageInstaller {
          *  signed with its own certificate, so a later requestChecksums can
          *  return them without re-hashing.
          *
-         *  This is a pure installer-enforced OPTIMISATION on a device. Mac.apk
+         *  This is a pure installer-enforced OPTIMISATION on a device. Apk on Mac
          *  has no checksum store to put them in, and PackageManager
          *  .requestChecksums correspondingly reports none -- the two answers
          *  agree. AOSP validates its arguments before storing, and those
@@ -1334,7 +1334,7 @@ public class PackageInstaller {
             return (meta != null) ? meta.appIcon : null;
         }
         /** AOSP API-31: "the attribution tag of the installer", null when the
-         *  installer did not set one. Mac.apk's PackageInstaller has no
+         *  installer did not set one. Apk on Mac's PackageInstaller has no
          *  setInstallerAttributionTag on SessionParams (it is a Context-level
          *  attribution on a device, which this tree does not model), so this is
          *  always null -- the value AOSP reports for an untagged installer. */
@@ -1360,7 +1360,7 @@ public class PackageInstaller {
             return meta != null && meta.preApprovalRequested;
         }
         /** AOSP API-35: whether this session is fulfilling an unarchival.
-         *  Mac.apk never issues an unarchive id, so no session is. */
+         *  Apk on Mac never issues an unarchive id, so no session is. */
         public boolean isUnarchival() { return false; }
         /** AOSP API-29: "whether this session has already been committed."
          *  Our sealed flag IS the commit flag -- PackageInstallerBackend seals
@@ -1385,7 +1385,7 @@ public class PackageInstaller {
         public boolean hasParentSessionId() { return getParentSessionId() != INVALID_ID; }
 
         // ---- staged sessions ------------------------------------------------
-        // No session on Mac.apk is ever staged (see Session.isStaged), so every
+        // No session on Apk on Mac is ever staged (see Session.isStaged), so every
         // staged-state question has one honest answer: not active, not applied,
         // not failed, not ready, no error. AOSP reports exactly this set for a
         // non-staged session, and a caller that branches on isStaged() first --
@@ -1398,7 +1398,7 @@ public class PackageInstaller {
         /** AOSP: @NonNull -- the empty string when there is no error. */
         public String getStagedSessionErrorMessage() { return ""; }
 
-        /** AOSP API-29: "the user associated with this session." Mac.apk has
+        /** AOSP API-29: "the user associated with this session." Apk on Mac has
          *  one user, the system user, and every session belongs to it. */
         public android.os.UserHandle getUser() { return android.os.UserHandle.SYSTEM; }
 
@@ -1437,7 +1437,7 @@ public class PackageInstaller {
         // made this class trivially "stateless" but also meant an app that
         // actually READ its own constraints back always got the wrong
         // answer. Real fields now back the getters (matching AOSP field
-        // names 1:1, PackageInstaller.java L5241-5299); Mac.apk still
+        // names 1:1, PackageInstaller.java L5241-5299); Apk on Mac still
         // trivially satisfies every constraint immediately (see
         // commitSessionAfterInstallConstraintsAreMet below), so this does
         // not change install behaviour -- only what the object reports
@@ -1507,7 +1507,7 @@ public class PackageInstaller {
         }
     }
 
-    /** AOSP API-34: commit once the constraints hold. On Mac.apk there is one
+    /** AOSP API-34: commit once the constraints hold. On Apk on Mac there is one
      *  foreground app and no calls/idle states to wait for, so the
      *  constraints are trivially met and this is a plain commit (F-Droid's
      *  SDK>=31 session path reaches here when canUseInstallConstraints). */

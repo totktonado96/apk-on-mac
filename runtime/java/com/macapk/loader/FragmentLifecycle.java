@@ -37,7 +37,7 @@ import java.util.Map;
 import java.util.WeakHashMap;
 
 public final class FragmentLifecycle {
-    private static final String TAG = "Mac.apk.FragmentLifecycle";
+    private static final String TAG = "Apk on Mac.FragmentLifecycle";
     private FragmentLifecycle() {}
 
     /** Flush + advance every FragmentManager reachable from the activity so
@@ -296,7 +296,7 @@ public final class FragmentLifecycle {
                 if (v == null || v == fm) continue;
                 Object got = callNoArg(v, "getFragments");
                 if (got instanceof List) {
-                    NativeLog.i("Mac.apk.FragmentLifecycle",
+                    NativeLog.i("Apk on Mac.FragmentLifecycle",
                         "fragments found via STORE " + v.getClass().getName()
                         + " (manager " + fm.getClass().getName()
                         + " has no getFragments() -- R8)");

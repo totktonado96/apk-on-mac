@@ -2,7 +2,7 @@
 // given quality. AOSP frameworks/base media/java/android/media/CamcorderProfile.java
 // (aosp-mirror/platform_frameworks_base, main).
 //
-// Mac.apk has no camcorder, but apps query CamcorderProfile.get(quality) for
+// Apk on Mac has no camcorder, but apps query CamcorderProfile.get(quality) for
 // sensible defaults before configuring MediaRecorder. We return a fixed 720p
 // profile so callers get usable, self-consistent fields rather than a crash;
 // hasProfile reflects what we can represent.

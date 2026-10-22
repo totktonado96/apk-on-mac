@@ -3,7 +3,7 @@ package android.renderscript;
 /**
  * Base class for all RenderScript exceptions.
  *
- * Unlike the previous Mac.apk stub, this type IS thrown: the package now has a
+ * Unlike the previous Apk on Mac stub, this type IS thrown: the package now has a
  * real CPU implementation of the intrinsics and honest failures everywhere it
  * does not (ScriptC bitcode, ScriptGroup, graphics-only Elements). AOSP throws
  * the three subclasses below from argument validation, so an app's catch block

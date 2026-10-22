@@ -18,7 +18,7 @@
 // return <nothing>;`, because a device without the app-widget feature is a
 // supported configuration that AOSP handles explicitly.
 //
-// Mac.apk is exactly that device: MacApkPackageManager's SYSTEM_FEATURES set
+// Apk on Mac is exactly that device: MacApkPackageManager's SYSTEM_FEATURES set
 // does not contain "android.software.app_widgets" (it cannot honestly, since a
 // single-app host has no home screen and nothing to place a widget on), so
 // hasSystemFeature(FEATURE_APP_WIDGETS) is false. So the bodies here are not

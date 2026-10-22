@@ -49,7 +49,7 @@ public final class Font {
      * The system font, as a Font value.
      *
      * AOSP hands out a real per-glyph Font from the shaper's font-fallback
-     * chain. Mac.apk renders every run with one system face (see MacApkFont),
+     * chain. Apk on Mac renders every run with one system face (see MacApkFont),
      * so this singleton is the accurate answer to "which font drew this glyph"
      * rather than a fabricated one: null file and null buffer say plainly that
      * it is the platform font, not something the app supplied.

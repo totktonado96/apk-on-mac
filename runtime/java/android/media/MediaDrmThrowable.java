@@ -5,7 +5,7 @@ package android.media;
  * error codes from any of them. API 33.
  *
  * All three accessors are DEFAULT methods in AOSP returning 0, and 0 is
- * documented as "the vendor did not supply one". Mac.apk has no DRM plugin (see
+ * documented as "the vendor did not supply one". Apk on Mac has no DRM plugin (see
  * MediaDrm's class comment), so no vendor code can ever exist and 0 is the
  * truthful answer for every throwable -- which is why the AOSP defaults are
  * inherited verbatim rather than overridden.

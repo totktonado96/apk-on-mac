@@ -2,7 +2,7 @@
 //
 // TWO behaviors coexist, selected by MACAPK_REAL_LOOPER:
 //
-//  * Historical model (flag OFF -- the default): Mac.apk never ran a real
+//  * Historical model (flag OFF -- the default): Apk on Mac never ran a real
 //    main loop. The Cocoa runloop + Handler.drainGlobal owned timing and
 //    main-Handler posts went to Handler.GLOBAL_QUEUE drained per frame.
 //    In that model this class is a near-stub: apps poke addIdleHandler()
@@ -117,7 +117,7 @@ public final class MessageQueue {
      *  for I/O events on a raw fd, serviced by this thread's native ALooper.
      *  v1.0.464 (subsystem-04 close-list): the OnFileDescriptorEventListener
      *  interface already existed but the add/remove methods were absent
-     *  (NoSuchMethodError for any caller). Mac.apk does NOT wire the Java
+     *  (NoSuchMethodError for any caller). Apk on Mac does NOT wire the Java
      *  MessageQueue to this thread's native ALooper fd set (see the file
      *  header: native fds are serviced separately to avoid double-driving
      *  engines like Unity), so registration is recorded but no Java-side fd

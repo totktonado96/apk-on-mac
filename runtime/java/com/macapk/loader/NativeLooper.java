@@ -1,7 +1,7 @@
 // JNI bridge to the per-thread native NDK ALooper (MacApkLooper in the bionic
 // shim). On real Android a thread's Java Looper and its NDK ALooper are the SAME
 // native Looper -- one poll loop services Java messages AND native fds added via
-// ALooper_addFd. Mac.apk split them (Java Looper = a BlockingQueue; NDK ALooper
+// ALooper_addFd. Apk on Mac split them (Java Looper = a BlockingQueue; NDK ALooper
 // = a separate C++ object), so a native vsync fd registered via ALooper_addFd
 // landed on a looper nobody polled (Unity's frame driver -> black screen).
 //

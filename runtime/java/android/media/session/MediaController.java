@@ -4,7 +4,7 @@
 //
 // AOSP's MediaController talks to a system-side session record over Binder,
 // so it works identically regardless of which process published the session.
-// Mac.apk has no such cross-process transport (see CLAUDE.md: no emulation/
+// Apk on Mac has no such cross-process transport (see CLAUDE.md: no emulation/
 // virtualization/IPC to a separate system process), but every app that reads
 // its OWN session back is already running in the same process as that
 // session -- MediaSession.Token carries a direct in-process reference (see

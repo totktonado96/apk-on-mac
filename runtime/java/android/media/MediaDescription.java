@@ -1,7 +1,7 @@
 // android.media.MediaDescription -- a lightweight description of a media item
 // (title, subtitle, art, media id). AOSP frameworks/base
 // media/java/android/media/MediaDescription.java. Immutable bag built via
-// Builder; Parcelable. Fully serviceable as a pure data holder on Mac.apk.
+// Builder; Parcelable. Fully serviceable as a pure data holder on Apk on Mac.
 package android.media;
 
 // AOSP-conformance (framework_lint vs android-30 stub jar): AOSP does not

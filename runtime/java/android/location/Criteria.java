@@ -6,7 +6,7 @@ import android.os.Parcelable;
 /**
  * A set of requirements used to select a location provider.
  *
- * Mac.apk registers no location providers, so nothing scores a Criteria against
+ * Apk on Mac registers no location providers, so nothing scores a Criteria against
  * a provider list -- but the object itself is pure data and is faithful here,
  * including the copy constructor, the range checks, and the non-obvious
  * setAccuracy/getAccuracy mapping onto the horizontal-accuracy field (AOSP

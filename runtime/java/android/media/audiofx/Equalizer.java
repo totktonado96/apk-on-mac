@@ -1,7 +1,7 @@
 // android.media.audiofx.Equalizer -- multi-band graphic equalizer. AOSP
 // frameworks/base media/java/android/media/audiofx/Equalizer.java.
 //
-// Mac.apk has no per-session EQ in the mixer, so this presents a faithful
+// Apk on Mac has no per-session EQ in the mixer, so this presents a faithful
 // 5-band EQ surface (the AOSP reference effect's default band count) with a
 // flat, settable level map. Music players query band count / center freqs /
 // level range and set per-band levels; reads reflect writes, and the audio is

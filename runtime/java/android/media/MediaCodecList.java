@@ -162,7 +162,7 @@ public final class MediaCodecList {
     /**
      * @param kind Either {@link #REGULAR_CODECS} or {@link #ALL_CODECS}. AOSP
      *     distinguishes these by excluding secure-/tunneled-only codecs from
-     *     REGULAR_CODECS. Mac.apk registers neither kind (no DRM, no tunneled
+     *     REGULAR_CODECS. Apk on Mac registers neither kind (no DRM, no tunneled
      *     pipeline -- see MediaCodecInfo.CodecCapabilities' FEATURE_ comment),
      *     so both kinds are always the identical set here.
      */

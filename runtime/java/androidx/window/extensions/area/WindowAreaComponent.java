@@ -1,6 +1,6 @@
 package androidx.window.extensions.area;
 import androidx.window.extensions.core.util.function.Consumer;
-/** Rear-display window-area control. Mac.apk has no rear display, so status
+/** Rear-display window-area control. Apk on Mac has no rear display, so status
  *  listeners report UNSUPPORTED and session starts are rejected. */
 public interface WindowAreaComponent {
     int STATUS_UNSUPPORTED = 0;

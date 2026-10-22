@@ -4,7 +4,7 @@
 // Added alongside Base64OutputStream (the sibling Crashlytics references). An
 // app that base64-decodes/encodes a stream loads this; provided so the class
 // links and behaves exactly as on a device. AOSP @android.ravenwood.* stripped
-// per Mac.apk convention; logic unchanged. Operates on a Base64.Coder.
+// per Apk on Mac convention; logic unchanged. Operates on a Base64.Coder.
 package android.util;
 
 import java.io.FilterInputStream;

@@ -1,5 +1,5 @@
 package android.util;
-/** statsd write entry point. Mac.apk has no statsd, so writes are dropped. */
+/** statsd write entry point. Apk on Mac has no statsd, so writes are dropped. */
 public final class StatsLog {
     private StatsLog() {}
     public static boolean logStart(int id) { return false; }

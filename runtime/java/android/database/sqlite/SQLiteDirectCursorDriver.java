@@ -10,13 +10,13 @@
 //         public void cursorClosed() / setBindArguments(String[]) /
 //                     cursorDeactivated() / cursorRequeried(Cursor)
 //     }
-// We drop the trailing CancellationSignal because Mac.apk does not model query
+// We drop the trailing CancellationSignal because Apk on Mac does not model query
 // cancellation; the argument ORDER of the rest matches AOSP so a reader of that
 // file finds what they expect. This is package-visible framework plumbing, not
 // SDK surface, so no guest compiles against the constructor.
 //
 // This class carries the behaviour that used to live in SQLiteCursorDriver when
-// that type was (wrongly) a class: Mac.apk's SQLiteCursorImpl drives the
+// that type was (wrongly) a class: Apk on Mac's SQLiteCursorImpl drives the
 // rawQueryWithFactory path directly and does not call back, so the notification
 // methods are benign no-ops -- but any AndroidX/app cursor subclass that DOES
 // invoke the driver (Room's older FrameworkSQLiteDatabase path, a custom

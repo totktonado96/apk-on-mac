@@ -3,7 +3,7 @@
 // AOSP source: frameworks/base/core/java/android/security/
 // ConfirmationNotAvailableException.java
 //
-// This is the exception Mac.apk ALWAYS throws from presentPrompt: Android
+// This is the exception Apk on Mac ALWAYS throws from presentPrompt: Android
 // Protected Confirmation needs a trusted display path implemented in secure
 // hardware, and macOS has none. See ConfirmationPrompt.
 package android.security;

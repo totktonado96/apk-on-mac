@@ -212,7 +212,7 @@ public class ContextThemeWrapper extends ContextWrapper {
      *  MainActivity does) -- without the method, starting the activity
      *  dies in NoSuchMethodError before onCreate. AOSP's getResources()
      *  builds a createConfigurationContext(mOverrideConfiguration)
-     *  context; Mac.apk's single-density Resources model has no
+     *  context; Apk on Mac's single-density Resources model has no
      *  per-configuration variants yet, so the stored override currently
      *  has no consumer -- the load-bearing part is the API surface and
      *  its state contract. */
@@ -343,7 +343,7 @@ public class ContextThemeWrapper extends ContextWrapper {
         return super.getSystemService(name);
     }
 
-    /** @hide Mac.apk. The inflater LayoutInflater.from(this) must return, for a
+    /** @hide Apk on Mac. The inflater LayoutInflater.from(this) must return, for a
      *  wrapper that models AOSP's getSystemService(LAYOUT_INFLATER_SERVICE)
      *  answer (android14 ContextThemeWrapper.java:181-189: the base's inflater
      *  cloned into this wrapper, factories kept). Null, the default, means "not

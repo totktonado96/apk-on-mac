@@ -1,7 +1,7 @@
 package android.content.res.loader;
 import android.os.ParcelFileDescriptor;
 /** A single provider of additional resources/assets loaded at runtime (API 30).
- *  Mac.apk resolves resources from the app's own apk; a runtime-loaded table is
+ *  Apk on Mac resolves resources from the app's own apk; a runtime-loaded table is
  *  held as an opaque provider that contributes nothing to the lookup.
  *  Source: frameworks/base/core/java/android/content/res/loader/ResourcesProvider.java */
 // AOSP-conformance (framework_lint vs android-30 stub jar): AOSP does not
@@ -19,7 +19,7 @@ public class ResourcesProvider implements AutoCloseable, java.io.Closeable {
     // AOSP core/java/android/content/res/loader/ResourcesProvider.java (API 30)
     // -- the remaining factories. Every one of them builds an ApkAssets on the
     // native AssetManager2 and would contribute a real resource table to a
-    // ResourcesLoader. Mac.apk resolves resources through ResourceIndex, which
+    // ResourcesLoader. Apk on Mac resolves resources through ResourceIndex, which
     // has no runtime-loaded-table concept at all, so a provider built from any
     // of these contributes nothing to a lookup -- exactly as the pre-existing
     // loadFromTable()/empty() already do. The construction still SUCCEEDS

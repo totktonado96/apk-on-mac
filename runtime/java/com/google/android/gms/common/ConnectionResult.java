@@ -5,7 +5,7 @@ import android.app.PendingIntent;
 import android.content.IntentSender;
 
 // com.google.android.gms.common.ConnectionResult: the result of a Google Play
-// services connection attempt. Mac.apk has no real Play services; code paths
+// services connection attempt. Apk on Mac has no real Play services; code paths
 // that construct/inspect a ConnectionResult get SUCCESS so callers take the
 // "services available" branch. Public surface mirrors the GMS SDK.
 public final class ConnectionResult {
@@ -50,7 +50,7 @@ public final class ConnectionResult {
     public String getErrorMessage()        { return message; }
 
     /** Real GMS launches the resolution PendingIntent (e.g. an account picker)
-     *  for a RESOLUTION_REQUIRED result. On Mac.apk there is no Play Services
+     *  for a RESOLUTION_REQUIRED result. On Apk on Mac there is no Play Services
      *  system app, so no result ever carries a resolution PendingIntent; this is
      *  a clean no-op exactly like a de-Googled device. The checked-exception
      *  declaration matches the GMS signature so callers that wrap it compile. */

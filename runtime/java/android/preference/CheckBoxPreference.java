@@ -14,7 +14,7 @@
 // referenced `<init>(Context,AttributeSet,int,int)` and `onCreateView(ViewGroup)`
 // -- the 4-arg constructor did not exist and onCreateView was not on the chain at
 // all. That app also SUBCLASSES this, which is why the whole TwoStatePreference
-// chain had to become real rather than be patched: the previous Mac.apk version
+// chain had to become real rather than be patched: the previous Apk on Mac version
 // extended Preference directly and kept an in-memory `checked` field that was
 // never persisted, i.e. a checkbox setting that silently forgot itself between
 // launches.
@@ -37,7 +37,7 @@ public class CheckBoxPreference extends TwoStatePreference {
     public CheckBoxPreference(Context context, AttributeSet attrs) { this(context, attrs, 0, 0); }
     public CheckBoxPreference(Context context) { this(context, null, 0, 0); }
 
-    /** Not AOSP; retained from the previous Mac.apk stub. */
+    /** Not AOSP; retained from the previous Apk on Mac stub. */
     public CheckBoxPreference() { super(); }
 
     @Override

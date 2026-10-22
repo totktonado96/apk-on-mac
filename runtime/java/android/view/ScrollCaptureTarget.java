@@ -4,7 +4,7 @@
 // Source: frameworks/base core/java/android/view/ScrollCaptureTarget.java
 // (android16-release).
 //
-// Mac.apk runs no scroll-capture host, so nothing consumes the targets a
+// Apk on Mac runs no scroll-capture host, so nothing consumes the targets a
 // View.onScrollCaptureSearch produces -- but the search itself is real (see
 // View.onScrollCaptureSearch), and an app that implements the search must be
 // able to build and read these.
@@ -17,7 +17,7 @@ public class ScrollCaptureTarget {
     private final ScrollCaptureCallback mCallback;
     private android.graphics.Rect mScrollBounds;
 
-    /** @hide -- Mac.apk keeps the no-arg form the tree already handed out. */
+    /** @hide -- Apk on Mac keeps the no-arg form the tree already handed out. */
     public ScrollCaptureTarget() {
         this(null, new android.graphics.Rect(), new android.graphics.Point(), null);
     }

@@ -53,7 +53,7 @@ import javax.security.auth.x500.X500Principal;
  *
  * <p>Like the symmetric side, the key is software-backed rather than
  * hardware-non-extractable (see MacApkKeyStoreBackend for why that is the right
- * Mac.apk analogue), so the stock JCE providers can sign with it.
+ * Apk on Mac analogue), so the stock JCE providers can sign with it.
  */
 public abstract class AndroidKeyStoreKeyPairGeneratorSpi extends KeyPairGeneratorSpi {
 

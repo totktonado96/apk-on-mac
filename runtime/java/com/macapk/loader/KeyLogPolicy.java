@@ -42,7 +42,7 @@ import android.view.KeyEvent;
 public final class KeyLogPolicy {
     private KeyLogPolicy() {}
 
-    static final String TAG = "Mac.apk.Touch";
+    static final String TAG = "Apk on Mac.Touch";
 
     /** MACAPK_TRACE_KEYS=1: log full key values and editor text (password targets excepted). */
     static final boolean TRACE_KEYS = "1".equals(System.getenv("MACAPK_TRACE_KEYS"));

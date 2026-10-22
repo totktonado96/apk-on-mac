@@ -268,7 +268,7 @@ public final class DocumentsContract {
     // transaction to an unknown authority raises IllegalArgumentException);
     // our in-process ContentResolver.call() instead returns null when no
     // provider is registered for the authority (see ContentResolver.java).
-    // Most Mac.apk apps never bundle a DocumentsProvider at all, so blindly
+    // Most Apk on Mac apps never bundle a DocumentsProvider at all, so blindly
     // dereferencing that null the way AOSP's source does would turn "no SAF
     // provider present" into a new crash where the previous stub was a safe
     // no-op. We fail soft (null/false) for THAT case -- no provider serves
@@ -296,7 +296,7 @@ public final class DocumentsContract {
         }
     }
 
-    /** Mac.apk fail-soft: true when no provider serves `authority` (the one case
+    /** Apk on Mac fail-soft: true when no provider serves `authority` (the one case
      *  where our ContentResolver.call returns null instead of throwing). */
     private static boolean macapkNoProvider(android.content.ContentResolver content,
             String authority) {
@@ -554,7 +554,7 @@ public final class DocumentsContract {
     // app's OWN DocumentsProvider -- exactly as in AOSP. Nothing here needs a
     // system service. The one behavioural difference is the same one the block
     // above already documents: AOSP's Binder call() throws for an unknown
-    // authority, while Mac.apk's in-process call() returns null, so these fail
+    // authority, while Apk on Mac's in-process call() returns null, so these fail
     // soft (null / false / no-op) instead of turning "no SAF provider bundled"
     // into a crash.
     // Source: frameworks/base/core/java/android/provider/DocumentsContract.java

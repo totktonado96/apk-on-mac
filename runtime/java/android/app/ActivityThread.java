@@ -39,7 +39,7 @@ public final class ActivityThread {
     public Instrumentation getInstrumentation() { return mInstrumentation; }
 
     /** The single package this process binds. AOSP keys a map of these by
-     *  package name (mPackages); a Mac.apk process runs exactly one app, so one
+     *  package name (mPackages); a Apk on Mac process runs exactly one app, so one
      *  field is the whole map. */
     private LoadedApk mBoundLoadedApk;
     private Application mInitialApplication;
@@ -75,7 +75,7 @@ public final class ActivityThread {
      *  Application-construction step.
      *
      *  NON-GOALS, stated because four comments elsewhere in the tree justify
-     *  lazy resolution with "Mac.apk has no handleBindApplication" and would
+     *  lazy resolution with "Apk on Mac has no handleBindApplication" and would
      *  otherwise read as an invitation to move work in here: this method creates
      *  NO ContextImpl, binds NO targetSdk (Application.macapkInitVersion keeps
      *  that), installs NO ContentProviders, and does NOT call onCreate. On a
@@ -93,7 +93,7 @@ public final class ActivityThread {
                 data.restrictedBackupMode, /*instrumentation=*/ null);
     }
 
-    /** Mac.apk-namespaced entry point: com.macapk.loader.Boot calls this to bind
+    /** Apk on Mac-namespaced entry point: com.macapk.loader.Boot calls this to bind
      *  the application through the AOSP chain.
      *
      *  Why the extra frame rather than a public handleBindApplication overload:

@@ -4,7 +4,7 @@ package android.os;
  * android.os.ServiceManager -- a HIDDEN (@hide) platform class apps reach only
  * by reflection to look up system-service binders. AOSP:
  *   frameworks/base/core/java/android/os/ServiceManager.java
- * Mac.apk has no binder / servicemanager, so every lookup honestly reports
+ * Apk on Mac has no binder / servicemanager, so every lookup honestly reports
  * "not available" (null), exactly as a device does for a service the process
  * has no permission for. Facebook's lacrima crash reporter references it to
  * install a "system binder died detector" (X.0a3.<init>); without the class the

@@ -8,7 +8,7 @@ import java.util.Objects;
 /**
  * Closed Subscriber Group information carried by an LTE/WCDMA cell identity.
  *
- * Immutable value type; no radio needed. Mac.apk never produces a cell identity,
+ * Immutable value type; no radio needed. Apk on Mac never produces a cell identity,
  * so getClosedSubscriberGroupInfo() reports null (AOSP's answer when the cell
  * does not advertise a CSG).
  *

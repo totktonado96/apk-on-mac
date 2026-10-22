@@ -4,7 +4,7 @@
 // android16-release). These are compile-time constants, so an app that names
 // one has it inlined -- but a library that reflects over the class, or code
 // that reads a value through a non-constant path, needs the class to exist.
-// Mac.apk performs no haptics (macOS exposes no equivalent for a trackpad-less
+// Apk on Mac performs no haptics (macOS exposes no equivalent for a trackpad-less
 // Mac and View.performHapticFeedback honestly returns false), so nothing here
 // is consumed; the ids must still be the platform's.
 package android.view;

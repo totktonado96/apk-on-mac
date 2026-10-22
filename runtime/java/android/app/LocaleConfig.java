@@ -11,7 +11,7 @@
 // Settings-style in-app picker) reads exactly those two to decide whether to
 // offer a language list at all.
 //
-// Mac.apk does not parse the localeConfig resource, so the honest answer is
+// Apk on Mac does not parse the localeConfig resource, so the honest answer is
 // AOSP's "the app declared none": STATUS_NOT_SPECIFIED plus a null locale list.
 // That makes a picker fall back to its own hard-coded list -- which is what it
 // does on any app without a localeConfig -- instead of showing an empty list,

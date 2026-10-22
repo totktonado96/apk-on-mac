@@ -10,7 +10,7 @@
 //     the calling runtime to hold its app's run lock;
 //   * the stub's single-instance check: a second launch finds it held and
 //     brings the running instance forward instead of starting another.
-// A launch from the Mac.apk window (MacApkLauncherApp.launch, Process() through
+// A launch from the Apk on Mac window (MacApkLauncherApp.launch, Process() through
 // a run-wrapper) never passed through a stub and held no lock: the helper
 // refused every dialog ("parent N does not hold <app>'s run lock", Organic Maps'
 // location request on 2026-10-05, answered DENIED with no dialog), and opening
@@ -29,11 +29,11 @@ import java.io.File;
 public final class RunLock {
     private RunLock() {}
 
-    private static final String TAG = "Mac.apk.RunLock";
+    private static final String TAG = "Apk on Mac.RunLock";
     private static volatile int sFd = -1;
 
     static File runDir() {
-        return new File(SharedStorage.hostHome(), "Library/Application Support/Mac.apk/run");
+        return new File(SharedStorage.hostHome(), "Library/Application Support/Apk on Mac/run");
     }
 
     /** Take the run lock if we have an installed identity and it is free. */

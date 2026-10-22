@@ -2,7 +2,7 @@ package com.google.firebase.functions;
 
 // com.google.firebase.functions.FirebaseFunctionsException -- the exception a
 // failed callable Task carries (task.getException() returns this). Apps catch it
-// and branch on getCode(). On Mac.apk there is no Cloud Functions backend
+// and branch on getCode(). On Apk on Mac there is no Cloud Functions backend
 // (de-Googled device), so every call fails with Code.INTERNAL -- we never
 // fabricate a function result.
 //

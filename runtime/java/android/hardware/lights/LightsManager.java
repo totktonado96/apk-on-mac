@@ -9,7 +9,7 @@
 // hardware/lights/LightsManager.java, fetched 2026-08-12,
 // android13-release), with the real implementation living in a hidden
 // binder-backed subclass that talks to com.android.server.lights over
-// AIDL. Mac.apk has no such service-process split and no lights HAL, so --
+// AIDL. Apk on Mac has no such service-process split and no lights HAL, so --
 // matching this codebase's convention for every other AOSP manager class
 // that is "abstract base + hidden impl" upstream (see DisplayManager.java,
 // StorageManager.java) -- this is flattened to ONE concrete class.
@@ -42,7 +42,7 @@ public class LightsManager {
 
     public LightsManager() {}
 
-    /** AOSP: "Returns the lights available on the device." Mac.apk has none. */
+    /** AOSP: "Returns the lights available on the device." Apk on Mac has none. */
     public List<Light> getLights() {
         return Collections.emptyList();
     }

@@ -17,7 +17,7 @@ import android.os.Parcelable;
  * android.widget.inline.InlinePresentationSpec unblocks them, and this class is
  * where to come back to.
  *
- * The rest is faithful. Mac.apk shows no inline suggestion strip -- there is no
+ * The rest is faithful. Apk on Mac shows no inline suggestion strip -- there is no
  * IME surface to host one -- so a presentation is never rendered, exactly as on
  * a device whose keyboard does not support inline suggestions.
  *

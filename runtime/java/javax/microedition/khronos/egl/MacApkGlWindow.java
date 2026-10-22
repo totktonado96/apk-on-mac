@@ -291,7 +291,7 @@ public final class MacApkGlWindow {
     // Called only from those bridges, on the app's own thread.
     // =====================================================================
 
-    private static final String TAG14 = "Mac.apk.EGL14";
+    private static final String TAG14 = "Apk on Mac.EGL14";
 
     /** AOSP's not_valid_surface message (android_opengl_EGL14.cpp). */
     private static final String NOT_VALID_SURFACE =

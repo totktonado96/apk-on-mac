@@ -18,7 +18,7 @@
 //   protected void finalize()
 //
 // On a real device the class names are read from the DEX's string/class tables
-// and loadClass routes through ART. Mac.apk has no DEX interpreter, so we run
+// and loadClass routes through ART. Apk on Mac has no DEX interpreter, so we run
 // the source file through com.macapk.dex (the same in-process DEX->JVM-bytecode
 // converter the primary app dex uses) into a jar, build an internal
 // URLClassLoader over it, enumerate the jar's classes for entries(), and resolve

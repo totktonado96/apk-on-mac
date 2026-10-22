@@ -6,7 +6,7 @@
 //
 // AOSP gates the whole feature on config_enableMotionPrediction, and on a
 // device where that is false isPredictionAvailable() returns false and predict()
-// returns null. Mac.apk has no prediction model (there is no libinput
+// returns null. Apk on Mac has no prediction model (there is no libinput
 // MotionPredictor to bind), so it takes exactly that branch -- a real,
 // reachable device state, not a stand-in. record() still accepts events so a
 // caller's bookkeeping is undisturbed.

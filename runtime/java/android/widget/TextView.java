@@ -1125,7 +1125,7 @@ public class TextView extends View
         n = macapkApplyFilters(n);
         CharSequence old = this.text;
         if (TW_TRACE && getClass().getSimpleName().contains("CalculatorResult")) {
-            com.macapk.loader.NativeLog.i("Mac.apk.TW",
+            com.macapk.loader.NativeLog.i("Apk on Mac.TW",
                 "CalculatorResult.setText('" + com.macapk.loader.KeyLogPolicy.viewText(this, n)
                 + "') vis=" + getVisibility());
         }
@@ -1151,7 +1151,7 @@ public class TextView extends View
                 }
                 macapkSetTextInternal(n);
                 macapkInitializeMovement();
-                if (TW_TRACE) com.macapk.loader.NativeLog.i("Mac.apk.TW",
+                if (TW_TRACE) com.macapk.loader.NativeLog.i("Apk on Mac.TW",
                     "setText fired " + textWatchers.size() + " watcher(s) on "
                     + getClass().getSimpleName() + " text='"
                     + com.macapk.loader.KeyLogPolicy.viewText(this, n) + "'");
@@ -1549,7 +1549,7 @@ public class TextView extends View
     }
     /** AOSP's private setRawTextSize (:4649-4661) with the unit recorded the way
      *  the constructor records it: how android:textSize from XML reaches the
-     *  view. Mac.apk's inflater applies XML attributes after construction, and
+     *  view. Apk on Mac's inflater applies XML attributes after construction, and
      *  doing that through the public setTextSize(int, float) reached app
      *  overrides a device never calls for XML: SmartTube's
      *  MarqueeTextViewCompat forwards setTextSize(unit, size) to its inner
@@ -1583,7 +1583,7 @@ public class TextView extends View
         if (TW_TRACE) {
             String cn = getClass().getSimpleName();
             if (cn.contains("CalculatorFormula") || cn.contains("CalculatorResult")) {
-                com.macapk.loader.NativeLog.i("Mac.apk.TS",
+                com.macapk.loader.NativeLog.i("Apk on Mac.TS",
                     cn + ".setTextSize unit=" + unit + " size=" + size + " -> px="
                     + this.textSizePx + " w=" + getWidth() + " mw=" + getMeasuredWidth()
                     + " h=" + getHeight());
@@ -1592,7 +1592,7 @@ public class TextView extends View
                     StackTraceElement[] st = new Throwable().getStackTrace();
                     for (int i = 1; i < Math.min(st.length, 8); i++)
                         sb.append(st[i].getClassName()).append('.').append(st[i].getMethodName()).append(" <- ");
-                    com.macapk.loader.NativeLog.i("Mac.apk.TS", sb.toString());
+                    com.macapk.loader.NativeLog.i("Apk on Mac.TS", sb.toString());
                 }
             }
         }
@@ -2736,7 +2736,7 @@ public class TextView extends View
         if (w == null) return;
         if (textWatchers == null) textWatchers = new java.util.ArrayList<>();
         if (!textWatchers.contains(w)) textWatchers.add(w);
-        if (TW_TRACE) com.macapk.loader.NativeLog.i("Mac.apk.TW",
+        if (TW_TRACE) com.macapk.loader.NativeLog.i("Apk on Mac.TW",
             "addTextChangedListener on " + getClass().getSimpleName() + " watcher=" + w.getClass().getName());
     }
     public void removeTextChangedListener(android.text.TextWatcher w) {
@@ -2946,7 +2946,7 @@ public class TextView extends View
         invalidate();
     }
 
-    /** Apply one host keystroke to this text field (Mac.apk's IME).
+    /** Apply one host keystroke to this text field (Apk on Mac's IME).
      *  Returns true if consumed. Routed here by TouchDispatcher when this
      *  view is the active soft-input target (see InputMethodManager). */
     public boolean macapkHandleSoftKey(int unicodeChar, int keyCode) {
@@ -3215,7 +3215,7 @@ public class TextView extends View
     private static final boolean sTraceIme = "1".equals(System.getenv("MACAPK_TRACE_IME"));
     @Override public boolean onKeyDown(int keyCode, android.view.KeyEvent ev) {
         if (sTraceIme) {
-            System.err.println("[Mac.apk.IME] TextView.onKeyDown " + getClass().getName()
+            System.err.println("[Apk on Mac.IME] TextView.onKeyDown " + getClass().getName()
                 + " editor=" + macapkIsTextEditor()
                 + " enabled=" + isEnabled() + " checkIsEditor=" + onCheckIsTextEditor()
                 + " focused=" + isFocused() + " focusableInTouchMode=" + isFocusableInTouchMode());
@@ -4888,7 +4888,7 @@ public class TextView extends View
      *  TextView.java:7525-7528), verbatim:
      *      final int inputType = getInputType();
      *      return isPasswordInputType(inputType) || isVisiblePasswordInputType(inputType);
-     *  Public because AOSP's is; Mac.apk's own reader is the input recorder,
+     *  Public because AOSP's is; Apk on Mac's own reader is the input recorder,
      *  which must never write what is typed into a password field. */
     public boolean isAnyPasswordInputType() {
         final int inputType = getInputType();
@@ -6980,7 +6980,7 @@ public class TextView extends View
      *      ViewRootImpl viewRootImpl = getViewRootImpl();
      *      if (viewRootImpl != null) { ...dispatchKeyFromIme(ENTER down/up, FLAG_EDITOR_ACTION)... }
      *
-     *  The IME calls this for its action button; on Mac.apk the host keyboard IS
+     *  The IME calls this for its action button; on Apk on Mac the host keyboard IS
      *  the IME, so the soft-input ENTER route (macapkHandleSoftKey with no
      *  KeyEvent) calls it. It used to be `{}` and that route called only the
      *  listener, so a field declaring imeOptions="actionNext" never advanced

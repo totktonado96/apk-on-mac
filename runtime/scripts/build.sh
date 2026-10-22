@@ -214,7 +214,7 @@ fi
 # is no version skew to manage.
 #
 # Output goes to $TMP/com/macapk/net/, so it is packaged into macapk-loader.jar
-# by the step below -- Mac.apk infrastructure, not Android API surface. NOTE it
+# by the step below -- Apk on Mac infrastructure, not Android API surface. NOTE it
 # also ends up in android-framework.jar: the `-path './com/macapk/*' -prune`
 # above LOOKS like it excludes com/macapk but is a no-op (-prune only suppresses
 # descent into a DIRECTORY, and -type f already filtered those out), so that jar
@@ -551,7 +551,7 @@ fi
 
 # Default app icon next to the runtime binary. cocoa_bridge.mm resolves
 # this exe-relative as the last-resort Dock icon so a standalone CLI run
-# (no launcher env) still shows the Mac.apk tile instead of a blank/
+# (no launcher env) still shows the Apk on Mac tile instead of a blank/
 # generic Dock entry. The .app build copies the same master into
 # Resources/ via build_launcher.sh.
 ICON_SRC="$RT_DIR/../images/mac_apk_icon_512.png"
@@ -637,7 +637,7 @@ echo "[build] build-id: $(tr '\n' ' ' < "$BUILD/build-id.txt")"
 # canonical installed app. Per-file ditto: new inode every time
 # (kernel signature cache safe; a RUNNING copy keeps its old files), mtimes
 # preserved so the -nt guard makes a no-op rebuild sync nothing.
-# build_dist.sh is unaffected: it re-copies build/Mac.apk.app fresh into
+# build_dist.sh is unaffected: it re-copies build/Apk on Mac.app fresh into
 # build/dist/ and signs there. Opt out for a deliberate old-bundle A/B:
 # MACAPK_NO_BUNDLE_SYNC=1 (scripts/rebuild_and_run.sh sets it, because it
 # atomically promotes the whole bundle itself right afterwards).
@@ -652,8 +652,8 @@ echo "[build] build-id: $(tr '\n' ' ' < "$BUILD/build-id.txt")"
 # nothing audited afterwards.
 #
 # MEASURED 2026-08-19 on this machine, before the fix: `otool -L
-# /Applications/Mac.apk.app/Contents/Resources/macapk-runtime` showed both
-# Homebrew JVM paths, and `scripts/audit_bundle_deps.sh /Applications/Mac.apk.app`
+# /Applications/Apk on Mac.app/Contents/Resources/macapk-runtime` showed both
+# Homebrew JVM paths, and `scripts/audit_bundle_deps.sh /Applications/Apk on Mac.app`
 # exited 1 with two EXTERNAL lines. That bundle would not have run on a Mac
 # without Homebrew, and no instrument said so -- the same blind spot as the
 # Dock-launch PATH bug, invisible here precisely because Homebrew IS installed.
@@ -669,7 +669,7 @@ SYNCED_THIS=0
 sync_payload_into() {  # $1 = a launcher bundle's Contents dir
     local c="$1" src dst pair
     SYNCED_THIS=0
-    # Only touch something that really is a Mac.apk launcher bundle.
+    # Only touch something that really is a Apk on Mac launcher bundle.
     [[ -x "$c/MacOS/MacApk" ]] || return 0
     for pair in \
         "$BIN/macapk-runtime:Resources/macapk-runtime" \
@@ -738,7 +738,7 @@ relink_and_audit() {
     if pgrep -f "^$app/Contents/MacOS/MacApk" >/dev/null 2>&1; then
         echo "[build] NOTE: $label is RUNNING; skipped the @rpath relink to avoid"
         echo "        rewriting a mapped binary. That bundle now links Homebrew"
-        echo "        absolutely. Quit Mac.apk and run:"
+        echo "        absolutely. Quit Apk on Mac and run:"
         echo "          bash scripts/relink_bundle_deps.sh \"$c\" \"$proj\""
         RELINK_FAILED=1
         return 0
@@ -778,12 +778,12 @@ relink_and_audit() {
 #   * never from a tree that lacks what is already installed
 #     (MACAPK_FORCE_INSTALL=1 overrides).
 # A skipped mirror never fails the build. The tree-local dev bundle
-# (build/Mac.apk.app) is this tree's own and is always refreshed.
+# (build/Apk on Mac.app) is this tree's own and is always refreshed.
 . "$RT_DIR/../scripts/install_guard.sh"
 CANON_SYNC_OK=0
 if [[ "${MACAPK_NO_BUNDLE_SYNC:-0}" != "1" ]]; then
     PROJ_TOP="$(cd -- "$RT_DIR/.." >/dev/null 2>&1 && pwd)"
-    CANON_APP="${MACAPK_CANONICAL_APP:-/Applications/Mac.apk.app}"
+    CANON_APP="${MACAPK_CANONICAL_APP:-/Applications/Apk on Mac.app}"
     if [[ ! -x "$CANON_APP/Contents/MacOS/MacApk" ]]; then
         :   # nothing installed: sync_payload_into would skip it anyway
     elif [[ "${MACAPK_BUNDLE_SYNC:-0}" != "1" ]] && ! ig_is_primary "$PROJ_TOP"; then
@@ -802,8 +802,8 @@ if [[ "${MACAPK_NO_BUNDLE_SYNC:-0}" != "1" ]]; then
     fi
 fi
 if [[ "${MACAPK_NO_BUNDLE_SYNC:-0}" != "1" ]]; then
-    DEV_CONTENTS="$RT_DIR/../build/Mac.apk.app/Contents"
-    CANON_CONTENTS="${MACAPK_CANONICAL_APP:-/Applications/Mac.apk.app}/Contents"
+    DEV_CONTENTS="$RT_DIR/../build/Apk on Mac.app/Contents"
+    CANON_CONTENTS="${MACAPK_CANONICAL_APP:-/Applications/Apk on Mac.app}/Contents"
     sync_payload_into "$DEV_CONTENTS"
     [[ "$SYNCED_THIS" -gt 0 ]] && relink_and_audit "$DEV_CONTENTS" "dev bundle"
     if [[ "$CANON_SYNC_OK" -eq 1 ]]; then

@@ -1,5 +1,5 @@
 package androidx.window.extensions.layout;
-/** A fold/hinge. Mac.apk is flat, so one is never produced; the type resolves.
+/** A fold/hinge. Apk on Mac is flat, so one is never produced; the type resolves.
  *  Source: androidx.window.extensions.layout.FoldingFeature */
 public class FoldingFeature implements DisplayFeature {
     public static final int TYPE_FOLD = 1;

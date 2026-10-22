@@ -3,7 +3,7 @@
 // a row count that did not match withExpectedCount, or an assert query whose
 // values did not match.
 //
-// Why Mac.apk needs it: Telegram and Signal reference it. It is a CHECKED
+// Why Apk on Mac needs it: Telegram and Signal reference it. It is a CHECKED
 // exception on applyBatch's signature, so its absence is not merely a missing
 // type -- the catch clause in the caller fails to resolve and the whole
 // containing method dies at link time even on the path where nothing throws.

@@ -4,7 +4,7 @@
 // Source: frameworks/base
 // core/java/android/view/inputmethod/TextAppearanceInfo.java (android16-release).
 //
-// Mac.apk runs no IME, so nothing consumes one -- but this is a plain immutable
+// Apk on Mac runs no IME, so nothing consumes one -- but this is a plain immutable
 // value object on AOSP too, every field round-trips, and a custom editor that
 // builds one gets back exactly what it set.
 package android.view.inputmethod;

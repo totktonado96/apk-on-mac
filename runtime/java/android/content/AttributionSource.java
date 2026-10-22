@@ -7,7 +7,7 @@ import android.os.Parcelable;
  * Who is responsible for a data access: the uid/package, an optional
  * attribution tag, and a chain of upstream callers for delegated access.
  *
- * On a device this is what AppOps records against. Mac.apk runs one app in one
+ * On a device this is what AppOps records against. Apk on Mac runs one app in one
  * process with no permission broker, so the source is always the app itself and
  * the attribution tag is null -- which is exactly what AOSP reports for a
  * Context that was never created with createAttributionContext().
@@ -24,7 +24,7 @@ public final class AttributionSource implements Parcelable {
     private final AttributionSource mNext;
 
     /** AOSP Context.DEVICE_ID_DEFAULT -- the physical device, as opposed to a
-     *  virtual (streamed) one. Mac.apk has no VirtualDeviceManager, so every
+     *  virtual (streamed) one. Apk on Mac has no VirtualDeviceManager, so every
      *  source is on the default device. */
     private static final int DEVICE_ID_DEFAULT = 0;
     /** AOSP Process.INVALID_PID. */
@@ -90,7 +90,7 @@ public final class AttributionSource implements Parcelable {
      *          && context.getSystemService(PermissionManager.class)
      *                    .isRegisteredAttributionSource(this);
      *  i.e. "has the system's permission broker REGISTERED this source". The
-     *  token is minted by that broker. Mac.apk has no permission broker and
+     *  token is minted by that broker. Apk on Mac has no permission broker and
      *  mints no tokens, so no source is registered and the honest answer is
      *  false -- the same answer a device gives for a source an app fabricated
      *  itself rather than obtaining from the system. Answering true would

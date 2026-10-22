@@ -3,7 +3,7 @@ package com.macapk.loader;
 /** HOST TRACKPAD CONTACTS -> Android multi-pointer touch streams.
  *
  *  The macOS trackpad reports every finger as an indirect NSTouch (normalized
- *  position on the pad, plus a phase). Mac.apk used to turn none of them into
+ *  position on the pad, plus a phase). Apk on Mac used to turn none of them into
  *  pointers: a single finger is the mouse (unchanged here), a two-finger swipe
  *  becomes the synthesized scroll drag and a pinch the synthesized two-pointer
  *  pinch (cocoa_bridge.mm scrollWheel: / magnifyWithEvent:), and a two-finger
@@ -45,7 +45,7 @@ package com.macapk.loader;
  *     CANCELS it (claim()), the way AOSP cancels a PRESS that turns into
  *     another gesture.
  *
- *  DELIBERATE DIFFERENCES FROM AOSP (Mac.apk choices, not AOSP behaviour):
+ *  DELIBERATE DIFFERENCES FROM AOSP (Apk on Mac choices, not AOSP behaviour):
  *   0a. TWO POINTERS FOR A STILL CONTACT. AOSP pointer mode treats a still
  *       two-finger contact as the PRESS hypothesis and reports ONE pointer, at
  *       the cursor (TouchInputMapper.cpp:3068-3072 "When there are two fingers
@@ -327,7 +327,7 @@ final class TrackpadGestureMapper {
         // finger lifts (n < 2), the contact is claimed, or it moves.
         if (!allowEngage) { vetoed = true; return SETTLE_MS; }
         // GATE-MUTANT(trackpad:engage) begin -- C1 deletes this: the pre-change
-        // Mac.apk, where a two-finger contact delivered nothing at all.
+        // Apk on Mac, where a two-finger contact delivered nothing at all.
         // Reference points, AOSP style: the cursor and the centroid of the
         // touching fingers at the moment the gesture settles.
         float sx = 0f, sy = 0f;

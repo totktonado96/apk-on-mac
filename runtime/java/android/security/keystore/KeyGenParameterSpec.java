@@ -25,7 +25,7 @@ import javax.security.auth.x500.X500Principal;
 // setAttestationChallenge()/getAttestationChallenge() and
 // setDevicePropertiesAttestationIncluded()/isDevicePropertiesAttestationIncluded()
 // are honest on THIS class: a spec is a REQUEST, and faithfully recording what
-// the app asked for is not a claim that we can satisfy it. What Mac.apk must
+// the app asked for is not a claim that we can satisfy it. What Apk on Mac must
 // never do is MINT the answer. A hardware key attestation is a certificate
 // chain, rooted in a Google-provisioned attestation key inside certified secure
 // hardware, asserting that the private key never left that hardware. macOS
@@ -163,14 +163,14 @@ public final class KeyGenParameterSpec implements AlgorithmParameterSpec {
     public boolean isUserConfirmationRequired() { return userConfirmationRequired; }
     public boolean isUnlockedDeviceRequired() { return unlockedDeviceRequired; }
     public boolean isInvalidatedByBiometricEnrollment() { return invalidatedByBiometricEnrollment; }
-    /** What the caller REQUESTED. Mac.apk has no StrongBox, so a true here makes
+    /** What the caller REQUESTED. Apk on Mac has no StrongBox, so a true here makes
      *  key generation fail with StrongBoxUnavailableException rather than
      *  silently producing a software key the app believes is in a secure
      *  element. See the class header. */
     public boolean isStrongBoxBacked() { return strongBoxBacked; }
     public int getMaxUsageCount() { return maxUsageCount; }
     public String getAttestKeyAlias() { return attestKeyAlias; }
-    /** The challenge the caller supplied, echoed back. Mac.apk never produces an
+    /** The challenge the caller supplied, echoed back. Apk on Mac never produces an
      *  attestation certificate for it -- see the class header. */
     public byte[] getAttestationChallenge() {
         return attestationChallenge != null ? attestationChallenge.clone() : null;
@@ -291,7 +291,7 @@ public final class KeyGenParameterSpec implements AlgorithmParameterSpec {
         public Builder setAttestKeyAlias(String attestKeyAlias) {
             this.attestKeyAlias = attestKeyAlias; return this;
         }
-        /** Records the challenge. Mac.apk produces no attestation certificate
+        /** Records the challenge. Apk on Mac produces no attestation certificate
          *  for it; see the class header. */
         public Builder setAttestationChallenge(byte[] attestationChallenge) {
             this.attestationChallenge = attestationChallenge; return this;

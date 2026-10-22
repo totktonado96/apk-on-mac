@@ -5,7 +5,7 @@ import java.util.concurrent.Executor;
 /**
  * Spatial-audio (head-tracked 3D audio) query surface, API 32+.
  *
- * Mac.apk plays through CoreAudio with no spatializer effect in the chain, so
+ * Apk on Mac plays through CoreAudio with no spatializer effect in the chain, so
  * the honest answer is the one AOSP gives on a device whose audio HAL has no
  * spatializer: unavailable, disabled, SPATIALIZER_IMMERSIVE_LEVEL_NONE, and
  * canBeSpatialized() false for every format. Media apps query this to decide

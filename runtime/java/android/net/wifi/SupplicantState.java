@@ -1,6 +1,6 @@
 // android.net.wifi.SupplicantState
 //
-// The wpa_supplicant association state enum. Mac.apk has no Wi-Fi stack; apps
+// The wpa_supplicant association state enum. Apk on Mac has no Wi-Fi stack; apps
 // reference these enum values when reading WifiInfo.getSupplicantState (which
 // reports a canned state). The enum + isValidState must resolve. Mirrors
 // frameworks/base wifi android.net.wifi.SupplicantState public API.

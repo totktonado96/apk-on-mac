@@ -1,7 +1,7 @@
 package com.google.android.gms.cast;
 
 // com.google.android.gms.cast.MediaInfo -- describes a media item to cast. Pure
-// data built via its Builder; Mac.apk casts nothing (no Cast backend), but the
+// data built via its Builder; Apk on Mac casts nothing (no Cast backend), but the
 // type and Builder must link for apps that construct one. Minimal published
 // surface (content id, stream type, content type).
 // Ref: developers.google.com/android/reference/.../cast/MediaInfo

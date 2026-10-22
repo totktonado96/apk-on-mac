@@ -28,7 +28,7 @@
 //   public static void setProcessDataDirectory(String)   // handleBindApplication's data-dir hand-off
 //   public static void setNonSdkApiUsageConsumer(java.util.function.Consumer)  // skipped: type not load-bearing
 //
-// Mac.apk runs guest arm64 (Stage 6) natively in-process, so is64Bit() is true
+// Apk on Mac runs guest arm64 (Stage 6) natively in-process, so is64Bit() is true
 // and the instruction set is "arm64-v8a" for the common path. (The arm32-lifter
 // path makes the guest believe it is 32-bit; if a future load wants per-load
 // ABI honesty it can set the system property below. We default to 64-bit, which
@@ -180,7 +180,7 @@ public final class VMRuntime {
     /** AOSP (newer): exempt signatures from hidden-API enforcement. We do not
      *  enforce hidden-API access at all, so this is a no-op. */
     public void setHiddenApiExemptions(String... signaturePrefixes) {
-        // no-op: Mac.apk does not enforce hidden-API restrictions
+        // no-op: Apk on Mac does not enforce hidden-API restrictions
     }
 
     // The app's data directory, as ActivityThread.handleBindApplication hands
@@ -201,7 +201,7 @@ public final class VMRuntime {
         sProcessDataDirectory = dataDir;
     }
 
-    /** Mac.apk-internal read side of {@link #setProcessDataDirectory}. AOSP
+    /** Apk on Mac-internal read side of {@link #setProcessDataDirectory}. AOSP
      *  keeps the value native-side with no Java getter, so this stays
      *  package-private rather than inventing public API. */
     static String processDataDirectory() {

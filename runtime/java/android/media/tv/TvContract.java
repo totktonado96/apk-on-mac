@@ -15,7 +15,7 @@
 // buildProgramsUriForChannel / isProgramUri etc. (debug/fwgap_census.py,
 // column T). They are pure URI arithmetic and now answer exactly as a device
 // does. Queries against these URIs go to content://android.media.tv, a
-// provider Mac.apk does not host -- the answer a phone without the TV
+// provider Apk on Mac does not host -- the answer a phone without the TV
 // provider gives (ContentResolver finds no provider), not an empty table
 // pretending to be one.
 // Census + method: docs/fwgap-new-platform-classes_2026-09-26.md.
@@ -206,7 +206,7 @@ public final class TvContract {
             // TvInputManager.requestChannelBrowsable(Uri), a binder call into
             // TvInputManagerService, which broadcasts
             // ACTION_CHANNEL_BROWSABLE_REQUESTED to the system TV app's
-            // receiver. Mac.apk has no TvInputManagerService and no system TV
+            // receiver. Apk on Mac has no TvInputManagerService and no system TV
             // app, so the request has nowhere to go -- the same outcome as a
             // phone, where getSystemService(TV_INPUT_SERVICE) is null and this
             // branch never runs. The URI is still built so a bad id fails

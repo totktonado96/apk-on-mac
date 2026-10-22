@@ -8,7 +8,7 @@
 // /storage/self/primary -- is one directory, the one externalStorageRoot()
 // names here, and /sdcard/Android/{data,obb,media} is the app-private root
 // under it. Keep the two in step; stage S3 moves the shared root on both sides
-// at once (a Mac.apk-wide folder, __macapk_set_shared_storage_root natively)
+// at once (a Apk on Mac-wide folder, __macapk_set_shared_storage_root natively)
 // while the app-private root stays in the bundle.
 //
 // The android-root resolution below used to live in android.os.Environment
@@ -66,7 +66,7 @@ public final class SharedStorage {
             // gate fails if anything recreates it, so do not put the old path
             // back here.
             root = System.getProperty("user.home")
-                    + "/Library/Caches/Mac.apk/scratch/android";
+                    + "/Library/Caches/Apk on Mac/scratch/android";
         }
         // java.io.File does not expand "~" (see Boot.java for why the raw env
         // fallback needs this).
@@ -239,7 +239,7 @@ public final class SharedStorage {
     // translation on either side -- /sdcard/Pictures and
     // Environment.getExternalStoragePublicDirectory(DIRECTORY_PICTURES) both
     // land in ~/Pictures because the host resolves the link, not because two
-    // resolvers agree. Only Mac.apk's own setup (this method, running as Boot
+    // resolvers agree. Only Apk on Mac's own setup (this method, running as Boot
     // before any app code) is MEANT to create links there: a NATIVE guest's
     // symlink() into shared storage is refused (bionic_shim.cpp
     // macapk_symlink_refusal, ENOSYS/EPERM, stage S0; fixed 2026-09-28 to also
@@ -315,7 +315,7 @@ public final class SharedStorage {
         return !userFoldersSettingOff();
     }
 
-    /** The Settings switch (Mac.apk Settings > App data, owner 2026-10-20: "map
+    /** The Settings switch (Apk on Mac Settings > App data, owner 2026-10-20: "map
      *  the android downloads folder to macos downloads folder"): this file's
      *  presence turns the mapping OFF for every app, and unlike
      *  MACAPK_USER_FOLDERS=0 the next launch then UNMAPS (unmapUserFolders), so
@@ -323,7 +323,7 @@ public final class SharedStorage {
      *  not an env var, because a Dock-launched app gets no environment from the
      *  launcher (same reason as space-tap.properties). */
     public static File userFoldersOffFile() {
-        return new File(HOST_HOME, "Library/Application Support/Mac.apk/user-folders-off");
+        return new File(HOST_HOME, "Library/Application Support/Apk on Mac/user-folders-off");
     }
 
     /** True when the Settings switch is OFF and nothing overrides it: an explicit
@@ -339,7 +339,7 @@ public final class SharedStorage {
     /** Settings OFF: each of OUR links (name AND exact target from
      *  USER_FOLDER_MAP) becomes an empty folder of the volume again. Only the
      *  link goes; every file stays in the Mac folder it was always in. A link
-     *  Mac.apk did not make, and a real folder, are left alone. Turning the
+     *  Apk on Mac did not make, and a real folder, are left alone. Turning the
      *  switch back on maps again, moving in whatever the app saved meanwhile
      *  (mapUserFolders' no-clobber merge). @return links removed. */
     static int unmapUserFolders(File volume) {

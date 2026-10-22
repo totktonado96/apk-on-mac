@@ -3,7 +3,7 @@
 // Source: frameworks/base
 // core/java/android/view/textclassifier/ConversationActions.java (android16-release).
 //
-// Mac.apk has no on-device model, so suggestConversationActions returns an
+// Apk on Mac has no on-device model, so suggestConversationActions returns an
 // instance carrying an EMPTY list -- AOSP's own no-model answer.
 package android.view.textclassifier;
 

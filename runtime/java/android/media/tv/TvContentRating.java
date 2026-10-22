@@ -11,7 +11,7 @@ import java.util.Objects;
  * main rating, sub-ratings) tuple with a canonical flat string form. API 21.
  *
  * Entirely self-contained string/value logic with no platform dependency, so it
- * is implemented in full, flatten/unflatten included. Mac.apk is not a TV
+ * is implemented in full, flatten/unflatten included. Apk on Mac is not a TV
  * device (TvInputManager reports no inputs), so nothing here ever produces one
  * -- but an app that constructs and compares ratings, which is all this class
  * is for, gets correct answers.

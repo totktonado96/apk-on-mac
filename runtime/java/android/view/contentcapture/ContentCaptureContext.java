@@ -3,7 +3,7 @@
 // Source: frameworks/base
 // core/java/android/view/contentcapture/ContentCaptureContext.java (android16-release).
 //
-// Mac.apk runs no content-capture service, so no session is ever created by the
+// Apk on Mac runs no content-capture service, so no session is ever created by the
 // framework -- but this is a plain immutable value object and an app that builds
 // one and reads it back gets exactly what it set.
 package android.view.contentcapture;

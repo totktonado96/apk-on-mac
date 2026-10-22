@@ -1,7 +1,7 @@
 // android.media.session.MediaSessionManager
 //
 // AOSP's service for discovering active media sessions and routing media keys.
-// Apps fetch it via getSystemService(MEDIA_SESSION_SERVICE). Mac.apk has no
+// Apps fetch it via getSystemService(MEDIA_SESSION_SERVICE). Apk on Mac has no
 // MediaSessionService backend, so getActiveSessions() is empty and listener
 // registration is a no-op (no sessions ever appear) -- the honest "no active
 // media sessions" result. Mirrors
@@ -41,7 +41,7 @@ public final class MediaSessionManager {
      * an enabled NotificationListenerService (the ComponentName argument) or
      * hold MEDIA_CONTENT_CONTROL; anyone else gets a SecurityException.
      *
-     * Mac.apk hosts exactly one app per process and has no notification-listener
+     * Apk on Mac hosts exactly one app per process and has no notification-listener
      * enrolment, so no caller here can qualify -- and rather than throwing a
      * SecurityException an app has no way to satisfy, the empty list ("nothing
      * you may see") is returned, which is the same shape AOSP gives a qualified

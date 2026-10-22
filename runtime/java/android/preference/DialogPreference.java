@@ -28,11 +28,11 @@
 //   protected void onRestoreInstanceState(Parcelable state)
 //
 // NOT abstract here. AOSP can be abstract because its own PreferenceInflater is
-// the only code path that instantiates the concrete subclasses; Mac.apk has no
+// the only code path that instantiates the concrete subclasses; Apk on Mac has no
 // inflater, and a `<DialogPreference>`-shaped tag reaching an app's own
 // Class.forName().newInstance() must not die on InstantiationException.
 //
-// showDialog() really does build and show an AlertDialog, because Mac.apk has a
+// showDialog() really does build and show an AlertDialog, because Apk on Mac has a
 // working android.app.AlertDialog.Builder -- so an app that overrides
 // onCreateDialogView()/onBindDialogView()/onDialogClosed() (the whole point of
 // subclassing this) gets its callbacks in the AOSP order.
@@ -90,7 +90,7 @@ public class DialogPreference extends Preference
     public DialogPreference(Context context, AttributeSet attrs) { this(context, attrs, 0, 0); }
     public DialogPreference(Context context) { this(context, null, 0, 0); }
 
-    /** Not AOSP. Needed because the pre-existing Mac.apk ListPreference /
+    /** Not AOSP. Needed because the pre-existing Apk on Mac ListPreference /
      *  MultiSelectListPreference stubs each had a no-arg constructor and now
      *  chain through this class; removing theirs would be a gratuitous
      *  source-compat regression for app code that reflectively instantiates. */
@@ -222,7 +222,7 @@ public class DialogPreference extends Preference
     }
 
     // ---- instance state --------------------------------------------------
-    // AOSP saves the dialog's own bundle inside a SavedState. Mac.apk keeps the
+    // AOSP saves the dialog's own bundle inside a SavedState. Apk on Mac keeps the
     // superclass behavior when no dialog is showing (the overwhelmingly common
     // case) and otherwise falls back to it too, because there is no
     // Parcel-backed Bundle round-trip in this framework to restore it from.

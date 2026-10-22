@@ -1,4 +1,4 @@
-// Mac.apk v1.0.111 -- GlideRescue: walks the view tree finding
+// Apk on Mac v1.0.111 -- GlideRescue: walks the view tree finding
 // ImageViews that have a pending Glide load, extracts the model URL
 // via reflection, fetches synchronously through HttpURLConnection,
 // and sets the bitmap on the ImageView directly.
@@ -46,7 +46,7 @@ import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public final class GlideRescue {
-    private static final String TAG = "Mac.apk.GlideRescue";
+    private static final String TAG = "Apk on Mac.GlideRescue";
 
     /** Glide's "request" tag id on a view, declared in
      *  com.bumptech.glide.R.id.glide_custom_view_target_tag. We discover
@@ -424,7 +424,7 @@ public final class GlideRescue {
         c.setRequestMethod("GET");
         c.setConnectTimeout(15_000);
         c.setReadTimeout(30_000);
-        c.setRequestProperty("User-Agent", "Mac.apk/1.0 GlideRescue");
+        c.setRequestProperty("User-Agent", "Apk on Mac/1.0 GlideRescue");
         c.setRequestProperty("Accept", "image/*");
         try {
             int code = c.getResponseCode();

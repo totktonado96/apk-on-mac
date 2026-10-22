@@ -1,7 +1,7 @@
 // android.content.ContentProviderResult -- the outcome of ONE
 // ContentProviderOperation inside a batch.
 //
-// Why Mac.apk needs it: Fossify Gallery and Telegram reference it directly,
+// Why Apk on Mac needs it: Fossify Gallery and Telegram reference it directly,
 // and every applyBatch caller receives an array of them. It is also the input
 // side of value back-references: ContentProviderOperation.BackReference.resolve
 // reads `extras` / `uri` / `count` off an earlier result to fill in a later

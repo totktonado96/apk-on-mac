@@ -1,7 +1,7 @@
 // android.media.RingtoneManager -- enumerates and resolves ringtones. AOSP
 // frameworks/base media/java/android/media/RingtoneManager.java.
 //
-// Mac.apk has no MediaStore-backed ringtone catalog, so the cursor is empty and
+// Apk on Mac has no MediaStore-backed ringtone catalog, so the cursor is empty and
 // getDefaultUri returns null (no system default). getRingtone still hands back a
 // usable Ringtone bound to whatever Uri is passed, so apps that resolve a
 // specific ringtone Uri (e.g. one the user picked) can preview it; apps that
@@ -84,7 +84,7 @@ public class RingtoneManager {
     // ---- haptic channels (API 29) ----------------------------------------
     // AOSP answers this by opening the media and looking for a channel carrying
     // the AUDIO_CHANNEL_OUT_HAPTIC_A/B mask -- a feature of the platform
-    // extractor. Mac.apk's extractor does not surface a haptic channel mask
+    // extractor. Apk on Mac's extractor does not surface a haptic channel mask
     // (nothing in this tree reads one), and there is no vibrator to play it on,
     // so false is both the truthful answer for this device and the answer that
     // keeps setHapticGeneratorEnabled/isHapticGeneratorEnabled on Ringtone from

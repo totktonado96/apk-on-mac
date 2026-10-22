@@ -51,7 +51,7 @@ import java.util.List;
 import java.util.Map;
 
 public class ActionMenuView extends LinearLayout {
-    private static final String TAG = "Mac.apk.ActionMenuView";
+    private static final String TAG = "Apk on Mac.ActionMenuView";
 
     public interface OnMenuItemClickListener {
         boolean onMenuItemClick(MenuItem item);

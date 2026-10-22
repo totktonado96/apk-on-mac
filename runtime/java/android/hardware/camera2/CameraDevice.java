@@ -1,7 +1,7 @@
 // android.hardware.camera2.CameraDevice -- an open connection to a
 // single camera. Abstract in AOSP; apps interact with it only through
 // the StateCallback they pass to CameraManager.openCamera and the
-// CaptureRequest.Builder / createCaptureSession methods. Mac.apk has no
+// CaptureRequest.Builder / createCaptureSession methods. Apk on Mac has no
 // camera, so CameraManager.openCamera throws IllegalArgumentException
 // synchronously before StateCallback is ever touched (matching AOSP's
 // real openCameraImpl -- see the comment there) and a CameraDevice is
@@ -198,7 +198,7 @@ public abstract class CameraDevice implements AutoCloseable {
      *
      * Obtained only from CameraManager.getCameraDeviceSetup, and only for a
      * camera for which CameraManager.isCameraDeviceSetupSupported returns true.
-     * Mac.apk reports no cameras, so both of those throw and no instance is
+     * Apk on Mac reports no cameras, so both of those throw and no instance is
      * ever created -- but the nested TYPE has to resolve for an app that
      * declares a field or a parameter of it.
      *

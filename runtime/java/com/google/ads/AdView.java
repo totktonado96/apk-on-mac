@@ -1,6 +1,6 @@
 // com.google.ads.AdView -- shadow stub.
 //
-// Mac.apk's user has stated repeatedly that ads will not be supported.
+// Apk on Mac's user has stated repeatedly that ads will not be supported.
 // Shadowing AdView (and a couple of helper types) here keeps Google's
 // ad SDK <clinit> from running at all -- the parent ClassLoader hands
 // out THIS class instead of the bytecode in the app jar, because

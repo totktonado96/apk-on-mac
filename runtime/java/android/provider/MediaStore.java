@@ -4,7 +4,7 @@
 // ContentResolver, and the ACTION_* intents to launch the camera /
 // picker.
 //
-// ⚠ CORRECTED 2026-08-23. This header used to say "Mac.apk hosts no
+// ⚠ CORRECTED 2026-08-23. This header used to say "Apk on Mac hosts no
 // MediaStore provider, so ContentResolver queries against these URIs
 // return null (no rows)". That has been FALSE since
 // android.provider.MediaStoreProvider landed (2026-07-30): the "media"
@@ -162,7 +162,7 @@ public final class MediaStore {
                     if (in != null) in.close();
                 }
             }
-            /** Insert an image. Mac.apk exposes no writable media provider, so the
+            /** Insert an image. Apk on Mac exposes no writable media provider, so the
              *  insert fails and AOSP contract-returns null. */
             public static String insertImage(android.content.ContentResolver cr, android.graphics.Bitmap source,
                     String title, String description) { return null; }
@@ -620,7 +620,7 @@ public final class MediaStore {
     // ---- Downloads ------------------------------------------------------
     /**
      * ⚠ AOSP declares this at MediaStore level (MediaStore.DownloadColumns) and
-     * has Downloads IMPLEMENT it. Mac.apk previously nested it inside Downloads,
+     * has Downloads IMPLEMENT it. Apk on Mac previously nested it inside Downloads,
      * so the descriptor was MediaStore$Downloads$DownloadColumns and Downloads
      * implemented nothing -- an app naming MediaStore.DownloadColumns did not
      * resolve.
@@ -783,7 +783,7 @@ public final class MediaStore {
      *  ... when opening media Uri for ensuring system stability", especially
      *  for Uris returned by ACTION_PICK_IMAGES.
      *
-     *  Mac.apk has no cloud media provider and no PhotoPicker, so
+     *  Apk on Mac has no cloud media provider and no PhotoPicker, so
      *  isNonCloudPickerUri(uri) is true for every Uri this runtime could
      *  ever hand back -- the picker-only branches beneath it (the
      *  read-only SecurityException guard, openTypedAssetFileDescriptorInternal)
@@ -868,7 +868,7 @@ public final class MediaStore {
 
     /**
      * AOSP asks MediaProvider for an opaque version string that changes when the
-     * media database is rebuilt. Mac.apk's MediaStoreProvider answers the same
+     * media database is rebuilt. Apk on Mac's MediaStoreProvider answers the same
      * call() if it implements it; when it does not, we fall back to a string
      * that is STABLE for the life of the process, which is the property callers
      * actually depend on (they compare it against a previously stored value to
@@ -924,7 +924,7 @@ public final class MediaStore {
     // ⚠ KNOWN-OPEN, and deliberately NOT faked. On Android these four return a
     // PendingIntent the app launches to get the USER's confirmation, and the
     // platform performs the delete/trash/favorite/grant only after the user
-    // agrees. Mac.apk has no consent activity, so there is nothing to launch
+    // agrees. Apk on Mac has no consent activity, so there is nothing to launch
     // and nothing that can grant.
     //
     // Two wrong answers were rejected here:
@@ -933,7 +933,7 @@ public final class MediaStore {
     //       confirmation, which Android never does;
     //   (b) returning null -- AOSP declares all four @NonNull, so a caller may
     //       dereference the result immediately and would NPE.
-    // So each returns a real PendingIntent wrapping a Mac.apk-specific
+    // So each returns a real PendingIntent wrapping a Apk on Mac-specific
     // no-consent-UI action. Launching it starts no activity, and
     // Activity.startIntentSenderForResult settles the pending result as
     // cancelled -- which the app reads as "the user declined", the one outcome
@@ -942,7 +942,7 @@ public final class MediaStore {
     // Fixing this properly needs a confirmation Activity in the host (outside
     // android.provider); see the lane report.
     private static final String ACTION_NO_CONSENT_UI =
-            "org.macapk.action.MEDIA_REQUEST_NO_CONSENT_UI";
+            "io.github.totktonado96.apkonmac.action.MEDIA_REQUEST_NO_CONSENT_UI";
 
     private static android.app.PendingIntent createMediaRequest(String op,
             java.util.Collection<Uri> uris, boolean value) {
@@ -997,7 +997,7 @@ public final class MediaStore {
     }
 
     // --- Cloud media provider -----------------------------------------------
-    // Mac.apk installs no CloudMediaProvider and the photo picker has no cloud
+    // Apk on Mac installs no CloudMediaProvider and the photo picker has no cloud
     // backend, so no authority is current or supported. false / a no-op notify
     // is the accurate answer, not a placeholder.
 
@@ -1021,7 +1021,7 @@ public final class MediaStore {
 
     /**
      * AOSP: whether the named package currently holds the System Gallery role.
-     * Mac.apk assigns no roles, so no package holds it.
+     * Apk on Mac assigns no roles, so no package holds it.
      */
     public static boolean isCurrentSystemGallery(android.content.ContentResolver resolver,
             int uid, String packageName) {
@@ -1032,7 +1032,7 @@ public final class MediaStore {
 
     /**
      * AOSP asks MediaProvider to translate a media: URI into the equivalent
-     * DocumentsProvider URI. Mac.apk registers no MediaDocumentsProvider, so
+     * DocumentsProvider URI. Apk on Mac registers no MediaDocumentsProvider, so
      * there is no document URI for the item and null -- AOSP's documented
      * @Nullable answer -- is correct.
      */
@@ -1042,7 +1042,7 @@ public final class MediaStore {
 
     /**
      * AOSP returns a URI whose reads have location metadata redacted. Redaction
-     * is performed by MediaProvider; Mac.apk's provider does not implement it,
+     * is performed by MediaProvider; Apk on Mac's provider does not implement it,
      * and handing back the ORIGINAL uri under a "redacted" name would leak the
      * very metadata the caller asked to strip. null (@Nullable in AOSP) says
      * "no redacted view is available", which is the truthful answer.
@@ -1059,7 +1059,7 @@ public final class MediaStore {
 
     /**
      * AOSP hands back a descriptor onto the file in its ORIGINAL format,
-     * bypassing the HEVC-to-AVC transcoder. Mac.apk never transcodes, so the
+     * bypassing the HEVC-to-AVC transcoder. Apk on Mac never transcodes, so the
      * descriptor the caller already holds IS the original format; AOSP is
      * @NonNull, so a duplicate of it is returned (a dup, not the same object,
      * so the caller can close either independently as the contract implies).

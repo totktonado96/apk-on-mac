@@ -9,7 +9,7 @@ import org.json.JSONObject;
 
 // com.android.billingclient.api.Purchase -- a record of an in-app purchase.
 // Real Play Billing constructs these from the JSON receipt the Play Store
-// returns. On a de-Googled device no purchase ever exists, so Mac.apk never
+// returns. On a de-Googled device no purchase ever exists, so Apk on Mac never
 // hands one back from any query. We still ship the full getter surface (apps
 // reference Purchase fields in their type signatures / receipt-validation code)
 // and a faithful JSON-parsing constructor for the rare app that serializes a

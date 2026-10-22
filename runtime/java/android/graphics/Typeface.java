@@ -300,7 +300,7 @@ public class Typeface {
     public boolean isItalic() { return (style & ITALIC) != 0; }
     public int getWeight()    { return weight; }
 
-    /** Mac.apk accessor for the Paint/Canvas text path: an APP-SUPPLIED base
+    /** Apk on Mac accessor for the Paint/Canvas text path: an APP-SUPPLIED base
      *  Font to derive from, or null when this typeface is a system family (or
      *  the table is off, in which case the legacy single-Roboto path runs). */
     public Font macapkBaseFont() { return baseFont; }

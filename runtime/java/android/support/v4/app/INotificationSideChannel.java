@@ -1,4 +1,4 @@
-// Mac.apk -- stub for a support-library AIDL interface.
+// Apk on Mac -- stub for a support-library AIDL interface.
 //
 // MUST BE AN INTERFACE. This was auto-generated as a `class` at v1.0.92, which
 // is wrong in a way no converter gate could see: the app's own dex declares

@@ -3,7 +3,7 @@
 // and every CallControl method).
 //
 // A REAL implementation, and a LOAD-BEARING one here: this is the value
-// Mac.apk hands back to say "this device has no Telecom service", so an app
+// Apk on Mac hands back to say "this device has no Telecom service", so an app
 // takes its own fallback path instead of waiting forever for a callback that
 // cannot arrive. See CallControl and TelecomManager for the reasoning.
 //

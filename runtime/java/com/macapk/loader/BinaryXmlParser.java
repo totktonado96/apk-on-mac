@@ -57,7 +57,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public final class BinaryXmlParser {
-    private static final String TAG = "Mac.apk.AXML";
+    private static final String TAG = "Apk on Mac.AXML";
 
     /** Namespace for the value-type annotations. */
     public static final String MACAPK_TYPE_NS = "http://macapk/axml-type";

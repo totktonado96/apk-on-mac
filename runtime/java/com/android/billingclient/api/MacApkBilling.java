@@ -3,13 +3,13 @@ package com.android.billingclient.api;
 import android.os.Handler;
 import android.os.Looper;
 
-// MacApkBilling -- Mac.apk-internal (package-private) helper for the Play
+// MacApkBilling -- Apk on Mac-internal (package-private) helper for the Play
 // Billing shim. NOT part of the public com.android.billingclient.api surface,
 // so it never shadows a real Play Billing class; it just centralizes the two
 // things every shimmed BillingClient call needs:
 //
 //   (1) Canonical BillingResult builders for the response codes we return.
-//       Mac.apk runs as a de-Googled device with no Play Store service, so
+//       Apk on Mac runs as a de-Googled device with no Play Store service, so
 //       every billing path resolves to an HONEST negative -- almost always
 //       BILLING_UNAVAILABLE (the Play service is structurally absent), never
 //       a fabricated OK with a fake purchase / entitlement.

@@ -2,7 +2,7 @@ package android.app;
 import android.view.View;
 import android.widget.ListAdapter;
 import android.widget.ListView;
-/** A Fragment that hosts a ListView. Mac.apk provides the API surface; the
+/** A Fragment that hosts a ListView. Apk on Mac provides the API surface; the
  *  ListView is created lazily. API 11 (deprecated). */
 public class ListFragment extends Fragment {
     private ListAdapter mAdapter;

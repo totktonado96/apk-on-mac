@@ -255,7 +255,7 @@ public class WebView extends android.widget.AbsoluteLayout
             String src = (android.app.Application.macapkTargetSdkKnown(tsdk) && tsdk < 19 && url.startsWith("javascript:"))
                 ? url.substring(11) : macapkJavascriptUrlSource(url);
             if (MacApkWebViewBridge.macapkTrace()) {
-                android.util.Log.i("Mac.apk.WebView", "id=" + macapkViewId
+                android.util.Log.i("Apk on Mac.WebView", "id=" + macapkViewId
                     + " javascript: loadUrl -> evaluate (" + src.length() + " chars) t="
                     + android.os.SystemClock.uptimeMillis());
             }
@@ -348,7 +348,7 @@ public class WebView extends android.widget.AbsoluteLayout
 
     /** AOSP: "@return the WebViewRenderProcess renderer handle associated with
      *  this WebView, or null if WebView is not runing in multiprocess mode."
-     *  Mac.apk is single-process and has no sandboxed renderer, so null is the
+     *  Apk on Mac is single-process and has no sandboxed renderer, so null is the
      *  answer the platform itself specifies for this configuration. */
     public WebViewRenderProcess getWebViewRenderProcess() { return null; }
 
@@ -639,7 +639,7 @@ public class WebView extends android.widget.AbsoluteLayout
     /** AOSP WebView.setDataDirectorySuffix -> WebViewFactory.setDataDirectorySuffix
      *  (frameworks/base/core/java/android/webkit/WebViewFactory.java:229). Gives
      *  a process its own WebView data directory, so two processes of the same
-     *  app never open one directory and trip the engine's native abort. Mac.apk
+     *  app never open one directory and trip the engine's native abort. Apk on Mac
      *  is single-process, so there is no second directory to hand out and the
      *  suffix only has to be remembered; the two preconditions are enforced
      *  because they are observable and apps are written against them (the call
@@ -742,7 +742,7 @@ public class WebView extends android.widget.AbsoluteLayout
                 .orElse(false));
     }
 
-    // ===== native-engine plumbing (Mac.apk internal, package-private) =====
+    // ===== native-engine plumbing (Apk on Mac internal, package-private) =====
 
     /** Creates the native WKWebView peer on first need. Returns false when the
      *  engine is unavailable this run (headless runtime), in which case every
@@ -930,7 +930,7 @@ public class WebView extends android.widget.AbsoluteLayout
      *  frame later, but a host that records the WebView once and replays the
      *  recording (Compose's AndroidView: a GraphicsLayer re-recorded only on
      *  invalidateLayer) kept the hole-less recording forever and the page sat
-     *  behind an opaque canvas (mGradani NIAS login white; Mac.apk-Releases
+     *  behind an opaque canvas (mGradani NIAS login white; Apk on Mac-Releases
      *  issue 2; debug/wvtest/compose_shape). A device draws the page (its draw
      *  functor) on every draw, whatever the previous frame was. */
     @Override
@@ -1317,7 +1317,7 @@ public class WebView extends android.widget.AbsoluteLayout
     // (FRAME loc=(498,0) on a 498-px window), and every later frame replayed the
     // GraphicsLayer under the new placement (punch dev x 471 -> 0) while the page
     // stayed parked off the window: a blank screen that took no clicks
-    // (Mac.apk-Releases issue 2). On a device the page is a draw functor INSIDE
+    // (Apk on Mac-Releases issue 2). On a device the page is a draw functor INSIDE
     // that recording, so it moves with it. The AOSP precedent for a view whose
     // content lives OUTSIDE the window's buffer is SurfaceView, which re-reads
     // getLocationInWindow from ViewTreeObserver callbacks (mDrawListener, an
@@ -1786,7 +1786,7 @@ public class WebView extends android.widget.AbsoluteLayout
      * AOSP WebView.setRendererPriorityPolicy(int, boolean).
      *
      * On Android this biases the OOM killer against a WebView's out-of-process
-     * renderer. Mac.apk renders web content with WKWebView, whose content process
+     * renderer. Apk on Mac renders web content with WKWebView, whose content process
      * is managed entirely by WebKit -- there is no supported API to bias its
      * lifetime, and macOS does not kill processes under memory pressure the way
      * Android's lowmemorykiller does, so the hazard this API mitigates does not

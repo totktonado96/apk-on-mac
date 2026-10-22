@@ -8,7 +8,7 @@
 // getDescription) and an app compiled against it would NoSuchMethodError
 // without it.
 //
-// Mac.apk has no DRM plug-in, so DrmManagerClient.getAvailableDrmSupportInfo()
+// Apk on Mac has no DRM plug-in, so DrmManagerClient.getAvailableDrmSupportInfo()
 // returns an EMPTY collection and nothing here is ever populated by the
 // framework. The class is fully implemented anyway because an app may build
 // one itself to describe what IT supports, and because AOSP's argument

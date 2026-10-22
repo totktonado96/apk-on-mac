@@ -1,6 +1,6 @@
 // android.os.Bundle -- typed key/value container.
 //
-// Real Android backs this with Parcel for marshalling across IPC; Mac.apk
+// Real Android backs this with Parcel for marshalling across IPC; Apk on Mac
 // has no IPC, so we just back it with a HashMap inherited from BaseBundle.
 // Most apps treat Bundle as opaque state shuttled between Activity
 // lifecycle calls. This impl covers the common get/put surface without
@@ -288,7 +288,7 @@ public final class Bundle extends BaseBundle implements Parcelable, Cloneable {
         };
 
     // API 33 type-safe getters: the Class arg disambiguates at the call site.
-    // Mac.apk stores unerased objects, so we delegate to the legacy getters and
+    // Apk on Mac stores unerased objects, so we delegate to the legacy getters and
     // let the caller's expected type drive resolution.
     @SuppressWarnings("unchecked")
     public <T> java.util.ArrayList<T> getParcelableArrayList(String key, Class<? extends T> clazz) {

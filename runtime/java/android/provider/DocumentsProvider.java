@@ -1,11 +1,11 @@
 // android.provider.DocumentsProvider -- the ContentProvider subclass that exposes
-// documents to the Storage Access Framework: an app's own provider, and Mac.apk's
+// documents to the Storage Access Framework: an app's own provider, and Apk on Mac's
 // system one (com.macapk.loader.HostDocumentsProvider, standing in for
 // ExternalStorageProvider).
 //
 // History. The class first landed (2026-07-29) so an app's subclass could LOAD at
 // all (com.nesbox.tic's TICDocumentsProvider died with NoClassDefFoundError on its
-// superclass), with a comment saying "Mac.apk has no SAF client, so nothing
+// superclass), with a comment saying "Apk on Mac has no SAF client, so nothing
 // produces such a URI". The document picker (v1.0.1653) made that false: it hands
 // out externalstorage document URIs, and OPEN_DOCUMENT_TREE (v1.0.1654) hands out
 // tree URIs whose children an app lists and edits through this class.
@@ -42,7 +42,7 @@
 //     it compiles against.
 //   * The two pre-O query forms ROUTE instead of throwing. AOSP throws
 //     UnsupportedOperationException("Pre-Android-O query format not supported.")
-//     because its Binder transport only ever calls the Bundle form. Mac.apk's
+//     because its Binder transport only ever calls the Bundle form. Apk on Mac's
 //     ContentResolver IS the transport and calls the 5-argument form directly, so
 //     here it builds the queryArgs Bundle exactly as AOSP ContentResolver.query
 //     does (createSqlQueryBundle, ContentResolver.java) and takes the Bundle form.
@@ -92,7 +92,7 @@ public abstract class DocumentsProvider extends ContentProvider {
     /** MACAPK_DOCSPROVIDER_DISPATCH, default ON. */
     static final boolean DISPATCH = !"0".equals(System.getenv("MACAPK_DOCSPROVIDER_DISPATCH"));
 
-    /** @hide Mac.apk: whether the AOSP URI / call() dispatch is on. */
+    /** @hide Apk on Mac: whether the AOSP URI / call() dispatch is on. */
     public static boolean macapkDispatch() { return DISPATCH; }
 
     private static final int MATCH_ROOTS = 1;
@@ -366,7 +366,7 @@ public abstract class DocumentsProvider extends ContentProvider {
 
     // ---- ContentProvider plumbing: the URI dispatch -----------------------
 
-    /** AOSP throws here (see the header); Mac.apk's ContentResolver calls this
+    /** AOSP throws here (see the header); Apk on Mac's ContentResolver calls this
      *  form, so it is routed to the Bundle form the way AOSP ContentResolver.query
      *  builds the Bundle. */
     @Override
@@ -558,7 +558,7 @@ public abstract class DocumentsProvider extends ContentProvider {
      *  getCallingOrSelfUriPermissionModeFlags(context, from))` when this provider
      *  stands in for ANOTHER package (HostDocumentsProvider): UriGrantsManagerService
      *  records the grant for the calling app (ActivityManagerService
-     *  .grantUriPermission :6401-6431). Mac.apk's Context.grantUriPermission is the
+     *  .grantUriPermission :6401-6431). Apk on Mac's Context.grantUriPermission is the
      *  APP's (a no-op, one app), so the record is made here. For the app's own
      *  provider there is nothing to record: the app already holds its own URIs.
      *  MACAPK_URI_GRANT_ENFORCE=0: nothing. */

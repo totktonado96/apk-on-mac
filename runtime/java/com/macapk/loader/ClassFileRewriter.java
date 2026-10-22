@@ -338,7 +338,7 @@ public final class ClassFileRewriter {
 
             // ---- Pattern H -- contain a FOREIGN-PROCESS component's exit ----
             // A component declared `android:process=":something"` runs, on
-            // real Android, in a SEPARATE OS process. Mac.apk hosts every
+            // real Android, in a SEPARATE OS process. Apk on Mac hosts every
             // component of an app in the ONE runtime process by design (no
             // emulation, no virtualization, no Zygote), and that host process
             // IS the app's main process -- so a System.exit()/Runtime.exit()
@@ -398,9 +398,9 @@ public final class ClassFileRewriter {
                     patchedH += patternHContainProcessExit(cf, code, className);
                 }
                 if (patchedH > 0) {
-                    NativeLog.i("Mac.apk.ClassFileRewriter", className
+                    NativeLog.i("Apk on Mac.ClassFileRewriter", className
                         + " runs in android:process=\"" + foreignProc + "\","
-                        + " which Mac.apk hosts in the main runtime process --"
+                        + " which Apk on Mac hosts in the main runtime process --"
                         + " contained " + patchedH + " process-exit call site(s)"
                         + " so the component cannot terminate the app");
                     hits += patchedH;
@@ -1183,7 +1183,7 @@ public final class ClassFileRewriter {
     // class named "java.io.*" from any non-bootstrap classloader with
     // SecurityException ("Prohibited package name"). (On real Android
     // this SDK read just succeeds against the device's real /proc/meminfo
-    // -- Mac.apk is the odd one out here, not the SDK.)
+    // -- Apk on Mac is the odd one out here, not the SDK.)
     //
     // THE FIX: since the JVM/JDK internals can't be intercepted, redirect
     // the APK'S OWN bytecode instead -- exactly Pattern E's technique
@@ -1412,7 +1412,7 @@ public final class ClassFileRewriter {
     //   and is SET at runtime -- by string name, reflectively -- by pairip's
     //   startup VM program (StartupLauncher.launch -> VMRunner.invoke(startup,
     //   null) -> executeVM), the SAME nargs==0 program the integrity gate
-    //   bypasses (native_methods.cpp macapk_pairip_gate). So on Mac.apk the
+    //   bypasses (native_methods.cpp macapk_pairip_gate). So on Apk on Mac the
     //   field stays null and the protected method NPEs at Method.invoke on a
     //   null Method -- which, for an Application/Activity/provider onCreate,
     //   aborts init before the app's real code (e.g. UnityPlayer creation)

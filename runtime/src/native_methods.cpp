@@ -230,7 +230,7 @@ jint Cocoa_phoneHeight(JNIEnv*, jclass) { return CocoaPhoneHeight(); }
 void Cocoa_runLoop(JNIEnv*, jclass) { CocoaRunLoop(); }
 
 jlong Cocoa_createWindow(JNIEnv* env, jclass, jstring title_j) {
-    const char* title = title_j ? env->GetStringUTFChars(title_j, nullptr) : "Mac.apk";
+    const char* title = title_j ? env->GetStringUTFChars(title_j, nullptr) : "Apk on Mac";
     void* handle = CocoaCreateWindow(title);
     if (title_j) env->ReleaseStringUTFChars(title_j, title);
     return reinterpret_cast<jlong>(handle);
@@ -254,7 +254,7 @@ jboolean Cocoa_openHostUrl(JNIEnv* env, jclass, jstring url_j) {
 }
 
 // The App Link sign-in window (com.macapk.loader.AppLinks): show `url` in the
-// Mac.apk window; the navigation to `prefix` is handed back to the app.
+// Apk on Mac window; the navigation to `prefix` is handed back to the app.
 jboolean Cocoa_openAppLinkWindow(JNIEnv* env, jclass, jstring url_j, jstring prefix_j) {
     if (!url_j || !prefix_j) return JNI_FALSE;
     const char* url = env->GetStringUTFChars(url_j, nullptr);
@@ -2923,7 +2923,7 @@ void GLES20_glGetShaderSource(JNIEnv* env, jclass, jint shader, jint bufsize,
 // and the default JNI_ABORT release would silently discard every pixel GL just
 // wrote.
 //
-// This binding is NOT the one Mac.apk's own render instrument uses: self-capture
+// This binding is NOT the one Apk on Mac's own render instrument uses: self-capture
 // and the GL frame dumps call C++ glReadPixels directly from angle_glue.cpp /
 // cocoa_bridge.mm, so nothing here can move a render verdict. ----
 void GLES20_glReadPixels_buf(JNIEnv* env, jclass, jint x, jint y, jint w, jint h,
@@ -3415,10 +3415,10 @@ const JNINativeMethod kNativeBootTime[] = {
 
 // ---------- pairip integrity-gate emulation (MACAPK_PAIRIP_GATE_EMU, default OFF) ----------
 // Play-built apps wrap a startup program in the pairip integrity VM
-// (com.pairip.VMRunner.executeVM -> libpairipcore ExecuteProgram). On Mac.apk that VM
+// (com.pairip.VMRunner.executeVM -> libpairipcore ExecuteProgram). On Apk on Mac that VM
 // FALSELY detonates (libpairipcore +0x440c4) because our HotSpot-on-macOS process STRUCTURE
 // differs from a zygote-forked ART-on-Linux process -- NOT because anything is tampered
-// (Mac.apk does not patch .text, forge signatures, or attach a debugger). RE confirmed the
+// (Apk on Mac does not patch .text, forge signatures, or attach a debugger). RE confirmed the
 // integrity is a SEPARABLE gate: the engine (libminecraftpe) is cleartext, decrypted by
 // nothing; the entire coupling is the one symbol ExecuteProgram whose return is discarded, so
 // passing the gate = the cleartext engine runs. We therefore re-register executeVM to this
@@ -3426,7 +3426,7 @@ const JNINativeMethod kNativeBootTime[] = {
 // caught (feed poison) and only the platform false-positive is passed. This CORRECTS a
 // false-positive while PRESERVING detection -- the same in-layer-ptrace-emu precedent CLAUDE.md
 // rules IN scope. It is NOT a .text patch: pairip's bytes stay pristine, so its own self-hash
-// still passes. Removal condition: retire if/when Mac.apk presents a process surface faithful
+// still passes. Removal condition: retire if/when Apk on Mac presents a process surface faithful
 // enough that the VM passes on its own. docs/pairip-frontier-301578-refutations_2026-09-17.md.
 static bool macapk_gate_self_traced() {
     // FAITHFUL debugger check: a real ptrace/lldb attach sets P_TRACED on our own proc.

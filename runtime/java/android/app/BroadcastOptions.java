@@ -21,7 +21,7 @@ public class BroadcastOptions {
     // AOSP ref: frameworks/base/core/java/android/app/BroadcastOptions.java
     // (android16-release). Delivery-group and deferral policies are hints the
     // system's broadcast queue uses to COLLAPSE or DELAY queued broadcasts
-    // across processes. Mac.apk delivers in-process and immediately, so there is
+    // across processes. Apk on Mac delivers in-process and immediately, so there is
     // no queue to collapse -- which is the same end state DELIVERY_GROUP_POLICY_ALL
     // (deliver everything) and DEFERRAL_POLICY_NONE (defer nothing) describe.
     // The VALUES still round-trip, because an app that sets a policy and reads it

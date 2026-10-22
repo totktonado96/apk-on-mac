@@ -72,7 +72,7 @@ public final class AudioDeviceInfo {
 
     public int getId()                 { return mId; }
     public int getType()               { return mType; }
-    public CharSequence getProductName() { return "Mac.apk"; }
+    public CharSequence getProductName() { return "Apk on Mac"; }
     public boolean isSink()            { return mIsSink; }
     public boolean isSource()          { return !mIsSink; }
     public int[] getSampleRates()      { return new int[] { 48000, 44100 }; }

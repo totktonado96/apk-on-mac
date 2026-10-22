@@ -6,7 +6,7 @@ package android.service.controls;
  *
  * PACKAGE NOTE -- applies to android.service.controls and its two subpackages.
  * A ControlsProviderService is bound by System UI's device-controls panel, which
- * Mac.apk does not have: nothing binds the service, no publisher is subscribed
+ * Apk on Mac does not have: nothing binds the service, no publisher is subscribed
  * to, and performControlAction is never called. Everything else in the package
  * is ordinary immutable value objects (Control, ControlTemplate, ControlAction)
  * that a smart-home app builds constantly outside the callback, so those are

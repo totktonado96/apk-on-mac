@@ -2,7 +2,7 @@
 // one sync back to the caller. On real Android the SyncManager reads these
 // fields to decide whether to retry, back off, or give up.
 //
-// Why Mac.apk needs it: Telegram and Signal reference it, and it is the fifth
+// Why Apk on Mac needs it: Telegram and Signal reference it, and it is the fifth
 // parameter of AbstractThreadedSyncAdapter.onPerformSync, so an app cannot
 // even declare its sync adapter subclass without it.
 //
@@ -12,7 +12,7 @@
 //
 // This is a complete implementation: SyncResult is pure state plus derived
 // predicates (hasHardError / hasSoftError / madeSomeProgress), with no system
-// dependency. What Mac.apk lacks is a SyncManager to READ the result -- see
+// dependency. What Apk on Mac lacks is a SyncManager to READ the result -- see
 // AbstractThreadedSyncAdapter for that half.
 package android.content;
 

@@ -79,7 +79,7 @@ std::string read_elf32(const std::string& path, Elf32Image* out,
                        uint32_t load_bias) {
     if (!out) return "internal error: null Elf32Image*";
 
-    // Slurp the file. Mac.apk's APK .so files are at most a few MB; no
+    // Slurp the file. Apk on Mac's APK .so files are at most a few MB; no
     // need for streaming.
     std::ifstream f(path, std::ios::binary);
     if (!f) return "cannot open " + path + ": " + std::strerror(errno);

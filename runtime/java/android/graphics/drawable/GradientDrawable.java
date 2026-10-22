@@ -411,7 +411,7 @@ public class GradientDrawable extends Drawable {
 
     /** Paint-path gate only (NOT the opacity model -- computeOpacity has its
      *  own, which counts a zero-length gradient array as "filled"). The extra
-     *  length test preserves long-standing Mac.apk behaviour: setColors(new
+     *  length test preserves long-standing Apk on Mac behaviour: setColors(new
      *  int[0]) used to clear the fill flag outright, and painting the local
      *  mFillColor there would put an opaque BLACK rect where nothing was drawn
      *  before. */
@@ -744,7 +744,7 @@ public class GradientDrawable extends Drawable {
                 // A ONE-stop gradient array has no Shader to build but still
                 // has to paint something; AOSP would hand Skia a degenerate
                 // gradient. Falling back to the single stop keeps the
-                // long-standing Mac.apk behaviour for that shape.
+                // long-standing Apk on Mac behaviour for that shape.
                 int base = tintOnly ? 0xFF000000 : mFillColor;   // AOSP mAlpha << 24 (applyAlpha below)
                 if (mGradientState.mSolidColors == null && mGradientState.mGradientColors != null
                         && mGradientState.mGradientColors.length > 0) {
@@ -771,7 +771,7 @@ public class GradientDrawable extends Drawable {
                 // DIAGNOSTIC (MACAPK_TRACE_SHAPEFILL=1): which of the two wins,
                 // and with what.
                 if ("1".equals(ENV_MACAPK_TRACE_SHAPEFILL)) {
-                    android.util.Log.i("Mac.apk.ShapeFill",
+                    android.util.Log.i("Apk on Mac.ShapeFill",
                         "fill=0x" + Integer.toHexString(base)
                         + " tint=0x" + Integer.toHexString(eff)
                         + " -> 0x" + Integer.toHexString(fc)

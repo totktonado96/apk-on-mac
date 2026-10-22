@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # stage_shared_runtime.sh -- install the SHARED RUNTIME (the copy every
-# installed app actually EXECUTES) from an already-promoted Mac.apk bundle.
+# installed app actually EXECUTES) from an already-promoted Apk on Mac bundle.
 #
 # Usage: scripts/stage_shared_runtime.sh <canonical-app-path>
 # Exit 0 = staged (or deliberately not staged because the user uninstalled it).
@@ -17,9 +17,9 @@
 #
 # WHY A BUILD CANNOT DO THIS: an installed app's Contents/MacOS/<exec> is a
 # SYMLINK to
-#     ~/Library/Application Support/Mac.apk/runtime/Resources/macapk-runtime
+#     ~/Library/Application Support/Apk on Mac/runtime/Resources/macapk-runtime
 # (RuntimeInstall.stagedRoot), never to anything in this repo and never to the
-# copy inside Mac.apk.app. runtime/scripts/build.sh does not stage it directly,
+# copy inside Apk on Mac.app. runtime/scripts/build.sh does not stage it directly,
 # so it has no business deciding what the machine's ONE shared runtime is.
 # Whoever promotes, stages.
 # ⚠ CORRECTED 2026-10-07: this used to say build.sh "does not promote". It DOES
@@ -80,7 +80,7 @@ if "$HELPER" runtime-status --json 2>/dev/null | grep -q '"removedByUser":"true"
     # because until it is reinstalled no app can launch.
     echo "==> NOTE: the shared runtime is UNINSTALLED (Runtime: Uninstall was pressed)."
     echo "    Not re-staging it. Installed apps cannot launch until you open"
-    echo "    Mac.apk and choose Runtime: Install."
+    echo "    Apk on Mac and choose Runtime: Install."
     exit 0
 fi
 

@@ -34,7 +34,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
 public class SurfaceView extends View implements MetalSurfaceCallbacks {
-    private static final String TAG = "Mac.apk.SurfaceView";
+    private static final String TAG = "Apk on Mac.SurfaceView";
 
     /** Cached renderer found via reflection on the subclass. The
      *  field's value implements onDrawFrame(GL10) and (optionally)
@@ -193,7 +193,7 @@ public class SurfaceView extends View implements MetalSurfaceCallbacks {
 
     /** Per AOSP SurfaceView.setSecure: marks the surface so its content is
      *  excluded from screenshots and non-secure displays (backed on real
-     *  Android by SurfaceControl.SECURE + Display.FLAG_SECURE). Mac.apk has
+     *  Android by SurfaceControl.SECURE + Display.FLAG_SECURE). Apk on Mac has
      *  no SurfaceFlinger and no screen-capture-exclusion path; the macOS
      *  analog is NSWindow.sharingType = .none in the native Cocoa bridge,
      *  which this file does not own and does not wire up here. Recording
@@ -2433,7 +2433,7 @@ public class SurfaceView extends View implements MetalSurfaceCallbacks {
     // "fork" -- cocos2d-x ships FSGLSurfaceView, and it is a common pattern)
     // gets its own private `GLThread` with its own private `mEventQueue`.
     // `queueEvent` on that fork appends to the PRIVATE queue, drained only by
-    // that thread's own guardedRun(). Mac.apk deliberately kills the fork's GL
+    // that thread's own guardedRun(). Apk on Mac deliberately kills the fork's GL
     // thread -- MacApkEGL10.eglCreateContext always returns EGL_NO_CONTEXT /
     // EGL_BAD_CONFIG -- and then drives the renderer reflectively from here
     // instead. Nothing drained the fork's queue, so every runnable posted through
@@ -2465,7 +2465,7 @@ public class SurfaceView extends View implements MetalSurfaceCallbacks {
     // sentinel, docs/openttd-egl_2026-07-30.md -- that changes an OBJECT'S
     // identity, not whether this method's failure fires. libGDX's GLES3
     // probe (GLSurfaceView20$ContextFactory.createContext) also reads
-    // eglGetError(), and separately is dead code on Mac.apk: our own
+    // eglGetError(), and separately is dead code on Apk on Mac: our own
     // android.opengl.GLSurfaceView never invokes an EGLContextFactory at
     // all, it drives renderers with a fixed STUB_GL10 -- so neither this
     // comment's original claim nor the correction affects libGDX apps.)
@@ -2664,7 +2664,7 @@ public class SurfaceView extends View implements MetalSurfaceCallbacks {
         return true;
     }
 
-    /** Mac.apk framework-internal (TouchDispatcher, MACAPK_INPUT_UI_THREAD):
+    /** Apk on Mac framework-internal (TouchDispatcher, MACAPK_INPUT_UI_THREAD):
      *  true when OUR OS-main frame callback draws this view's content, i.e.
      *  macapkDrawFrame has resolved a renderer it calls onDrawFrame on (the
      *  reflected-renderer drive; GLSurfaceView adds its setRenderer branch).
@@ -2705,7 +2705,7 @@ public class SurfaceView extends View implements MetalSurfaceCallbacks {
     /** Last macapkOsMainDeclinesRenderer verdict (written on OS-main only). */
     private volatile boolean osMainDeclinedRenderer;
 
-    /** Mac.apk framework-internal (TouchDispatcher, MACAPK_TOUCH_APP_QUEUE_ONLY):
+    /** Apk on Mac framework-internal (TouchDispatcher, MACAPK_TOUCH_APP_QUEUE_ONLY):
      *  true when an event this view's own code queues NOW (onTouchEvent ->
      *  queueEvent -> the thread the view's field holds) will be run by this
      *  class before the next onDrawFrame. That needs all of: the drain on and
@@ -2904,7 +2904,7 @@ public class SurfaceView extends View implements MetalSurfaceCallbacks {
         }
     }
 
-    /** Mac.apk framework-internal: true when {@code t} is a SurfaceView's own
+    /** Apk on Mac framework-internal: true when {@code t} is a SurfaceView's own
      *  (forked) GL thread: its own fields point at a SurfaceView (directly or
      *  through a Reference), or a field of a live SurfaceView subclass holds
      *  it. See the section comment above for the contract and evidence. */
@@ -3035,7 +3035,7 @@ public class SurfaceView extends View implements MetalSurfaceCallbacks {
     // rendering performance is decoupled from the UI thread" (frameworks/base
     // opengl/java/android/opengl/GLSurfaceView.java:690, aosp-mirror master,
     // fetched 2026-09-26). The reflected drive in this file (macapkSurfaceChanged
-    // / macapkDrawFrame calling a DISCOVERED renderer on OS-main) is Mac.apk's
+    // / macapkDrawFrame calling a DISCOVERED renderer on OS-main) is Apk on Mac's
     // stand-in for an app GL thread that is DEAD -- the vendored-GLSurfaceView
     // forks die at MacApkEGL10's refused eglCreateContext. It used to run
     // unconditionally, so it raced any fork that did NOT die.
@@ -3265,7 +3265,7 @@ public class SurfaceView extends View implements MetalSurfaceCallbacks {
         return false;
     }
 
-    /** Mac.apk framework-internal: does the app's own GL thread own this
+    /** Apk on Mac framework-internal: does the app's own GL thread own this
      *  view's reflected renderer right now? Evaluated on OS-main, never blocks
      *  (reflective reads only). See the section comment for the rule. */
     boolean macapkRendererOwnedByAppGlThread() {
@@ -3469,7 +3469,7 @@ public class SurfaceView extends View implements MetalSurfaceCallbacks {
     // MediaCodec.java:5052-5092, fetched 2026-08-17). Net: decoded frame
     // stretches to the surface, surface stretches to the view rect.
     //
-    // Mac.apk's equivalent: MediaCodec.configure/setOutputSurface register
+    // Apk on Mac's equivalent: MediaCodec.configure/setOutputSurface register
     // the Surface's owner SurfaceView here; cocoa_bridge.mm's video layer
     // (CocoaPresentVideoFrame + the per-frame drawInMTKView refresh) PULLS
     // macapkActiveVideoRectPacked() and sets the CAMetalLayer's frame to the
@@ -4025,7 +4025,7 @@ public class SurfaceView extends View implements MetalSurfaceCallbacks {
     }
 
     // The AttachedSurfaceControl of the window this SurfaceView roots into.
-    // Mac.apk has one composited window and no SurfaceControl transaction
+    // Apk on Mac has one composited window and no SurfaceControl transaction
     // pipeline, so this is a stable no-op host (applyTransactionOnDraw defaults
     // to "not deferred"). API 30.
     private final AttachedSurfaceControl mRootSurfaceControl = new AttachedSurfaceControl() { };
@@ -4047,11 +4047,11 @@ public class SurfaceView extends View implements MetalSurfaceCallbacks {
     public void onPointerCaptureChange(boolean hasCapture) {}
 
     // ======================================================================
-    //  AOSP API-36 surface completion (Mac.apk API-gap lane, android.view).
+    //  AOSP API-36 surface completion (Apk on Mac API-gap lane, android.view).
     // ======================================================================
 
     /** AOSP SurfaceView.getSurfaceControl(): the SurfaceControl backing this
-     *  view's dedicated compositor layer. Mac.apk draws SurfaceView content into
+     *  view's dedicated compositor layer. Apk on Mac draws SurfaceView content into
      *  the SAME ANGLE/Metal layer as the rest of the window rather than a
      *  separate SurfaceFlinger layer, so there is no layer of its own -- but the
      *  handle must be non-null and STABLE, because the standard idiom is
@@ -4082,7 +4082,7 @@ public class SurfaceView extends View implements MetalSurfaceCallbacks {
 
     /** AOSP SurfaceView.setChildSurfacePackage(SurfacePackage) /
      *  getChildSurfacePackage() / clearChildSurfacePackage(): embed another
-     *  process's SurfaceControlViewHost hierarchy inside this view. Mac.apk is
+     *  process's SurfaceControlViewHost hierarchy inside this view. Apk on Mac is
      *  a single process with nothing to embed (see SurfaceControlViewHost's
      *  header); the package round-trips so a caller reads back what it set, and
      *  nothing is composited -- the same as an embedded package whose remote

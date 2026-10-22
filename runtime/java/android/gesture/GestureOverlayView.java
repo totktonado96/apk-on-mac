@@ -9,7 +9,7 @@
 // History: this used to be a 66-line stub with a comment saying "we never
 // synthesize gestures, so the listener simply never fires (correct -- there are
 // no ad gestures on this platform)". That reasoning was true for the one SDK
-// that motivated it and wrong as framework behaviour: Mac.apk delivers real
+// that motivated it and wrong as framework behaviour: Apk on Mac delivers real
 // MotionEvents, so an app whose whole UI is gesture-driven (a launcher, a
 // note-taking app, an accessibility shortcut) had a dead input surface with no
 // error to point at. It now captures, draws and dispatches for real.
@@ -19,9 +19,9 @@
 //   AOSP reads its twelve XML attributes through
 //   context.obtainStyledAttributes(attrs, R.styleable.GestureOverlayView, ...),
 //   i.e. through com.android.internal.R, which does not exist here -- and
-//   Mac.apk's obtainStyledAttributes returns an EMPTY TypedArray, so that call
+//   Apk on Mac's obtainStyledAttributes returns an EMPTY TypedArray, so that call
 //   would silently yield the hardcoded defaults for every app. Instead we read
-//   the same twelve attributes by NAME off the AttributeSet, which Mac.apk's
+//   the same twelve attributes by NAME off the AttributeSet, which Apk on Mac's
 //   DomXmlResourceParser answers namespace-correctly. Same attribute names, same
 //   defaults, same resulting field values; only the lookup path differs. This is
 //   generic (no app is named anywhere) and it is the difference between an
@@ -545,7 +545,7 @@ public class GestureOverlayView extends FrameLayout {
         }
     }
 
-    /** AOSP declares this `protected`; Mac.apk's android.view.View declares it
+    /** AOSP declares this `protected`; Apk on Mac's android.view.View declares it
      *  `public` (runtime/java/android/view/View.java:6355), and Java forbids
      *  narrowing an override, so it is public here. Observably identical -- a
      *  wider modifier only ADDS callers, and nothing in this class relies on it

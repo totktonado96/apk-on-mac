@@ -6,7 +6,7 @@
 // receives one from CameraDevice.createExtensionSession, and it implements the
 // nested StateCallback/ExtensionCaptureCallback rather than the session itself.
 //
-// Mac.apk exposes no extensions (see CameraExtensionCharacteristics), so no
+// Apk on Mac exposes no extensions (see CameraExtensionCharacteristics), so no
 // instance is ever created -- but the type and the two callback bases must
 // resolve, because an app that subclasses ExtensionCaptureCallback fails to
 // LINK without them, whether or not it ever opens a session. AOSP keeps the

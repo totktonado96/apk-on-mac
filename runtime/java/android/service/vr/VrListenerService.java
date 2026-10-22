@@ -9,7 +9,7 @@ import android.os.IBinder;
  * API 24 base for a service the platform binds while a VR-mode activity is in
  * the foreground.
  *
- * Mac.apk presents a plain phone/tablet-shaped device and never enters VR mode,
+ * Apk on Mac presents a plain phone/tablet-shaped device and never enters VR mode,
  * so nothing binds this and onCurrentVrActivityChanged never fires. That is the
  * state on every non-VR Android device too -- the class exists there as well
  * and is simply never bound -- so this is honest rather than degraded.

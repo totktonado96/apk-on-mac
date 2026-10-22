@@ -198,7 +198,7 @@ public class AlarmManager {
     }
 
     /** AOSP cancelAll(): {@code mService.removeAll(mContext.getOpPackageName());}
-     *  -- "Remove all alarms previously set by the caller, if any." Mac.apk's
+     *  -- "Remove all alarms previously set by the caller, if any." Apk on Mac's
      *  PENDING map IS this process's whole alarm set (one app per process), so
      *  cancelling every entry is the same removal AOSP performs for the calling
      *  package. */

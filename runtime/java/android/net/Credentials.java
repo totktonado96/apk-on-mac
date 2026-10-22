@@ -1,7 +1,7 @@
 // android.net.Credentials
 //
 // The peer credentials (pid/uid/gid) of a LocalSocket connection. Pure value
-// type. Mac.apk's LocalSocket never connects, so these are not produced, but
+// type. Apk on Mac's LocalSocket never connects, so these are not produced, but
 // the type must resolve. Mirrors
 // frameworks/base/core/java/android/net/Credentials.java.
 package android.net;

@@ -3,7 +3,7 @@
 // AOSP's service for screen-capture/casting consent. Apps fetch it via
 // getSystemService(MEDIA_PROJECTION_SERVICE) and call createScreenCaptureIntent()
 // to prompt the user, then getMediaProjection(resultCode, data) after consent.
-// Mac.apk has no screen-capture consent transport, so the capture intent is a
+// Apk on Mac has no screen-capture consent transport, so the capture intent is a
 // bare Intent (the consent flow yields RESULT_CANCELED, so apps get null from
 // getMediaProjection and take their "capture denied" path). Mirrors
 // frameworks/base/media/java/android/media/projection/MediaProjectionManager.java.
@@ -35,7 +35,7 @@ public final class MediaProjectionManager {
      * display); AOSP builds the same Intent as the no-argument overload and
      * attaches the config as an extra, which is exactly what happens here.
      *
-     * The config is carried rather than dropped even though Mac.apk never shows
+     * The config is carried rather than dropped even though Apk on Mac never shows
      * a consent dialog: an app that reads its own Intent back (some do, to
      * re-issue the request) must find what it put there. AOSP throws NPE on a
      * null config -- {@code i.putExtra(key, (Parcelable) null)} would silently

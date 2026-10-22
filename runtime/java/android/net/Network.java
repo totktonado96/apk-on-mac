@@ -21,7 +21,7 @@ public class Network {
      *  in their own caches. Stable for the lifetime of this Network. */
     public long getNetworkHandle() { return netId; }
 
-    /** AOSP: bind a socket so its traffic goes via THIS network. Mac.apk has a
+    /** AOSP: bind a socket so its traffic goes via THIS network. Apk on Mac has a
      *  single host network, so binding is a no-op (traffic already goes the one
      *  way out). cronet's NetworkChangeNotifierAutoDetect only calls this on the
      *  VPN-filter branch, which our "non-VPN WIFI" capabilities never trigger;
@@ -34,7 +34,7 @@ public class Network {
     public void bindSocket(java.io.FileDescriptor fd) {}
 
     /** AOSP Network.openConnection(URL): opens a URLConnection whose traffic
-     *  is routed via THIS network (per-network sockets + DNS). Mac.apk models
+     *  is routed via THIS network (per-network sockets + DNS). Apk on Mac models
      *  a single host network, so routing is implicit: we delegate straight to
      *  the JDK's URL.openConnection(). This makes the common "fetch over the
      *  network I was handed in onAvailable()" pattern work instead of CNF/

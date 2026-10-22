@@ -182,7 +182,7 @@ public class Region implements android.os.Parcelable {
     // for any app that stores a Region through a Parcelable-typed reference,
     // not merely a missing parcel path. The wire form here is our own (a rect
     // count followed by the band rects) rather than Skia's binary blob -- both
-    // ends of any parcel inside Mac.apk are this class.
+    // ends of any parcel inside Apk on Mac are this class.
     // ---------------------------------------------------------------------
     @Override public int describeContents() { return 0; }
     @Override public void writeToParcel(android.os.Parcel out, int flags) {

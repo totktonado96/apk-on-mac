@@ -6,7 +6,7 @@
 // frameworks/base/core/java/android/text/method/MultiTapKeyListener.java.
 //
 // ⚠ Same scope note as QwertyKeyListener: AOSP's onKeyDown implements the
-// timed tap-cycling itself, and Mac.apk does not route hardware key events
+// timed tap-cycling itself, and Apk on Mac does not route hardware key events
 // through KeyListener at all (text arrives through the IME/host path), so
 // onKeyDown is inherited from BaseKeyListener. The SpanWatcher half IS
 // implemented for real -- it is what cancels an in-progress tap cycle when the

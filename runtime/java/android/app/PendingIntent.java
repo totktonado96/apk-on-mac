@@ -1,12 +1,12 @@
 // android.app.PendingIntent -- a token wrapping an Intent + the
 // operation to perform with it (launch an activity, start a service,
-// or fire a broadcast) that another process (or, on Mac.apk, a
+// or fire a broadcast) that another process (or, on Apk on Mac, a
 // deferred caller like AlarmManager / NotificationManager) can later
 // trigger on the creating app's behalf. AOSP API-1+.
 //
 // AOSP ref: frameworks/base/core/java/android/app/PendingIntent.java.
 // Real Android marshals the wrapped Intent + target type through the
-// ActivityManager. Mac.apk is single-process, so we hold the Intent
+// ActivityManager. Apk on Mac is single-process, so we hold the Intent
 // directly and, on send(), dispatch it through our own
 // Context.startActivity / startService / sendBroadcast path -- exactly
 // the operation type the factory recorded. This makes notification
@@ -396,7 +396,7 @@ public final class PendingIntent implements Parcelable {
     // AOSP writes `out.writeStrongBinder(mTarget.asBinder())`
     // (frameworks/base/core/java/android/app/PendingIntent.java:1219-1226), a
     // handle to the ActivityManager-side IIntentSender that holds the real
-    // Intent. Mac.apk is single-process with no binder and no ActivityManager,
+    // Intent. Apk on Mac is single-process with no binder and no ActivityManager,
     // so this class IS the token: the Intent and the operation type live here,
     // and flattening them is the faithful analogue. AOSP's OnMarshaledListener
     // hook has no counterpart -- it exists so the system can detect an
@@ -412,10 +412,10 @@ public final class PendingIntent implements Parcelable {
         // marker records that one EXISTED so the reader can restore the only
         // correct in-process answer instead of silently producing a token whose
         // getCreatorPackage() is null and whose dispatch() has no Context.
-        // Mac.apk hosts exactly one app, so Application.getInstance() IS the
+        // Apk on Mac hosts exactly one app, so Application.getInstance() IS the
         // creator's context; on AOSP the creator may be another process, which
         // is why AOSP carries a binder instead.
-        // REMOVAL CONDITION: if Mac.apk ever hosts more than one package in a
+        // REMOVAL CONDITION: if Apk on Mac ever hosts more than one package in a
         // process, this has to carry the creator's identity (package + uid) and
         // resolve it on read, not assume the single Application.
         dest.writeInt(creatorContext != null ? 1 : 0);
@@ -469,7 +469,7 @@ public final class PendingIntent implements Parcelable {
 
     /** AOSP getCreatorUserHandle(): {@code UserHandle.getUserHandleForUid(
      *  getCachedInfo().getCreatorUid())} -- "the user handle of the app that
-     *  created this PendingIntent", never null. Mac.apk runs one app as one
+     *  created this PendingIntent", never null. Apk on Mac runs one app as one
      *  process for one user, and every PendingIntent here is created by that
      *  app, so this is the process's own user -- the same one
      *  android.os.Process.myUserHandle() reports. */

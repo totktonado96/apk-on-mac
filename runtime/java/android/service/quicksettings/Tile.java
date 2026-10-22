@@ -10,7 +10,7 @@ import android.text.TextUtils;
  * A quick-settings tile's mutable state.
  *
  * A TileService owns one of these and mutates it, then calls updateTile() to
- * push the new state to the panel. Mac.apk draws no quick-settings panel, so
+ * push the new state to the panel. Apk on Mac draws no quick-settings panel, so
  * updateTile() has nowhere to push -- but the object itself is pure state, and
  * an app's tile logic (compute the label, flip the state, set the icon) reads
  * its own writes back. That round-trip is real here, so a tile's own unit-test-

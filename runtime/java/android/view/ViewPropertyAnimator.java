@@ -73,10 +73,10 @@ public class ViewPropertyAnimator {
     public ViewPropertyAnimator withEndAction(Runnable r)   { endAction = r; return this; }
     // AOSP: sets LAYER_TYPE_HARDWARE for the animation's duration and restores
     // it afterward, so translucency/rotation composite cleanly through a GL
-    // layer. Mac.apk already composites every View through Metal/ANGLE
+    // layer. Apk on Mac already composites every View through Metal/ANGLE
     // regardless of layer type, so there is no rendering-cost model here for
     // the hint to change -- an honest no-op keeps the fluent chain working
-    // without inventing behavior Mac.apk can't back up.
+    // without inventing behavior Apk on Mac can't back up.
     public ViewPropertyAnimator withLayer() { return this; }
 
     private float getProp(int kind) {

@@ -700,7 +700,7 @@ public class Intent implements Parcelable, Cloneable {
     public ComponentName getComponent() { return component; }
     public Intent setComponent(ComponentName c) { this.component = c; return this; }
     /** AOSP Intent.getSourceBounds: on-screen bounds of the view that
-     *  triggered this Intent, used as an animation-origin hint. Mac.apk has
+     *  triggered this Intent, used as an animation-origin hint. Apk on Mac has
      *  no launch-transition system to consume it; storage only. */
     public Rect getSourceBounds() { return sourceBounds; }
     /** AOSP Intent.setSourceBounds returns void (not fluent, unlike most
@@ -733,7 +733,7 @@ public class Intent implements Parcelable, Cloneable {
     /** AOSP Intent.getClipData/setClipData: an optional ClipData payload,
      *  semantically similar to extras. Not used for Intent matching. Real
      *  Android applies FLAG_GRANT_READ/WRITE_URI_PERMISSION to its URI
-     *  items; Mac.apk has no cross-app URI grant system, so this is
+     *  items; Apk on Mac has no cross-app URI grant system, so this is
      *  storage only. */
     public ClipData getClipData() { return clipData; }
     public void setClipData(ClipData clip) { this.clipData = clip; }
@@ -744,7 +744,7 @@ public class Intent implements Parcelable, Cloneable {
     // during init; missing it -> NoSuchMethodError on the FA worker thread.
     public Intent setClassName(Context packageContext, String className) { this.component = new ComponentName(packageContext.getPackageName(), className); return this; }
     // Android: target this intent only at the named package's resolvers.
-    // We don't actually resolve intents (Mac.apk is a single-app
+    // We don't actually resolve intents (Apk on Mac is a single-app
     // process), but engines call setPackage during init to narrow
     // implicit intents -- the value is informational here.
     private String targetPackage;
@@ -763,7 +763,7 @@ public class Intent implements Parcelable, Cloneable {
         return extras;
     }
     /** AOSP Intent.setExtrasClassLoader: sets the ClassLoader used to
-     *  unmarshal Parcelable/Serializable extras out of a Parcel. Mac.apk's
+     *  unmarshal Parcelable/Serializable extras out of a Parcel. Apk on Mac's
      *  Bundle stores live objects rather than lazily-unmarshalled Parcel
      *  bytes (no IPC boundary to cross), so Bundle.setClassLoader is
      *  already a no-op; forwarding here just makes the call linkable. */
@@ -869,7 +869,7 @@ public class Intent implements Parcelable, Cloneable {
     }
     /** AOSP API-33 typed variant of getParcelableArrayListExtra. Bundle on
      *  this tree only exposes the untyped getParcelableArrayList(String);
-     *  since Mac.apk's Bundle stores live objects rather than a
+     *  since Apk on Mac's Bundle stores live objects rather than a
      *  lazily-unmarshalled Parcel, the per-item type check AOSP performs
      *  while unparceling reduces here to a plain isInstance walk over the
      *  already-live list -- same observable contract (wrong element type
@@ -1098,7 +1098,7 @@ public class Intent implements Parcelable, Cloneable {
     /** AOSP :13236 -- `(mExtendedFlags & EXTENDED_FLAG_FILTER_MISMATCH) != 0`.
      *  The system sets that extended flag when it delivers a broadcast whose
      *  intent did NOT match the receiver's declared IntentFilter (the
-     *  U+ mismatch-logging path). Mac.apk's broadcast dispatch matches filters
+     *  U+ mismatch-logging path). Apk on Mac's broadcast dispatch matches filters
      *  before delivering and never sets the flag, so a receiver here never
      *  gets a mismatching intent -- which is what false means. */
     public boolean isMismatchingFilter() { return false; }
@@ -1954,7 +1954,7 @@ public class Intent implements Parcelable, Cloneable {
         }
         // mContentUserHint slot. AOSP carries a multi-user hint here saying
         // which user's content the data Uri belongs to; this tree has no field
-        // for it because Mac.apk is single-user and nothing can set or read
+        // for it because Apk on Mac is single-user and nothing can set or read
         // one. Writing the ABSENT marker rather than skipping the slot keeps
         // the wire layout AOSP-shaped, and -2 is AOSP's own initial value
         // (UserHandle.USER_CURRENT), so a future session that adds the field
@@ -2028,7 +2028,7 @@ public class Intent implements Parcelable, Cloneable {
      * package name plus a fully-qualified resource name ("com.foo:drawable/ic").
      * Launcher-shortcut creation still builds one via fromContext even on
      * modern Android, so the class must exist and round-trip even though
-     * Mac.apk has no home screen to place the shortcut on.
+     * Apk on Mac has no home screen to place the shortcut on.
      *
      * Source: frameworks/base/core/java/android/content/Intent.java
      * (nested class ShortcutIconResource)

@@ -1,7 +1,7 @@
 // com.macapk.loader.axml.AxmlBlock -- a COMPILED XML document (aapt "AXML"),
 // parsed once into an immutable tree that any number of parsers can walk.
 //
-// This is the Mac.apk analogue of AOSP's android.content.res.XmlBlock plus the
+// This is the Apk on Mac analogue of AOSP's android.content.res.XmlBlock plus the
 // native ResXMLTree it wraps (frameworks/base core/java/android/content/res/
 // XmlBlock.java; libs/androidfw/ResourceTypes.cpp ResXMLTree / ResXMLParser):
 // the block owns the bytes' decoded structure, newParser() hands out a cursor.

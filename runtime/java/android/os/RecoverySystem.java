@@ -1,6 +1,6 @@
 // android.os.RecoverySystem -- access to the recovery partition for OTA package
 // verification + install + factory reset. Every operation here requires
-// privileged system access that does not exist on Mac.apk's host, so we mirror
+// privileged system access that does not exist on Apk on Mac's host, so we mirror
 // AOSP's public surface and fail the way an unprivileged caller would: install /
 // reboot paths throw IOException/SecurityException, verifyPackage runs the
 // listener to completion (no real signature check). Apps almost never call this;

@@ -1,6 +1,6 @@
 package android.view.inputmethod;
 // android.view.inputmethod.InputMethodSubtype: one locale/mode of an IME.
-// Mac.apk exposes no IMEs (text arrives from the host keyboard through the Cocoa
+// Apk on Mac exposes no IMEs (text arrives from the host keyboard through the Cocoa
 // bridge), so InputMethodManager never hands one out -- but the class is a plain
 // immutable value object on AOSP too, and an app CAN build one itself with the
 // deprecated constructors or the Builder, so every accessor answers real state

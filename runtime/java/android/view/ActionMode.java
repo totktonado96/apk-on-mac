@@ -1,6 +1,6 @@
 // android.view.ActionMode -- AOSP-style transient contextual action
 // bar. AppCompat exposes one for "selection" UIs (multi-select in a
-// list). Mac.apk stubs the API surface so AppCompat code links.
+// list). Apk on Mac stubs the API surface so AppCompat code links.
 package android.view;
 
 public abstract class ActionMode {
@@ -63,7 +63,7 @@ public abstract class ActionMode {
      *      public void hide(long duration) {}
      *  A visible effect only appears in a concrete subclass with on-screen
      *  positioning (the TYPE_FLOATING selection toolbar), which schedules a
-     *  timed re-show. Mac.apk has no such positioning system for ActionMode,
+     *  timed re-show. Apk on Mac has no such positioning system for ActionMode,
      *  so the AOSP base no-op is the faithful behaviour here, not a stand-in
      *  for a missing one.
      *

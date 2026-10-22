@@ -46,7 +46,7 @@ public abstract class Window {
         default boolean dispatchTouchEvent(MotionEvent event) { return false; }
         // API 11/23 Window.Callback surface. Apps' Callback implementations (and
         // AppCompat's) reference these; default them so a partial implementor
-        // and any caller resolve. Mac.apk has no action-bar/search/pointer-
+        // and any caller resolve. Apk on Mac has no action-bar/search/pointer-
         // capture host driving them, so the defaults are the AOSP no-op answers.
         default android.view.ActionMode onWindowStartingActionMode(
                 android.view.ActionMode.Callback callback, int type) { return null; }
@@ -183,10 +183,10 @@ public abstract class Window {
         return (mFeatures & (1 << feature)) != 0;
     }
     /** AOSP Window.setFeatureInt: sets a feature's value (progress bar
-     *  percentage, etc). Mac.apk renders no title/progress chrome, so this
+     *  percentage, etc). Apk on Mac renders no title/progress chrome, so this
      *  is a no-op like the other chrome setters in this file (setFormat,
      *  setBackgroundDrawable below) -- the interpretation is feature-
-     *  specific UI Mac.apk does not draw. */
+     *  specific UI Apk on Mac does not draw. */
     public void setFeatureInt(int featureId, int value) {}
     /** AOSP Window.setFlags: "attrs.flags = (attrs.flags&~mask) | (flags&mask)"
      *  (frameworks/base core/java/android/view/Window.java). Was a pure no-op
@@ -285,7 +285,7 @@ public abstract class Window {
      *  Real AOSP stores this on the window's LayoutParams (WindowManager.
      *  LayoutParams.dimAmount); that field does not exist on this tree's
      *  WindowManager.LayoutParams (android/view/WindowManager.java, not
-     *  owned by this fix), and Mac.apk has no compositor dim-behind overlay
+     *  owned by this fix), and Apk on Mac has no compositor dim-behind overlay
      *  to apply it to regardless, so the value is stored on the Window
      *  itself purely so the call does not throw -- consistent with
      *  setStatusBarColor/setNavigationBarColor's no-op pattern elsewhere in
@@ -327,12 +327,12 @@ public abstract class Window {
      *              }
      *          }
      *      }
-     *  Mac.apk has no compositor blur, so this stores the clamped value (the
+     *  Apk on Mac has no compositor blur, so this stores the clamped value (the
      *  one real observable effect of calling it on a device -- a negative
      *  radius is silently floored to 0) and reports it back through
      *  getBackgroundBlurRadius() rather than rendering it. AOSP's public
      *  Window class exposes no getter at all (the field is PhoneWindow-
-     *  private); this getter is a Mac.apk-added round-trip accessor, not a
+     *  private); this getter is a Apk on Mac-added round-trip accessor, not a
      *  mirrored AOSP method, so a caller that reads back what it set does not
      *  regress to a stale value.
      *
@@ -408,7 +408,7 @@ public abstract class Window {
     }
     // View/ViewGroup in this tree declare no dispatchTrackballEvent at any
     // level (trackball is legacy D-pad-era hardware with no macOS host
-    // equivalent -- Mac.apk has no trackball input path to forward into),
+    // equivalent -- Apk on Mac has no trackball input path to forward into),
     // so unlike the other four superDispatch* methods above this cannot
     // forward into the decor view's own dispatch chain; false matches
     // AOSP's own "event not consumed" return for an unhandled dispatch.
@@ -468,7 +468,7 @@ public abstract class Window {
 
     public abstract void setTitle(CharSequence title);
 
-    // System-chrome color setters (API 21+). Mac.apk renders the
+    // System-chrome color setters (API 21+). Apk on Mac renders the
     // game inside an NSWindow without an Android-style status/
     // navigation bar, so these are no-ops. Required by libgdx's
     // AndroidLauncher.onCreate and many modern Android games.
@@ -771,7 +771,7 @@ public abstract class Window {
     // onCreate -- e.g. Reddit's IntroductionActivity (the welcome/login
     // screen) calls setSharedElementsUseOverlay(false) in onCreate; without
     // the method its onCreate throws NoSuchMethodError and the Compose login
-    // UI never sets up. Mac.apk renders inside an NSWindow with no Android
+    // UI never sets up. Apk on Mac renders inside an NSWindow with no Android
     // activity-transition framework, so these are no-ops (the transitions are
     // purely cosmetic; their absence doesn't change WHICH content shows).
     public void setSharedElementsUseOverlay(boolean sharedElementsUseOverlay) {}
@@ -805,10 +805,10 @@ public abstract class Window {
     // Used by androidx.activity.EdgeToEdge.enable() -- F-Droid's MainActivity
     // calls EdgeToEdge.enable() in onCreate, which on API >= 29 invokes
     // these methods. Without stubs, onCreate throws NoSuchMethodError and
-    // the activity never reaches setContentView -- Mac.apk falls back to a
+    // the activity never reaches setContentView -- Apk on Mac falls back to a
     // placeholder GLSurfaceView and the user sees a blank window
     // (MACAPK_EMPTY_WINDOW_DECOR=0 only; by default the activity's own empty
-    // decor, docs/fallback-glsurfaceview-content-retired_2026-09-27.md). Mac.apk
+    // decor, docs/fallback-glsurfaceview-content-retired_2026-09-27.md). Apk on Mac
     // draws no scrim of its own for either bar, so nothing here changes what
     // is painted; what the pair has to get right is the ANSWER, because that
     // is what callers branch on.
@@ -850,7 +850,7 @@ public abstract class Window {
      *  that genuinely wants edge-to-edge says so through this method and
      *  everything else gets AOSP's default inset behaviour.
      *
-     *  Static because Mac.apk hosts ONE window: ViewCanvasDriver lays the
+     *  Static because Apk on Mac hosts ONE window: ViewCanvasDriver lays the
      *  rootView out from the surface dimensions and has no Window handle at
      *  that point. Recorded per-set rather than per-instance so the last
      *  activity to express a preference wins, which matches what a
@@ -892,7 +892,7 @@ public abstract class Window {
         // future session concludes the app never called this at all.
         if (System.getenv("MACAPK_TRACE_INSETS") != null) {
             try {
-                com.macapk.loader.NativeLog.i("Mac.apk.Window",
+                com.macapk.loader.NativeLog.i("Apk on Mac.Window",
                     "setDecorFitsSystemWindows(" + decorFitsSystemWindows + ")"
                     + (decorFitsSystemWindows ? "" : " -- app opted into EDGE-TO-EDGE")
                     + ("1".equals(System.getenv("MACAPK_DECOR_FITS_HONOUR"))
@@ -909,7 +909,7 @@ public abstract class Window {
         sDecorFitsSystemWindows = decorFits;
         if (System.getenv("MACAPK_TRACE_INSETS") != null) {
             try {
-                com.macapk.loader.NativeLog.i("Mac.apk.Window",
+                com.macapk.loader.NativeLog.i("Apk on Mac.Window",
                     "setSystemUiVisibility -> decorFits=" + decorFits
                     + (decorFits ? "" : " -- app opted into EDGE-TO-EDGE"));
             } catch (Throwable ignored) {}
@@ -1098,7 +1098,7 @@ public abstract class Window {
         sTypesHiddenByFlags &= ~typesToShow;
         if (System.getenv("MACAPK_TRACE_INSETS") != null) {
             try {
-                com.macapk.loader.NativeLog.i("Mac.apk.Window",
+                com.macapk.loader.NativeLog.i("Apk on Mac.Window",
                     "setSystemUiVisibility(0x" + Integer.toHexString(sysUiVis)
                     + ") -> hide=0x" + Integer.toHexString(typesToHide)
                     + " show=0x" + Integer.toHexString(typesToShow)
@@ -1113,7 +1113,7 @@ public abstract class Window {
     // getOnBackInvokedDispatcher() is @NonNull and throws "Not implemented. Must
     // override in a subclass."; PhoneWindow returns its
     // ProxyOnBackInvokedDispatcher, which forwards every registration, in order,
-    // to the window's ViewRootImpl WindowOnBackInvokedDispatcher. Mac.apk has no
+    // to the window's ViewRootImpl WindowOnBackInvokedDispatcher. Apk on Mac has no
     // ViewRootImpl per window, so the window owns the WindowOnBackInvokedDispatcher
     // itself (the proxy's observable effect -- same callbacks, same order, same
     // Checker -- is preserved; see that class's header). This one object is what
@@ -1150,7 +1150,7 @@ public abstract class Window {
     // Per-frame timing telemetry (API 24+). Reddit's IntroductionActivity
     // (welcome/login) registers one in onCreate (RedditAppPerformanceAnalytics);
     // without the nested interface its onCreate throws NoClassDefFoundError and
-    // the Compose login UI never sets up. Mac.apk produces no real frame
+    // the Compose login UI never sets up. Apk on Mac produces no real frame
     // metrics, so the listener is never invoked; add/remove are no-ops.
     public interface OnFrameMetricsAvailableListener {
         void onFrameMetricsAvailable(Window window, android.view.FrameMetrics frameMetrics,
@@ -1161,7 +1161,7 @@ public abstract class Window {
     public void removeOnFrameMetricsAvailableListener(OnFrameMetricsAvailableListener listener) {}
 
     // ======================================================================
-    //  AOSP API-36 surface completion (Mac.apk API-gap lane, android.view).
+    //  AOSP API-36 surface completion (Apk on Mac API-gap lane, android.view).
     //  Every member below is declared on android.view.Window by AOSP's
     //  core/api/current.txt and was absent here.
     //
@@ -1177,7 +1177,7 @@ public abstract class Window {
     // ======================================================================
 
     /** AOSP Window(Context) -- the only constructor AOSP declares. The no-arg
-     *  form kept below is a Mac.apk addition, not AOSP surface: ActivityWindow
+     *  form kept below is a Apk on Mac addition, not AOSP surface: ActivityWindow
      *  in android/app/Activity.java assigns mContext itself and super()s
      *  implicitly, and removing that path is not this lane's to make. */
     public Window(android.content.Context context) {
@@ -1232,7 +1232,7 @@ public abstract class Window {
      *  shortcut for a currently-open panel. No panel is ever open here. */
     public boolean isShortcutKey(int keyCode, KeyEvent event) { return false; }
     /** AOSP Window.takeKeyEvents(boolean): asks for (or gives up) key events at
-     *  the window level rather than the focused view's. Mac.apk delivers key
+     *  the window level rather than the focused view's. Apk on Mac delivers key
      *  events from the Cocoa bridge to the focused view via ViewRootImpl in
      *  every case; there is no alternate window-level route to switch to. */
     public void takeKeyEvents(boolean get) { }
@@ -1260,7 +1260,7 @@ public abstract class Window {
 
     /** AOSP Window.OnRestrictedCaptionAreaChangedListener: told when the area of
      *  the freeform-window caption that the app may not draw over moves.
-     *  Mac.apk has no freeform caption, so the listener is stored and never
+     *  Apk on Mac has no freeform caption, so the listener is stored and never
      *  fired -- as on a device where the window is never in freeform mode. */
     public interface OnRestrictedCaptionAreaChangedListener {
         void onRestrictedCaptionAreaChanged(android.graphics.Rect rect);
@@ -1354,7 +1354,7 @@ public abstract class Window {
      *  unregisterScrollCaptureCallback:2928, both empty on the base class. */
     public void registerScrollCaptureCallback(ScrollCaptureCallback callback) { }
     public void unregisterScrollCaptureCallback(ScrollCaptureCallback callback) { }
-    /** AOSP Window.getRootSurfaceControl():3016 `return null`. Mac.apk composites
+    /** AOSP Window.getRootSurfaceControl():3016 `return null`. Apk on Mac composites
      *  through ANGLE/Metal, not SurfaceControl -- see View.getRootSurfaceControl. */
     public AttachedSurfaceControl getRootSurfaceControl() { return null; }
     /** AOSP Window.takeSurface(SurfaceHolder.Callback2) / takeInputQueue(
@@ -1404,7 +1404,7 @@ public abstract class Window {
         mSustainedPerformanceMode = enable;
     }
     /** AOSP Window.setHideOverlayWindows:1094. The real body throws
-     *  SecurityException unless the caller holds HIDE_OVERLAY_WINDOWS; Mac.apk
+     *  SecurityException unless the caller holds HIDE_OVERLAY_WINDOWS; Apk on Mac
      *  runs one app with no overlay windows to hide, so there is nothing to
      *  deny and nothing to do. */
     public final void setHideOverlayWindows(boolean hide) { }

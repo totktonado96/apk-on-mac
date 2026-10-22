@@ -22,25 +22,25 @@ public class Build {
     public static final String UNKNOWN     = "unknown";
     public static final String BOARD       = "macapk";
     public static final String BOOTLOADER  = "unknown";
-    public static final String BRAND       = "Mac.apk";
+    public static final String BRAND       = "ApkOnMac";
     public static final String CPU_ABI     = "arm64-v8a";
     public static final String CPU_ABI2    = "";
     public static final String[] SUPPORTED_ABIS    = { "arm64-v8a" };
     public static final String[] SUPPORTED_64_BIT_ABIS = { "arm64-v8a" };
     public static final String[] SUPPORTED_32_BIT_ABIS = {};
     public static final String DEVICE      = "macapk";
-    public static final String DISPLAY     = "Mac.apk-1";
+    public static final String DISPLAY     = "ApkOnMac-1";
     public static final String HARDWARE    = "apple_silicon";
     public static final String HOST        = "macapk-mac";
     public static final String ID          = "PR1";
-    // The project is Voltare's. Every other field here is already
-    // Mac.apk/macapk-branded; this one named the vendor of the assistant
+    // The project is ApkOnMac's. Every other field here is already
+    // Apk on Mac/macapk-branded; this one named the vendor of the assistant
     // used to write some of this code, which is neither who ships it nor
     // who an app should be told it is running on. Corrected
     // 2026-08-20 at the owner's direction. Not part of FINGERPRINT, which
     // derives from BRAND/PRODUCT/DEVICE, so nothing else moves.
-    public static final String MANUFACTURER = "Voltare";
-    public static final String MODEL       = "Mac.apk";
+    public static final String MANUFACTURER = "ApkOnMac";
+    public static final String MODEL       = "ApkOnMac";
     public static final String PRODUCT     = "macapk";
     public static final String RADIO       = "unknown";
     public static final String TAGS        = "release-keys";
@@ -50,7 +50,7 @@ public class Build {
     // ⚠ v1.0.938: DERIVED from the fields below, not spelled independently.
     // It used to read "macapk/v2/arm64-v8a:.../PR1/0:user/release-keys", which
     // disagreed with our OWN Build fields in four of its eight components --
-    // brand macapk vs BRAND "Mac.apk", product v2 vs PRODUCT "macapk", device
+    // brand macapk vs BRAND "Apk on Mac", product v2 vs PRODUCT "macapk", device
     // arm64-v8a vs DEVICE "macapk", incremental 0 vs VERSION.INCREMENTAL "1".
     // AOSP's deriveFingerprint() BUILDS the string from those same properties
     // (Build.java, `$(BRAND)/$(PRODUCT)/$(DEVICE):$(RELEASE)/$(ID)/$(INCREMENTAL):$(TYPE)/$(TAGS)`),
@@ -95,7 +95,7 @@ public class Build {
     // purpose: it was a permanent, unresettable device identifier. We were
     // handing every app "macapk-stub", i.e. re-supplying exactly the tracking
     // token the platform withdrew, and one that is identical across every
-    // Mac.apk install so it also fingerprints the RUNTIME. `unknown` is both
+    // Apk on Mac install so it also fingerprints the RUNTIME. `unknown` is both
     // the AOSP-correct answer and the privacy-preserving one, and it happens to
     // close the BLD.SERIAL row (the reference also answers "unknown").
     public static final String SERIAL      = UNKNOWN;
@@ -144,7 +144,7 @@ public class Build {
      *  (`BackportedFixesProperties.alias_bitset()`, populated from
      *  ro.build.backported_fixes.alias_bitset) and answers FIXED only for a
      *  bit that is set, UNKNOWN otherwise -- including for every id outside
-     *  1..1023. Mac.apk ships no backported-fix bitset, which is the same
+     *  1..1023. Apk on Mac ships no backported-fix bitset, which is the same
      *  state as a device whose bitset is empty, so every id is UNKNOWN. */
     public static int getBackportedFixStatus(long id) {
         return BACKPORTED_FIX_STATUS_UNKNOWN;

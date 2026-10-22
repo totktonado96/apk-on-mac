@@ -1,7 +1,7 @@
 // org.json.JSON -- package-private coercion helpers shared by JSONObject and
 // JSONArray. Ported verbatim (behavior-for-behavior) from AOSP libcore:
 //   https://android.googlesource.com/platform/libcore/+/master/json/src/main/java/org/json/JSON.java
-// This class did not previously exist in Mac.apk's org.json shim, which is
+// This class did not previously exist in Apk on Mac's org.json shim, which is
 // why JSONObject/JSONArray's getInt/getLong/getDouble/getBoolean/opt* methods
 // hand-rolled their own (stricter, non-AOSP) coercion instead of sharing one
 // helper -- e.g. Integer.parseInt("3.5") throws where AOSP's

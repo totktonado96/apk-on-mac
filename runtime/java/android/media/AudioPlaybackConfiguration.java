@@ -1,7 +1,7 @@
 package android.media;
 // android.media.AudioPlaybackConfiguration -- a snapshot of one active audio
 // player's routing/attributes (API 26+). AOSP frameworks/base
-// media/java/android/media/AudioPlaybackConfiguration.java. Mac.apk never
+// media/java/android/media/AudioPlaybackConfiguration.java. Apk on Mac never
 // surfaces live configurations (getActivePlaybackConfigurations returns empty),
 // so this exists for the return type to resolve and for the few getters apps
 // read off a configuration. Parcelable to match AOSP.

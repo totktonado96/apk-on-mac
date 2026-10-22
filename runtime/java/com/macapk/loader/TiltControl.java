@@ -40,7 +40,7 @@ import java.util.Properties;
 public final class TiltControl {
     private TiltControl() {}
 
-    private static final String TAG = "Mac.apk.Tilt";
+    private static final String TAG = "Apk on Mac.Tilt";
 
     /** The largest tilt either axis reaches, in degrees. 30 is a firm phone tilt:
      *  enough for full lock in a steering game, small enough that the device
@@ -263,7 +263,7 @@ public final class TiltControl {
 
     private static File storeFile() {
         String home = System.getProperty("user.home");
-        return new File(home + "/Library/Application Support/Mac.apk/tilt-control.properties");
+        return new File(home + "/Library/Application Support/Apk on Mac/tilt-control.properties");
     }
 
     private static Properties store() {
@@ -289,7 +289,7 @@ public final class TiltControl {
                 // Write-then-rename so a crash mid-write cannot lose every app's choice.
                 File tmp = new File(f.getPath() + ".tmp");
                 try (FileOutputStream out = new FileOutputStream(tmp)) {
-                    p.store(out, "Mac.apk Tilt Control: packages with it turned on");
+                    p.store(out, "Apk on Mac Tilt Control: packages with it turned on");
                 }
                 if (!tmp.renameTo(f)) {
                     f.delete();

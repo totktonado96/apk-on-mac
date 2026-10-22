@@ -3,7 +3,7 @@
 // Source: frameworks/base
 // core/java/android/view/inputmethod/InputBinding.java (android16-release).
 //
-// Mac.apk binds no IME (see InputMethodManager), so the framework never
+// Apk on Mac binds no IME (see InputMethodManager), so the framework never
 // constructs one; the type exists because InputMethod.bindInput names it.
 package android.view.inputmethod;
 

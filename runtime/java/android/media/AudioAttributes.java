@@ -99,7 +99,7 @@ public final class AudioAttributes implements android.os.Parcelable {
      * A REAL round-trip of what Builder.setAllowedCapturePolicy was given --
      * previously that setter silently DROPPED its argument, so an app that set
      * ALLOW_CAPTURE_BY_NONE and read it back was told ALL. This does not make
-     * Mac.apk enforce the policy (nothing here captures playback), but
+     * Apk on Mac enforce the policy (nothing here captures playback), but
      * misreporting an app's own stated intent is a different and worse failure
      * than not enforcing it: an app that checks its own attributes before
      * starting a sensitive stream would take the wrong branch.

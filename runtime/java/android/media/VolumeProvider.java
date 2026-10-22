@@ -2,7 +2,7 @@
 // audio is routed remotely (cast targets). AOSP frameworks/base
 // media/java/android/media/VolumeProvider.java.
 //
-// Mac.apk has no remote playback routing, so a VolumeProvider is an inert holder:
+// Apk on Mac has no remote playback routing, so a VolumeProvider is an inert holder:
 // the framework never calls onAdjustVolume/onSetVolumeTo (no remote session
 // drives it). The type must resolve because MediaSession.setPlaybackToRemote's
 // published descriptor names it; a guest that subclasses VolumeProvider for a

@@ -1,4 +1,4 @@
-// com.macapk.gms.GmsHttp -- the one HTTP client for every call Mac.apk makes to
+// com.macapk.gms.GmsHttp -- the one HTTP client for every call Apk on Mac makes to
 // Google on the user's behalf (checkin, auth, licensing).
 //
 // WHY ONE CLASS. Three verticals need the same four things and would otherwise
@@ -37,12 +37,12 @@ import java.util.zip.GZIPOutputStream;
 
 public final class GmsHttp {
 
-    /** How we identify ourselves to Google. Mac.apk, honestly -- we are not
+    /** How we identify ourselves to Google. Apk on Mac, honestly -- we are not
      *  pretending to be a Pixel or the Play Store binary. If a Google endpoint
      *  turns out to require a specific client string, that is an honest
      *  stopping point to report, not a string to quietly copy. */
     public static final String USER_AGENT =
-            "Mac.apk/" + version() + " (Linux; U; Android " + sdkRelease()
+            "Apk on Mac/" + version() + " (Linux; U; Android " + sdkRelease()
             + "; " + android.os.Build.MODEL + " Build/" + android.os.Build.ID + ")";
 
     private static final int CONNECT_TIMEOUT_MS = 15_000;
@@ -231,7 +231,7 @@ public final class GmsHttp {
      *  token in one is a live credential. */
     static void log(String what, String url, Response r) {
         try {
-            com.macapk.loader.NativeLog.i("Mac.apk.GMS",
+            com.macapk.loader.NativeLog.i("Apk on Mac.GMS",
                 what + " " + stripQuery(url) + " -> " + (r == null ? "(no response)" : r.toString()));
         } catch (Throwable ignored) {}
     }

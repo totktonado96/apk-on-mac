@@ -1,5 +1,5 @@
 // android.os.FileObserver -- watches a path and delivers onEvent() callbacks
-// when files change. Mac.apk has a real on-disk filesystem mirror
+// when files change. Apk on Mac has a real on-disk filesystem mirror
 // (~/Documents/android/...), so we back this with java.nio.file.WatchService on
 // a daemon thread rather than the inotify fd AOSP uses. We map the JDK watch
 // kinds onto the Android event constants the app expects.

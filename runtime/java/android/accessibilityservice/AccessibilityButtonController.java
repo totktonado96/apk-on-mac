@@ -9,7 +9,7 @@ import java.util.List;
  * Handle an accessibility service uses to observe the system's "accessibility
  * button" (the shortcut in the navigation bar / gesture area).
  *
- * Mac.apk draws no navigation bar, so the button does not exist and
+ * Apk on Mac draws no navigation bar, so the button does not exist and
  * isAccessibilityButtonAvailable() is false -- which is a state real Android
  * also reports (on devices without the shortcut, and whenever another service
  * has claimed it), so callback-driven code takes a path it already handles.
@@ -27,7 +27,7 @@ public final class AccessibilityButtonController {
     AccessibilityButtonController() { }
 
     /**
-     * False on Mac.apk: there is no navigation-bar shortcut to press. AOSP
+     * False on Apk on Mac: there is no navigation-bar shortcut to press. AOSP
      * returns false in exactly the same situations (no shortcut configured, or
      * the service is not connected), so this is a state apps already handle.
      */

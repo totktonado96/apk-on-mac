@@ -1,5 +1,5 @@
 package android.app.usage;
-/** Queries historical network usage (API 23). Mac.apk keeps none, so queries
+/** Queries historical network usage (API 23). Apk on Mac keeps none, so queries
  *  return an empty NetworkStats. */
 public class NetworkStatsManager {
     public NetworkStatsManager() {}

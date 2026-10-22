@@ -56,7 +56,7 @@ public class TextPaint extends Paint {
     }
 
     /** AOSP TextPaint.getFontVariationSettings (API 26): the current fvar axis
-     *  settings string, or null when none were set. Mac.apk does not vary font
+     *  settings string, or null when none were set. Apk on Mac does not vary font
      *  axes, so this reports null (no override). */
     public String getFontVariationSettings() { return null; }
 

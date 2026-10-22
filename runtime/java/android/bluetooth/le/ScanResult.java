@@ -1,6 +1,6 @@
 // android.bluetooth.le.ScanResult
 //
-// A single BLE advertisement observation. Mac.apk never produces one (no
+// A single BLE advertisement observation. Apk on Mac never produces one (no
 // radio), but the type + getters must resolve for scan-result-handling code to
 // compile. Mirrors
 // frameworks/base/core/java/android/bluetooth/le/ScanResult.java.

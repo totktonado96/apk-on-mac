@@ -1,5 +1,5 @@
 #!/bin/bash
-# jdk25_select.sh -- the ONE JDK setting for Mac.apk, and the only place that turns it
+# jdk25_select.sh -- the ONE JDK setting for Apk on Mac, and the only place that turns it
 # into a JDK home. Sourced by runtime/scripts/build.sh, debug/build_java_only.sh,
 # scripts/stage_jre.sh and scripts/check-requirements.sh; run directly, it prints the
 # resolved home (or, with --feature <home>, that home's feature release).

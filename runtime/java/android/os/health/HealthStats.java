@@ -1,7 +1,7 @@
 package android.os.health;
 import java.util.Collections;
 import java.util.Map;
-/** A snapshot of a uid's resource-usage metrics. Mac.apk collects none, so an
+/** A snapshot of a uid's resource-usage metrics. Apk on Mac collects none, so an
  *  empty snapshot is returned (0 keys). API 24. */
 // AOSP-conformance (framework_lint vs android-30 stub jar): AOSP does not
 // mark this final. Final-when-AOSP-is-not is the dangerous direction -- an

@@ -16,7 +16,7 @@ import Foundation
 // AHEAD of the latest release and would otherwise read as "current" forever, or
 // worse, a stale clone would nag about a release it never claimed to be.
 //
-// WHAT IS COMPARED. Release tags on kksimp/Mac.apk-Releases are "v" + VERSION
+// WHAT IS COMPARED. Release tags on totktonado96/apk-on-mac are "v" + VERSION
 // (v1.0.1666, v1.0.1700, v1.0.1702, v1.0.1732 as of 2026-10-13), so both sides
 // reduce to dotted integers and compare component by component.
 //
@@ -72,9 +72,9 @@ final class UpdateChecker: ObservableObject {
 
     @Published private(set) var state: State = .idle
 
-    static let releasesPage = URL(string: "https://github.com/kksimp/Mac.apk-Releases/releases")!
+    static let releasesPage = URL(string: "https://github.com/totktonado96/apk-on-mac/releases")!
     private static let latestAPI =
-        URL(string: "https://api.github.com/repos/kksimp/Mac.apk-Releases/releases/latest")!
+        URL(string: "https://api.github.com/repos/totktonado96/apk-on-mac/releases/latest")!
 
     /// The release number baked into this build, or nil for a dev build.
     var bakedRelease: String? { BuildInfo.releaseVersion }
@@ -94,7 +94,7 @@ final class UpdateChecker: ObservableObject {
 
     var isChecking: Bool { state == .checking }
 
-    /// Mac.apk > Check for Updates... in the menu bar; names the release when
+    /// Apk on Mac > Check for Updates... in the menu bar; names the release when
     /// one is waiting, since a menu item cannot glow.
     var menuTitle: String {
         switch state {
@@ -121,7 +121,7 @@ final class UpdateChecker: ObservableObject {
                              timeoutInterval: 15)
         req.setValue("application/vnd.github+json", forHTTPHeaderField: "Accept")
         // GitHub rejects API requests with no User-Agent.
-        req.setValue("Mac.apk/\(displayVersion)", forHTTPHeaderField: "User-Agent")
+        req.setValue("Apk on Mac/\(displayVersion)", forHTTPHeaderField: "User-Agent")
         let baked = bakedRelease
         Task {
             let result: State
@@ -157,15 +157,15 @@ final class UpdateChecker: ObservableObject {
     }
 
     /// The dialog a click ends in. Every outcome offers the releases page,
-    /// because "where do I get Mac.apk" is a fair question whatever the answer.
+    /// because "where do I get Apk on Mac" is a fair question whatever the answer.
     func presentResult(_ result: State) {
         let alert = NSAlert()
         var pageToOpen = Self.releasesPage
         switch result {
         case .available(let tag, let page):
             pageToOpen = page
-            alert.messageText = "A new version of Mac.apk is available"
-            alert.informativeText = "Mac.apk \(tag) is out. You have v\(displayVersion)."
+            alert.messageText = "A new version of Apk on Mac is available"
+            alert.informativeText = "Apk on Mac \(tag) is out. You have v\(displayVersion)."
             alert.addButton(withTitle: "Go to Releases Page")
             alert.addButton(withTitle: "Not Now")
         case .current(let tag):
@@ -176,7 +176,7 @@ final class UpdateChecker: ObservableObject {
                 The latest public release is \(tag).
                 """
             } else {
-                alert.messageText = "Mac.apk is up to date"
+                alert.messageText = "Apk on Mac is up to date"
                 alert.informativeText = "You have v\(displayVersion), the latest release."
             }
             alert.addButton(withTitle: "OK")

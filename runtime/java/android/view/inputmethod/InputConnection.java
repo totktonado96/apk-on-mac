@@ -16,7 +16,7 @@
 // the concrete class but not DECLARED here, so a caller holding the value as an
 // InputConnection (which is how AndroidX's InputConnectionCompat helpers and
 // Emoji2 hold it) could not reach them and got NoSuchMethodError. The API 25-34
-// methods whose AOSP signature can be expressed with types Mac.apk already
+// methods whose AOSP signature can be expressed with types Apk on Mac already
 // models are now declared, with AOSP's own default bodies.
 // Source: frameworks/base/core/java/android/view/inputmethod/InputConnection.java
 package android.view.inputmethod;

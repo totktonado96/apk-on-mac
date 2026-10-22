@@ -7,7 +7,7 @@ import java.nio.ByteOrder;
 
 /**
  * AOSP-faithful android.os.SharedMemory (API 27). On real Android this wraps an
- * ashmem/memfd file descriptor mapped across processes. Mac.apk is single
+ * ashmem/memfd file descriptor mapped across processes. Apk on Mac is single
  * process with no IPC, so we back it with a plain in-process direct ByteBuffer.
  * The observable contract (create -> map -> read/write -> close, with a stable
  * size and protection state) is preserved; "shared" across our single process
@@ -152,7 +152,7 @@ public final class SharedMemory implements Parcelable, Closeable {
         // Real Android passes the ashmem/memfd fd itself across the Binder
         // transaction, so the receiving process mmaps the SAME physical
         // pages -- writes on one side become visible on the other, which is
-        // the entire point of "shared" memory. Mac.apk is single-process, so
+        // the entire point of "shared" memory. Apk on Mac is single-process, so
         // those pages ARE this object's backing ByteBuffer; a size-only
         // reconstruction (the old behavior here) throws away both the
         // content and that aliasing. writeValue backs onto Parcel's

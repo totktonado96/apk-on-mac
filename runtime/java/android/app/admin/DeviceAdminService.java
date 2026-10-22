@@ -7,7 +7,7 @@
 //         faithful binder is simply a Binder that answers the
 //         "android.app.admin.IDeviceAdminService" descriptor, which is what
 //         this returns; there is no transaction it could be asked to serve.
-// Nothing on Mac.apk binds it (there is no DevicePolicyManagerService); an app
+// Nothing on Apk on Mac binds it (there is no DevicePolicyManagerService); an app
 // that binds its own gets the same binder a device would hand back.
 // Census + method: docs/fwgap-new-platform-classes_2026-09-26.md.
 package android.app.admin;

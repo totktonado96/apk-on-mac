@@ -2,7 +2,7 @@ package com.google.firebase.storage;
 
 // com.google.firebase.storage.UploadTask -- returned by StorageReference.putBytes
 // / putStream / putFile. Real Storage streams the payload to the backend and
-// completes with a TaskSnapshot describing the uploaded object. On Mac.apk there
+// completes with a TaskSnapshot describing the uploaded object. On Apk on Mac there
 // is no backend, so the upload fails cleanly with StorageException(ERROR_UNKNOWN)
 // -- we never report bytes transferred or fabricate stored metadata.
 //

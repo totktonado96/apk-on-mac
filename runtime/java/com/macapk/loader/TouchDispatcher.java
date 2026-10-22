@@ -56,7 +56,7 @@ public final class TouchDispatcher {
     public TouchDispatcher() { s_instance = this; }
 
     static TouchDispatcher macapkInstance() { return s_instance; }
-    private static final String TAG = "Mac.apk.Touch";
+    private static final String TAG = "Apk on Mac.Touch";
 
     /** Called from native cocoa_bridge.mm for each mouse event.
      *  action: 0=ACTION_DOWN, 1=ACTION_UP, 2=ACTION_MOVE
@@ -76,7 +76,7 @@ public final class TouchDispatcher {
      *  MotionEvent.obtain(downTime, eventTime, action, x, y, metaState) is the
      *  subset factory, and AOSP's subset factory leaves source
      *  SOURCE_UNKNOWN and toolType TOOL_TYPE_UNKNOWN (MotionEvent.java:1953 ->
-     *  :1870, pp[0].clear()). Mac.apk used to paper over that by defaulting
+     *  :1870, pp[0].clear()). Apk on Mac used to paper over that by defaulting
      *  the factory itself to SOURCE_TOUCHSCREEN/TOOL_TYPE_FINGER, which made
      *  every event we synthesized answer differently from the platform. The
      *  defaults are now AOSP-exact, so the host-mouse path has to NAME the
@@ -241,7 +241,7 @@ public final class TouchDispatcher {
 
     /** MULTI-TOUCH PINCH, synthesized from the host trackpad.
      *
-     *  Mac.apk delivered exactly ONE pointer, so `ACTION_POINTER_DOWN`/`ACTION_POINTER_UP` were
+     *  Apk on Mac delivered exactly ONE pointer, so `ACTION_POINTER_DOWN`/`ACTION_POINTER_UP` were
      *  never generated and `ScaleGestureDetector` -- which is fully implemented here and was simply
      *  never fed -- could not fire. Consequence: **pinch-to-zoom was unreachable in every map,
      *  image, PDF and browser app**, with no error anywhere; the app just never saw a second finger.
@@ -522,7 +522,7 @@ public final class TouchDispatcher {
     }
 
     /** Same device contract as the host mouse (touchEvent): a FINGER on the
-     *  registered touchscreen, because that is what Mac.apk presents the host
+     *  registered touchscreen, because that is what Apk on Mac presents the host
      *  pointer as to every app. */
     static MotionEvent multiPointerEvent(TrackpadGestureMapper.Motion m) {
         final int count = m.ids.length;
@@ -864,7 +864,7 @@ public final class TouchDispatcher {
      *  DOWN and the UP the SAME downTime and eventTime and does not sleep; the
      *  only gap between them is the WAIT_FOR_FINISH round trip. So a per-frame
      *  poller can react to our tap and miss the emulator's. That asymmetry is
-     *  in the A/B instrument, not in the app: read a "reacts on Mac.apk, not on
+     *  in the A/B instrument, not in the app: read a "reacts on Apk on Mac, not on
      *  the emulator" touch row with it in mind. (Also older and separate: the
      *  UP built by touchEvent() carries pressure 1f, where input tap's is 0f.) */
     private static final long INJECT_TAP_HOLD_MS = 40L;
@@ -2106,7 +2106,7 @@ public final class TouchDispatcher {
      *  framework's other internal posters follow. Posts keep DOWN/UP order. */
     private static final java.util.concurrent.Executor BACK_INVOKER = r -> {
         // A callback that throws is an APP bug, and AOSP crashes the app with it
-        // (it runs straight out of the input stage). Mac.apk logs it with its
+        // (it runs straight out of the input stage). Apk on Mac logs it with its
         // stack and carries on -- the same thing Looper.loop does for every
         // posted message, so the inline and the posted case now agree. What it
         // must NOT do is hand the same BACK to the legacy path afterwards: the
@@ -2127,7 +2127,7 @@ public final class TouchDispatcher {
      *  getRepeatCount() (KeyEvent: "> 0 if this is after the initial down"),
      *  and ViewRootImpl.doOnBackKeyEvent relies on it: onBackStarted only when
      *  getRepeatCount() == 0, "1 means the button continues to be pressed
-     *  (long press)" (android14 VRI :6555-6563). Mac.apk's host key
+     *  (long press)" (android14 VRI :6555-6563). Apk on Mac's host key
      *  bridge sends every macOS autorepeat keyDown (holding Esc) as a fresh
      *  DOWN with repeat 0, so without this an OnBackAnimationCallback got
      *  onBackStarted once per autorepeat, and androidx.activity 1.8+ answers a
@@ -2172,7 +2172,7 @@ public final class TouchDispatcher {
      *  Compose Popup/Dialog all find the dispatcher through a VIEW. With the
      *  stub answering null they register nowhere, so an opted-in app whose
      *  fragment back stack holds an androidx callback would pop the fragment and
-     *  leave the drawer / search view open -- wrong against both the old Mac.apk
+     *  leave the drawer / search view open -- wrong against both the old Apk on Mac
      *  (the legacy key reached them via onKeyUp) and real Android. A behavioural
      *  probe, not a reflective one, asked of the FOCUSED window on every BACK:
      *  a view in it must actually get a dispatcher back, i.e. exactly what its
@@ -2436,7 +2436,7 @@ public final class TouchDispatcher {
      *  wheel up / down). Since v1.0.2273 (WheelScroll.ALL) every other window
      *  gets the same event too, through deliverWheelToWindows, and the framework
      *  scrollers answer it (WheelScroll.VIEWS); =0 keeps the v1.0.2254 drag for
-     *  them. A notch is never a touch, so it can never tap. Device id 0: Mac.apk
+     *  them. A notch is never a touch, so it can never tap. Device id 0: Apk on Mac
      *  registers no mouse InputDevice (see InputManager), and 0 is AOSP's "not
      *  from a physical device".
      *  @return true when the notch was delivered as ACTION_SCROLL. */
@@ -2913,7 +2913,7 @@ public final class TouchDispatcher {
             // v1.0.867: the left-edge back SWIPE is GONE with the gesture pill.
             // It was the gesture-nav BACK trigger; under 3-button nav AOSP has
             // no edge-back at all -- BACK is the tappable glyph handled above.
-            // Keeping both would be a Mac.apk invention AND a live hazard: the
+            // Keeping both would be a Apk on Mac invention AND a live hazard: the
             // swipe consumed any rightward drag starting within 20dp of the left
             // edge, so an app with a left-edge control (a drag handle, a game's
             // on-screen stick) silently lost it. Esc / Cmd+[ still dispatch BACK.
@@ -3047,7 +3047,7 @@ public final class TouchDispatcher {
                 + (autoRepeat ? " autoRepeat=1" : ""));
         }
         // Soft-input routing: when an app has shown the soft keyboard for a
-        // text field (Mac.apk records the target in InputMethodManager), the
+        // text field (Apk on Mac records the target in InputMethodManager), the
         // host keystroke is text, not game input -- deliver it to that field
         // (which fires its TextWatcher -> Unity nativeSetInputString) and
         // consume it so the engine doesn't also see it as a gameplay key.
@@ -3081,7 +3081,7 @@ public final class TouchDispatcher {
         }
 
         // Compose (and any view without a TextView) receives text through its
-        // bound InputConnection, not macapkHandleSoftKey. Mac.apk IS the IME, so
+        // bound InputConnection, not macapkHandleSoftKey. Apk on Mac IS the IME, so
         // feed host keystrokes the way a soft keyboard would: printable chars via
         // commitText, backspace via deleteSurroundingText. ENTER/arrows/escape
         // fall through to dispatchKeyEvent so Compose's focus key handling (submit,
@@ -3101,7 +3101,7 @@ public final class TouchDispatcher {
                         if (backspace) { ic.deleteSurroundingText(1, 0); return; }
                         // ENTER on a field that declares an editor action is
                         // performEditorAction, not a key event -- that is what a
-                        // real IME does, and Mac.apk IS the IME here. The rule and
+                        // real IME does, and Apk on Mac IS the IME here. The rule and
                         // its citations live in
                         // InputMethodManager.macapkImeActionForEnter(); NONE means
                         // "plain newline", so we fall through to key dispatch and

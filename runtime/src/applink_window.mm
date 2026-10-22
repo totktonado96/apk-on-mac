@@ -1,4 +1,4 @@
-// applink_window.mm -- the Mac.apk sign-in window: the device-browser half of
+// applink_window.mm -- the Apk on Mac sign-in window: the device-browser half of
 // Android App Links (see com.macapk.loader.AppLinks for the contract).
 //
 // An app opened a sign-in page whose redirect_uri is one of its own VERIFIED
@@ -162,7 +162,7 @@ static WKWebsiteDataStore* BrowserDataStore() {
     static WKWebsiteDataStore* store = nil;
     if (store) return store;
     if (@available(macOS 14.0, *)) {
-        // Fixed identifier: one browser session for every Mac.apk app.
+        // Fixed identifier: one browser session for every Apk on Mac app.
         NSUUID* ident = [[NSUUID alloc] initWithUUIDString:@"6D61632E-6170-6B2D-6272-6F7773657231"];
         @try {
             store = [WKWebsiteDataStore dataStoreForIdentifier:ident];

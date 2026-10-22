@@ -7,7 +7,7 @@
 // AdvancedProtectionManager.java (android16-release). Obtained on a device via
 // Context.getSystemService(AdvancedProtectionManager.class).
 //
-// Mac.apk answer: the mode is a platform-wide setting owned by a system service
+// Apk on Mac answer: the mode is a platform-wide setting owned by a system service
 // we do not have, and the user has never enabled it -- so
 // isAdvancedProtectionEnabled() is false and a registered callback simply never
 // fires, because the state never changes. That is the same observable behaviour
@@ -37,7 +37,7 @@ public final class AdvancedProtectionManager {
     private final Map<Callback, Executor> mCallbacks =
             Collections.synchronizedMap(new WeakHashMap<Callback, Executor>());
 
-    /** Mac.apk wiring, not AOSP API -- AOSP's constructor is @hide. */
+    /** Apk on Mac wiring, not AOSP API -- AOSP's constructor is @hide. */
     public AdvancedProtectionManager() {}
 
     /** False: advanced protection mode is not enabled on this device. */

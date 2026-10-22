@@ -1,12 +1,12 @@
 // android.os.Binder -- the standard IBinder implementation.
 //
-// Mac.apk runs a single VM with no Binder driver, but that does NOT make this
+// Apk on Mac runs a single VM with no Binder driver, but that does NOT make this
 // class inert: AOSP's own LOCAL-binder path is already a plain in-process
 // call, so we mirror it exactly. attachInterface records {owner, descriptor},
 // queryLocalInterface hands the owner back (the fast path that every
 // AIDL-generated asInterface() takes first, bypassing Proxy + marshalling
 // entirely), and transact() dispatches straight into onTransact(). Only the
-// cross-process BpBinder path needs a kernel driver, and nothing in Mac.apk is
+// cross-process BpBinder path needs a kernel driver, and nothing in Apk on Mac is
 // cross-process, so nothing here is an approximation.
 // Reference: frameworks/base core/java/android/os/Binder.java.
 package android.os;
@@ -101,7 +101,7 @@ public class Binder implements IBinder {
     // ⚠ CHANGED v1.0.1175: return the CALLER'S OWN identity, per AOSP.
     // AOSP's contract (frameworks/base core/java/android/os/Binder.java): when
     // the current thread is NOT executing an incoming transaction,
-    // getCallingUid/Pid return the process's OWN uid/pid. Mac.apk has no kernel
+    // getCallingUid/Pid return the process's OWN uid/pid. Apk on Mac has no kernel
     // Binder, so an in-process bind is never "an incoming transaction" -- the
     // caller IS this process, so the honest answer is Process.myUid()/myPid(),
     // not 0. The old 0 broke every AOSP-faithful `getCallingUid() ==
@@ -117,7 +117,7 @@ public class Binder implements IBinder {
     // opaque to callers on a real device as well: IPCThreadState packs the
     // CURRENT calling identity as `((int64_t)mCallingUid << 32) | mCallingPid`
     // and then resets the caller to this process, and restoreCallingIdentity
-    // unpacks it back. Mac.apk has exactly one identity, so there is nothing
+    // unpacks it back. Apk on Mac has exactly one identity, so there is nothing
     // to swap away from and the packed value is simply our own identity;
     // restoring it is therefore genuinely a no-op rather than a stub. Callers
     // use the token only as a handle to hand back in a finally block.
@@ -136,7 +136,7 @@ public class Binder implements IBinder {
 
     /** AOSP :386 -- getCallingUid(), but throwing IllegalStateException when
      *  the thread is neither inside a binder transaction nor holding an
-     *  identity explicitly set by clearCallingIdentity(). Mac.apk's
+     *  identity explicitly set by clearCallingIdentity(). Apk on Mac's
      *  clearCallingIdentity() (above) always establishes such an identity for
      *  this process and there is exactly one identity, so the "not in a
      *  transaction AND no explicit identity" branch cannot be reached in a way
@@ -152,7 +152,7 @@ public class Binder implements IBinder {
     // ---- Work-source propagation (AOSP :569-:622, all native). A work source
     // is the uid a binder call should BILL its power/CPU cost to when a
     // service is doing work on someone else's behalf. It is per-THREAD state
-    // that AOSP propagates onto outgoing transactions. Mac.apk has no battery
+    // that AOSP propagates onto outgoing transactions. Apk on Mac has no battery
     // attribution and no outgoing transactions to tag, but the state itself is
     // a plain thread-local that we CAN keep honestly: an app that sets a work
     // source and reads it back gets its own value, and a set/restore pair
@@ -187,7 +187,7 @@ public class Binder implements IBinder {
 
     /** AOSP :663 -- `BinderInternal.joinThreadPool()`, which adds the CURRENT
      *  thread to the process's binder thread pool and BLOCKS FOREVER servicing
-     *  transactions; it never returns on a device either. Mac.apk has no
+     *  transactions; it never returns on a device either. Apk on Mac has no
      *  binder driver, so there is no pool to join and no transaction to
      *  service. Returning immediately would be the observable opposite of the
      *  contract (the caller's thread would fall out of a method documented

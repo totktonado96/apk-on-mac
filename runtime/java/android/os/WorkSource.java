@@ -1,5 +1,5 @@
 // android.os.WorkSource -- attributes power/work to one or more uids (used by
-// PowerManager.WakeLock.setWorkSource and AlarmManager). Mac.apk does no power
+// PowerManager.WakeLock.setWorkSource and AlarmManager). Apk on Mac does no power
 // attribution, but the value object is fully functional (real uid list) so apps
 // constructing and passing one behave correctly.
 //

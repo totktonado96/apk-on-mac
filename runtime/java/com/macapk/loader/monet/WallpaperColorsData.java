@@ -101,7 +101,7 @@ public final class WallpaperColorsData {
         // is already at or under the area (calculateOptimalSize), so scaleBitmapDown()
         // returns it unchanged and no region is set -- getPixelsFromBitmap is all pixels.
         //
-        // ActivityManager.isLowRamDeviceStatic() is false on Mac.apk (a Mac is not an
+        // ActivityManager.isLowRamDeviceStatic() is false on Apk on Mac (a Mac is not an
         // Android Go device), so the CelebiQuantizer branch is the one AOSP takes.
         // in any case, always use between 5 and 128 clusters
         int minClusters = 5;

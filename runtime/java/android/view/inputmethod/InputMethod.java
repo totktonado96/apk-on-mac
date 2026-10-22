@@ -2,7 +2,7 @@
 // service implements. Source: frameworks/base
 // core/java/android/view/inputmethod/InputMethod.java (android16-release).
 //
-// Mac.apk installs no IME (InputMethodManager's lists are empty and text reaches
+// Apk on Mac installs no IME (InputMethodManager's lists are empty and text reaches
 // the focused view straight from the Cocoa key handler), so nothing here is ever
 // called -- but android.inputmethodservice.InputMethodService in an APK, and
 // AbstractInputMethodService's inner AbstractInputMethodImpl, implement this

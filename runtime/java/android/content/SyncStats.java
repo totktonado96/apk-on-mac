@@ -3,7 +3,7 @@
 // soft error (see SyncResult.hasHardError / hasSoftError), the rest are purely
 // informational.
 //
-// Why Mac.apk needs it: SyncResult.stats is a public final field of this type,
+// Why Apk on Mac needs it: SyncResult.stats is a public final field of this type,
 // so any app that references SyncResult -- Telegram and Signal here -- also
 // needs SyncStats to resolve.
 //

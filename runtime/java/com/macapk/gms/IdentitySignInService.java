@@ -2,7 +2,7 @@
 // sign-in service (action "com.google.android.gms.auth.api.identity.service.
 // signin.START"), in-process: One Tap (Identity.getSignInClient(..).beginSignIn)
 // and the explicit "Sign in with Google" intent (getSignInIntent), answered from
-// the CENTRAL Google account the user added in Mac.apk's Accounts panel.
+// the CENTRAL Google account the user added in Apk on Mac's Accounts panel.
 //
 // WHY IT EXISTS (docs/gms-google-signin-provider_2026-09-30.md, "One Tap"). The
 // Identity client is a GoogleApi: it binds this action on com.google.android.gms

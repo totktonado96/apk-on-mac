@@ -9,7 +9,7 @@ import java.util.Set;
 // point for on-demand dynamic feature modules. On a de-Googled device there is
 // no Play Store to fetch a module from, so:
 //   - getInstalledModules() returns the empty set (only the base is installed;
-//     Mac.apk does not split-install anything at runtime),
+//     Apk on Mac does not split-install anything at runtime),
 //   - startInstall() fails its Task with a SplitInstallException carrying
 //     SplitInstallErrorCode.API_NOT_AVAILABLE (the honest "no backend" answer),
 //   - deferredInstall/deferredUninstall/deferredLanguageInstall resolve cleanly

@@ -105,7 +105,7 @@ public class ConnectivityManager {
 
     /** API-21+ network registration. Apps subclass NetworkCallback and
      *  pass an instance to registerDefaultNetworkCallback / requestNetwork
-     *  to learn about network availability changes. Mac.apk claims a
+     *  to learn about network availability changes. Apk on Mac claims a
      *  single always-on WIFI network, so we just call onAvailable
      *  synchronously when the callback registers and never fire
      *  onLost/onCapabilitiesChanged. HCR 1.68's
@@ -140,7 +140,7 @@ public class ConnectivityManager {
      *  idle)" callback. Chromium cronet's org.chromium.net.NetworkActiveNotifier
      *  implements this and registers via addDefaultNetworkActiveListener; the
      *  class must exist or NetworkActiveNotifier fails to load (jni_zero CHECK).
-     *  Mac.apk's single network is always active, so we never need to fire the
+     *  Apk on Mac's single network is always active, so we never need to fire the
      *  "became active" edge (cronet treats it as a radio-wake optimization
      *  hint, not a correctness signal). */
     public interface OnNetworkActiveListener {
@@ -160,7 +160,7 @@ public class ConnectivityManager {
     /** Deprecated pre-Lollipop int-typed overload (superseded by
      *  getNetworkInfo(Network), but never removed -- AOSP still routes it
      *  straight through to the service). AOSP returns null when networkType
-     *  is "not supported by the device"; Mac.apk only ever presents
+     *  is "not supported by the device"; Apk on Mac only ever presents
      *  TYPE_WIFI, so any other type is unsupported here. Large numbers of
      *  pre-2016-vintage ad/analytics SDKs bundled in current APKs still call
      *  this directly instead of the Network-typed API. */
@@ -532,7 +532,7 @@ public class ConnectivityManager {
     public void registerBestMatchingNetworkCallback(android.net.NetworkRequest request,
             NetworkCallback networkCallback, android.os.Handler handler) { }
 
-    /** Mac.apk-only (not AOSP API): the host's Wi-Fi HARDWARE presence, for
+    /** Apk on Mac-only (not AOSP API): the host's Wi-Fi HARDWARE presence, for
      *  PackageManager's FEATURE_WIFI answer. See MacApkHostNetwork.hasWifiHardware. */
     public static boolean macapkHostHasWifiHardware() {
         return MacApkHostNetwork.hasWifiHardware();

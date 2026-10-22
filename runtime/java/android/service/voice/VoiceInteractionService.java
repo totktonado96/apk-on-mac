@@ -14,7 +14,7 @@ import java.util.Set;
  *
  * PACKAGE NOTE -- applies to android.service.voice. A VoiceInteractionService
  * is the DEVICE'S assistant: the system binds it at boot, keeps it alive, and
- * routes the assist gesture and hotword to it. Mac.apk runs one app and is not
+ * routes the assist gesture and hotword to it. Apk on Mac runs one app and is not
  * an Android device's assistant host, so nothing binds it, showSession() has no
  * system to ask, and isActiveService() is false.
  *
@@ -84,7 +84,7 @@ public class VoiceInteractionService extends android.app.Service {
     public final void setUiHints(Bundle hints) { }
 
     /**
-     * False: Mac.apk has no "default assistant" setting for a guest to be
+     * False: Apk on Mac has no "default assistant" setting for a guest to be
      * selected in. See the class note -- this is the answer that makes an
      * assistant app show its setup flow, which is the correct behaviour.
      */

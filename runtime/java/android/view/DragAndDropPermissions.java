@@ -3,7 +3,7 @@
 // obtained via Activity.requestDragAndDropPermissions(DragEvent) or
 // DragAndDropPermissions.obtain(DragEvent). AOSP wraps a Binder handle
 // (IDragAndDropPermissions) whose lifetime the system DragDropController
-// owns; Mac.apk is a single process with no cross-app URI grant to revoke,
+// owns; Apk on Mac is a single process with no cross-app URI grant to revoke,
 // so a plain granted/released flag pair stands in for it and
 // take()/takeTransient()/release() are idempotent local state instead of
 // Binder calls.
@@ -47,7 +47,7 @@ public final class DragAndDropPermissions implements Parcelable {
 
     /** AOSP: binds the permission's lifetime to the given Activity (revoked
      *  automatically when that activity is destroyed); returns whether the
-     *  grant is still valid to take. Mac.apk has a single Activity host
+     *  grant is still valid to take. Apk on Mac has a single Activity host
      *  process rather than AOSP's separate ActivityClientController
      *  lifecycle to bind to, so the observable result collapses to "was
      *  this ever granted and not yet released". */

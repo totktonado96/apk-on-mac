@@ -1,5 +1,5 @@
 package android.os.health;
-/** Key constants for a PidHealthStats HealthStats bucket. Mac.apk populates no health data,
+/** Key constants for a PidHealthStats HealthStats bucket. Apk on Mac populates no health data,
  *  but the keys resolve.
  *
  *  Values = HealthKeys.BASE_PID (20000) + the per-field offset AOSP assigns in

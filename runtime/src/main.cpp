@@ -1201,7 +1201,7 @@ std::string SetupAndroidRoot(const std::string& cli_root,
                 for (const auto& a : abi.present)
                     names += (names.empty() ? "" : ", ") + a;
                 std::fprintf(stderr,
-                    "[macapk] APK ships NO usable ABI (has: %s) -- Mac.apk "
+                    "[macapk] APK ships NO usable ABI (has: %s) -- Apk on Mac "
                     "runs arm64-v8a/armeabi-v7a/armeabi only. Native code "
                     "will fall back to a stub dylib.\n", names.c_str());
             } else {
@@ -2204,7 +2204,7 @@ static int RescueAppDataFromCodeDir(const fs::path& code_dir, const fs::path& da
 static void MacApkRunLockCloexec() {
     const char* home = std::getenv("HOME");
     if (!home || !home[0]) return;
-    const std::string run_dir = std::string(home) + "/Library/Application Support/Mac.apk/run/";
+    const std::string run_dir = std::string(home) + "/Library/Application Support/Apk on Mac/run/";
     for (int fd = 3; fd < 256; ++fd) {
         int flags = fcntl(fd, F_GETFD);
         if (flags < 0 || (flags & FD_CLOEXEC)) continue;
@@ -3427,7 +3427,7 @@ int main(int argc, char** argv) {
     // one of three "silent success-but-wrong path" bugs found on 2026-08-12.
     // The copy list was fixed, but a positive assertion HERE catches the next
     // omission from ANY producer (build_launcher.sh, the staged runtime under
-    // ~/Library/Application Support/Mac.apk/runtime, a future packager),
+    // ~/Library/Application Support/Apk on Mac/runtime, a future packager),
     // which is the reason it lives at the consumer.
     if (fs::exists(java_base_patch_dir)) {
         jvm_cfg.extra_options.push_back(
@@ -3480,7 +3480,7 @@ int main(int argc, char** argv) {
     // for the runtime binary is wherever the launcher / shell was when
     // it spawned us -- often the project root or the APKs folder).
     // Stray hs_err files next to the APKs are noise; we want them
-    // grouped with the other Mac.apk logs.
+    // grouped with the other Apk on Mac logs.
     //
     // Resolution: walk up from the runtime executable looking for a
     // sibling `logs/` directory (matches the launcher's resolution).
@@ -3499,7 +3499,7 @@ int main(int argc, char** argv) {
             std::error_code ecp;
             // The VERSION + runtime/ markers are load-bearing, not caution.
             // A bare "does probe/logs exist" test walked up from the STAGED
-            // runtime (~/Library/Application Support/Mac.apk/runtime/Resources/)
+            // runtime (~/Library/Application Support/Apk on Mac/runtime/Resources/)
             // to ~/Library and matched ~/Library/Logs, because the filesystem
             // is case-insensitive so "logs" == "Logs". Every Dock-launched app
             // therefore aimed -XX:ErrorFile at ~/Library/Logs/ directly rather

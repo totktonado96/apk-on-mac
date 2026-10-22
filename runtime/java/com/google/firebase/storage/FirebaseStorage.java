@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 // com.google.firebase.storage.FirebaseStorage -- entry point to the Cloud
-// Storage SDK. On Mac.apk it is a real, fully-constructable client whose
+// Storage SDK. On Apk on Mac it is a real, fully-constructable client whose
 // references navigate locally and whose data operations fail cleanly (no
 // backend, no fabricated data). getInstance is cached per app+bucket so
 // identity-comparing apps see a stable instance, mirroring the published SDK.

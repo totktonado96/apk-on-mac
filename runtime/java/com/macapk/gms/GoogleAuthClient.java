@@ -572,7 +572,7 @@ public final class GoogleAuthClient {
     }
 
     static void log(String m) {
-        try { com.macapk.loader.NativeLog.i("Mac.apk.GMS", "auth: " + m); }
+        try { com.macapk.loader.NativeLog.i("Apk on Mac.GMS", "auth: " + m); }
         catch (Throwable t) { System.err.println("[auth] " + m); }
     }
 }

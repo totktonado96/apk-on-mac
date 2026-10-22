@@ -2,7 +2,7 @@
 // a UiAutomation test. Source: frameworks/base
 // core/java/android/view/FrameStats.java (android16-release).
 //
-// Mac.apk keeps no per-frame timeline for a window (there is no SurfaceFlinger
+// Apk on Mac keeps no per-frame timeline for a window (there is no SurfaceFlinger
 // and no UiAutomation host), so no instance is ever produced by the framework;
 // AOSP's own answer for a window that has posted no frames is a zero-length
 // stats object, which is what a subclass built here reports.

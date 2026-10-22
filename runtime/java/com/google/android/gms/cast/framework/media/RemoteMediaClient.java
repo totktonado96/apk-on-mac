@@ -4,7 +4,7 @@ import com.google.android.gms.cast.MediaInfo;
 import com.google.android.gms.cast.MediaStatus;
 
 // com.google.android.gms.cast.framework.media.RemoteMediaClient -- controls
-// playback on a connected Cast receiver. Mac.apk connects to no receiver, so this
+// playback on a connected Cast receiver. Apk on Mac connects to no receiver, so this
 // is only ever obtained as null from CastSession.getRemoteMediaClient on a
 // de-Googled device; the type exists so apps that reference it link. All controls
 // are no-ops. Ref: developers.google.com/android/reference/.../media/RemoteMediaClient

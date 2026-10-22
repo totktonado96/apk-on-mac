@@ -2,7 +2,7 @@
 // spell-checker service. Source: frameworks/base
 // core/java/android/view/textservice/SpellCheckerInfo.java (android16-release).
 //
-// Mac.apk installs no spell checkers, so TextServicesManager's lists are empty
+// Apk on Mac installs no spell checkers, so TextServicesManager's lists are empty
 // and the framework never produces an instance; the type exists because those
 // list element types and getCurrentSpellCheckerInfo() name it.
 package android.view.textservice;

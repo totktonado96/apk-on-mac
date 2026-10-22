@@ -6,7 +6,7 @@
 // which is a pure MARKER: it carries no state, and its whole contract is that
 // it exists on the range and survives a Parcel.
 //
-// Mac.apk has no writing-tools provider, so nothing consults the marker today.
+// Apk on Mac has no writing-tools provider, so nothing consults the marker today.
 // That is not a divergence: a device with no writing-tools provider ignores it
 // too, and the span's observable API (identity, type id, parcelability) is
 // exactly reproduced.

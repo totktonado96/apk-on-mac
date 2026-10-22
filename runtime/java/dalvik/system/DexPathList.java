@@ -11,11 +11,11 @@
 //   List<File> nativeLibraryDirectories
 //   plus String findLibrary(String) / getDexPaths() helpers.
 //
-// Mac.apk does not route real class loading through this object (BaseDexClassLoader
+// Apk on Mac does not route real class loading through this object (BaseDexClassLoader
 // is a URLClassLoader, so the live element list lives in URLClassLoader's
 // internal ucp). This class therefore exists primarily so the TYPE resolves and
 // the named fields are present for reflective probes; mutating its arrays does
-// NOT redirect Mac.apk's loading (the hotfix would not take effect, but the
+// NOT redirect Apk on Mac's loading (the hotfix would not take effect, but the
 // reflective access succeeds instead of crashing the app at startup).
 package dalvik.system;
 
@@ -60,7 +60,7 @@ public final class DexPathList {
         }
     }
 
-    /** AOSP: search the native-library directories for a lib. Mac.apk resolves
+    /** AOSP: search the native-library directories for a lib. Apk on Mac resolves
      *  native libs in AppClassLoader.findLibrary, not here, so this returns null
      *  (callers fall back to the loader's findLibrary). */
     public String findLibrary(String libraryName) {

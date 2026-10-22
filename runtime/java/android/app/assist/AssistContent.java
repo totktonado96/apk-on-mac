@@ -7,7 +7,7 @@
 // loading the activity NoClassDefFoundErrors at EVERY lifecycle stage
 // (onCreate/onStart/onResume) -- which is exactly what blocked Reddit once the
 // DI graph came up. We implement the full observable API; the Parcel round
-// trip is minimal (Assist/voice-interaction isn't wired on Mac.apk, so these
+// trip is minimal (Assist/voice-interaction isn't wired on Apk on Mac, so these
 // objects are constructed and read but effectively never marshalled).
 package android.app.assist;
 
@@ -95,7 +95,7 @@ public class AssistContent implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         // Minimal marshalling: the structured-data string + the two
-        // app-provided flags. Assist isn't a live surface on Mac.apk, so a
+        // app-provided flags. Assist isn't a live surface on Apk on Mac, so a
         // faithful-but-light round trip is sufficient.
         dest.writeInt(mIsAppProvidedIntent ? 1 : 0);
         dest.writeInt(mIsAppProvidedWebUri ? 1 : 0);
@@ -130,7 +130,7 @@ public class AssistContent implements Parcelable {
      *  another device", read by the assistant when the user asks to continue on
      *  another device. It is a plain app-set value the app also reads back --
      *  AOSP stores it in the same extras Bundle the rest of this class uses --
-     *  so it round-trips here rather than being dropped. Nothing in Mac.apk
+     *  so it round-trips here rather than being dropped. Nothing in Apk on Mac
      *  consumes it: there is no assistant and no cross-device session transfer,
      *  which is the same state as a phone with no assistant configured. */
     public void setSessionTransferUri(android.net.Uri uri) { mSessionTransferUri = uri; }

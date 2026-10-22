@@ -1,4 +1,4 @@
-// com.macapk.gms.GmsStore -- the persisted state behind Mac.apk's GMS layer:
+// com.macapk.gms.GmsStore -- the persisted state behind Apk on Mac's GMS layer:
 // the signed-in Google account(s), the master token, cached scoped auth tokens,
 // and the checkin identity (android_id / security_token).
 //
@@ -9,7 +9,7 @@
 // write a token to a world-readable file. So: one store, one file, one lock.
 //
 // ---- WHERE THE SECRETS GO --------------------------------------------------
-// Default: a 0600 file under ~/Library/Application Support/Mac.apk/gms/. That is
+// Default: a 0600 file under ~/Library/Application Support/Apk on Mac/gms/. That is
 // the same protection Aurora Store's own token XML gets on a device, and the
 // same protection this runtime already gives installed_apps.json's neighbours.
 // The permissions are applied BEFORE any content is written (see save()), not
@@ -66,13 +66,13 @@ public final class GmsStore {
     // ===================================================================
 
     /** The GMS state directory. Sibling of installed_apps.json on purpose: one
-     *  place for "things the Mac.apk installation knows", so a user clearing
-     *  Mac.apk's data clears the Google session too. */
+     *  place for "things the Apk on Mac installation knows", so a user clearing
+     *  Apk on Mac's data clears the Google session too. */
     public static File dir() {
         String override = System.getenv("MACAPK_GMS_DIR");
         if (override != null && !override.isEmpty()) return new File(override);
         return new File(System.getProperty("user.home"),
-                "Library/Application Support/Mac.apk/gms");
+                "Library/Application Support/Apk on Mac/gms");
     }
 
     private static File file() { return new File(dir(), "gms_state.properties"); }
@@ -121,7 +121,7 @@ public final class GmsStore {
                 }
                 chmod600(f);
                 try (OutputStream out = Files.newOutputStream(f.toPath())) {
-                    sProps.store(out, "Mac.apk GMS state -- contains OAuth tokens. Mode 0600.");
+                    sProps.store(out, "Apk on Mac GMS state -- contains OAuth tokens. Mode 0600.");
                 }
                 chmod600(f);   // store() does not change perms; re-assert after truncate
             } catch (Throwable t) {
@@ -454,7 +454,7 @@ public final class GmsStore {
         return "1".equals(v) || "true".equalsIgnoreCase(v);
     }
 
-    private static final String KEYCHAIN_SERVICE = "Mac.apk GMS";
+    private static final String KEYCHAIN_SERVICE = "Apk on Mac GMS";
 
     /** Read a secret: keychain when enabled, else the properties file. When the
      *  keychain is enabled but has no item, we fall back to the file -- that is
@@ -544,7 +544,7 @@ public final class GmsStore {
     }
 
     private static void warn(String msg) {
-        try { com.macapk.loader.NativeLog.w("Mac.apk.GMS", "GmsStore: " + msg); }
+        try { com.macapk.loader.NativeLog.w("Apk on Mac.GMS", "GmsStore: " + msg); }
         catch (Throwable t) { System.err.println("[GmsStore] " + msg); }
     }
 }

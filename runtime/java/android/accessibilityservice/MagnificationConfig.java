@@ -9,7 +9,7 @@ import android.os.Parcelable;
  * screen point it is centred on, and whether it is active at all.
  *
  * A plain value holder in AOSP too -- the platform reads the fields out of it
- * in AccessibilityService.MagnificationController. Mac.apk drives no magnifier,
+ * in AccessibilityService.MagnificationController. Apk on Mac drives no magnifier,
  * so a config an app builds is stored and handed back verbatim rather than
  * applied; that keeps a builder round-trip (build -> read the getters back)
  * self-consistent, which is what an app's own unit-test-shaped code checks.

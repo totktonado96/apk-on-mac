@@ -156,7 +156,7 @@ public class ClipDescription implements android.os.Parcelable {
     /** AOSP :473 returns an INT from the CLASSIFICATION_* domain, not a
      *  boolean -- this used to be declared `boolean`, so an app compiled
      *  against android.jar emitted `getClassificationStatus:()I` and got
-     *  NoSuchMethodError against our `()Z`. Mac.apk runs no TextClassifier
+     *  NoSuchMethodError against our `()Z`. Apk on Mac runs no TextClassifier
      *  over clipboard content, so classification is never ATTEMPTED, which is
      *  precisely CLASSIFICATION_NOT_PERFORMED (a device also reports that when
      *  the text is too long). */

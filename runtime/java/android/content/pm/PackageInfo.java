@@ -81,13 +81,13 @@ public class PackageInfo implements Parcelable {
      *  common case, and the probe's). */
     public FeatureGroupInfo[] featureGroups;
 
-    /** AOSP PackageInfo.java:395. True only for an APEX module; Mac.apk loads
+    /** AOSP PackageInfo.java:395. True only for an APEX module; Apk on Mac loads
      *  APKs, never APEXes. */
     public boolean isApex;
 
     /** AOSP PackageInfo.attributions (API 31, PackageInfo.java:247): the
      *  `<attribution>` elements the manifest declares, or null when it declares
-     *  none -- which is what Mac.apk's parser (which does not read the element
+     *  none -- which is what Apk on Mac's parser (which does not read the element
      *  yet) leaves it at, and what AOSP reports for nearly every package. The
      *  FIELD must exist: we present API 36, so a getfield on it has to link. */
     public Attribution[] attributions;
@@ -103,7 +103,7 @@ public class PackageInfo implements Parcelable {
     /** AOSP PackageInfo.getArchiveTimeMillis() (API 35): "the time at which the
      *  app was archived for the user", in System.currentTimeMillis() units.
      *
-     *  Mac.apk never archives a package (see PackageManager.getArchivedPackage
+     *  Apk on Mac never archives a package (see PackageManager.getArchivedPackage
      *  for the full reasoning), so this is 0 for everything we generate -- the
      *  same value AOSP reports for any package that has not been archived. */
     public long getArchiveTimeMillis() { return mArchiveTimeMillis; }
@@ -112,7 +112,7 @@ public class PackageInfo implements Parcelable {
     public void setArchiveTimeMillis(long value) { mArchiveTimeMillis = value; }
 
     /** AOSP PackageInfo.getApexPackageName() (API 34): "if the package is an
-     *  APEX package, returns the name of the APEX; null otherwise." Mac.apk
+     *  APEX package, returns the name of the APEX; null otherwise." Apk on Mac
      *  loads APKs and never APEXes (isApex is permanently false), so this is
      *  always null -- the AOSP answer for any non-APEX package. */
     public String getApexPackageName() { return mApexPackageName; }

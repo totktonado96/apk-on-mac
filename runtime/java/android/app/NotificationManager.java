@@ -30,7 +30,7 @@ public class NotificationManager {
 
     private final List<NotificationChannel> channels = new ArrayList<>();
 
-    // ---- Mac.apk bridge to macOS Notification Center (notification_bridge.mm) ----
+    // ---- Apk on Mac bridge to macOS Notification Center (notification_bridge.mm) ----
     // Gate MACAPK_NOTIFICATIONS (default on; =0 restores the old no-op behaviour).
     // State is static: Context.getSystemService builds one manager per Context, but
     // the notification shade is per-package, and a tap must find the Notification
@@ -184,7 +184,7 @@ public class NotificationManager {
     public void deleteNotificationChannel(String channelId) {
         channels.removeIf(c -> c != null && c.getId() != null && c.getId().equals(channelId));
     }
-    /** API 30: conversation-scoped lookup; Mac.apk has no per-conversation
+    /** API 30: conversation-scoped lookup; Apk on Mac has no per-conversation
      *  channels, so it resolves to the parent channel. */
     public NotificationChannel getNotificationChannel(String channelId, String conversationId) {
         return getNotificationChannel(channelId);
@@ -200,7 +200,7 @@ public class NotificationManager {
     }
 
     // Notification channel GROUPS (API 26+). Apps create groups to organize
-    // channels in system settings; Mac.apk records them so the get/list
+    // channels in system settings; Apk on Mac records them so the get/list
     // round-trip is faithful. Stored in a parallel list keyed by group id.
     private final List<NotificationChannelGroup> channelGroups = new ArrayList<>();
     public void createNotificationChannelGroup(NotificationChannelGroup group) {
@@ -419,7 +419,7 @@ public class NotificationManager {
     }
 
     /** AOSP getActiveNotifications (API 23): this app's currently-posted
-     *  notifications. Mac.apk has no notification shade, so none are "active". */
+     *  notifications. Apk on Mac has no notification shade, so none are "active". */
     public android.service.notification.StatusBarNotification[] getActiveNotifications() {
         synchronized (sActive) {
             return sActive.values().toArray(new android.service.notification.StatusBarNotification[0]);
@@ -428,7 +428,7 @@ public class NotificationManager {
 
 
     /** AOSP canUseFullScreenIntent (API 34): whether the app may post full-screen
-     *  intents. Mac.apk has no lockscreen gate, so yes. */
+     *  intents. Apk on Mac has no lockscreen gate, so yes. */
     public boolean canUseFullScreenIntent() { return true; }
 
     public boolean canPostPromotedNotifications() { return false; }
@@ -445,7 +445,7 @@ public class NotificationManager {
     // ================================================================
     // AOSP API-36 surface completion (android.app.NotificationManager).
     // AOSP ref: frameworks/base/core/java/android/app/NotificationManager.java
-    // (android16-release). Mac.apk has no notification shade, no do-not-disturb
+    // (android16-release). Apk on Mac has no notification shade, no do-not-disturb
     // state and no notification-listener services -- notify() above is already
     // a sink -- so each answer below is the one a device gives when the feature
     // is off or the app holds no special access, never a claimed success.
@@ -462,7 +462,7 @@ public class NotificationManager {
     public boolean areNotificationsPaused() { return false; }
 
     /** AOSP areBubblesAllowed(): whether the app may post bubbles -- the
-     *  per-app user setting. Mac.apk renders no bubbles (there is no launcher
+     *  per-app user setting. Apk on Mac renders no bubbles (there is no launcher
      *  or shade to float them over), so the honest answer is no; claiming yes
      *  would make an app post a bubble that never appears instead of falling
      *  back to a normal notification. */
@@ -478,7 +478,7 @@ public class NotificationManager {
 
     /** AOSP canNotifyAsPackage(String pkg): whether this app has been granted
      *  notification-delegate rights for another package. Delegation is granted
-     *  by the OTHER package calling setNotificationDelegate, and Mac.apk hosts
+     *  by the OTHER package calling setNotificationDelegate, and Apk on Mac hosts
      *  exactly one package -- so the only true answer is for our own package
      *  name, which is what a device would also say. */
     public boolean canNotifyAsPackage(String pkg) { return false; }
@@ -490,7 +490,7 @@ public class NotificationManager {
 
     /** AOSP isNotificationListenerAccessGranted(ComponentName listener):
      *  whether the named NotificationListenerService has been granted access in
-     *  Settings. Mac.apk runs no notification-listener services and has no
+     *  Settings. Apk on Mac runs no notification-listener services and has no
      *  Settings screen to grant from. */
     public boolean isNotificationListenerAccessGranted(android.content.ComponentName listener) {
         return false;
@@ -599,7 +599,7 @@ public class NotificationManager {
 
     /** AOSP areAutomaticZenRulesUserManaged(): "Returns true if the calling
      *  app's automatic zen rules are managed by the user in Settings" (API 34+
-     *  moved rule management into Settings for apps targeting V). Mac.apk has no
+     *  moved rule management into Settings for apps targeting V). Apk on Mac has no
      *  Settings UI in which a user could manage them, so the app remains the
      *  manager of its own rules -- which is what false means. */
     public boolean areAutomaticZenRulesUserManaged() { return false; }

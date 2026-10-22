@@ -3,7 +3,7 @@ package android.telephony.ims;
 /**
  * Thrown when an IMS operation cannot be carried out.
  *
- * Mac.apk has no IMS stack, so any app that reaches an IMS API gets
+ * Apk on Mac has no IMS stack, so any app that reaches an IMS API gets
  * CODE_ERROR_UNSUPPORTED_OPERATION -- AOSP's own code for "the device does not
  * support IMS", which is the truthful answer for a machine with no radio.
  *

@@ -2,7 +2,7 @@ package android.app;
 import android.graphics.Color;
 import android.os.Parcel;
 import android.os.Parcelable;
-/** The representative colors of a wallpaper (primary/secondary/tertiary). Mac.apk
+/** The representative colors of a wallpaper (primary/secondary/tertiary). Apk on Mac
  *  sets no live wallpaper, so instances are only constructed explicitly; getters
  *  mirror AOSP. API 27. */
 public final class WallpaperColors implements Parcelable {

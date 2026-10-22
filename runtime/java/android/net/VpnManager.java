@@ -2,7 +2,7 @@
 //
 // The API 30+ manager for platform (always-on / app-based) VPN profiles.
 //
-// Mac.apk has no VPN subsystem: there is no TUN device to hand an app, and
+// Apk on Mac has no VPN subsystem: there is no TUN device to hand an app, and
 // nothing in the runtime routes packets. So NO profile is ever provisioned and
 // NO session ever starts, and this class says so rather than accepting the
 // request and going quiet.

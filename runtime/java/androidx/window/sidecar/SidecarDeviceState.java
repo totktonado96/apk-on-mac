@@ -1,5 +1,5 @@
 package androidx.window.sidecar;
-/** The device's fold posture. Mac.apk is a flat display -> POSTURE_OPENED. */
+/** The device's fold posture. Apk on Mac is a flat display -> POSTURE_OPENED. */
 public final class SidecarDeviceState {
     public static final int POSTURE_UNKNOWN = 0;
     public static final int POSTURE_CLOSED = 1;
