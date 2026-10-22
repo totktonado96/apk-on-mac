@@ -2293,6 +2293,16 @@ public final class ActivityHost {
         // SHARE_TEXT's payload lives in the EXTRAS, which the predicate is not
         // allowed to read (see hostActionFor). Compose it HERE, where the
         // intent is being performed and is fully populated.
+        // The macOS share sheet for text and files alike. A share is user-initiated
+        // like any host open: same refusals as openHost (MACAPK_EXTERNAL_URLS=0, the
+        // recency grace window). When the sheet is unavailable, text keeps the
+        // mailto: path below and a file share reports unhandled, as before.
+        if (act.kind == HostAction.Kind.SHARE_FILES
+                || (act.kind == HostAction.Kind.SHARE_TEXT && ShareSheet.enabled())) {
+            if (!shareAllowed()) return act.kind == HostAction.Kind.SHARE_FILES;
+            if (ShareSheet.share(real)) return true;
+            if (act.kind == HostAction.Kind.SHARE_FILES) return false;
+        }
         String target = (act.kind == HostAction.Kind.SHARE_TEXT)
                       ? shareTextUrl(real) : act.url;
         if (target == null) return false;
@@ -2424,6 +2434,9 @@ public final class ActivityHost {
              *  at START time by {@code shareTextUrl} -- resolution must never
              *  depend on extras. */
             SHARE_TEXT,
+            /** ACTION_SEND of a non-text type (EXTRA_STREAM) or ACTION_SEND_MULTIPLE:
+             *  the macOS share sheet (ShareSheet), when MACAPK_SHARE_SHEET is on. */
+            SHARE_FILES,
             /** The system package installer's surface (ACTION_INSTALL_PACKAGE,
              *  or ACTION_VIEW of an application/vnd.android.package-archive).
              *  {@link HostAction#url} is null: the payload is the data URI,
@@ -2576,6 +2589,13 @@ public final class ActivityHost {
                 return new HostAction(HostAction.Kind.SHARE_TEXT, null);
             }
         }
+        // File shares: NSSharingServicePicker now PERFORMS them (ShareSheet), so
+        // the answer flips from "nothing handles this" to "the host does". Still
+        // extras-independent: action and MIME type only.
+        if (ShareSheet.enabled()
+                && (Intent.ACTION_SEND_MULTIPLE.equals(action) || Intent.ACTION_SEND.equals(action))) {
+            return new HostAction(HostAction.Kind.SHARE_FILES, null);
+        }
         if (DocumentPickerHandler.isPickerIntent(intent)) {
             return new HostAction(HostAction.Kind.DOCUMENT_PICKER, null);
         }
@@ -2680,6 +2700,23 @@ public final class ActivityHost {
      *  Package-visible so framework shims reach it via this loader class. */
     public static boolean openHostUrlGated(String uri, String why) {
         return openHost(uri, why);
+    }
+
+    /** openHost's two refusals for a share: harness kill-switch and "was this a
+     *  user act" (a launch-time programmatic share must not pop a sheet). */
+    private static boolean shareAllowed() {
+        if (externalUrlsOff()) {
+            NativeLog.w(TAG, "REFUSED share sheet: MACAPK_EXTERNAL_URLS=0");
+            return false;
+        }
+        if (allowHostUrlAtLaunch()) return true;
+        long last = TouchDispatcher.lastUserInputMillis();
+        long age = (last == 0L) ? Long.MAX_VALUE : (System.currentTimeMillis() - last);
+        if (age > hostUrlGraceMs()) {
+            NativeLog.w(TAG, "REFUSED share sheet: last real input too old");
+            return false;
+        }
+        return true;
     }
 
     private static boolean openHost(String uri, String action) {

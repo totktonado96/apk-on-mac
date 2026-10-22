@@ -43,6 +43,7 @@ implemented directly on macOS:
 
 ## What's new in Apk on Mac
 
+- **Share via macOS:** an app's Share button opens the system share sheet (Mail, Messages, AirDrop, ...) for text, images and files.
 - **Drag and drop files:** drop files from Finder on an app window and the app receives them as a share (or open-with) when it handles one.
 - **Lone modifier keys:** Shift, Ctrl, Option, Cmd and Caps Lock pressed alone reach games as Android key events (not in text fields).
 - **Emoji and CJK text:** converted or composed text (emoji, IME candidates) is committed to the app as one string instead of per UTF-16 unit.

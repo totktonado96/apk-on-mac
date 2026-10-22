@@ -4383,6 +4383,9 @@ namespace location { void RegisterLocationBridgeMethods(JNIEnv* env); }
 // android.media.session.MacApkNowPlaying (the active MediaSession <-> macOS
 // Now Playing and its remote commands). Soft-fails on a jar that lacks it.
 namespace nowplaying { void RegisterNowPlayingBridgeMethods(JNIEnv* env); }
+// Forward-declared from share_bridge.mm; registers com.macapk.loader.ShareSheet
+// (ACTION_SEND -> NSSharingServicePicker). Soft-fails on a jar that lacks it.
+namespace share { void RegisterShareBridgeMethods(JNIEnv* env); }
 // Forward-declared from notification_bridge.mm; registers the JNI methods of
 // android.app.NotificationManager (posts to macOS Notification Center).
 namespace notification { void RegisterNotificationBridgeMethods(JNIEnv* env); }
@@ -4515,6 +4518,7 @@ void RegisterAllNativeMethods(JNIEnv* env) {
     gamepad::RegisterGamepadBridgeMethods(env);
     location::RegisterLocationBridgeMethods(env);
     nowplaying::RegisterNowPlayingBridgeMethods(env);
+    share::RegisterShareBridgeMethods(env);
     notification::RegisterNotificationBridgeMethods(env);
     power::RegisterPowerAssertionMethods(env);
     webview::RegisterWebViewBridgeMethods(env);

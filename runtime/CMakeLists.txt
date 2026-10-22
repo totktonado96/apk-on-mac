@@ -148,6 +148,8 @@ set(MACAPK_RUNTIME_SOURCES
     # (MediaPlayer.framework, rung 1: the Mac's own system media controls and
     # media keys; gate MACAPK_NOW_PLAYING).
     src/nowplaying_bridge.mm
+    # ACTION_SEND -> NSSharingServicePicker (gate MACAPK_SHARE_SHEET).
+    src/share_bridge.mm
     src/notification_bridge.mm
     src/power_assertion_bridge.mm
     src/webview_bridge.mm
