@@ -1,7 +1,8 @@
 // android.hardware.biometrics.BiometricPrompt -- the system biometric
-// auth dialog. Apk on Mac has no biometric hardware, so authenticate()
-// immediately reports onAuthenticationError(BIOMETRIC_ERROR_HW_UNAVAILABLE)
-// on the supplied executor -- the honest "no biometric hardware" path.
+// auth dialog. authenticate() drives Touch ID / the login password through
+// LocalAuthentication (MacApkBiometric, biometric_bridge.mm). With
+// MACAPK_BIOMETRIC=0 or no native bridge it reports
+// onAuthenticationError(BIOMETRIC_ERROR_HW_NOT_PRESENT) on the supplied executor.
 // The Builder + AuthenticationCallback + nested types must exist for
 // androidx.biometric and direct callers to compile. Error constant
 // values mirror AOSP BiometricConstants.
@@ -65,8 +66,14 @@ public class BiometricPrompt {
     private final int mLogoRes;
     private final int mAuthenticators;
     private final boolean mConfirmationRequired;
+    private final boolean mDeviceCredentialAllowed;
+    private final Executor mNegativeButtonExecutor;
+    private final DialogInterface.OnClickListener mNegativeButtonListener;
 
     private BiometricPrompt(Builder b) {
+        mDeviceCredentialAllowed = b.mDeviceCredentialAllowed;
+        mNegativeButtonExecutor = b.mNegativeExecutor;
+        mNegativeButtonListener = b.mNegativeListener;
         mTitle = b.mTitle;
         mSubtitle = b.mSubtitle;
         mDescription = b.mDescription;
@@ -105,21 +112,120 @@ public class BiometricPrompt {
 
     public void authenticate(CancellationSignal cancel, Executor executor,
             AuthenticationCallback callback) {
-        reportUnavailable(executor, callback);
+        authenticate(null, cancel, executor, callback);
     }
 
     public void authenticate(CryptoObject crypto, CancellationSignal cancel,
             Executor executor, AuthenticationCallback callback) {
-        reportUnavailable(executor, callback);
+        // AOSP :948-953 -- the argument checks come first and are unconditional.
+        if (callback == null) throw new IllegalArgumentException("Must supply an authentication callback");
+        if (executor == null) throw new IllegalArgumentException("Must supply an executor");
+        if (cancel != null && cancel.isCanceled()) return;   // AOSP: "Authentication already canceled"
+
+        // Credential fallback: DEVICE_CREDENTIAL in the mask or the deprecated
+        // setDeviceCredentialAllowed -> the login-password policy (Touch ID is
+        // still offered first by LocalAuthentication).
+        final boolean credential = mDeviceCredentialAllowed
+                || (mAuthenticators & BiometricManager.Authenticators.DEVICE_CREDENTIAL) != 0;
+        final int avail = MacApkBiometric.canAuthenticate(credential
+                ? (mAuthenticators | BiometricManager.Authenticators.DEVICE_CREDENTIAL)
+                : (mAuthenticators == 0 ? BiometricManager.Authenticators.BIOMETRIC_WEAK
+                                       : mAuthenticators));
+        if (avail != BiometricManager.BIOMETRIC_SUCCESS) {
+            // AOSP BiometricPrompt reports these through onAuthenticationError
+            // with the BiometricConstants twin of the canAuthenticate code.
+            int code; String msg;
+            switch (avail) {
+                case BiometricManager.BIOMETRIC_ERROR_NONE_ENROLLED:
+                    code = credential ? BIOMETRIC_ERROR_NO_DEVICE_CREDENTIAL : BIOMETRIC_ERROR_NO_BIOMETRICS;
+                    msg = credential ? "No device credential set" : "No biometrics enrolled";
+                    break;
+                case BiometricManager.BIOMETRIC_ERROR_HW_UNAVAILABLE:
+                    code = BIOMETRIC_ERROR_HW_UNAVAILABLE; msg = "Biometric hardware unavailable"; break;
+                default:
+                    code = BIOMETRIC_ERROR_HW_NOT_PRESENT; msg = "No biometric hardware"; break;
+            }
+            reportError(executor, callback, code, msg);
+            return;
+        }
+
+        final boolean hasNegative = mNegativeButtonText != null && mNegativeButtonText.length() > 0;
+        final StringBuilder reason = new StringBuilder(String.valueOf(mTitle));
+        if (mSubtitle != null && mSubtitle.length() > 0) reason.append(" - ").append(mSubtitle);
+        else if (mDescription != null && mDescription.length() > 0) reason.append(" - ").append(mDescription);
+
+        final int id = MacApkBiometric.authenticate(credential, reason.toString(),
+                hasNegative ? mNegativeButtonText.toString() : null, la -> {
+            switch (la) {
+                case 0: {
+                    // Which factor LocalAuthentication used is not reported; with
+                    // biometrics available it is Touch ID (STRONG), otherwise the password.
+                    int type = MacApkBiometric.canEvaluate(false) == 0
+                            ? AUTHENTICATION_RESULT_TYPE_BIOMETRIC
+                            : AUTHENTICATION_RESULT_TYPE_DEVICE_CREDENTIAL;
+                    executor.execute(() -> callback.onAuthenticationSucceeded(
+                            new AuthenticationResult(crypto, type)));
+                    break;
+                }
+                case MacApkBiometric.LA_USER_CANCEL:
+                    // AOSP framework BiometricPrompt: the negative button runs the
+                    // app's listener on ITS executor (androidx turns that into
+                    // ERROR_NEGATIVE_BUTTON for its own callback); Back/outside
+                    // click is ERROR_USER_CANCELED.
+                    if (hasNegative && mNegativeButtonListener != null) {
+                        (mNegativeButtonExecutor != null ? mNegativeButtonExecutor : executor)
+                                .execute(() -> mNegativeButtonListener.onClick(null,
+                                        DialogInterface.BUTTON_NEGATIVE));
+                    } else {
+                        reportError(executor, callback, BIOMETRIC_ERROR_USER_CANCELED, "Canceled by user");
+                    }
+                    break;
+                case MacApkBiometric.LA_USER_FALLBACK:
+                    reportError(executor, callback, BIOMETRIC_ERROR_USER_CANCELED, "Canceled by user");
+                    break;
+                case MacApkBiometric.LA_SYSTEM_CANCEL:
+                case MacApkBiometric.LA_APP_CANCEL:
+                case MacApkBiometric.LA_INVALID_CONTEXT:
+                    // invalidate() from CancellationSignal: AOSP delivers nothing
+                    // for an app-initiated cancel.
+                    if (cancel == null || !cancel.isCanceled()) {
+                        reportError(executor, callback, BIOMETRIC_ERROR_CANCELED, "Operation canceled");
+                    }
+                    break;
+                case MacApkBiometric.LA_BIOMETRY_LOCKOUT:
+                    reportError(executor, callback, BIOMETRIC_ERROR_LOCKOUT,
+                            "Too many attempts. Try again later.");
+                    break;
+                case MacApkBiometric.LA_AUTH_FAILED:
+                    // A rejected attempt; LocalAuthentication ends the sheet after
+                    // it, so follow AOSP's non-terminal failure with a terminal error.
+                    executor.execute(callback::onAuthenticationFailed);
+                    reportError(executor, callback, BIOMETRIC_ERROR_CANCELED, "Authentication failed");
+                    break;
+                case MacApkBiometric.LA_PASSCODE_NOT_SET:
+                    reportError(executor, callback, BIOMETRIC_ERROR_NO_DEVICE_CREDENTIAL, "No device credential set");
+                    break;
+                case MacApkBiometric.LA_BIOMETRY_NOT_ENROLLED:
+                    reportError(executor, callback, BIOMETRIC_ERROR_NO_BIOMETRICS, "No biometrics enrolled");
+                    break;
+                case MacApkBiometric.LA_BIOMETRY_NOT_AVAILABLE:
+                    reportError(executor, callback, BIOMETRIC_ERROR_HW_UNAVAILABLE, "Biometric hardware unavailable");
+                    break;
+                default:
+                    reportError(executor, callback, BIOMETRIC_ERROR_UNABLE_TO_PROCESS, "Unable to process");
+            }
+        });
+        if (id < 0) {
+            reportError(executor, callback, BIOMETRIC_ERROR_HW_NOT_PRESENT, "No biometric hardware");
+            return;
+        }
+        if (cancel != null) cancel.setOnCancelListener(() -> MacApkBiometric.cancel(id));
     }
 
-    private void reportUnavailable(Executor executor, AuthenticationCallback callback) {
-        if (callback == null) return;
+    private static void reportError(Executor executor, AuthenticationCallback callback,
+            int code, CharSequence msg) {
         Runnable r = () -> {
-            try {
-                callback.onAuthenticationError(BIOMETRIC_ERROR_HW_NOT_PRESENT,
-                        "No biometric hardware");
-            } catch (Throwable ignored) {}
+            try { callback.onAuthenticationError(code, msg); } catch (Throwable ignored) {}
         };
         if (executor != null) executor.execute(r); else r.run();
     }

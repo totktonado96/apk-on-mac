@@ -4389,6 +4389,9 @@ namespace share { void RegisterShareBridgeMethods(JNIEnv* env); }
 // Forward-declared from notification_bridge.mm; registers the JNI methods of
 // android.app.NotificationManager (posts to macOS Notification Center).
 namespace notification { void RegisterNotificationBridgeMethods(JNIEnv* env); }
+// Forward-declared from biometric_bridge.mm; registers
+// android.hardware.biometrics.MacApkBiometric (Touch ID via LocalAuthentication).
+namespace biometric { void RegisterBiometricBridgeMethods(JNIEnv* env); }
 // Forward-declared from power_assertion_bridge.mm; registers
 // android.os.MacApkKeepAwake (keep-screen-on / wake locks -> IOKit assertions).
 namespace power { void RegisterPowerAssertionMethods(JNIEnv* env); }
@@ -4520,6 +4523,7 @@ void RegisterAllNativeMethods(JNIEnv* env) {
     nowplaying::RegisterNowPlayingBridgeMethods(env);
     share::RegisterShareBridgeMethods(env);
     notification::RegisterNotificationBridgeMethods(env);
+    biometric::RegisterBiometricBridgeMethods(env);
     power::RegisterPowerAssertionMethods(env);
     webview::RegisterWebViewBridgeMethods(env);
     clipboard::RegisterClipboardBridgeMethods(env);

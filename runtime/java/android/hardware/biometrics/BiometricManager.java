@@ -26,8 +26,13 @@ public class BiometricManager {
 
     public BiometricManager() {}
 
-    public int canAuthenticate() { return BIOMETRIC_ERROR_NO_HARDWARE; }
-    public int canAuthenticate(int authenticators) { return BIOMETRIC_ERROR_NO_HARDWARE; }
+    /** AOSP :504 -- the no-arg form is BIOMETRIC_WEAK. Availability comes from
+     *  LocalAuthentication (Touch ID); see MacApkBiometric. MACAPK_BIOMETRIC=0
+     *  restores the old constant NO_HARDWARE. */
+    public int canAuthenticate() { return canAuthenticate(Authenticators.BIOMETRIC_WEAK); }
+    public int canAuthenticate(int authenticators) {
+        return MacApkBiometric.canAuthenticate(authenticators);
+    }
 
     /**
      * AOSP BiometricManager.java:778 getLastAuthenticationTime(int) -- when did
@@ -54,7 +59,12 @@ public class BiometricManager {
             throw new IllegalArgumentException(
                     "Only BIOMETRIC_STRONG and DEVICE_CREDENTIAL authenticators may be used.");
         }
-        return BIOMETRIC_NO_AUTHENTICATION;
+        // Only a prompt THIS process saw succeed counts. The wall-clock is
+        // converted to the elapsed-realtime base AOSP documents.
+        long at = MacApkBiometric.lastAuthenticationMillis();
+        if (at < 0) return BIOMETRIC_NO_AUTHENTICATION;
+        return android.os.SystemClock.elapsedRealtime()
+                - Math.max(0L, System.currentTimeMillis() - at);
     }
 
     /** AOSP :565. Declared @NonNull, so a Strings object is always returned;

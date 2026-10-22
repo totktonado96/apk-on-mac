@@ -24,14 +24,18 @@ public class KeyguardManager {
     // low-minSdk apps still call it unguarded, and a NoSuchMethodError is an
     // Error, which catch(Exception) blocks do not stop.
     @Deprecated public boolean inKeyguardRestrictedInputMode() { return isKeyguardLocked(); }
-    public boolean isKeyguardSecure() { return false; }
+    /** AOSP: a lock screen (PIN/password/biometric) is configured. The Mac's
+     *  equivalent is a login password, i.e. LAPolicyDeviceOwnerAuthentication
+     *  can evaluate (MACAPK_BIOMETRIC=0 keeps the old constant false). */
+    public boolean isKeyguardSecure() { return android.hardware.biometrics.MacApkBiometric.isDeviceSecure(); }
     public boolean isDeviceLocked() { return false; }
-    public boolean isDeviceSecure() { return false; }
+    public boolean isDeviceSecure() { return android.hardware.biometrics.MacApkBiometric.isDeviceSecure(); }
 
     // AOSP KeyguardManager.createConfirmDeviceCredentialIntent(CharSequence,
     // CharSequence) (same file/branch as the constants above):
     //
-    //     public Intent createConfirmDeviceCredentialIntent(CharSequence title,
+    //     private static final boolean CONFIRM_ACTIVITY_PRESENT = false;
+    public Intent createConfirmDeviceCredentialIntent(CharSequence title,
     //             CharSequence description) {
     //         if (!isDeviceSecure()) return null;
     //         Intent intent = new Intent(ACTION_CONFIRM_DEVICE_CREDENTIAL);
@@ -60,7 +64,11 @@ public class KeyguardManager {
     // round-trip for a branch that cannot execute today.
     public Intent createConfirmDeviceCredentialIntent(CharSequence title,
             CharSequence description) {
-        if (!isDeviceSecure()) return null;
+        // isDeviceSecure() is now real, but nothing here handles
+        // ACTION_CONFIRM_DEVICE_CREDENTIAL: an app that fired the Intent would get
+        // ActivityNotFound where it used to take its null fallback. Apps get the
+        // Touch ID / password prompt through BiometricPrompt instead.
+        if (!isDeviceSecure() || !CONFIRM_ACTIVITY_PRESENT) return null;
         Intent intent = new Intent(ACTION_CONFIRM_DEVICE_CREDENTIAL);
         intent.putExtra(EXTRA_TITLE, title);
         intent.putExtra(EXTRA_DESCRIPTION, description);

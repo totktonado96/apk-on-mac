@@ -151,6 +151,9 @@ set(MACAPK_RUNTIME_SOURCES
     # ACTION_SEND -> NSSharingServicePicker (gate MACAPK_SHARE_SHEET).
     src/share_bridge.mm
     src/notification_bridge.mm
+    # Touch ID / login password -> BiometricPrompt, BiometricManager, KeyguardManager
+    # (LocalAuthentication.framework; gate MACAPK_BIOMETRIC).
+    src/biometric_bridge.mm
     src/power_assertion_bridge.mm
     src/webview_bridge.mm
     # Android App Links: the sign-in window that hands a verified link back (AppLinks.java).
@@ -421,6 +424,7 @@ target_link_libraries(macapk-runtime PRIVATE
     "-framework CoreLocation"
     "-framework MediaPlayer"
     "-framework UserNotifications"
+    "-framework LocalAuthentication"
     "-framework IOKit"
 )
 
