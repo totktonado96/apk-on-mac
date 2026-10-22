@@ -25,15 +25,14 @@ jobs:
         run: |
           git config user.name "apk-on-mac-bot"
           git config user.email "noreply@users.noreply.github.com"
+          export PORT_BODY="$RUNNER_TEMP/port_body.md"
           out=$(scripts/port_upstream.sh | tail -1)
           echo "$out"
           branch="upstream-port/$(date -u +%Y-%m-%d-%H%M)"
           if [ "$(git rev-list --count origin/main..HEAD)" = "0" ] && git diff --quiet origin/main -- .upstream-sync; then
             echo "Nothing new upstream."; exit 0
           fi
-          git add .upstream-sync port_body.md 2>/dev/null || true
-          git reset -q port_body.md 2>/dev/null || true
           git commit -m "Update .upstream-sync" .upstream-sync || true
           git push origin "HEAD:refs/heads/$branch"
           gh pr create --base main --head "$branch" \
-            --title "Port upstream commits ($out)" --body-file port_body.md
+            --title "Port upstream commits ($out)" --body-file "$PORT_BODY"
