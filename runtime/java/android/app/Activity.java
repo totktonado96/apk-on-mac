@@ -236,7 +236,7 @@ public class Activity extends ContextThemeWrapper
 
     public final Application getApplication() { return application; }
     public Intent getIntent()                 { return intent; }
-    public final void setIntent(Intent i)     { this.intent = i; }
+    public void setIntent(Intent i)           { this.intent = i; }
     // AOSP: Activity does NOT override getContentResolver -- it inherits
     // ContextWrapper.getContentResolver(), which delegates to the base
     // ContextImpl and always returns a non-null ContentResolver. Our old
