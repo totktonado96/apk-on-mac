@@ -154,6 +154,8 @@ set(MACAPK_RUNTIME_SOURCES
     # Touch ID / login password -> BiometricPrompt, BiometricManager, KeyguardManager
     # (LocalAuthentication.framework; gate MACAPK_BIOMETRIC).
     src/biometric_bridge.mm
+    # Admin/user-domain trusted roots for the JVM's TLS trust (gate MACAPK_SYSTEM_TRUST).
+    src/system_trust_bridge.mm
     src/power_assertion_bridge.mm
     src/webview_bridge.mm
     # Android App Links: the sign-in window that hands a verified link back (AppLinks.java).

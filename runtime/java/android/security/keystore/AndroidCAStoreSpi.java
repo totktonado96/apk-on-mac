@@ -2,6 +2,7 @@ package android.security.keystore;
 
 import java.io.InputStream;
 import java.io.OutputStream;
+import android.security.MacApkSystemTrust;
 import java.security.Key;
 import java.security.KeyStore;
 import java.security.KeyStoreSpi;
@@ -31,11 +32,14 @@ import javax.net.ssl.X509TrustManager;
  * is the standard way to read the system trust anchors, so any app doing cert
  * pinning or trust inspection needs it.
  *
- * We back it with the HOST's real trust anchors rather than inventing a set: the
- * default {@link TrustManagerFactory} initialised with a null KeyStore yields the
- * JDK's own CA list, which on this platform IS the machine's trusted set. That
- * keeps the answer honest (the app sees the CAs that will actually validate its
- * connections) instead of an empty store that would silently fail every pin.
+ * Contents: the default {@link TrustManagerFactory} initialised with a null
+ * KeyStore yields the JDK's BUNDLED cacerts -- which is NOT the Mac's trust
+ * store (an earlier version of this comment claimed it was; it ignores the
+ * Keychain entirely). So the anchors are that list PLUS the macOS admin/user
+ * trusted roots (MacApkSystemTrust, trust settings honoured), aliased the way
+ * Conscrypt does it: "system:" for the former, "user:" for the latter
+ * (MACAPK_SYSTEM_TRUST=0 drops the macOS roots). The default trust store is
+ * already merged at boot, so a root that appears in both is aliased "user:".
  *
  * READ-ONLY, like the device's: the system trust store is not app-writable, so
  * the mutating operations throw {@link KeyStoreException} as Conscrypt's does.
@@ -54,7 +58,7 @@ public class AndroidCAStoreSpi extends KeyStoreSpi {
             TrustManagerFactory tmf = TrustManagerFactory.getInstance(
                     TrustManagerFactory.getDefaultAlgorithm());
             tmf.init((KeyStore) null);          // null => the platform default CAs
-            int n = 0;
+            int n = 0, u = 0;
             for (TrustManager tm : tmf.getTrustManagers()) {
                 if (!(tm instanceof X509TrustManager)) continue;
                 for (X509Certificate c : ((X509TrustManager) tm).getAcceptedIssuers()) {
@@ -63,8 +67,22 @@ public class AndroidCAStoreSpi extends KeyStoreSpi {
                     ks.setCertificateEntry("system:" + (n++), c);
                 }
             }
+            // A user root that the (boot-merged) default list already carried keeps
+            // the "user:" alias below; add any the default list does not have.
+            java.util.List<X509Certificate> user = MacApkSystemTrust.userRoots();
+            for (String a : java.util.Collections.list(ks.aliases())) {
+                if (user.contains(ks.getCertificate(a))) {
+                    X509Certificate c = (X509Certificate) ks.getCertificate(a);
+                    ks.deleteEntry(a);
+                    ks.setCertificateEntry("user:" + (u++), c);
+                    n--;
+                }
+            }
+            for (X509Certificate c : user) {
+                if (ks.getCertificateAlias(c) == null) ks.setCertificateEntry("user:" + (u++), c);
+            }
             com.macapk.loader.NativeLog.i("AndroidCAStore",
-                    "system trust store built from the host's CA set (" + n + " anchors)");
+                    "system trust store built (" + n + " system + " + u + " user anchors)");
         } catch (Throwable t) {
             com.macapk.loader.NativeLog.w("AndroidCAStore",
                     "could not build the system trust store (" + t + "); serving it empty");

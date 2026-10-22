@@ -4392,6 +4392,9 @@ namespace notification { void RegisterNotificationBridgeMethods(JNIEnv* env); }
 // Forward-declared from biometric_bridge.mm; registers
 // android.hardware.biometrics.MacApkBiometric (Touch ID via LocalAuthentication).
 namespace biometric { void RegisterBiometricBridgeMethods(JNIEnv* env); }
+// Forward-declared from system_trust_bridge.mm; registers android.security.MacApkSystemTrust
+// (macOS admin/user trusted roots for the JVM's TLS trust).
+namespace systemtrust { void RegisterSystemTrustBridgeMethods(JNIEnv* env); }
 // Forward-declared from power_assertion_bridge.mm; registers
 // android.os.MacApkKeepAwake (keep-screen-on / wake locks -> IOKit assertions).
 namespace power { void RegisterPowerAssertionMethods(JNIEnv* env); }
@@ -4524,6 +4527,7 @@ void RegisterAllNativeMethods(JNIEnv* env) {
     share::RegisterShareBridgeMethods(env);
     notification::RegisterNotificationBridgeMethods(env);
     biometric::RegisterBiometricBridgeMethods(env);
+    systemtrust::RegisterSystemTrustBridgeMethods(env);
     power::RegisterPowerAssertionMethods(env);
     webview::RegisterWebViewBridgeMethods(env);
     clipboard::RegisterClipboardBridgeMethods(env);

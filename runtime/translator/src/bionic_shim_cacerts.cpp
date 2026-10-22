@@ -147,6 +147,88 @@ void mkdirs(const std::string& path) {
     }
 }
 
+
+// ---- admin/user trust settings (Keychain Access > Get Info > Trust) --------
+//
+// SecTrustCopyAnchorCertificates is ONLY Apple's own roots. An enterprise root
+// pushed by MDM (admin domain) or a corporate / mitmproxy / dev CA the user
+// trusted (user domain) lives in the trust-settings database instead, and macOS
+// itself honours it, so a stack that ignores it fails where Safari works.
+// SecTrustSettingsCopyCertificates lists the certs that HAVE settings in a
+// domain; what each means is in SecTrustSettingsCopyTrustSettings (Security
+// SecTrustSettings.h): an EMPTY array = "always trust as a root"; otherwise
+// each dictionary may carry kSecTrustSettingsResult (absent = TrustRoot) and
+// may be scoped to one policy via kSecTrustSettingsPolicy. We want the TLS
+// answer, so a dictionary scoped to a non-SSL policy (S/MIME, code signing) is
+// skipped. TrustRoot/TrustAsRoot trust; Deny distrusts and wins over a trust in
+// the other domain (and over the Apple anchor), as macOS does; Unspecified is
+// "no opinion". MACAPK_SYSTEM_TRUST=0 turns all of this off.
+bool system_trust_enabled() {
+    const char* e = getenv("MACAPK_SYSTEM_TRUST");
+    return !(e && e[0] == '0');
+}
+
+bool policy_is_ssl_or_unscoped(CFDictionaryRef d) {
+    SecPolicyRef pol = (SecPolicyRef)CFDictionaryGetValue(d, kSecTrustSettingsPolicy);
+    if (!pol) return true;
+    bool ssl = false;
+    CFDictionaryRef props = SecPolicyCopyProperties(pol);
+    if (props) {
+        CFTypeRef oid = CFDictionaryGetValue(props, kSecPolicyOid);
+        ssl = oid && CFEqual(oid, kSecPolicyAppleSSL);
+        CFRelease(props);
+    }
+    return ssl;
+}
+
+// 1 = trusted as root, -1 = denied, 0 = no opinion, for one cert in one domain.
+int trust_verdict(SecCertificateRef c, SecTrustSettingsDomain domain) {
+    CFArrayRef settings = nullptr;
+    if (SecTrustSettingsCopyTrustSettings(c, domain, &settings) != errSecSuccess || !settings)
+        return 0;
+    int verdict = 0;
+    if (CFArrayGetCount(settings) == 0) verdict = 1;     // "always trust as root"
+    for (CFIndex i = 0, n = CFArrayGetCount(settings); i < n; i++) {
+        CFDictionaryRef d = (CFDictionaryRef)CFArrayGetValueAtIndex(settings, i);
+        if (!d || CFGetTypeID(d) != CFDictionaryGetTypeID() || !policy_is_ssl_or_unscoped(d)) continue;
+        int32_t r = kSecTrustSettingsResultTrustRoot;     // absent result = TrustRoot
+        CFNumberRef rn = (CFNumberRef)CFDictionaryGetValue(d, kSecTrustSettingsResult);
+        if (rn) CFNumberGetValue(rn, kCFNumberSInt32Type, &r);
+        if (r == kSecTrustSettingsResultDeny) { verdict = -1; break; }
+        if (r == kSecTrustSettingsResultTrustRoot || r == kSecTrustSettingsResultTrustAsRoot)
+            verdict = 1;
+    }
+    CFRelease(settings);
+    return verdict;
+}
+
+std::vector<uint8_t> cert_der(SecCertificateRef c) {
+    std::vector<uint8_t> out;
+    if (CFDataRef d = SecCertificateCopyData(c)) {
+        const uint8_t* b = CFDataGetBytePtr(d);
+        out.assign(b, b + CFDataGetLength(d));
+        CFRelease(d);
+    }
+    return out;
+}
+
+// Certs trusted / denied by the admin and user domains (DER).
+void collect_trust_settings(std::vector<std::vector<uint8_t>>* trusted,
+                            std::vector<std::vector<uint8_t>>* denied) {
+    for (SecTrustSettingsDomain dom : {kSecTrustSettingsDomainAdmin, kSecTrustSettingsDomainUser}) {
+        CFArrayRef certs = nullptr;
+        if (SecTrustSettingsCopyCertificates(dom, &certs) != errSecSuccess || !certs) continue;
+        for (CFIndex i = 0, n = CFArrayGetCount(certs); i < n; i++) {
+            SecCertificateRef c = (SecCertificateRef)CFArrayGetValueAtIndex(certs, i);
+            const int v = trust_verdict(c, dom);
+            if (v == 0) continue;
+            std::vector<uint8_t> der = cert_der(c);
+            if (!der.empty()) (v > 0 ? trusted : denied)->push_back(std::move(der));
+        }
+        CFRelease(certs);
+    }
+}
+
 std::string build_store() {
     const char* home = getenv("HOME");
     if (!home || !*home) return {};
@@ -162,6 +244,20 @@ std::string build_store() {
         CFRelease(d);
     }
     CFRelease(anchors);
+    if (system_trust_enabled()) {
+        std::vector<std::vector<uint8_t>> trusted, denied;
+        collect_trust_settings(&trusted, &denied);
+        std::vector<std::vector<uint8_t>> merged;
+        for (auto* src : {&ders, &trusted}) {
+            for (auto& d : *src) {
+                bool skip = false;
+                for (const auto& x : denied) if (x == d) { skip = true; break; }
+                for (const auto& x : merged) if (!skip && x == d) { skip = true; break; }
+                if (!skip) merged.push_back(std::move(d));
+            }
+        }
+        ders.swap(merged);   // folded into the digest below, so the store refreshes
+    }
     if (ders.empty()) return {};
 
     CC_SHA256_CTX ctx;
@@ -215,4 +311,22 @@ extern "C" const char* __macapk_android_cacerts_dir() {
         dir = build_store();
     });
     return dir.empty() ? nullptr : dir.c_str();
+}
+
+// The admin/user-domain roots (DER), for the JVM's TLS trust (SystemTrust.java
+// reaches this through dlsym). Calls cb once per cert; returns the count, 0
+// when MACAPK_SYSTEM_TRUST=0.
+extern "C" size_t __macapk_user_trust_roots(void (*cb)(const uint8_t*, size_t, void*), void* ctx) {
+    if (!system_trust_enabled()) return 0;
+    std::vector<std::vector<uint8_t>> trusted, denied;
+    collect_trust_settings(&trusted, &denied);
+    size_t n = 0;
+    for (const auto& d : trusted) {
+        bool dup = false;
+        for (const auto& x : denied) if (x == d) { dup = true; break; }
+        if (dup) continue;
+        cb(d.data(), d.size(), ctx);
+        n++;
+    }
+    return n;
 }

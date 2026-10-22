@@ -1278,6 +1278,11 @@ public final class Boot {
             return;
         }
 
+        // macOS admin/user-trusted roots into the JVM's default TLS trust. Must run
+        // before the first TLS use (the JDK reads the trustStore properties once).
+        try { android.security.MacApkSystemTrust.installDefaultTrust(); }
+        catch (Throwable t) { NativeLog.w(TAG, "system trust merge failed: " + t); }
+
         // ---- 1. Parse manifest ----
         Manifest manifest;
         try {
