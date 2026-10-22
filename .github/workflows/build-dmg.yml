@@ -102,3 +102,23 @@ jobs:
           sed -i '' 's/^          //' notes.md
           gh release create "$tag" --prerelease --title "Apk on Mac $tag" --notes-file notes.md \
             build/dist/Apk-on-Mac-*.dmg build/lgpl_src/*
+
+      - name: Update Homebrew cask (only if TAP_GITHUB_TOKEN is set)
+        if: startsWith(github.ref, 'refs/tags/v')
+        env:
+          TAP_TOKEN: ${{ secrets.TAP_GITHUB_TOKEN }}
+        run: |
+          if [ -z "$TAP_TOKEN" ]; then
+            echo "TAP_GITHUB_TOKEN not set; skipping cask update."
+            exit 0
+          fi
+          ver="${GITHUB_REF_NAME#v}"
+          dmg=$(ls build/dist/Apk-on-Mac-*.dmg | head -1)
+          sha=$(shasum -a 256 "$dmg" | awk '{print $1}')
+          git clone "https://x-access-token:${TAP_TOKEN}@github.com/totktonado96/homebrew-tap.git" tap
+          cd tap
+          sed -i '' -E "s/^  version \".*\"/  version \"${ver}\"/; s/^  sha256 \".*\"/  sha256 \"${sha}\"/" Casks/apk-on-mac.rb
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -am "apk-on-mac ${ver}" || { echo "cask already current"; exit 0; }
+          git push origin HEAD:main

@@ -43,6 +43,12 @@ implemented directly on macOS:
 
 ## What's new in Apk on Mac
 
+- **Russian UI:** the launcher follows your macOS language (English or Russian).
+- **Homebrew:** `brew install --cask totktonado96/tap/apk-on-mac`.
+- **Install from URL:** File > Install from URL… (⌘U), or drop a link on the window.
+  Downloads with progress, checks it is an APK or split bundle, then installs it.
+- **Compatibility warning:** x86-only apps are flagged before install, and 32-bit-only
+  apps get a note in the install dialog.
 - **Finder previews (Quick Look):** APK files show the app's own icon, and Space shows a
   card with name, version, SDK, ABIs, permissions and whether it runs on Apple Silicon.
 - **Keyboard:** Russian and other non-Latin layouts work (WASD, Cmd+C/V by physical
@@ -71,6 +77,18 @@ implemented directly on macOS:
 | **macOS** | 26.4 (Tahoe) or newer |
 | **Hardware** | Any Apple Silicon Mac. Intel is not supported. |
 | **Disk** | ~280 MB, plus roughly 1.5–3× each app's APK size |
+
+## Install
+
+With [Homebrew](https://brew.sh):
+
+```
+brew install --cask totktonado96/tap/apk-on-mac
+```
+
+Or download the DMG from the [Releases](https://github.com/totktonado96/apk-on-mac/releases)
+page. The app is ad-hoc signed and not notarized: right-click it and choose Open the
+first time, or run `xattr -dr com.apple.quarantine "/Applications/Apk on Mac.app"`.
 
 ## Building
 
