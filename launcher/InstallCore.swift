@@ -1629,7 +1629,12 @@ public struct Registry: Codable {
         // installing) used to shadow the live install, so the next attempt
         // classified against a row that owns no bundle and installed beside the
         // app with none of its data.
-        let all = records(forPackage: pkg)
+        // Additional instances ("Add another instance") are not what an update
+        // supersedes: an update targets the original app (the row without the
+        // instance marker). Only when nothing but instances remain do they count.
+        let every = records(forPackage: pkg)
+        let originals = every.filter { $0.env[InstallPipeline.instanceEnvKey] == nil }
+        let all = originals.isEmpty ? every : originals
         let live = all.filter { $0.state == AppState.installed || $0.state == "ok" }
         let rs = live.isEmpty ? all : live
         if let best = rs.first, best.versionCode > 0 { return best }
@@ -3406,11 +3411,18 @@ public struct InstallRequest {
     /// false only for --no-ui test mode: skips confirm (and, when it exists,
     /// auth). Nothing in a production path may set this.
     public let interactive: Bool
+    /// "Add another instance": install this APK as an additional, independent
+    /// copy (its own bundle, data folder and registry row) numbered `instance`
+    /// (2, 3, ...), instead of classifying against the installed app. nil =
+    /// an ordinary install.
+    public let instance: Int?
 
-    public init(sourceFile: URL, source: InstallSource, interactive: Bool) {
+    public init(sourceFile: URL, source: InstallSource, interactive: Bool,
+                instance: Int? = nil) {
         self.sourceFile = sourceFile
         self.source = source
         self.interactive = interactive
+        self.instance = instance
     }
 }
 
@@ -3499,14 +3511,16 @@ public final class InstallPipeline {
         /// that type: this file must compile whether or not BundleGenerator.swift
         /// exists yet. Wiring it is three lines at the call site.
         /// (package, label, versionName, versionCode, iconPNG, apkToRetain,
-        ///  dirName) -> bundle URL
+        ///  dirName, instance) -> bundle URL. `instance` is non-nil only for
+        ///  "Add another instance": the generator then matches the bundle by
+        ///  that exact dirName whatever the identity mode.
         ///
         /// dirName is load-bearing, not decoration: under the default
         /// per-version identity the generator keys the bundle by dirName, so
         /// omitting it would collapse every version of a package onto one
         /// bundle -- which is precisely the cross-lane mismatch that moved one
         /// version's saves into another version's bundle.
-        public var generateBundle: ((String, String, String, Int64, URL?, URL, String) throws -> URL)?
+        public var generateBundle: ((String, String, String, Int64, URL?, URL, String, Int?) throws -> URL)?
         /// Remove a generated bundle.
         public var removeBundle: ((URL) throws -> Void)?
         /// Stamp the bundle's REAL identity on after extraction, when the
@@ -3606,6 +3620,11 @@ public final class InstallPipeline {
         var existing = peek.package.flatMap { registry.currentRecord(forPackage: $0) }
         var kind = classify(newCode: peek.versionCode, newName: peek.versionName,
                             against: existing)
+        // An additional instance is a NEW app as far as classification goes: it
+        // neither updates, reinstalls nor downgrades the installed one, and
+        // nothing of the installed row is inherited.
+        let instance = req.instance
+        if instance != nil { existing = nil; kind = .fresh }
         // v1.0.1640: an update that REPLACES the installed app (see
         // updatesInPlace). Refused while that app is running: AOSP kills the
         // replaced package's processes first, and we cannot move a live app's
@@ -3627,7 +3646,7 @@ public final class InstallPipeline {
         }
 
         // ---- confirm ---------------------------------------------------
-        if req.interactive, let ask = hooks.confirm {
+        if req.interactive, instance == nil, let ask = hooks.confirm {
             let prompt = InstallPrompt(
                 kind: kind, source: req.source, sourceFile: req.sourceFile,
                 package: peek.package,
@@ -3684,6 +3703,7 @@ public final class InstallPipeline {
             existing = now
             kind = classify(newCode: peek.versionCode, newName: peek.versionName,
                             against: existing)
+            if instance != nil { existing = nil; kind = .fresh }
             inPlace = updatesInPlace(kind: kind, source: req.source, existing: existing)
         }
         // The stub's pidfile FLOCK is its "running" signal (AppStubMain: "the
@@ -3740,6 +3760,7 @@ public final class InstallPipeline {
         if let pkg = peek.package {
             let provisional = provisionalDirName(package: pkg, versionName: peek.versionName,
                                                  existing: existing)
+                + Self.instanceDirSuffix(instance, versionName: peek.versionName)
             journalledDirName = provisional
             try? store.upsert(AppRecord(
                 package: pkg,
@@ -3785,12 +3806,17 @@ public final class InstallPipeline {
             // tree with the data in it) the existing bundle instead of naming a
             // second one "<Label> (<lastSeg>)"; finalizeBundle stamps the new
             // dirName once extraction has produced it.
-            let dir0 = (inPlace ? existing?.dirName : nil)
-                ?? (ver0.isEmpty ? pkg0 : "\(pkg0)_\(ver0)")
+            let dir0 = ((inPlace ? existing?.dirName : nil)
+                ?? (ver0.isEmpty ? pkg0 : "\(pkg0)_\(ver0)"))
+                + Self.instanceDirSuffix(instance, versionName: ver0)
             do {
-                bundleURL = try gen(pkg0, peek.label ?? pkg0, ver0,
+                // An instance is named "<Label> N" from the start, so its bundle
+                // never competes with the installed one for "<Label>.app".
+                let genLabel = instance.map { "\(peek.label ?? pkg0) \($0)" }
+                    ?? (peek.label ?? pkg0)
+                bundleURL = try gen(pkg0, genLabel, ver0,
                                     peek.versionCode ?? 0, nil,
-                                    req.sourceFile, dir0)
+                                    req.sourceFile, dir0, instance)
                 log("[install] bundle: \(bundleURL!.path)")
                 report("bundle", 0.10)
             } catch {
@@ -3824,7 +3850,9 @@ public final class InstallPipeline {
         // below; a kept snapshot restored into the new data dir first would win
         // every file-by-file conflict (the carry never overwrites) and strand the
         // current saves in the old dir.
-        if !inPlace, let root = extractRoot, let pkg0 = peek.package, !pkg0.isEmpty {
+        // Nor into an additional instance: it starts empty by definition, and a
+        // snapshot kept from an uninstalled copy is that copy's data.
+        if !inPlace, instance == nil, let root = extractRoot, let pkg0 = peek.package, !pkg0.isEmpty {
             _ = KeptData.restore(package: pkg0, versionName: peek.versionName ?? "",
                                  intoAndroidRoot: root, log: hooks.log)
         }
@@ -3915,7 +3943,7 @@ public final class InstallPipeline {
             }
         }
         // ---- extract ----------------------------------------------------
-        let ex = extract(req.sourceFile, into: extractRoot)
+        let ex = extract(req.sourceFile, into: extractRoot, instance: instance)
         guard ex.status == 0 else {
             rollbackInPlace("the extractor exited with status \(ex.status)")
             removeFreshBundleAfterFailedInstall(bundleURL)
@@ -3964,7 +3992,7 @@ public final class InstallPipeline {
         // Re-derive against the REAL package in the degraded (no-peek) case.
         var previous = existing
         var effectiveKind = kind
-        if peek.package == nil {
+        if peek.package == nil && instance == nil {
             registry = (try? store.load()) ?? registry
             previous = registry.records(forPackage: pkg)
                 .first { $0.dirName != found.dirName }
@@ -4109,6 +4137,11 @@ public final class InstallPipeline {
             env: previous?.env ?? [:],
             state: AppState.installing)
 
+        if let n = instance {
+            rec.label = "\(rec.label) \(n)"
+            rec.env[Self.instanceEnvKey] = String(n)
+        }
+
         // Drop the provisional journal row if the real dirName differs from
         // the one we guessed, so a bad guess cannot survive as a ghost.
         if let j = journalledDirName, j != rec.dirName { try? store.remove(dirName: j) }
@@ -4225,6 +4258,18 @@ public final class InstallPipeline {
     }
 
     // MARK: classification
+
+    /// Reserved key in `AppRecord.env` marking a row as an additional instance
+    /// ("2", "3", ...). Stored in env so it round-trips through every registry
+    /// reader and writer without a schema change; the app process ignores it.
+    public static let instanceEnvKey = "MACAPK_INSTANCE"
+
+    /// The dirName suffix the runtime appends for an instance (main.cpp,
+    /// MACAPK_INSTANCE_SUFFIX): "-N", or "_iN" when the version is empty.
+    static func instanceDirSuffix(_ instance: Int?, versionName: String?) -> String {
+        guard let n = instance else { return "" }
+        return (versionName ?? "").isEmpty ? "_i\(n)" : "-\(n)"
+    }
 
     /// Registry setting that turns in-place STORE updates off ("0"), for A/B.
     public static let storeUpdatesInPlaceSettingKey = "storeUpdatesInPlace"
@@ -4394,7 +4439,7 @@ public final class InstallPipeline {
         "natives-translated": 0.78, // install-time icon + .so translation done
     ]
 
-    func extract(_ apk: URL, into root: URL? = nil) -> ExtractResult {
+    func extract(_ apk: URL, into root: URL? = nil, instance: Int? = nil) -> ExtractResult {
         let r = root ?? androidRoot
         var highWater = 0.15        // the "prepared" report that precedes us
         let out = runProcess(runtimePath,
@@ -4404,8 +4449,15 @@ public final class InstallPipeline {
                              // Matches AppStubMain's contract exactly, so an
                              // install and a later launch agree about where the
                              // code cache lives.
-                             env: ["MACAPK_APP_CACHE_DIR":
-                                     r.appendingPathComponent(".macapk/code").path],
+                             env: {
+                                 var e = ["MACAPK_APP_CACHE_DIR":
+                                            r.appendingPathComponent(".macapk/code").path]
+                                 // main.cpp appends "-<N>" to the code/data dir name, so
+                                 // the instance gets its own dirName (registry row,
+                                 // pidfile) beside the installed copy.
+                                 if let n = instance { e["MACAPK_INSTANCE_SUFFIX"] = String(n) }
+                                 return e
+                             }(),
                              onLine: { line in
             guard line.hasPrefix("[macapk] stage ") else { return }
             let name = line.dropFirst("[macapk] stage ".count)

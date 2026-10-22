@@ -43,6 +43,7 @@ implemented directly on macOS:
 
 ## What's new in Apk on Mac
 
+- **Add another instance:** right-click an installed app and choose "Add another instance…" to get a second copy with its own data folder (for a second account). Both can run at once; uninstalling one leaves the other alone.
 - **Updates keep your data:** installing a newer version of an installed app replaces it in place (one app, saves kept), as on Android. Prefer side-by-side versions? Set the bundle identity mode to "version", or run with `MACAPK_UPDATE_IN_PLACE=0`.
 - **Theme and language toggles keep your place:** recreating an activity now keeps its ViewModels (`getLastNonConfigurationInstance`), and a dark/light flip, locale change or window resize across a size bucket relaunches an activity that does not declare it in `configChanges`, as Android does. Off with `MACAPK_RETAIN_NCI=0` / `MACAPK_CONFIG_RELAUNCH=0`.
 - **Notification clicks after quit:** clicking a delivered notification relaunches the app and opens its target.

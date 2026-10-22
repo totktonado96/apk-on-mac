@@ -85,6 +85,12 @@
 "Install of %ld apps cancelled." = "Установка приложений (%ld) отменена.";
 "Update \"%@\"?" = "Обновить «%@»?";
 "Your saved data is carried forward." = "Ваши сохранённые данные будут перенесены.";
+"It replaces the installed app in place, and your saved data is kept." = "Она заменит установленное приложение на месте, а ваши сохранённые данные останутся.";
+"Add another instance…" = "Добавить ещё один экземпляр…";
+"No APK on disk for %@ -- install it from a file again." = "Для «%@» нет APK на диске — установите его из файла заново.";
+"Adding another instance of %@…" = "Добавляется ещё один экземпляр «%@»…";
+"Added %@. Select it below to launch." = "Добавлено: %@. Выберите его ниже, чтобы запустить.";
+"Couldn't add another instance of %@: " = "Не удалось добавить ещё один экземпляр «%@»: ";
 "It installs alongside the current version as a separate app. The current version and its data stay untouched." = "Она будет установлена рядом с текущей как отдельное приложение. Текущая версия и её данные не изменятся.";
 "This is newer than the installed version (%@ -> %@)." = "Это более новая версия, чем установленная (%@ -> %@).";
 "Install an OLDER version of \"%@\"?" = "Установить БОЛЕЕ СТАРУЮ версию «%@»?";

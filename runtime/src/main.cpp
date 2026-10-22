@@ -2880,8 +2880,24 @@ int main(int argc, char** argv) {
         // COEXIST -- nothing here ever merges or renames another
         // version's dirs. Boot.java derives the data dir lexically from
         // basename(appDir), so handing it the code dir yields data_dir.
-        const std::string dir_name = ver.empty() ? mfst_pkg
-                                                 : mfst_pkg + "_" + ver;
+        std::string dir_name = ver.empty() ? mfst_pkg
+                                           : mfst_pkg + "_" + ver;
+        // "Add another instance" (launcher): a second bundle of the same
+        // package and version needs its own registry identity, which IS this
+        // name (code dir, data dir, pidfile and registry row all derive from
+        // it). The launcher sets MACAPK_INSTANCE_SUFFIX=<N> for that install
+        // only; the name stays "<pkg>_<ver>-<N>", which every later lookup
+        // (cache hit: "<pkg>" followed by '_', Boot.java: basename of the code
+        // dir) accepts unchanged. With no version the '_' is supplied so the
+        // cache-hit consistency check still sees "<pkg>_".
+        if (const char* inst = std::getenv("MACAPK_INSTANCE_SUFFIX");
+            inst && *inst) {
+            std::string n;
+            for (const char* q = inst; *q; ++q)
+                if (*q >= '0' && *q <= '9') n.push_back(*q);
+            if (!n.empty())
+                dir_name += (ver.empty() ? "_i" : "-") + n;
+        }
         const fs::path code_dir = code_root / dir_name;
         const fs::path data_dir = data_root / dir_name;
 

@@ -69,6 +69,10 @@ struct BundleSpec {
     let versionCode: Int64
     let iconPNG: URL?
     let apkToRetain: URL
+    /// "Add another instance" number (2, 3, ...); nil for an ordinary app.
+    /// Stamped as MacapkInstance so a package-keyed match (.package mode) never
+    /// adopts an instance bundle as the original.
+    var instance: Int? = nil
 }
 
 enum BundleGeneratorError: LocalizedError {
@@ -107,20 +111,24 @@ enum BundleGenerator {
     /// dirName, not package -- packages are ambiguous, e.g. three hillclimb
     /// rows on the live machine). nil produces a bundle that launches fine
     /// but never records a launch.
-    static func generate(_ spec: BundleSpec, dirName: String? = nil) throws -> URL {
+    static func generate(_ spec: BundleSpec, dirName: String? = nil,
+                         instance: Int? = nil) throws -> URL {
         let fm = FileManager.default
+        var spec = spec
+        if let n = instance { spec.instance = n }
         guard fm.fileExists(atPath: spec.apkToRetain.path) else {
             throw BundleGeneratorError.apkMissing(spec.apkToRetain.path)
         }
         let template = try stubTemplateURL()
 
-        let bundlesDir = homeFolder(for: spec, dirName: dirName)
+        let bundlesDir = homeFolder(for: spec, dirName: dirName, exact: instance != nil)
         var isDir: ObjCBool = false
         if !(fm.fileExists(atPath: bundlesDir.path, isDirectory: &isDir) && isDir.boolValue) {
             throw BundleGeneratorError.bundlesDirUnavailable(bundlesDir.path)
         }
 
-        let name = try resolveBundleName(for: spec, dirName: dirName, in: bundlesDir)
+        let name = try resolveBundleName(for: spec, dirName: dirName, in: bundlesDir,
+                                         exact: instance != nil)
         let finalURL = bundlesDir.appendingPathComponent("\(name).app", isDirectory: true)
         recoverInterruptedSwap(name: name, finalURL: finalURL, in: bundlesDir)
         genLog("bundle folder: \(bundlesDir.path)")
@@ -353,12 +361,14 @@ enum BundleGenerator {
         let plistURL = contents.appendingPathComponent("Info.plist")
         var vc: Int64 = 0
         var keptDir = dirName
+        var keptInstance: Int? = nil
         var currentId: String? = nil
         if let d = try? Data(contentsOf: plistURL),
            let pl = (try? PropertyListSerialization.propertyList(from: d, format: nil))
                      as? [String: Any] {
             vc = Int64((pl["MacapkVersionCode"] as? String) ?? "0") ?? 0
             if keptDir == nil { keptDir = pl["MacapkDirName"] as? String }
+            keptInstance = (pl["MacapkInstance"] as? String).flatMap { Int($0) }
             currentId = pl["CFBundleIdentifier"] as? String
         }
         // v1.0.1641: an in-place update keeps the bundle's identifier. It is
@@ -368,7 +378,8 @@ enum BundleGenerator {
         // it -- a new id on every update would orphan all of that.
         let xml = infoPlistXML(
             spec: BundleSpec(package: package, label: raw, versionName: versionName,
-                             versionCode: vc, iconPNG: nil, apkToRetain: current),
+                             versionCode: vc, iconPNG: nil, apkToRetain: current,
+                             instance: keptInstance),
             executableName: exeName, dirName: keptDir,
             // generate() already chose a UNIQUE id (uniqueBundleIdentifier);
             // recomputing it from the dirName here could collide again.
@@ -650,12 +661,12 @@ enum BundleGenerator {
     /// This is the single place that ties the two together -- keep it here,
     /// so there is exactly one call site to audit when the shape changes.
     static func install(into hooks: inout InstallPipeline.Hooks) {
-        hooks.generateBundle = { pkg, label, versionName, versionCode, icon, apk, dirName in
+        hooks.generateBundle = { pkg, label, versionName, versionCode, icon, apk, dirName, instance in
             try generate(BundleSpec(package: pkg, label: label,
                                     versionName: versionName,
                                     versionCode: versionCode,
                                     iconPNG: icon, apkToRetain: apk),
-                         dirName: dirName)
+                         dirName: dirName, instance: instance)
         }
         hooks.removeBundle = { url in try remove(bundleAt: url) }
         hooks.finalizeBundle = { bundle, label, icon, versionName, package, dirName, keepId in
@@ -721,8 +732,12 @@ enum BundleGenerator {
     /// failure -- so the new one goes to the writable folder and the log says
     /// two copies now exist.
     /// internal so debug/bundlesdir_gate.sh can drive it.
-    static func homeFolder(for spec: BundleSpec, dirName: String?) -> URL {
-        let wantDir = (identityMode() == .version) ? dirName : nil
+    static func homeFolder(for spec: BundleSpec, dirName: String?,
+                           exact: Bool = false) -> URL {
+        // `exact` = "Add another instance": its dirName is unique to it, so match
+        // by that whatever the identity mode; by package (.package mode) it would
+        // find the ORIGINAL bundle and regenerate over it.
+        let wantDir = (exact || identityMode() == .version) ? dirName : nil
         var lockedOut: URL?
         for d in Paths.bundleDirs {
             guard let n = existingBundleName(matching: spec.package, dirName: wantDir, in: d)
@@ -741,11 +756,11 @@ enum BundleGenerator {
     // internal (not private) so debug/bundlename_gate.sh can drive it against
     // a temp directory; nothing outside this file calls it.
     static func resolveBundleName(for spec: BundleSpec, dirName: String?,
-                                  in bundlesDir: URL) throws -> String {
+                                  in bundlesDir: URL, exact: Bool = false) throws -> String {
         // Identity: the dirName when one is available and we are in
         // per-version mode, else the package.
         let mode = identityMode()
-        let wantDir = (mode == .version) ? dirName : nil
+        let wantDir = (exact || mode == .version) ? dirName : nil
         if let existing = existingBundleName(matching: spec.package, dirName: wantDir,
                                              in: bundlesDir) {
             return existing
@@ -816,6 +831,9 @@ enum BundleGenerator {
             return orphanMatches(url, package: package, dirName: dirName)
         }
         guard (plist["MacapkPackage"] as? String) == package else { return false }
+        // A package-keyed match (.package mode, dirName nil) is for the ORIGINAL
+        // app; an additional instance has its own identity and is never it.
+        if dirName == nil, plist["MacapkInstance"] != nil { return false }
         guard let want = dirName else { return true }
         // A bundle generated before MacapkDirName existed carries no such key.
         // Treat it as the package's bundle so it is adopted and upgraded in
@@ -1005,9 +1023,11 @@ enum BundleGenerator {
              .replacingOccurrences(of: ">", with: "&gt;")
              .replacingOccurrences(of: "\"", with: "&quot;")
         }
-        let dirNameEntry = dirName.map {
+        let dirNameEntry = (dirName.map {
             "\n  <key>MacapkDirName</key><string>\(e($0))</string>"
-        } ?? ""
+        } ?? "") + (spec.instance.map {
+            "\n  <key>MacapkInstance</key><string>\($0)</string>"
+        } ?? "")
         return """
         <?xml version="1.0" encoding="UTF-8"?>
         <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">

@@ -3462,7 +3462,7 @@ struct LauncherView: View {
                     let carry = InstallPipeline.identityReplacesInPlace(
                             mode: RegistryStore.shared.setting(BundleGenerator.identityModeSettingKey))
                         && RegistryStore.shared.setting(InstallPipeline.storeUpdatesInPlaceSettingKey) != "0"
-                        ? L("Your saved data is carried forward.")
+                        ? L("It replaces the installed app in place, and your saved data is kept.")
                         : L("It installs alongside the current version as a separate app. The current version and its data stay untouched.")
                     alert.informativeText = peek.detailLine + "\n\n"
                         + L("This is newer than the installed version (%@ -> %@).", "\(old)", "\(new)")
@@ -4879,11 +4879,14 @@ struct ExtractOutcome {
     /// what it just installed gets nothing. The generator already knows this
     /// path, so carry it.
     var bundlePath: String? = nil
+    /// A failure the install pipeline already put into words (its stage message).
+    var pipelineFailure: String? = nil
 
     var succeeded: Bool { entry != nil && exitStatus == 0 && launchError == nil }
 
     /// One line, user-facing, naming what actually went wrong.
     var failureReason: String {
+        if let m = pipelineFailure { return m }
         if let e = launchError { return "couldn't start the installer (\(e))" }
         let detail = ExtractOutcome.diagnosticLine(from: output)
         if exitStatus != 0 {
@@ -5590,6 +5593,24 @@ final class InstalledLibrary: ObservableObject {
                     // extraction, and the peek reads only the binary
                     // manifest.
                     let peek = ApkPeek.detailed(apk, runtimePath: runtimePath)
+                    // An UPDATE of an installed app replaces it in place and keeps
+                    // its data, as Android does: that machinery (backup, data
+                    // carry-forward, rollback) lives in InstallPipeline, so hand
+                    // the APK to it. nil = not an in-place update; the code below
+                    // installs it as before. MACAPK_UPDATE_IN_PLACE=0 or the
+                    // "version" identity mode never delegate.
+                    if let delegated = Self.updateInPlaceViaPipeline(
+                            apk: apk, peek: peek, runtimePath: runtimePath,
+                            androidRoot: androidRoot, source: source) {
+                        outcomes.add(delegated)
+                        Task { @MainActor in
+                            if let e = delegated.entry { self.upsert(e) }
+                            if var pr = self.installProgress {
+                                pr.completed += 1; pr.current = ""; self.installProgress = pr
+                            }
+                        }
+                        return
+                    }
                     var appRoot = androidRoot           // fallback: shared root
                     var appCache = cacheDir
                     var madeBundle: URL?
@@ -5795,6 +5816,97 @@ final class InstalledLibrary: ObservableObject {
                     self.installProgress = nil
                     completion?(outcomes.all())
                 }
+            }
+        }
+    }
+
+    // MARK: pipeline-backed installs (in-place update, additional instance)
+
+    nonisolated private static func makePipeline(
+            runtimePath: String, androidRoot: String, source: String
+    ) -> (InstallPipeline, InstallSource) {
+        var hooks = InstallPipeline.Hooks()
+        hooks.log = { installLog($0) }
+        BundleGenerator.install(into: &hooks)
+        let src: InstallSource = source == "finder" ? .finder
+            : (source.hasPrefix("android")
+               ? .android(requestorLabel: String(source.dropFirst("android:".count)))
+               : .gui)
+        return (InstallPipeline(runtimePath: runtimePath,
+                                androidRoot: URL(fileURLWithPath: androidRoot),
+                                hooks: hooks), src)
+    }
+
+    nonisolated private static func runPipeline(
+            _ pipeline: InstallPipeline, source: InstallSource, apk: URL,
+            instance: Int?) -> ExtractOutcome {
+        let out = pipeline.run(InstallRequest(sourceFile: apk, source: source,
+                                              interactive: false, instance: instance))
+        if case .success = out.status,
+           let reg = try? RegistryStore.shared.loadReadOnly() {
+            let rec = reg.apps.first(where: {
+                            out.bundlePath != nil && $0.bundlePath == out.bundlePath })
+                ?? out.package.flatMap { reg.currentRecord(forPackage: $0) }
+            if let rec {
+                return ExtractOutcome(apk: apk, entry: InstalledApp(record: rec),
+                                      exitStatus: 0, output: "", launchError: nil,
+                                      bundlePath: out.bundlePath)
+            }
+        }
+        var why = "the install did not complete"
+        if case .failed(let stage, let message) = out.status { why = "\(stage): \(message)" }
+        var o = ExtractOutcome(apk: apk, entry: nil, exitStatus: 1, output: why,
+                               launchError: nil)
+        o.pipelineFailure = why
+        return o
+    }
+
+    /// Non-nil when `apk` is an update of an installed app that should replace
+    /// it in place (see InstallPipeline.updatesInPlace); the outcome is the
+    /// pipeline's. nil leaves the install to the caller's own path.
+    nonisolated private static func updateInPlaceViaPipeline(
+            apk: URL, peek: ApkPeek, runtimePath: String, androidRoot: String,
+            source: String) -> ExtractOutcome? {
+        guard let pkg = peek.package, !pkg.isEmpty else { return nil }
+        let store = RegistryStore.shared
+        guard InstallPipeline.identityReplacesInPlace(
+                mode: store.setting(BundleGenerator.identityModeSettingKey)),
+              let reg = try? store.loadReadOnly(),
+              let existing = reg.currentRecord(forPackage: pkg) else { return nil }
+        let (pipeline, src) = makePipeline(runtimePath: runtimePath,
+                                           androidRoot: androidRoot, source: source)
+        let kind = pipeline.classify(newCode: peek.versionCode, newName: peek.versionName,
+                                     against: existing)
+        guard kind == .update,
+              pipeline.updatesInPlace(kind: kind, source: src, existing: existing)
+        else { return nil }
+        installLog("\(apk.lastPathComponent): update of \(existing.dirName) replaces it in place")
+        return runPipeline(pipeline, source: src, apk: apk, instance: nil)
+    }
+
+    /// The next free instance number (2, 3, ...) for `package`.
+    func nextInstanceNumber(forPackage package: String) -> Int {
+        let used = Set(apps.filter { $0.package == package }
+            .compactMap { $0.env[InstallPipeline.instanceEnvKey] }
+            .compactMap { Int($0) })
+        var n = 2
+        while used.contains(n) { n += 1 }
+        return n
+    }
+
+    /// "Add another instance...": install `apk` (an installed copy of the app)
+    /// again as an independent app -- its own bundle ("<Label> N"), data folder,
+    /// bundle id and registry row -- so a second account can run beside the first.
+    func addInstance(apk: URL, instance: Int, runtimePath: String, androidRoot: String,
+                     completion: @escaping (ExtractOutcome) -> Void) {
+        installLog("add instance \(instance): \(apk.path)")
+        DispatchQueue.global(qos: .userInitiated).async {
+            let (pipeline, src) = Self.makePipeline(runtimePath: runtimePath,
+                                                    androidRoot: androidRoot, source: "gui")
+            let outcome = Self.runPipeline(pipeline, source: src, apk: apk, instance: instance)
+            Task { @MainActor in
+                if let e = outcome.entry { self.upsert(e) }
+                completion(outcome)
             }
         }
     }
@@ -6458,6 +6570,12 @@ struct InstalledAppsView: View {
                 }
                 .disabled(library.health(for: app).apkMissing)
             }
+            if app.state != AppState.removed {
+                // A second copy of the same app with its own data folder (a second
+                // account). Needs the installed APK to install from.
+                Button("Add another instance…") { addInstance(app) }
+                    .disabled(app.resolvedApkPath == nil)
+            }
             Button("Reveal install dir in Finder") {
                 NSWorkspace.shared.activateFileViewerSelecting(
                     [library.dataDir(for: app).resolvingSymlinksInPath()])
@@ -6536,6 +6654,36 @@ struct InstalledAppsView: View {
         }
         onInstall(LauncherInstallRequest(sourceFiles: [URL(fileURLWithPath: apk)],
                                          source: .gui, interactive: true))
+    }
+
+    /// "Add another instance...": see InstalledLibrary.addInstance.
+    private func addInstance(_ app: InstalledApp) {
+        guard let apk = app.resolvedApkPath, FileManager.default.fileExists(atPath: apk)
+        else {
+            model.status = L("No APK on disk for %@ -- install it from a file again.", app.label)
+            model.statusKind = .error
+            return
+        }
+        guard let runtime = model.runtimePath() else {
+            model.status = L("macapk-runtime not found. Build it with runtime/scripts/build.sh.")
+            model.statusKind = .error
+            return
+        }
+        let n = library.nextInstanceNumber(forPackage: app.package)
+        model.status = L("Adding another instance of %@…", app.label)
+        model.statusKind = .info
+        library.addInstance(apk: URL(fileURLWithPath: apk), instance: n,
+                            runtimePath: runtime,
+                            androidRoot: model.androidRootURL().path) { outcome in
+            if let e = outcome.entry {
+                model.status = L("Added %@. Select it below to launch.", e.label)
+                model.statusKind = .success
+            } else {
+                model.status = L("Couldn't add another instance of %@: ", app.label)
+                    + outcome.failureReason
+                model.statusKind = .error
+            }
+        }
     }
 
     /// Warning glyph on a tile whose registry row does not match the disk.
