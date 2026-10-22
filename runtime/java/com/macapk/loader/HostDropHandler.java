@@ -3,6 +3,7 @@ package com.macapk.loader;
 import android.app.Activity;
 import android.content.ClipData;
 import android.content.Intent;
+import android.content.MacApkUriGrants;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
 
