@@ -35,4 +35,6 @@ jobs:
           git commit -m "Update .upstream-sync" .upstream-sync || true
           git push origin "HEAD:refs/heads/$branch"
           gh pr create --base main --head "$branch" \
-            --title "Port upstream commits ($out)" --body-file "$PORT_BODY"
+            --title "Port upstream commits ($out)" --body-file "$PORT_BODY" || {
+            echo "::warning::Could not open a PR (enable Settings > Actions > Allow GitHub Actions to create pull requests). Branch pushed: $branch"
+            echo "https://github.com/${GITHUB_REPOSITORY}/compare/main...${branch//\//%2F}?expand=1"; }
