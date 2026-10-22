@@ -31,7 +31,7 @@ enum CompatCheck {
         if files.count == 1, only32.count == 1 {
             r.notes.append(L("Note: this app only has 32-bit code. It runs, but is recompiled on first launch."))
         } else if !only32.isEmpty {
-            r.notes.append(L("Note: %d of these apps only have 32-bit code. They run, but are recompiled on first launch.", only32.count))
+            r.notes.append(L("Note: %ld of these apps only have 32-bit code. They run, but are recompiled on first launch.", only32.count))
         }
         return r
     }
@@ -46,7 +46,7 @@ enum CompatCheck {
             alert.informativeText = L("%@ contains only x86 code and won't run on Apple Silicon. Install anyway?", names[0])
         } else {
             alert.messageText = L("Some apps won't run on this Mac")
-            alert.informativeText = L("%d of these apps contain only x86 code and won't run on Apple Silicon:\n\n%@\n\nInstall anyway?",
+            alert.informativeText = L("%ld of these apps contain only x86 code and won't run on Apple Silicon:\n\n%@\n\nInstall anyway?",
                                       names.count, names.prefix(8).map { "  • " + $0 }.joined(separator: "\n"))
         }
         alert.addButton(withTitle: L("Cancel"))
@@ -174,7 +174,7 @@ final class UrlInstall: NSObject, URLSessionDownloadDelegate {
     func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask,
                     didFinishDownloadingTo location: URL) {
         if let http = downloadTask.response as? HTTPURLResponse, !(200..<300).contains(http.statusCode) {
-            finish(.failure(UrlInstallError(message: L("The server answered with HTTP %d.", http.statusCode))))
+            finish(.failure(UrlInstallError(message: L("The server answered with HTTP %ld.", http.statusCode))))
             return
         }
         let fm = FileManager.default

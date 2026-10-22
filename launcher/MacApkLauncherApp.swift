@@ -2468,16 +2468,12 @@ struct LauncherView: View {
         let live = RuntimeInstall.runningGuests()
         if !live.isEmpty {
             let a = NSAlert()
-            a.messageText = "Quit your Android apps first"
-            a.informativeText = """
-            \(live.count == 1 ? "An Android app is" : "\(live.count) Android apps are") \
-            still running (\(live.joined(separator: ", "))). Removing the runtime \
-            underneath a running app would crash it.
-
-            Quit \(live.count == 1 ? "it" : "them") and try again.
-            """
+            a.messageText = L("Quit your Android apps first")
+            a.informativeText = live.count == 1
+                ? L("An Android app is still running (%@). Removing the runtime underneath a running app would crash it.\n\nQuit it and try again.", live.joined(separator: ", "))
+                : L("%ld Android apps are still running (%@). Removing the runtime underneath a running app would crash it.\n\nQuit them and try again.", live.count, live.joined(separator: ", "))
             a.alertStyle = .warning
-            a.addButton(withTitle: "OK")
+            a.addButton(withTitle: L("OK"))
             a.runModal()
             return
         }
@@ -2486,36 +2482,32 @@ struct LauncherView: View {
         let sizeStr = ByteCountFormatter.string(fromByteCount: appBytes, countStyle: .file)
 
         let alert = NSAlert()
-        alert.messageText = "Uninstall the Apk on Mac runtime?"
+        alert.messageText = L("Uninstall the Apk on Mac runtime?")
         // The reassurance IS the point of separating the two actions. A bare
         // "your apps will be inoperable" reads like they are being broken
         // permanently, which is exactly what this design avoids.
-        alert.informativeText = """
-        Uninstalling the runtime will make your Android apps inoperable.
-        They stay installed, and will work again when you reinstall the runtime.
-        """
+        alert.informativeText = L("Uninstalling the runtime will make your Android apps inoperable.\nThey stay installed, and will work again when you reinstall the runtime.")
         alert.alertStyle = .warning
 
-        let plainTitle = "Uninstall Runtime"
+        let plainTitle = L("Uninstall Runtime")
         let destructiveTitle = appCount == 1
-            ? "Uninstall Runtime and Remove 1 App"
-            : "Uninstall Runtime and Remove \(appCount) Apps"
+            ? L("Uninstall Runtime and Remove 1 App")
+            : L("Uninstall Runtime and Remove %ld Apps", appCount)
 
         // Manual frames, not Auto Layout: NSAlert sizes an accessory view from
         // its frame, and a stack view that computes its own fitting size gets
         // clipped to zero height here often enough to not be worth the risk.
         let width: CGFloat = 380
         let detail = NSTextField(wrappingLabelWithString: appCount == 0
-            ? "You have no Android apps installed, so this removes nothing extra."
-            : "This permanently removes all \(appCount) app\(appCount == 1 ? "" : "s") "
-            + "and their data (\(sizeStr)). This cannot be undone.")
+            ? L("You have no Android apps installed, so this removes nothing extra.")
+            : L("This permanently removes all %ld apps and their data (%@). This cannot be undone.", appCount, sizeStr))
         detail.translatesAutoresizingMaskIntoConstraints = true
         detail.font = .systemFont(ofSize: NSFont.smallSystemFontSize)
         detail.textColor = .secondaryLabelColor
         detail.preferredMaxLayoutWidth = width - 20
         detail.frame = NSRect(x: 20, y: 0, width: width - 20, height: 32)
 
-        let check = NSButton(checkboxWithTitle: "Also remove all Android apps",
+        let check = NSButton(checkboxWithTitle: L("Also remove all Android apps"),
                              target: nil, action: nil)
         check.state = .off                   // never remembered, never pre-ticked
         check.isEnabled = appCount > 0
@@ -2527,7 +2519,7 @@ struct LauncherView: View {
         alert.accessoryView = container
 
         alert.addButton(withTitle: plainTitle)   // buttons[0] = default
-        alert.addButton(withTitle: "Cancel")
+        alert.addButton(withTitle: L("Cancel"))
         alert.buttons[0].hasDestructiveAction = true
 
         let retitler = PrimaryButtonRetitler(primary: alert.buttons[0],
@@ -2740,8 +2732,7 @@ struct LauncherView: View {
                             .foregroundColor(defaultHandlerFeedbackOK ? Color.green : Color.orange)
                             .fixedSize(horizontal: false, vertical: true)
                     }
-                    Text("Covers .apk, .apkm, .xapk, .apks and .apkx. "
-                         + "Double-clicking one in Finder installs it.")
+                    Text(L("Covers .apk, .apkm, .xapk, .apks and .apkx. Double-clicking one in Finder installs it."))
                         .font(.caption)
                         .foregroundColor(.secondary)
                 }
@@ -2751,9 +2742,7 @@ struct LauncherView: View {
                         Spacer()
                         Button("Reveal logs folder") { revealLogsFolder() }
                     }
-                    Text("install.log records every install attempt, including "
-                       + "the installer's own output when one fails. Send this "
-                       + "folder when reporting a problem.")
+                    Text(L("install.log records every install attempt, including the installer's own output when one fails. Send this folder when reporting a problem."))
                         .font(.caption)
                         .foregroundColor(.secondary)
                 }
@@ -2766,9 +2755,7 @@ struct LauncherView: View {
                         Spacer()
                         Button("Open App Data Folder") { openAppDataFolder() }
                     }
-                    Text("Each installed app keeps its data in its own folder here, "
-                       + "named after its package. Deleting an app's folder clears "
-                       + "its data, and the app starts fresh the next time it opens.")
+                    Text(L("Each installed app keeps its data in its own folder here, named after its package. Deleting an app's folder clears its data, and the app starts fresh the next time it opens."))
                         .font(.caption)
                         .foregroundColor(.secondary)
                     // Owner, 2026-10-20: Android's Download, Documents, Pictures,
@@ -2778,9 +2765,7 @@ struct LauncherView: View {
                     // environment from here (SharedStorage.userFoldersOffFile).
                     Toggle("Use my Mac's Downloads, Documents, Pictures, Movies and Music",
                            isOn: macFoldersBinding)
-                    Text("Android apps see these as their own Download, Documents, Pictures, "
-                       + "Movies and Music folders. Turning this off takes effect the next "
-                       + "time each app opens; your files stay in your Mac folders.")
+                    Text(L("Android apps see these as their own Download, Documents, Pictures, Movies and Music folders. Turning this off takes effect the next time each app opens; your files stay in your Mac folders."))
                         .font(.caption)
                         .foregroundColor(.secondary)
                 }
@@ -3333,7 +3318,7 @@ struct LauncherView: View {
     /// Validate, optionally confirm, then extract-and-register.
     private func runInstall(_ request: LauncherInstallRequest) {
         guard let runtime = model.runtimePath() else {
-            model.status = "macapk-runtime not found. Build it with runtime/scripts/build.sh."
+            model.status = L("macapk-runtime not found. Build it with runtime/scripts/build.sh.")
             model.statusKind = .error
             return
         }
@@ -3358,11 +3343,10 @@ struct LauncherView: View {
             // fall through to the original message in that case. So "I removed
             // it on purpose" and "it was never staged" stay distinguishable,
             // which is the whole reason that marker exists.
-            model.status = "Preparing the Apk on Mac runtime..."
+            model.status = L("Preparing the Apk on Mac runtime...")
             model.statusKind = .info
             if RuntimeInstall.ensureStaged(log: { model.appendLog($0) }) == nil {
-                model.status = "The Apk on Mac runtime is not installed, so apps cannot be "
-                    + "installed or launched. Choose Runtime: Install (top left) first."
+                model.status = L("The Apk on Mac runtime is not installed, so apps cannot be installed or launched. Choose Runtime: Install (top left) first.")
                 model.statusKind = .error
                 return
             }
@@ -3371,8 +3355,7 @@ struct LauncherView: View {
             kSupportedApkExtensions.contains($0.pathExtension.lowercased())
         }
         guard !files.isEmpty else {
-            model.status = "Nothing installable in that selection. "
-                + "Apk on Mac takes .apk, .apkm, .xapk, .apks, and .apkx."
+            model.status = L("Nothing installable in that selection. Apk on Mac takes .apk, .apkm, .xapk, .apks, and .apkx.")
             model.statusKind = .error
             return
         }
@@ -3401,7 +3384,7 @@ struct LauncherView: View {
         // is waiting to see what they double-clicked.
         model.status = files.count == 1
             ? L("Reading %@…", files[0].lastPathComponent)
-            : L("Reading %d packages…", files.count)
+            : L("Reading %ld packages…", files.count)
         model.statusKind = .info
         DispatchQueue.global(qos: .userInitiated).async {
             let peeks = files.map { ApkPeek.detailed($0, runtimePath: runtime) }
@@ -3417,7 +3400,7 @@ struct LauncherView: View {
                                      compatNotes: compat.notes) else {
                     model.status = files.count == 1
                         ? L("Install cancelled.")
-                        : L("Install of %d apps cancelled.", files.count)
+                        : L("Install of %ld apps cancelled.", files.count)
                     model.statusKind = .info
                     return
                 }
@@ -3496,13 +3479,13 @@ struct LauncherView: View {
                     + L("Apk on Mac will unpack this app into your app library so you can launch it from here. It runs inside the Apk on Mac Android runtime and does not modify system files.")
             }
         } else {
-            alert.messageText = L("Install %d apps?", peeks.count)
+            alert.messageText = L("Install %ld apps?", peeks.count)
             // Cap the list: an "Open With" on a whole folder can be dozens
             // of files, and an alert that tall is unusable.
             let shown = peeks.prefix(8).map { "  • \($0.displayName)" }
             let rest = peeks.count - shown.count
             alert.informativeText = shown.joined(separator: "\n")
-                + (rest > 0 ? "\n  " + L("… and %d more", rest) : "")
+                + (rest > 0 ? "\n  " + L("… and %ld more", rest) : "")
                 + "\n\n" + L("Each is unpacked into your app library. Apps already installed are re-unpacked and keep their saved data.")
         }
 
@@ -3523,8 +3506,8 @@ struct LauncherView: View {
                               source: LauncherInstallSource,
                               runtime: String) {
         model.status = files.count == 1
-            ? "Installing \(files[0].lastPathComponent)…"
-            : "Installing \(files.count) apps…"
+            ? L("Installing %@…", files[0].lastPathComponent)
+            : L("Installing %ld apps…", files.count)
         model.statusKind = .info
         library.install(apks: files,
                         runtimePath: runtime,
@@ -3538,7 +3521,7 @@ struct LauncherView: View {
             // which is exactly the failure case -- a corrupt or unsupported
             // APK reported itself as a successful install.
             guard !outcomes.isEmpty else {
-                model.status = "That install produced no result."
+                model.status = L("That install produced no result.")
                 model.statusKind = .error
                 return
             }
@@ -3554,20 +3537,19 @@ struct LauncherView: View {
             let okCount = outcomes.count - failed.count
             if failed.isEmpty {
                 if outcomes.count == 1, let app = outcomes[0].entry {
-                    model.status = "Installed \(app.label). Select it below to launch."
+                    model.status = L("Installed %@. Select it below to launch.", app.label)
                 } else {
-                    model.status = "Installed \(okCount) app\(okCount == 1 ? "" : "s")."
+                    model.status = okCount == 1 ? L("Installed 1 app.") : L("Installed %ld apps.", okCount)
                 }
                 model.statusKind = .success
             } else if let first = failed.first {
                 // Name the first failure so there is something to act on;
                 // the rest, with their full output tails, are in the system
                 // log via NSLog from InstalledLibrary.install.
-                let more = failed.count > 1 ? " (+\(failed.count - 1) more)" : ""
+                let more = failed.count > 1 ? " " + L("(+%ld more)", failed.count - 1) : ""
                 let prefix = outcomes.count == 1
-                    ? "Couldn't install \(first.apk.lastPathComponent): "
-                    : "Installed \(okCount) of \(outcomes.count). "
-                        + "\(first.apk.lastPathComponent) failed: "
+                    ? L("Couldn't install %@: ", first.apk.lastPathComponent)
+                    : L("Installed %ld of %ld. %@ failed: ", okCount, outcomes.count, first.apk.lastPathComponent)
                 model.status = prefix + first.failureReason + more
                 model.statusKind = .error
             }
@@ -3630,7 +3612,7 @@ struct LauncherView: View {
     /// rather than only this menu item.
     private func updateFromApk(_ app: InstalledApp) {
         guard let runtime = model.runtimePath() else {
-            model.status = "macapk-runtime not found. Build it with runtime/scripts/build.sh."
+            model.status = L("macapk-runtime not found. Build it with runtime/scripts/build.sh.")
             model.statusKind = .error
             return
         }
@@ -3653,17 +3635,11 @@ struct LauncherView: View {
             DispatchQueue.main.async {
                 if let pkg = peek.package, pkg != app.package {
                     let alert = NSAlert()
-                    alert.messageText = "That APK is a different app"
-                    alert.informativeText = """
-                    \(url.lastPathComponent) contains \(pkg), not \
-                    \(app.package).
-
-                    Nothing was changed. Pick an APK for \(app.label), or \
-                    install this one on its own by dropping it on the window.
-                    """
+                    alert.messageText = L("That APK is a different app")
+                    alert.informativeText = L("%@ contains %@, not %@.\n\nNothing was changed. Pick an APK for %@, or install this one on its own by dropping it on the window.", url.lastPathComponent, pkg, app.package, app.label)
                     alert.alertStyle = .warning
                     alert.runModal()
-                    model.status = "Update cancelled: wrong package."
+                    model.status = L("Update cancelled: wrong package.")
                     model.statusKind = .error
                     return
                 }
@@ -3691,14 +3667,10 @@ struct LauncherView: View {
         guard let apkPath = app.apkPath,
               FileManager.default.fileExists(atPath: apkPath) else {
             let alert = NSAlert()
-            alert.messageText = "Can't reset \(app.label)"
-            alert.informativeText = """
-            Resetting re-unpacks the app from its APK, and that file is no \
-            longer at its recorded location\
-            \(app.apkPath.map { ":\n\n\($0)" } ?? ".")
-
-            Nothing was changed. Drop the APK on the window to reinstall it.
-            """
+            alert.messageText = L("Can't reset %@", app.label)
+            alert.informativeText = L("Resetting re-unpacks the app from its APK, and that file is no longer at its recorded location")
+                + (app.apkPath.map { ":\n\n\($0)" } ?? ".")
+                + "\n\n" + L("Nothing was changed. Drop the APK on the window to reinstall it.")
             alert.alertStyle = .warning
             alert.runModal()
             return
@@ -3707,21 +3679,14 @@ struct LauncherView: View {
 
         let size = library.dataDirSizeBytes(for: app)
         let alert = NSAlert()
-        alert.messageText = "Reset \(app.label)? This deletes its saved data."
-        alert.informativeText = """
-        Apk on Mac keeps an app's extracted assets, translated code AND its \
-        save files in one folder, so a reset cannot spare the saves. \
-        Everything \(app.label) has stored (\(ByteCountFormatter.string(
-            fromByteCount: size, countStyle: .file))) is deleted, then the app \
-        is unpacked again from:
-
-        \(apkPath)
-
-        Use this when an app misbehaves in a way a fresh install would fix.
-        """
+        alert.messageText = L("Reset %@? This deletes its saved data.", app.label)
+        alert.informativeText = L("Apk on Mac keeps an app's extracted assets, translated code AND its save files in one folder, so a reset cannot spare the saves. Everything %@ has stored (%@) is deleted, then the app is unpacked again from:",
+                                  app.label, ByteCountFormatter.string(fromByteCount: size, countStyle: .file))
+            + "\n\n" + apkPath + "\n\n"
+            + L("Use this when an app misbehaves in a way a fresh install would fix.")
         alert.alertStyle = .critical
-        alert.addButton(withTitle: "Delete and Reinstall")
-        alert.addButton(withTitle: "Cancel")
+        alert.addButton(withTitle: L("Delete and Reinstall"))
+        alert.addButton(withTitle: L("Cancel"))
         guard alert.runModal() == .alertFirstButtonReturn else { return }
 
         library.wipeDataDir(for: app)
@@ -3982,25 +3947,16 @@ struct LauncherView: View {
         let dir = model.arm32AppCacheDir()
         let bytes = directorySizeBytes(at: dir)
         let sizeStr = bytes == 0
-            ? "empty"
+            ? L("empty")
             : ByteCountFormatter.string(
                 fromByteCount: bytes, countStyle: .file)
 
         let alert = NSAlert()
-        alert.messageText = "Clear All Apps?"
-        alert.informativeText = """
-        This uninstalls EVERY app and deletes everything under
-        \(dir.path)
-
-        Currently \(sizeStr). Save files, settings, translated dylibs, \
-        meta.json, icon.png, and extracted assets ALL go with it.
-
-        Use "Uninstall" from a tile's right-click menu to remove just \
-        one app. This button is the nuclear option.
-        """
+        alert.messageText = L("Clear All Apps?")
+        alert.informativeText = L("This uninstalls EVERY app and deletes everything under\n%@\n\nCurrently %@. Save files, settings, translated dylibs, meta.json, icon.png, and extracted assets ALL go with it.\n\nUse \"Uninstall\" from a tile's right-click menu to remove just one app. This button is the nuclear option.", dir.path, sizeStr)
         alert.alertStyle = .warning
-        alert.addButton(withTitle: "Clear All")
-        alert.addButton(withTitle: "Cancel")
+        alert.addButton(withTitle: L("Clear All"))
+        alert.addButton(withTitle: L("Cancel"))
         let response = alert.runModal()
         guard response == .alertFirstButtonReturn else { return }
 
@@ -4147,7 +4103,7 @@ struct LauncherView: View {
             return
         }
         guard let runtimePath = model.runtimePath() else {
-            model.status = "macapk-runtime not found. Build it with runtime/scripts/build.sh."
+            model.status = L("macapk-runtime not found. Build it with runtime/scripts/build.sh.")
             model.statusKind = .error
             return
         }
@@ -6191,16 +6147,11 @@ struct AppDetailSheet: View {
 
     private func confirmDeleteOrphan(_ o: InstalledLibrary.OrphanDir) {
         let alert = NSAlert()
-        alert.messageText = "Delete \(o.name)?"
-        alert.informativeText = """
-        This is an older version's folder for \(current.package). It holds \
-        that version's assets AND its saved data (\(Self.bytes(o.sizeBytes))).
-
-        Deleting it does not affect the version you have installed now.
-        """
+        alert.messageText = L("Delete %@?", o.name)
+        alert.informativeText = L("This is an older version's folder for %@. It holds that version's assets AND its saved data (%@).\n\nDeleting it does not affect the version you have installed now.", current.package, Self.bytes(o.sizeBytes))
         alert.alertStyle = .warning
-        alert.addButton(withTitle: "Delete")
-        alert.addButton(withTitle: "Cancel")
+        alert.addButton(withTitle: L("Delete"))
+        alert.addButton(withTitle: L("Cancel"))
         guard alert.runModal() == .alertFirstButtonReturn else { return }
         library.deleteOrphan(o)
         rescan()
@@ -6680,31 +6631,21 @@ struct InstalledAppsView: View {
     /// `KeptData.restore` can actually bring it back.
     private func confirmUninstall(_ app: InstalledApp) {
         let alert = NSAlert()
-        alert.messageText = "Uninstall \(app.label) \(app.version)?"
+        alert.messageText = L("Uninstall %@ %@?", app.label, app.version)
         let dataSizeStr: String
         if library.dataDirExists(for: app) {
             dataSizeStr = ByteCountFormatter.string(
                 fromByteCount: library.dataDirSizeBytes(for: app), countStyle: .file)
         } else {
-            dataSizeStr = "no data on disk"
+            dataSizeStr = L("no data on disk")
         }
-        alert.informativeText = """
-        This moves \(app.label) \(app.version) to the Trash and removes it \
-        from your installed apps.
-
-        Its saved data (\(dataSizeStr)) is set aside first, and installing \
-        this same version again puts it back. Nothing else on your Mac is \
-        touched.
-
-        Tick the box to delete that data permanently instead. This cannot be \
-        undone.
-        """
+        alert.informativeText = L("This moves %@ %@ to the Trash and removes it from your installed apps.\n\nIts saved data (%@) is set aside first, and installing this same version again puts it back. Nothing else on your Mac is touched.\n\nTick the box to delete that data permanently instead. This cannot be undone.", app.label, app.version, dataSizeStr)
         alert.alertStyle = .warning
         // Repurpose the suppression checkbox as the "also delete data" toggle.
         alert.showsSuppressionButton = true
-        alert.suppressionButton?.title = "Also delete its saved data permanently"
-        alert.addButton(withTitle: "Uninstall")
-        alert.addButton(withTitle: "Cancel")
+        alert.suppressionButton?.title = L("Also delete its saved data permanently")
+        alert.addButton(withTitle: L("Uninstall"))
+        alert.addButton(withTitle: L("Cancel"))
         guard alert.runModal() == .alertFirstButtonReturn else { return }
         let deleteData = (alert.suppressionButton?.state == .on)
         if model.selectedAppId == app.id {
@@ -6716,7 +6657,7 @@ struct InstalledAppsView: View {
         // Off the main actor: removing a multi-GB bundle beachballs the panel.
         let rt = model.runtimePath() ?? ""
         let root = model.androidRootURL()
-        model.status = "Uninstalling \(app.label)…"
+        model.status = L("Uninstalling %@…", app.label)
         model.statusKind = .info
         DispatchQueue.global(qos: .userInitiated).async {
             let st = library.removeSync(app, deleteData: deleteData,
@@ -6770,9 +6711,8 @@ struct InstalledAppsView: View {
 
         if apks.isEmpty {
             let alert = NSAlert()
-            alert.messageText = "No APKs found"
-            alert.informativeText = "\(folder.path) contains no " +
-                ".apk / .apkm / .xapk / .apks / .apkx files."
+            alert.messageText = L("No APKs found")
+            alert.informativeText = L("%@ contains no .apk / .apkm / .xapk / .apks / .apkx files.", folder.path)
             alert.runModal()
             return
         }
@@ -6908,11 +6848,7 @@ struct AccountsSheet: View {
                 // WHY someone would want one. Without this the button is an
                 // unexplained request for a Google password, which is exactly
                 // the shape of a thing users are right to refuse.
-                Text("Apps you bought on Google Play verify their licence with "
-                   + "Google before they run, exactly as they do on an Android "
-                   + "device. Signing in lets Apk on Mac answer that check with "
-                   + "your own account. Apps that do not use Play licensing "
-                   + "run without one.")
+                Text(L("Apps you bought on Google Play verify their licence with Google before they run, exactly as they do on an Android device. Signing in lets Apk on Mac answer that check with your own account. Apps that do not use Play licensing run without one."))
                     .font(.caption)
                     .foregroundStyle(.secondary)
                     .fixedSize(horizontal: false, vertical: true)
@@ -6986,8 +6922,7 @@ struct AccountsSheet: View {
                     .font(.callout)
                     .fixedSize(horizontal: false, vertical: true)
             }
-            Text("That window is Google's own sign-in page. Apk on Mac does not "
-               + "read what you type into it.")
+            Text(L("That window is Google's own sign-in page. Apk on Mac does not read what you type into it."))
                 .font(.caption)
                 .foregroundStyle(.secondary)
                 .fixedSize(horizontal: false, vertical: true)

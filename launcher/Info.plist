@@ -44,6 +44,13 @@
     <string>0.4.0</string>
     <key>CFBundleShortVersionString</key>
     <string>0.2.0</string>
+    <key>CFBundleDevelopmentRegion</key>
+    <string>en</string>
+    <key>CFBundleLocalizations</key>
+    <array>
+        <string>en</string>
+        <string>ru</string>
+    </array>
     <key>CFBundlePackageType</key>
     <string>APPL</string>
     <!--

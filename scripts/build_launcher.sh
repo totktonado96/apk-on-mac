@@ -254,6 +254,13 @@ done
 echo "[4/5] Copying Info.plist and bundling runtime binary..."
 cp "$LAUNCHER_DIR/Info.plist" "$CONTENTS/Info.plist"
 
+# UI localizations (Russian). Keys are the English strings, so English needs no
+# .lproj; macOS picks the bundle's language from CFBundleLocalizations.
+for LPROJ in "$LAUNCHER_DIR"/Resources/*.lproj; do
+    [ -d "$LPROJ" ] || continue
+    cp -R "$LPROJ" "$RESOURCES_DIR/"
+done
+
 # STRICT plist validation. `plutil -lint` is NOT sufficient: it accepts a double
 # hyphen inside an XML comment, which illegally terminates the comment and which
 # strict parsers reject. That is not hypothetical -- a comment added to

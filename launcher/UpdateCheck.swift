@@ -98,9 +98,9 @@ final class UpdateChecker: ObservableObject {
     /// one is waiting, since a menu item cannot glow.
     var menuTitle: String {
         switch state {
-        case .available(let tag, _): return "Update Available (\(tag))…"
-        case .checking: return "Checking for Updates…"
-        default: return "Check for Updates…"
+        case .available(let tag, _): return String(format: NSLocalizedString("Update Available (%@)…", comment: ""), tag)
+        case .checking: return NSLocalizedString("Checking for Updates…", comment: "")
+        default: return NSLocalizedString("Check for Updates…", comment: "")
         }
     }
 
@@ -164,10 +164,10 @@ final class UpdateChecker: ObservableObject {
         switch result {
         case .available(let tag, let page):
             pageToOpen = page
-            alert.messageText = "A new version of Apk on Mac is available"
-            alert.informativeText = "Apk on Mac \(tag) is out. You have v\(displayVersion)."
-            alert.addButton(withTitle: "Go to Releases Page")
-            alert.addButton(withTitle: "Not Now")
+            alert.messageText = NSLocalizedString("A new version of Apk on Mac is available", comment: "")
+            alert.informativeText = String(format: NSLocalizedString("Apk on Mac %@ is out. You have v%@.", comment: ""), tag, displayVersion)
+            alert.addButton(withTitle: NSLocalizedString("Go to Releases Page", comment: ""))
+            alert.addButton(withTitle: NSLocalizedString("Not Now", comment: ""))
         case .current(let tag):
             if bakedRelease == nil {
                 alert.messageText = "This is a development build"
@@ -176,17 +176,17 @@ final class UpdateChecker: ObservableObject {
                 The latest public release is \(tag).
                 """
             } else {
-                alert.messageText = "Apk on Mac is up to date"
-                alert.informativeText = "You have v\(displayVersion), the latest release."
+                alert.messageText = NSLocalizedString("Apk on Mac is up to date", comment: "")
+                alert.informativeText = String(format: NSLocalizedString("You have v%@, the latest release.", comment: ""), displayVersion)
             }
-            alert.addButton(withTitle: "OK")
-            alert.addButton(withTitle: "Open Releases Page")
+            alert.addButton(withTitle: NSLocalizedString("OK", comment: ""))
+            alert.addButton(withTitle: NSLocalizedString("Open Releases Page", comment: ""))
         case .failed(let why):
-            alert.messageText = "Could not check for updates"
+            alert.messageText = NSLocalizedString("Could not check for updates", comment: "")
             alert.informativeText = why
             alert.alertStyle = .warning
-            alert.addButton(withTitle: "OK")
-            alert.addButton(withTitle: "Open Releases Page")
+            alert.addButton(withTitle: NSLocalizedString("OK", comment: ""))
+            alert.addButton(withTitle: NSLocalizedString("Open Releases Page", comment: ""))
         case .idle, .checking:
             return
         }
