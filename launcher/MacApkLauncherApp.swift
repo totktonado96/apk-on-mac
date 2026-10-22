@@ -3459,7 +3459,8 @@ struct LauncherView: View {
                 switch (existing.versionCode, peek.versionCode) {
                 case let (old?, new?) where new > old:
                     alert.messageText = L("Update \"%@\"?", existing.label)
-                    let carry = BundleGenerator.identityMode() == .package
+                    let carry = InstallPipeline.identityReplacesInPlace(
+                            mode: RegistryStore.shared.setting(BundleGenerator.identityModeSettingKey))
                         && RegistryStore.shared.setting(InstallPipeline.storeUpdatesInPlaceSettingKey) != "0"
                         ? L("Your saved data is carried forward.")
                         : L("It installs alongside the current version as a separate app. The current version and its data stay untouched.")

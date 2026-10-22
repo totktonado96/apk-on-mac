@@ -4246,6 +4246,17 @@ public final class InstallPipeline {
     /// Finder / launcher installs in the default `.version` mode keep the owner's
     /// per-version independence (2026-08-10), unchanged. Reinstalls of the same
     /// version already regenerate in place; downgrades are not replacements.
+    /// Does the identity-mode setting mean "an update replaces the installed app"?
+    /// Android's behaviour (PackageManagerService replaces the package, /data/data
+    /// is kept), so it is the DEFAULT now: an unset mode updates in place, and only
+    /// an explicit "version" keeps the old side-by-side installs.
+    /// MACAPK_UPDATE_IN_PLACE=0 restores the old default (only "package" replaces).
+    static func identityReplacesInPlace(mode: String?) -> Bool {
+        if mode == "package" { return true }
+        if mode == "version" { return false }
+        return ProcessInfo.processInfo.environment["MACAPK_UPDATE_IN_PLACE"] != "0"
+    }
+
     func updatesInPlace(kind: InstallKind, source: InstallSource, existing: AppRecord?) -> Bool {
         // "ok" is the launcher's legacy spelling of installed (MacApkLauncherApp
         // writes it; registry readers treat the two alike).
@@ -4257,7 +4268,7 @@ public final class InstallPipeline {
         else { return false }
         var byStore = false
         if case .android = source { byStore = true }
-        let packageMode = store.setting("bundleIdentityMode") == "package"
+        let packageMode = Self.identityReplacesInPlace(mode: store.setting("bundleIdentityMode"))
         guard byStore || packageMode else { return false }
         if store.setting(Self.storeUpdatesInPlaceSettingKey) == "0" {
             log("[install] in-place updates are off (\(Self.storeUpdatesInPlaceSettingKey)=0)")
