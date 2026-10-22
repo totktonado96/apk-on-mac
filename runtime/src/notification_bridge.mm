@@ -32,12 +32,13 @@ JavaVM*   g_vm = nullptr;
 jclass    g_cls = nullptr;          // global ref to android.app.NotificationManager
 jmethodID g_on_click = nullptr;
 jmethodID g_on_cold_click = nullptr;
+jmethodID g_on_action = nullptr;
 // Cold-click stash (main queue only). A click that LAUNCHED the app arrives from
 // the UN delegate long before Java has an Activity; firing the PendingIntent
 // then would start an Activity under a half-booted app. Hold it until Java
 // reports the first Activity resumed (nativeBootReady).
 bool      g_boot_ready = false;
-NSMutableArray* g_cold_stash = nil;  // of @[key, payload]
+NSMutableArray* g_cold_stash = nil;  // of copied blocks, run on boot ready
 std::atomic<int> g_auth{0};         // 0 unknown / not asked, 1 granted, 2 denied
 bool      g_asked = false;          // main queue only
 
@@ -98,18 +99,60 @@ void SendColdClick(NSString* key, NSString* payload) {
     }
 }
 
+// Main queue only. Runs `fn` now, or after the first Activity is up.
+void RunWhenReady(void (^fn)(void)) {
+    if (g_boot_ready) { fn(); return; }
+    if (!g_cold_stash) g_cold_stash = [[NSMutableArray alloc] init];
+    [g_cold_stash addObject:[[fn copy] autorelease]];
+}
+
+// MACAPK_NOTIF_ACTIONS=0 turns the action buttons off (no category is attached).
+bool ActionsEnabled() {
+    const char* e = std::getenv("MACAPK_NOTIF_ACTIONS");
+    return !(e && std::strcmp(e, "0") == 0);
+}
+
 // Main queue only.
 void HandleClick(NSString* key, NSString* payload) {
     if (payload && ColdEnabled() && g_on_cold_click) {
-        if (!g_boot_ready) {
-            if (!g_cold_stash) g_cold_stash = [[NSMutableArray alloc] init];
-            [g_cold_stash addObject:@[key, payload]];
-        } else {
-            SendColdClick(key, payload);
-        }
+        [key retain]; [payload retain];
+        RunWhenReady(^{ SendColdClick(key, payload); [key release]; [payload release]; });
         return;
     }
     SendClick(key);
+}
+
+// Main queue only. `cold` is the base64 action payload from userInfo (may be nil).
+void HandleAction(NSString* key, int index, NSString* text, NSString* cold) {
+    if (!g_on_action) return;
+    [key retain]; [text retain]; [cold retain];
+    RunWhenReady(^{
+        JNIEnv* env = Env();
+        if (env && g_cls) {
+            jstring jk = env->NewStringUTF(key.UTF8String);
+            jstring jt = text ? env->NewStringUTF(text.UTF8String) : nullptr;
+            jstring jc = cold ? env->NewStringUTF(cold.UTF8String) : nullptr;
+            env->CallStaticVoidMethod(g_cls, g_on_action, jk, (jint)index, jt, jc);
+            env->DeleteLocalRef(jk);
+            if (jt) env->DeleteLocalRef(jt);
+            if (jc) env->DeleteLocalRef(jc);
+            if (env->ExceptionCheck()) {
+                std::fprintf(stderr, "[W] notification: Java threw in macapkOnNotificationAction\n");
+                env->ExceptionDescribe();
+                env->ExceptionClear();
+            }
+        }
+        [key release]; [text release]; [cold release];
+    });
+}
+
+uint64_t Fnv1a(NSString* s) {
+    uint64_t h = 1469598103934665603ULL;
+    for (const unsigned char* p = (const unsigned char*)s.UTF8String; p && *p; ++p) {
+        h ^= *p;
+        h *= 1099511628211ULL;
+    }
+    return h;
 }
 
 NSString* Str(JNIEnv* env, jstring s) {
@@ -153,6 +196,23 @@ didReceiveNotificationResponse:(UNNotificationResponse*)response
             [key release];
             [payload release];
         });
+    } else if (macapk::notification::ActionsEnabled() &&
+               [response.actionIdentifier hasPrefix:@"macapk.a"]) {
+        int idx = [[response.actionIdentifier substringFromIndex:8] intValue];
+        NSString* text = [response isKindOfClass:[UNTextInputNotificationResponse class]]
+            ? [[(UNTextInputNotificationResponse*)response userText] copy] : nil;
+        id acts = response.notification.request.content.userInfo[@"macapk.act"];
+        NSString* cold = nil;
+        if ([acts isKindOfClass:[NSArray class]] && idx >= 0 && (NSUInteger)idx < [acts count]) {
+            id v = acts[idx];
+            if ([v isKindOfClass:[NSString class]] && [v length] > 0) cold = [v copy];
+        }
+        dispatch_async(dispatch_get_main_queue(), ^{
+            @autoreleasepool {
+                macapk::notification::HandleAction(key, idx, text, cold);
+            }
+            [key release]; [payload release]; [text release]; [cold release];
+        });
     } else {
         [key release];
         [payload release];
@@ -187,8 +247,78 @@ void EnsureAuthOnMain() {
     }];
 }
 
+// Java String[] -> NSArray of NSString (NSNull for a null element); autoreleased.
+NSArray* StrArray(JNIEnv* env, jobjectArray a) {
+    if (!a) return nil;
+    jsize n = env->GetArrayLength(a);
+    NSMutableArray* out = [NSMutableArray arrayWithCapacity:(NSUInteger)n];
+    for (jsize i = 0; i < n; i++) {
+        jstring js = (jstring)env->GetObjectArrayElement(a, i);
+        NSString* v = Str(env, js);
+        [out addObject:v ? v : (id)[NSNull null]];
+        if (js) env->DeleteLocalRef(js);
+    }
+    return out;
+}
+
+// Categories are per-app and setNotificationCategories REPLACES the set, so the
+// set is kept cumulative (union) -- an older delivered banner keeps its buttons.
+// First use in a run merges what the system already holds, so a relaunch does not
+// drop the categories of notifications still in Notification Center.
+NSMutableSet* g_cats = nil;      // main queue only
+bool g_cats_loaded = false;
+
+void WithCategories(void (^then)(void)) {
+    if (g_cats_loaded) { then(); return; }
+    void (^h)(void) = [then copy];
+    [[UNUserNotificationCenter currentNotificationCenter]
+        getNotificationCategoriesWithCompletionHandler:^(NSSet<UNNotificationCategory*>* existing) {
+        [existing retain];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (!g_cats) g_cats = [[NSMutableSet alloc] init];
+            [g_cats unionSet:existing];
+            [existing release];
+            g_cats_loaded = true;
+            h();
+            [h release];
+        });
+    }];
+}
+
+NSString* CategoryFor(NSArray* titles, NSArray* inputs) {
+    NSMutableString* sig = [NSMutableString string];
+    for (NSUInteger i = 0; i < titles.count && i < 3; i++) {
+        id in = i < inputs.count ? inputs[i] : [NSNull null];
+        [sig appendFormat:@"%lu\x1f%@\x1f%@\x1e", (unsigned long)i, titles[i],
+            [in isKindOfClass:[NSString class]] ? in : @""];
+    }
+    NSString* cid = [NSString stringWithFormat:@"macapk.cat.%016llx", (unsigned long long)Fnv1a(sig)];
+    for (UNNotificationCategory* c in g_cats)
+        if ([c.identifier isEqualToString:cid]) return cid;
+    NSMutableArray* acts = [NSMutableArray array];
+    for (NSUInteger i = 0; i < titles.count && i < 3; i++) {
+        if (![titles[i] isKindOfClass:[NSString class]]) continue;   // action with no PendingIntent
+        NSString* ident = [NSString stringWithFormat:@"macapk.a%lu", (unsigned long)i];
+        id in = i < inputs.count ? inputs[i] : [NSNull null];
+        if ([in isKindOfClass:[NSString class]]) {
+            [acts addObject:[UNTextInputNotificationAction actionWithIdentifier:ident title:titles[i]
+                options:UNNotificationActionOptionNone textInputButtonTitle:titles[i]
+                textInputPlaceholder:in]];
+        } else {
+            [acts addObject:[UNNotificationAction actionWithIdentifier:ident title:titles[i]
+                options:UNNotificationActionOptionNone]];
+        }
+    }
+    [g_cats addObject:[UNNotificationCategory categoryWithIdentifier:cid actions:acts
+        intentIdentifiers:@[] options:UNNotificationCategoryOptionNone]];
+    [[UNUserNotificationCenter currentNotificationCenter] setNotificationCategories:g_cats];
+    return cid;
+}
+
 void JNICALL Notif_nativePost(JNIEnv* env, jclass, jstring key, jstring title, jstring text,
-                              jstring subtitle, jbyteArray png, jboolean silent, jstring cold) {
+                              jstring subtitle, jbyteArray png, jboolean silent, jstring cold,
+                              jobjectArray actionTitles, jobjectArray actionInputs,
+                              jobjectArray actionPayloads) {
     NSString* k = [Str(env, key) retain];
     NSString* t = [Str(env, title) retain];
     NSString* x = [Str(env, text) retain];
@@ -206,6 +336,10 @@ void JNICALL Notif_nativePost(JNIEnv* env, jclass, jstring key, jstring title, j
         }
     }
     const bool quiet = silent == JNI_TRUE;
+    NSArray* aTitles = ActionsEnabled() ? StrArray(env, actionTitles) : nil;
+    NSArray* aInputs = StrArray(env, actionInputs);
+    NSArray* aPayloads = StrArray(env, actionPayloads);
+    [aTitles retain]; [aInputs retain]; [aPayloads retain];
     dispatch_async(dispatch_get_main_queue(), ^{
         @autoreleasepool {
             if (HaveBundle() && k) {
@@ -217,7 +351,20 @@ void JNICALL Notif_nativePost(JNIEnv* env, jclass, jstring key, jstring title, j
                 if (x) c.body = x;
                 // Serialized contentIntent, so a click after the process exited
                 // (macOS relaunches the app) can still be fired; see HandleClick.
-                if (cp) c.userInfo = @{@"macapk.pi": cp};
+                NSMutableDictionary* ui = [NSMutableDictionary dictionary];
+                if (cp) ui[@"macapk.pi"] = cp;
+                // Per-action serialized PendingIntent (+RemoteInputs) for the same
+                // cold-start case; "" where an action has none.
+                const bool haveActs = aTitles.count > 0;
+                if (haveActs) {
+                    NSMutableArray* pl = [NSMutableArray array];
+                    for (NSUInteger i = 0; i < aTitles.count; i++) {
+                        id v = i < aPayloads.count ? aPayloads[i] : nil;
+                        [pl addObject:[v isKindOfClass:[NSString class]] ? v : @""];
+                    }
+                    ui[@"macapk.act"] = pl;
+                }
+                if (ui.count) c.userInfo = ui;
                 if (!quiet) c.sound = [UNNotificationSound defaultSound];
                 if (icon) {
                     // The attachment's file is moved into the data store by the
@@ -233,16 +380,21 @@ void JNICALL Notif_nativePost(JNIEnv* env, jclass, jstring key, jstring title, j
                     }
                 }
                 // Same identifier replaces the delivered banner in place.
-                UNNotificationRequest* r = [UNNotificationRequest requestWithIdentifier:k
-                                                                                content:c trigger:nil];
-                [[UNUserNotificationCenter currentNotificationCenter]
-                    addNotificationRequest:r withCompletionHandler:^(NSError* err) {
-                    if (err) std::fprintf(stderr, "[W] notification: post failed: %s\n",
-                                          err.localizedDescription.UTF8String);
-                }];
+                void (^submit)(void) = ^{
+                    if (haveActs) c.categoryIdentifier = CategoryFor(aTitles, aInputs);
+                    UNNotificationRequest* r = [UNNotificationRequest requestWithIdentifier:k
+                                                                                    content:c trigger:nil];
+                    [[UNUserNotificationCenter currentNotificationCenter]
+                        addNotificationRequest:r withCompletionHandler:^(NSError* err) {
+                        if (err) std::fprintf(stderr, "[W] notification: post failed: %s\n",
+                                              err.localizedDescription.UTF8String);
+                    }];
+                };
+                if (haveActs) WithCategories(submit); else submit();
             }
         }
         [k release]; [t release]; [x release]; [s release]; [cp release]; [icon release];
+        [aTitles release]; [aInputs release]; [aPayloads release];
     });
 }
 
@@ -285,7 +437,8 @@ jboolean JNICALL Notif_nativeIsDenied(JNIEnv*, jclass) {
 
 const JNINativeMethod kMethods[] = {
     {const_cast<char*>("nativePost"),
-     const_cast<char*>("(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;[BZLjava/lang/String;)V"),
+     const_cast<char*>("(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;[BZLjava/lang/String;"
+                       "[Ljava/lang/String;[Ljava/lang/String;[Ljava/lang/String;)V"),
      reinterpret_cast<void*>(Notif_nativePost)},
     {const_cast<char*>("nativeCancel"), const_cast<char*>("(Ljava/lang/String;)V"),
      reinterpret_cast<void*>(Notif_nativeCancel)},
@@ -324,6 +477,9 @@ void RegisterNotificationBridgeMethods(JNIEnv* env) {
     g_on_cold_click = env->GetStaticMethodID(cls, "macapkOnColdNotificationClicked",
                                              "(Ljava/lang/String;Ljava/lang/String;)V");
     if (!g_on_cold_click) env->ExceptionClear();
+    g_on_action = env->GetStaticMethodID(cls, "macapkOnNotificationAction",
+                                         "(Ljava/lang/String;ILjava/lang/String;Ljava/lang/String;)V");
+    if (!g_on_action) env->ExceptionClear();
     env->GetJavaVM(&g_vm);
     g_cls = (jclass)env->NewGlobalRef(cls);
     env->DeleteLocalRef(cls);

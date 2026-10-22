@@ -44,7 +44,9 @@ public class NotificationManager {
     private static final long THROTTLE_MS = 2000;
 
     private static native void nativePost(String key, String title, String text, String subtitle,
-                                          byte[] iconPng, boolean silent, String coldPayload);
+                                          byte[] iconPng, boolean silent, String coldPayload,
+                                          String[] actionTitles, String[] actionInputs,
+                                          String[] actionPayloads);
     private static native void nativeBootReady();
     private static native void nativeCancel(String key);
     private static native void nativeCancelAll();
@@ -103,7 +105,7 @@ public class NotificationManager {
             nativePost(key, title, body, sub, iconPng(n),
                        importance == IMPORTANCE_LOW || importance == IMPORTANCE_MIN
                        || (reposted && (n.flags & Notification.FLAG_ONLY_ALERT_ONCE) != 0),
-                       coldPayload(n));
+                       coldPayload(n), actTitles(n), actInputs(n), actPayloads(n));
         } catch (UnsatisfiedLinkError e) {
             sLinked = false;
         }
@@ -166,6 +168,129 @@ public class NotificationManager {
         } finally {
             p.recycle();
         }
+    }
+
+    // ---- Action buttons (MACAPK_NOTIF_ACTIONS, default on) ----
+    // AOSP NotificationContentView renders Notification.actions as buttons that
+    // send Action.actionIntent; an action with a RemoteInput shows an inline reply
+    // field and the typed text rides in the fill-in Intent
+    // (RemoteInputView.sendRemoteInput -> RemoteInput.addResultsToIntent). macOS
+    // shows up to 3 UNNotificationActions per banner, so the first 3 are mapped;
+    // a free-form RemoteInput becomes a UNTextInputNotificationAction.
+    private static final boolean ACTIONS = !"0".equals(System.getenv("MACAPK_NOTIF_ACTIONS"));
+    private static final int MAX_ACTIONS = 3;
+
+    private static int actCount(Notification n) {
+        return !ACTIONS || n.actions == null ? 0 : Math.min(n.actions.length, MAX_ACTIONS);
+    }
+    private static boolean usable(Notification.Action a) {
+        return a != null && a.actionIntent != null && a.title != null && a.title.length() > 0;
+    }
+    private static RemoteInput freeForm(Notification.Action a) {
+        RemoteInput[] ris = a.getRemoteInputs();
+        if (ris != null) for (RemoteInput ri : ris) if (ri != null && ri.getAllowFreeFormInput()) return ri;
+        return null;
+    }
+    /** Title per action index, null where the action cannot fire (no PendingIntent). */
+    private static String[] actTitles(Notification n) {
+        int c = actCount(n);
+        if (c == 0) return null;
+        String[] out = new String[c];
+        boolean any = false;
+        for (int i = 0; i < c; i++) if (usable(n.actions[i])) { out[i] = n.actions[i].title.toString(); any = true; }
+        return any ? out : null;
+    }
+    /** Placeholder text for a reply action, null for a plain button. */
+    private static String[] actInputs(Notification n) {
+        int c = actCount(n);
+        if (c == 0) return null;
+        String[] out = new String[c];
+        for (int i = 0; i < c; i++) {
+            if (!usable(n.actions[i])) continue;
+            RemoteInput ri = freeForm(n.actions[i]);
+            if (ri != null) out[i] = ri.getLabel() != null ? ri.getLabel().toString() : "";
+        }
+        return out;
+    }
+    private static String[] actPayloads(Notification n) {
+        int c = actCount(n);
+        if (c == 0 || !COLD_CLICK) return null;
+        String[] out = new String[c];
+        for (int i = 0; i < c; i++) {
+            Notification.Action a = n.actions[i];
+            if (!usable(a)) continue;
+            android.os.Parcel p = android.os.Parcel.obtain();
+            try {
+                p.writeTypedObject(a.actionIntent, 0);
+                RemoteInput[] ris = a.getRemoteInputs();
+                p.writeInt(ris == null ? 0 : ris.length);
+                if (ris != null) for (RemoteInput ri : ris) p.writeTypedObject(ri, 0);
+                byte[] b = p.marshall();
+                if (b != null && b.length > 0 && b.length <= COLD_MAX_BYTES)
+                    out[i] = java.util.Base64.getEncoder().encodeToString(b);
+            } catch (Throwable t) {
+                // leave null: the live click still works
+            } finally {
+                p.recycle();
+            }
+        }
+        return out;
+    }
+
+    /** Called from notification_bridge.mm (main queue) when an action button is
+     *  clicked or a reply is sent. `text` is the typed reply or null; `cold` is the
+     *  action's serialized payload, used when this process did not post the banner. */
+    static void macapkOnNotificationAction(String key, int index, String text, String cold) {
+        PendingIntent pi = null;
+        RemoteInput[] ris = null;
+        boolean autoCancel = false;
+        synchronized (sActive) {
+            android.service.notification.StatusBarNotification sbn = sActive.get(key);
+            if (sbn != null) {
+                Notification n = sbn.getNotification();
+                if (n.actions != null && index >= 0 && index < n.actions.length && n.actions[index] != null) {
+                    pi = n.actions[index].actionIntent;
+                    ris = n.actions[index].getRemoteInputs();
+                }
+                autoCancel = (n.flags & Notification.FLAG_AUTO_CANCEL) != 0;
+            }
+        }
+        if (pi == null && cold != null && COLD_CLICK) {
+            android.os.Parcel p = android.os.Parcel.obtain();
+            try {
+                byte[] b = java.util.Base64.getDecoder().decode(cold);
+                p.unmarshall(b, 0, b.length);
+                p.setDataPosition(0);
+                pi = p.readTypedObject(PendingIntent.CREATOR);
+                int c = p.readInt();
+                ris = new RemoteInput[Math.max(c, 0)];
+                for (int i = 0; i < ris.length; i++) ris[i] = p.readTypedObject(RemoteInput.CREATOR);
+            } catch (Throwable t) {
+                System.err.println("[W] notification: cold action undecodable: " + t);
+            } finally {
+                p.recycle();
+            }
+        }
+        if (pi == null) return;
+        final PendingIntent fpi = pi;
+        final android.content.Intent fill = new android.content.Intent();
+        if (text != null && ris != null) {
+            RemoteInput target = null;
+            for (RemoteInput ri : ris) if (ri != null && ri.getAllowFreeFormInput()) { target = ri; break; }
+            if (target != null) {
+                android.os.Bundle results = new android.os.Bundle();
+                results.putCharSequence(target.getResultKey(), text);
+                RemoteInput.addResultsToIntent(ris, fill, results);
+                RemoteInput.setResultsSource(fill, RemoteInput.SOURCE_FREE_FORM_INPUT);
+            }
+        }
+        final boolean cancel = autoCancel;
+        new android.os.Handler(android.os.Looper.getMainLooper()).post(() -> {
+            try { fpi.send(null, 0, fill); }
+            catch (PendingIntent.CanceledException ignored) {}
+            catch (Throwable t) { System.err.println("[W] notification: action intent failed: " + t); }
+            if (cancel) cancelKey(key);
+        });
     }
 
     /** Called by ActivityHost once the first Activity has resumed. */
