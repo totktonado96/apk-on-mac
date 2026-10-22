@@ -34,8 +34,7 @@ public class KeyguardManager {
     // AOSP KeyguardManager.createConfirmDeviceCredentialIntent(CharSequence,
     // CharSequence) (same file/branch as the constants above):
     //
-    private static final boolean CONFIRM_ACTIVITY_PRESENT = false;
-    public Intent createConfirmDeviceCredentialIntent(CharSequence title,
+    //     public Intent createConfirmDeviceCredentialIntent(CharSequence title,
     //             CharSequence description) {
     //         if (!isDeviceSecure()) return null;
     //         Intent intent = new Intent(ACTION_CONFIRM_DEVICE_CREDENTIAL);
