@@ -2247,7 +2247,7 @@ public final class Boot {
                 // would kill the process, but Apk on Mac logs and continues so one
                 // unsupported line in an override cannot cost us the whole launch.
                 try {
-                    android.content.Context appBase = application.getBaseContext();
+                    android.content.Context appBase = macapkRawBaseContext(application);
                     if (appBase != null) {
                         // DIAGNOSTIC (MACAPK_STACK_PAD=<n>, default OFF): dispatch
                         // attachBaseContext through <n> extra nested frames so
@@ -2284,7 +2284,7 @@ public final class Boot {
                         // on it; see Application.java's constructor comment). Put
                         // it back rather than let a single override reintroduce a
                         // fixed bug process-wide.
-                        if (application.getBaseContext() == null) {
+                        if (macapkRawBaseContext(application) == null) {
                             application.macapkAttachBaseContext(appBase);
                             NativeLog.w(TAG, application.getClass().getName()
                                       + ".attachBaseContext nulled the base Context"
@@ -2860,6 +2860,22 @@ public final class Boot {
     // task). Recurses `depth` times before dispatching attachBaseContext, so the
     // app's attachBaseContext (and any executeVM it invokes) runs under a deeper
     // Java call stack. Distinct frame per recursion (real method frames).
+    /** The Application's real base Context (ContextWrapper's private field),
+     *  read directly so an app that overrides getBaseContext() does not make
+     *  Boot skip dispatching attachBaseContext. WhatsApp's AppShell returns
+     *  null from getBaseContext() until its own attachBaseContext runs, so the
+     *  skip left its AppContext unset and every onCreate threw. Falls back to
+     *  the public getter if the field moves. */
+    private static android.content.Context macapkRawBaseContext(android.app.Application application) {
+        try {
+            java.lang.reflect.Field f = android.content.ContextWrapper.class.getDeclaredField("baseContext");
+            f.setAccessible(true);
+            return (android.content.Context) f.get(application);
+        } catch (Throwable t) {
+            return application.getBaseContext();
+        }
+    }
+
     private static void macapkStackPad(android.app.Application app,
                                        android.content.Context base, int depth) {
         if (depth <= 0) { app.macapkAttachBaseContext(base); return; }
