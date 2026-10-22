@@ -2997,6 +2997,51 @@ public final class TouchDispatcher {
         }
         deliverKey(action, keyCode, unicodeChar, metaState, autoRepeat);
     }
+    /** JNI door for composed/converted host text (cocoa_bridge.mm insertText:).
+     *  Commits the WHOLE string in one edit, as an Android IME's
+     *  InputConnection.commitText does (BaseInputConnection.commitText ->
+     *  replaceText), instead of one KEYCODE_UNKNOWN key per UTF-16 unit, which
+     *  split surrogate pairs (emoji) into lone surrogates and made each CJK
+     *  character a separate edit. MACAPK_HOST_TEXT=0 restores the per-unit keys. */
+    public void dispatchHostText(String s) {
+        if (s == null || s.length() == 0) return;
+        noteRealInput();
+        if (routeToLoop(ActivityHost.peek())) {
+            loopHandler().post(() -> deliverText(s));
+            return;
+        }
+        deliverText(s);
+    }
+    private static final boolean HOST_TEXT = !"0".equals(System.getenv("MACAPK_HOST_TEXT"));
+    private void deliverText(String s) {
+        if (InputRecorder.ON) {
+            for (int i = 0; i < s.length(); ) {
+                int cp = s.codePointAt(i); i += Character.charCount(cp);
+                InputRecorder.key(KeyEvent.ACTION_DOWN, 0, cp, 0);
+                InputRecorder.key(KeyEvent.ACTION_UP, 0, cp, 0);
+            }
+        }
+        if (HOST_TEXT) {
+            try {
+                android.widget.TextView input =
+                    android.view.inputmethod.InputMethodManager.macapkActiveInput();
+                if (input != null) {
+                    if (input.macapkCommitHostText(s)) return;
+                } else {
+                    android.view.inputmethod.InputConnection ic =
+                        android.view.inputmethod.InputMethodManager.macapkActiveConnection();
+                    if (ic != null) { ic.commitText(s, 1); return; }
+                }
+            } catch (Throwable thr) { NativeLog.w(TAG, "hostText: " + thr); }
+        }
+        // No text target (a game): the per-key path, on CODE POINTS so an emoji is
+        // one KEYCODE_UNKNOWN + unicode event, never two lone surrogates.
+        for (int i = 0; i < s.length(); ) {
+            int cp = s.codePointAt(i); i += Character.charCount(cp);
+            doDispatchKey(KeyEvent.ACTION_DOWN, 0, cp, 0, false);
+            doDispatchKey(KeyEvent.ACTION_UP, 0, cp, 0, false);
+        }
+    }
     /** A HOST key, as it reaches the app: the recorder sees it here, on the
      *  delivering thread and after any queued focus change has run, so its
      *  password check reads the editor the key is delivered into (InputRecorder,
@@ -3097,7 +3142,7 @@ public final class TouchDispatcher {
                                      || keyCode == 160 /* KEYCODE_NUMPAD_ENTER */);
                 if (action == KeyEvent.ACTION_DOWN) {
                     try {
-                        if (printable) { ic.commitText(String.valueOf((char) unicodeChar), 1); return; }
+                        if (printable) { ic.commitText(new String(Character.toChars(unicodeChar)), 1); return; }
                         if (backspace) { ic.deleteSurroundingText(1, 0); return; }
                         // ENTER on a field that declares an editor action is
                         // performEditorAction, not a key event -- that is what a

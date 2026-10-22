@@ -12176,12 +12176,54 @@ static JNIEnv* MacapkTouchJniEnv() {
     // for an unnamed printable key. One DOWN/UP pair per UTF-16 code unit, so a
     // multi-character conversion (and a surrogate pair) reassembles in the
     // guest's buffer in order.
+    // MACAPK_HOST_TEXT=0 restores the per-UTF-16-unit keys (which split an emoji
+    // into lone surrogates). Default: the whole string in ONE commit, the way an
+    // Android IME's InputConnection.commitText delivers it.
+    static const bool kHostText = [] {
+        const char* e = getenv("MACAPK_HOST_TEXT");
+        return !e || e[0] != '0';
+    }();
+    if (kHostText && [self dispatchHostText:s]) return;
     for (NSUInteger i = 0; i < s.length; i++) {
         int c = (int) [s characterAtIndex:i];
         [self dispatchKeyRawAction:0 keyCode:0 unicode:c meta:0 repeat:NO];
         [self dispatchKeyRawAction:1 keyCode:0 unicode:c meta:0 repeat:NO];
     }
 }
+
+// JNI: TouchDispatcher.dispatchHostText(String). NO when the dispatcher or the
+// method is unavailable (older Java side), so the caller falls back per unit.
+- (BOOL)dispatchHostText:(NSString*)s {
+    if (!macapk::g_touch_vm || !macapk::g_touch_dispatcher) return NO;
+    JNIEnv* env = nullptr;
+    JavaVM* vm = macapk::g_touch_vm;
+    jint r = vm->GetEnv(reinterpret_cast<void**>(&env), JNI_VERSION_21);
+    if (r == JNI_EDETACHED) {
+        if (vm->AttachCurrentThread(reinterpret_cast<void**>(&env), nullptr) != JNI_OK) return NO;
+    } else if (r != JNI_OK || !env) return NO;
+    static jmethodID mid = nullptr;
+    if (!mid) {
+        jclass cls = env->GetObjectClass(macapk::g_touch_dispatcher);
+        mid = env->GetMethodID(cls, "dispatchHostText", "(Ljava/lang/String;)V");
+        env->DeleteLocalRef(cls);
+    }
+    if (!mid) { if (env->ExceptionCheck()) env->ExceptionClear(); return NO; }
+    // UTF-16 straight through: Java strings are UTF-16, so surrogate pairs survive.
+    NSUInteger n = s.length;
+    unichar* buf = (unichar*) malloc(n * sizeof(unichar));
+    if (!buf) return NO;
+    [s getCharacters:buf range:NSMakeRange(0, n)];
+    jstring js = env->NewString((const jchar*)buf, (jsize)n);
+    free(buf);
+    if (!js) { if (env->ExceptionCheck()) env->ExceptionClear(); return NO; }
+    macapk::MacApkInputPriorityBegin();
+    env->CallVoidMethod(macapk::g_touch_dispatcher, mid, js);
+    macapk::MacApkInputPriorityEnd();
+    env->DeleteLocalRef(js);
+    if (env->ExceptionCheck()) { env->ExceptionDescribe(); env->ExceptionClear(); }
+    return YES;
+}
+
 
 // Swallowed on purpose. NSResponder's implementation would walk the responder
 // chain and end in noResponderFor: (the alert beep) for the editing selectors

@@ -3042,6 +3042,21 @@ public class TextView extends View
         return false;   // non-text key (arrows, etc.) -> let the game handle it
     }
 
+    /** Commit a whole host string at once (TouchDispatcher.dispatchHostText): a
+     *  CJK conversion, an emoji (surrogate pair) or a Character-Palette insert.
+     *  AOSP's IME path is InputConnection.commitText -> Editable.replace of the
+     *  WHOLE text at the selection (BaseInputConnection.replaceText), so the
+     *  InputFilters and TextWatchers see one edit, not one per UTF-16 unit.
+     *  Returns false for an empty string. */
+    public boolean macapkCommitHostText(String s) {
+        if (s == null || s.length() == 0) return false;
+        if (MACAPK_TEXT_CARET) { macapkInsertAtSelection(s); return true; }
+        String cur = text != null ? text.toString() : "";
+        CharSequence ins = macapkFilterInsertion(s, cur.length(), cur.length());
+        if (ins != null && ins.length() > 0) macapkSetTextAndNotify(cur + ins);
+        return true;
+    }
+
     /** The selection an edit applies to, as AOSP's key listeners read it:
      *  {min, max} of the two markers (QwertyKeyListener.onKeyDown's
      *  `selStart = Math.min(a, b); selEnd = Math.max(a, b);`). A buffer with

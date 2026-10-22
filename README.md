@@ -43,6 +43,7 @@ implemented directly on macOS:
 
 ## What's new in Apk on Mac
 
+- **Emoji and CJK text:** converted or composed text (emoji, IME candidates) is committed to the app as one string instead of per UTF-16 unit.
 - **Russian UI:** the launcher follows your macOS language (English or Russian).
 - **Homebrew:** `brew install --cask totktonado96/tap/apk-on-mac`.
 - **Install from URL:** File > Install from URL… (⌘U), or drop a link on the window.
