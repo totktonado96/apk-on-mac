@@ -265,10 +265,22 @@ public class TelephonyManager {
     public String  getLine1Number()     { return ""; }
     public String  getNetworkOperator() { return ""; }
     public String  getNetworkOperatorName() { return "Apk on Mac"; }
-    public String  getNetworkCountryIso()   { return "us"; }
+    public String  getNetworkCountryIso()   { return macapkHostCountryIso(); }
     public String  getSimOperator()     { return ""; }
     public String  getSimOperatorName() { return ""; }
-    public String  getSimCountryIso()   { return "us"; }
+    public String  getSimCountryIso()   { return macapkHostCountryIso(); }
+    /** The host's region (the JVM default locale's country, which the JDK
+     *  takes from the system's region setting) as a lowercase ISO 3166 code,
+     *  so an app that pre-selects the user's country from the telephony layer
+     *  (a phone-number sign-up's country picker) sees where the user is, not a
+     *  fixed "us". "us" stays the answer when the locale names no country. */
+    private static String macapkHostCountryIso() {
+        try {
+            String c = java.util.Locale.getDefault().getCountry();
+            if (c != null && c.length() == 2) return c.toLowerCase(java.util.Locale.ROOT);
+        } catch (Throwable ignored) {}
+        return "us";
+    }
     public int     getNetworkType()     { return NETWORK_TYPE_UNKNOWN; }
     public int     getDataNetworkType() { return NETWORK_TYPE_UNKNOWN; }
     // PHONE_TYPE_GSM, not NONE (2026-08-17). The device we present is a PHONE:
