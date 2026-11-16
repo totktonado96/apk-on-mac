@@ -81,6 +81,22 @@ public class ListView extends AbsListView {
     }
     public int getHeaderViewsCount() { return mHeaderViewInfos.size(); }
 
+    /** AOSP ListView.findViewTraversal: after the children, look in the header
+     *  and footer views, which are adapter items rather than children until the
+     *  list lays them out (and again once they scroll off). Without it a
+     *  findViewById for a view inside a header added in onCreate came back
+     *  null: WhatsApp's contact screen requireViewById'd its media card stub
+     *  there, the throw ended its onCreate early, and its back arrow later hit
+     *  the ViewModel that onCreate never created. */
+    @Override protected java.util.List<android.view.View> macapkUnattachedFindRoots() {
+        if (mHeaderViewInfos.isEmpty() && mFooterViewInfos.isEmpty()) return null;
+        java.util.ArrayList<android.view.View> out =
+            new java.util.ArrayList<>(mHeaderViewInfos.size() + mFooterViewInfos.size());
+        for (HeaderViewListAdapter.FixedViewInfo i : mHeaderViewInfos) out.add(i.view);
+        for (HeaderViewListAdapter.FixedViewInfo i : mFooterViewInfos) out.add(i.view);
+        return out;
+    }
+
     public void addFooterView(View v) { addFooterView(v, null, true); }
     public void addFooterView(View v, Object data, boolean isSelectable) {
         HeaderViewListAdapter.FixedViewInfo info =

@@ -2221,7 +2221,14 @@ public class ViewGroup extends View implements ViewParent, ViewManager {
      *  because addView() had no base method to call virtually. Declaring it is
      *  what makes those overrides reachable at all. */
     protected LayoutParams generateLayoutParams(LayoutParams p) { return p; }
-    public LayoutParams generateDefaultLayoutParams() { return new LayoutParams(); }
+    /** AOSP ViewGroup.generateDefaultLayoutParams: WRAP_CONTENT both ways. It
+     *  returned the no-arg LayoutParams, which is 0x0, so a child added with a
+     *  plain addView(view) to a ViewGroup that does not override this measured
+     *  to nothing: WhatsApp adds its reactions container to the message row
+     *  that way, and no reaction was ever shown under a message. */
+    public LayoutParams generateDefaultLayoutParams() {
+        return new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+    }
     /** AOSP ViewGroup.checkLayoutParams: `return p != null;` -- each container
      *  overrides it with `p instanceof Its.LayoutParams`, which is what makes
      *  addView convert a foreign LayoutParams (v1.0.1643; it answered true for
@@ -3069,8 +3076,28 @@ public class ViewGroup extends View implements ViewParent, ViewManager {
                 if (found != null) return found;
             }
         }
+        // Views this group owns but has not attached (ListView's headers and
+        // footers before the first layout), searched after the children as
+        // AOSP ListView.findViewTraversal does.
+        java.util.List<View> owned = macapkUnattachedFindRoots();
+        if (owned != null) {
+            for (View c : owned) {
+                if (c == null) continue;
+                if (c instanceof ViewGroup cvg) {
+                    T found = cvg.findViewByIdRec(searchId, visited);
+                    if (found != null) return found;
+                } else if (visited.put(c, Boolean.TRUE) == null) {
+                    T found = c.findViewById(searchId);
+                    if (found != null) return found;
+                }
+            }
+        }
         return null;
     }
+
+    /** Views a findViewById of this group must also search although they are
+     *  not (yet) its children. None for a plain ViewGroup. */
+    protected java.util.List<View> macapkUnattachedFindRoots() { return null; }
 
     // -------- AOSP-audit batch (v1.0.116) — missing ViewGroup public API --------
 
